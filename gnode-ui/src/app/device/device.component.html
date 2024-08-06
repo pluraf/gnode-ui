@@ -1,0 +1,86 @@
+<div class="card">
+    <div class="flex flex-row align-items-center h-3rem" style="border:1px solid rgb(230, 227, 227); padding: 10px;">
+        <div class="flex flex-row align-items-center">
+            <p class="m-2">Registries</p>
+            <p-divider layout="vertical" />
+            <p class="m-2"><strong>{{ selectedMenuName }}</strong></p>
+        </div>
+        <div class="flex flex-row ml-auto">
+            <button pButton icon="pi pi-plus" (click)="showDialogToAdd()"></button>
+            <button pButton icon="pi pi-trash" (click)="delete()" *ngIf="!newDevice"></button>
+        </div>
+
+    </div>
+    <p-splitter [panelSizes]="[25, 75]" [style]="{ height: '100vh' }" styleClass="mb-5">
+        <ng-template pTemplate class="sidemenu">
+            <form [formGroup]="formGroup">
+                <p-listbox [options]="sidemenulist" formControlName="selectedMenu" optionLabel="name"
+                    [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"
+                    (onChange)="onMenuSelect($event)" />
+            </form>
+        </ng-template>
+        <ng-template pTemplate >
+            <div class="flex flex-grow-1 flex-column m-3">
+                <div  class="flex  flex-row align-items-center border-round h-3rem"
+                    style="border:1px solid rgb(215, 211, 211); ">
+                    <span class="pi pi-filter m-3"></span>
+                    <p class="m-3">Filter</p>
+                    <input type="text" class="filterContainer" pInputText [(ngModel)]="value" placeholder="Enter device ID"/>
+                </div>
+                <div class="flex flex-column justify-content-center border-round  deviceinfo">
+                    <p-table [value]="deviceList" selectionMode="single" [(selection)]="selectedDevice"
+                        (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5"
+                        [tableStyle]="{ 'min-width': '50rem' }">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 4rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                                <th>Device ID</th>
+                                <th>Communication</th>
+                                <th>Last Seen</th>
+                                <th>Cloud Logging</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" class="device" let-device>
+                            <tr>
+                                <td style="width: 4rem"><p-tableCheckbox [value]="device"></p-tableCheckbox></td>
+                                <td>{{ device.deviceID }}</td>
+                                <td class="communicationBox" *ngIf="device.communication === 'Allowed'">
+                                    <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" color="green" aria-hidden="true" viewBox="0 0 24 24" data-testid="CheckCircleIcon">
+                                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+                                    </svg>{{ device.communication }}</td>
+                                <td>{{ device.lastseen }}</td>
+                                <td>{{ device.cloudlogging }}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+
+        </ng-template>
+    </p-splitter>
+
+    <p-dialog header="Device Details" [(visible)]="displayDialog" [modal]="true" [style]="{ width: '300px' }">
+        <div class="p-fluid">
+            <div class="p-field mb-3">
+                <label for="deviceID">Device ID</label>
+                <input id="deviceID" type="text" pInputText [(ngModel)]="device.deviceID" />
+            </div>
+            <div class="p-field mb-3">
+                <label for="communication">Communication</label>
+                <input id="communication" type="text" pInputText [(ngModel)]="device.communication" />
+            </div>
+            <div class="p-field mb-3">
+                <label for="lastseen">Last Seen</label>
+                <input id="lastseen" type="text" pInputText [(ngModel)]="device.lastseen" />
+            </div>
+            <div class="p-field ">
+                <label for="cloudlogging">Cloud Logging</label>
+                <input id="cloudlogging" type="text" pInputText [(ngModel)]="device.cloudlogging" />
+            </div>
+        </div>
+
+        <p-footer>
+            <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
+        </p-footer>
+    </p-dialog>
+</div>
