@@ -12,6 +12,6 @@ const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
 
 @NgModule({
   declarations: [],
-  imports: [ CommonModule, MqttModule.forRoot(MQTT_SERVICE_OPTIONS), MqttModule  ]
- })
+  imports: [CommonModule, MqttModule.forRoot(MQTT_SERVICE_OPTIONS), MqttModule]
+})
 export class MqttconfigModule { }

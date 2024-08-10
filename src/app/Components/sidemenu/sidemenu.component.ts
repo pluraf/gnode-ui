@@ -12,7 +12,5 @@ export class SidemenuComponent {
   sidemenulist: Sidemenu[] = [
     { name: 'Registry Details' },
     { name: 'Devices' },
-    { name: 'Gateways' },
-    { name: 'Monitoring' },
   ];
 }

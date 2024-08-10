@@ -16,7 +16,7 @@ export class EventmqttService {
   }
 
   topic(deviceId: string): Observable<IMqttMessage> {
-    let topicName = `/${this.endpoint}/${deviceId}`;     
+    let topicName = `/${this.endpoint}/${deviceId}`;
     return this._mqttService.observe(topicName);
   }
 }
