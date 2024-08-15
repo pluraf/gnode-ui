@@ -28,7 +28,7 @@ export class RegisterComponent {
 
   onRegistor() {
     debugger;
-    this.http.post("http://127.0.0.1:8000/users", this.loginObj).subscribe((res: any) => {
+    this.http.post("api/users/", this.loginObj).subscribe((res: any) => {
       debugger;
       alert("register success!")
     })

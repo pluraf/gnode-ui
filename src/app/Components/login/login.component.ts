@@ -35,7 +35,7 @@ export class LoginComponent {
       const body = new HttpParams()
         .set('username', this.loginObj.username)
         .set('password', this.loginObj.password);
-      this.http.post('http://127.0.0.1:8000/auth/token/', body, { headers }).subscribe(
+      this.http.post('api/auth/token/', body, { headers }).subscribe(
         (res: any) => {
           console.log('res', res);
           if (res.access_token) {
@@ -43,7 +43,7 @@ export class LoginComponent {
             this.userService.login(res.access_token);
             alert('Login successful!');
             this.router.navigateByUrl('/device')
-            
+
           } else {
             alert('Invalid Username or Password.');
           }
