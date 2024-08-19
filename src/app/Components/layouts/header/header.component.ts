@@ -1,31 +1,18 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
-import { DeviceComponent } from './device/device.component';
 import { CardModule } from 'primeng/card';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
-import { UserService } from './services/user.service';
-import { HeaderComponent } from './components/layouts/header/header.component';
-import { FooterComponent } from './components/layouts/footer/footer.component';
+import { Router } from '@angular/router';
+import { UserService } from '../../../services/user.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-header',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    DeviceComponent,
-    CardModule,
-    MenubarModule,
-    HeaderComponent,
-    FooterComponent,
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
-  providers: [UserService],
+  imports: [CardModule, MenubarModule],
+  templateUrl: './header.component.html',
+  styleUrl: './header.component.css',
 })
-export class AppComponent {
-  title = 'gnode-ui';
-
+export class HeaderComponent {
   items: MenuItem[] | undefined;
   constructor(
     private router: Router,

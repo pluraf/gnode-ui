@@ -1,23 +1,14 @@
 import { Component } from '@angular/core';
 import { FormsModule, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SplitterModule } from 'primeng/splitter';
-import { TableModule } from 'primeng/table';
-import { PanelModule } from 'primeng/panel';
+
+import { PRIMENG_MODULES } from '../shared/primeng-modules';
 import { Device, Sidemenu, PageEvent } from './device';
-import { CheckboxModule } from 'primeng/checkbox';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { InputTextModule } from 'primeng/inputtext';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { DividerModule } from 'primeng/divider';
-import { ListboxModule } from 'primeng/listbox';
-import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-device',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SplitterModule, TableModule, PanelModule, CheckboxModule, RadioButtonModule, InputTextModule, ListboxModule, DialogModule, ButtonModule, PaginatorModule, DividerModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PRIMENG_MODULES],
   templateUrl: './device.component.html',
   styleUrl: './device.component.css',
 })

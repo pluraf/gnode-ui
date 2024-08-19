@@ -7,19 +7,17 @@
       <div class="card flex flex-row justify-content-center ">
         <p-card>
           <div class="flex flex-column gap-2">
-            <label for="email">Email</label>
-            <input class="mb-4" name="email" required pInputText id="email" aria-describedby="username-help"
-              [(ngModel)]="loginObj.email" />
-          </div>
-          <div class="flex flex-column gap-2">
             <label for="username">Username</label>
             <input class="mb-4" name="username" required pInputText id="username" aria-describedby="username-help"
               [(ngModel)]="loginObj.username" />
           </div>
           <div class="flex flex-column gap-2 mb-4">
             <label for="password">Password</label>
-            <input pInputText name="password" required id="password" aria-describedby="username-help"
-              [(ngModel)]="loginObj.password" />
+            <p-password [(ngModel)]="loginObj.password" name="password" id="password" class="w-full" promptLabel="Choose a password" 
+              weakLabel="Too simple" 
+              mediumLabel="Average complexity" 
+              strongLabel="Complex password" [toggleMask]="true" [style]="{'width':'100%'}"
+              [inputStyle]="{'width':'100%'}"/>
           </div>
           <button pButton pRipple label="CREATE AN ACCOUNT" (click)="onRegistor()"> </button>
         </p-card>

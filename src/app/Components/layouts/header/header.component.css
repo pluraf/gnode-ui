@@ -3,6 +3,11 @@
     flex-direction: row-reverse;
     background-color: #0f5c55;
     border-radius: 0px;
+    /*  position: fixed;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    z-index: 9999; */
   }
 }
 :host {
@@ -25,7 +30,7 @@
 
 :host {
   ::ng-deep .p-menubar .p-menuitem > .p-menuitem-content:hover {
-    background-color: #186ba0;
+    background-color: #0a4f49;
   }
 }
 :host {

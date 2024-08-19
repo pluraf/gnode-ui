@@ -14,11 +14,12 @@
           </div>
           <div class="flex flex-column gap-2 mb-4">
             <label for="password">Password</label>
-            <input pInputText name="password" id="password" aria-describedby="username-help"
-              [(ngModel)]="loginObj.password" />
-            <small id="username-help">
-              Forgot password?
-            </small>
+            <p-password [(ngModel)]="loginObj.password" name="password" id="password" class="w-full" promptLabel="Choose a password" 
+              weakLabel="Too simple" 
+              mediumLabel="Average complexity" 
+              strongLabel="Complex password" [toggleMask]="true" [style]="{'width':'100%'}"
+              [inputStyle]="{'width':'100%'}"/>         
+            <a [routerLink]="['/forgot-password']" class="ml-2">Forgot password?</a>          
           </div>
           <button pButton pRipple label="LOG IN" (click)="onLogin()"> </button>
         </p-card>

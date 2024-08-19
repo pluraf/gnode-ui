@@ -2,35 +2,30 @@ import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { CardModule } from 'primeng/card';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
-import { DividerModule } from 'primeng/divider';
+import { ReactiveFormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
+import { PRIMENG_MODULES } from '../../shared/primeng-modules';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, RouterModule, CardModule, FormsModule, InputTextModule, ButtonModule, RippleModule, DividerModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, PRIMENG_MODULES],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.css',
 })
 export class RegisterComponent {
-  value: string | undefined;
+  private apiUrl = environment.apiUrl + 'users';
 
   loginObj: any = {
-    "email": "",
-    "username": "",
-    "password": ""
-  }
+    username: '',
+    password: '',
+  };
+
   http = inject(HttpClient);
 
   onRegistor() {
-    debugger;
-    this.http.post("http://127.0.0.1:8000/users", this.loginObj).subscribe((res: any) => {
-      debugger;
-      alert("register success!")
-    })
+    this.http.post(this.apiUrl, this.loginObj).subscribe((res: any) => {
+      alert('register success!');
+    });
   }
 }
