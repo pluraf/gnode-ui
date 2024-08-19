@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { UserService } from '../../services/user.service';
-import { environment } from '../../../environments/environment';
 import { PRIMENG_MODULES } from '../../shared/primeng-modules';
 
 @Component({
@@ -15,7 +14,6 @@ import { PRIMENG_MODULES } from '../../shared/primeng-modules';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  private apiUrl = environment.apiUrl + 'auth/token/';
   loginObj: any = {
     username: '',
     password: '',
@@ -38,6 +36,7 @@ export class LoginComponent {
       this.http
         .post('api/auth/token/', body, { headers })
         .subscribe((res: any) => {
+          console.log('res', res);
           if (res.access_token) {
             this.userService.login(res.access_token);
             alert('Login successful!');

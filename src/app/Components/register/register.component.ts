@@ -21,7 +21,9 @@ export class RegisterComponent {
   http = inject(HttpClient);
 
   onRegistor() {
+    debugger;
     this.http.post('api/users/', this.loginObj).subscribe((res: any) => {
+      debugger;
       alert('register success!');
     });
   }
