@@ -35,15 +35,17 @@ export class LoginComponent {
       const body = new HttpParams()
         .set('username', this.loginObj.username)
         .set('password', this.loginObj.password);
-      this.http.post(this.apiUrl, body, { headers }).subscribe((res: any) => {
-        if (res.access_token) {
-          this.userService.login(res.access_token);
-          alert('Login successful!');
-          this.router.navigateByUrl('/device');
-        } else {
-          alert('Invalid Username or Password.');
-        }
-      });
+      this.http
+        .post('api/auth/token/', body, { headers })
+        .subscribe((res: any) => {
+          if (res.access_token) {
+            this.userService.login(res.access_token);
+            alert('Login successful!');
+            this.router.navigateByUrl('/device');
+          } else {
+            alert('Invalid Username or Password.');
+          }
+        });
     }
   }
 }

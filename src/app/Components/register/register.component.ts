@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { environment } from '../../../environments/environment';
 import { PRIMENG_MODULES } from '../../shared/primeng-modules';
 
 @Component({
@@ -14,8 +13,6 @@ import { PRIMENG_MODULES } from '../../shared/primeng-modules';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
-  private apiUrl = environment.apiUrl + 'users';
-
   loginObj: any = {
     username: '',
     password: '',
@@ -24,7 +21,7 @@ export class RegisterComponent {
   http = inject(HttpClient);
 
   onRegistor() {
-    this.http.post(this.apiUrl, this.loginObj).subscribe((res: any) => {
+    this.http.post('api/users/', this.loginObj).subscribe((res: any) => {
       alert('register success!');
     });
   }
