@@ -36,9 +36,14 @@ export class LoginComponent {
       this.http
         .post('api/auth/token/', body.toString(), { headers })
         .subscribe((res: any) => {
-          console.log('res', res);
           if (res.access_token) {
             this.userService.login(res.access_token);
+
+            // Decode the token to check if the user is an admin
+            const user = this.userService.parseJwt(res.access_token);
+            if (user.is_admin) {
+              this.userService.setAdminStatus(true);
+            }
             alert('Login successful!');
             this.router.navigateByUrl('/device');
           } else {

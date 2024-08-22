@@ -14,12 +14,12 @@
               [(ngModel)]="loginObj.username" />
           </div>
           <div class="flex flex-column gap-2 mb-4">
-            <label for="password">Password</label>
-            <input class="mb-4" name="password" type="password" pInputText id="password" aria-describedby="username-help"
-              [(ngModel)]="loginObj.password" />
-           <!--  <p-password [(ngModel)]="loginObj.password" name="passwordInput" id="passwordInput" class="w-full" promptLabel="Choose a password" 
+            <label for="passwordInput">Password</label>
+            <!-- <input class="mb-4" name="password" type="password" pInputText id="password" aria-describedby="username-help"
+              [(ngModel)]="loginObj.password" /> -->
+           <p-password [(ngModel)]="loginObj.password" name="passwordInput" id="passwordInput" [inputId]="'passwordInput'"  class="w-full" promptLabel="Choose a password" 
              [toggleMask]="true" [style]="{'width':'100%'}"
-              [inputStyle]="{'width':'100%'}"/>  --> 
+              [inputStyle]="{'width':'100%'}"/> 
           </div>
           <button pButton pRipple label="LOG IN" (click)="onLogin()"> </button>
         </p-card>
@@ -29,9 +29,4 @@
   <div class="flex flex-column justify-content-center">
     <p-divider layout="horizontal" class="p-divider-center flex flex-row justify-content-center w-2 m-auto"></p-divider>
   </div>
-
-<!--   <div class="flex flex-column">
-    <p class=" flex flex-row justify-content-center m-auto">Don't have an account? <a [routerLink]="['/register']"
-        class="ml-2">Sign up</a></p>
-  </div> -->
 </div>

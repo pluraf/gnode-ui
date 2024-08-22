@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
 import { authGuard } from './guards/auth.guard';
 import { DeviceComponent } from './device/device.component';
 import { DeviceDetailComponent } from './device/device-detail/device-detail.component';
 import { DevicesCreateComponent } from './device/devices-create/devices-create.component';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 export const routes: Routes = [
   {
@@ -17,8 +17,8 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'register',
-    component: RegisterComponent,
+    path: 'create-user',
+    component: CreateUserComponent,
   },
   {
     path: 'device',

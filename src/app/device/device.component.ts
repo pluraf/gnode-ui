@@ -14,7 +14,13 @@ import { Router, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-device',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, PRIMENG_MODULES],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PRIMENG_MODULES,
+    RouterModule,
+  ],
   templateUrl: './device.component.html',
   styleUrl: './device.component.css',
 })

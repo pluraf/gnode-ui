@@ -5,8 +5,9 @@
         <p class="m-2"><strong>{{ selectedMenuName }}</strong></p>
     </div>
     <div class="flex flex-row ml-auto">
-        <button pButton icon="pi pi-plus" (click)="showDialogToAdd()"></button>
-        <button pButton icon="pi pi-trash" (click)="delete()" *ngIf="!newDevice"></button>
+        <button pButton icon="pi pi-plus" pTooltip="Create devices" tooltipPosition="bottom" tooltipEvent="hover" (click)="showDialogToAdd()"></button>        
+        <button pButton icon="pi pi-trash" pTooltip="Delete devices" tooltipPosition="bottom" tooltipEvent="hover" (click)="delete()" *ngIf="!newDevice"></button>
+        <p-avatar icon="pi pi-user" pTooltip="Create user" tooltipPosition="bottom" tooltipEvent="hover"  class="usericon ml-3" [routerLink]="['/create-user']"/>
     </div>
 
 </div>
@@ -23,7 +24,7 @@
                 style="border:1px solid rgb(215, 211, 211); ">
                 <span class="pi pi-filter m-3"></span>
                 <p class="m-3">Filter</p>
-                <input type="text" class="filterContainer" pInputText [(ngModel)]="value"
+                <input type="text" class="filterContainer" pInputText [(ngModel)]="deviceList.deviceID"
                     placeholder="Enter device ID" />
             </div>
             <div class="flex flex-column justify-content-center border-round  deviceinfo">
@@ -71,25 +72,3 @@
 
     </ng-template>
 </p-splitter>
-
-<p-dialog header="Device Details" [(visible)]="displayDialog" [modal]="true" [style]="{ width: '300px' }">
-    <div class="p-fluid">
-        <div class="p-field mb-3">
-            <label for="deviceID">Device ID</label>
-            <input id="deviceID" name="deviceID" type="text" pInputText [(ngModel)]="device.deviceID" />
-        </div>
-        <div class="p-field mb-3">
-            <label for="communication">Communication</label>
-            <input id="communication" name="communication" type="text" pInputText [(ngModel)]="device.communication" />
-        </div>
-        <div class="p-field mb-3">
-            <label for="lastseen">Last Seen</label>
-            <input id="lastseen" name="lastseen" type="text" pInputText [(ngModel)]="device.lastseen" />
-        </div>
-
-    </div>
-
-    <p-footer>
-        <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
-    </p-footer>
-</p-dialog>
