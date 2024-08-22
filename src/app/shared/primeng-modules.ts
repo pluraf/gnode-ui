@@ -12,6 +12,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ListboxModule } from 'primeng/listbox';
 import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 export const PRIMENG_MODULES = [
   ButtonModule,
@@ -28,4 +29,5 @@ export const PRIMENG_MODULES = [
   DialogModule,
   PaginatorModule,
   PasswordModule,
+  FloatLabelModule,
 ];

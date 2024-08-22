@@ -1,0 +1,12 @@
+#deviceID {
+  width: 40%;
+}
+.p-fluid .p-field {
+  margin-bottom: 1.5rem;
+}
+
+small {
+  display: block;
+  margin-top: 0.5rem;
+  color: black;
+}

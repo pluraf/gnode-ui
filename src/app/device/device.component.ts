@@ -1,9 +1,15 @@
 import { Component } from '@angular/core';
-import { FormsModule, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { PRIMENG_MODULES } from '../shared/primeng-modules';
 import { Device, Sidemenu, PageEvent } from './device';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-device',
@@ -16,11 +22,7 @@ export class DeviceComponent {
   value!: string;
   formGroup!: FormGroup<{ selectedMenu: FormControl<Sidemenu | null> }>;
 
-  sidemenulist: Sidemenu[] = [
-    { name: 'Devices' },
-    { name: 'Status' },
-
-  ];
+  sidemenulist: Sidemenu[] = [{ name: 'Devices' }, { name: 'Status' }];
   first: number = 0;
   rows: number = 5;
   totalRecords: number = 5;
@@ -31,10 +33,30 @@ export class DeviceComponent {
   ];
 
   deviceList: Device[] = [
-    { id: 1, deviceID: 'Device-1', communication: 'Allowed', lastseen: this.formatDate(new Date()) },
-    { id: 2, deviceID: 'Device-2', communication: 'Allowed', lastseen: this.formatDate(new Date()) },
-    { id: 3, deviceID: 'Device-3', communication: 'Allowed', lastseen: this.formatDate(new Date()) },
-    { id: 4, deviceID: 'Device-4', communication: 'Allowed', lastseen: this.formatDate(new Date()) }
+    {
+      id: 1,
+      deviceID: 'Device-1',
+      communication: 'Allowed',
+      lastseen: this.formatDate(new Date()),
+    },
+    {
+      id: 2,
+      deviceID: 'Device-2',
+      communication: 'Allowed',
+      lastseen: this.formatDate(new Date()),
+    },
+    {
+      id: 3,
+      deviceID: 'Device-3',
+      communication: 'Allowed',
+      lastseen: this.formatDate(new Date()),
+    },
+    {
+      id: 4,
+      deviceID: 'Device-4',
+      communication: 'Allowed',
+      lastseen: this.formatDate(new Date()),
+    },
   ];
 
   onPageChange(event: PageEvent) {
@@ -43,14 +65,13 @@ export class DeviceComponent {
   }
   displayDialog: boolean = false;
   newDevice: boolean = false;
-  device: Device = { deviceID: '', communication: '', lastseen: '', };
+  device: Device = { deviceID: '', communication: '', lastseen: '' };
   selectedDevice!: Device;
   selectedMenuName: string = 'Devices';
 
-
-  constructor() {
+  constructor(private router: Router) {
     this.formGroup = new FormGroup({
-      selectedMenu: new FormControl<Sidemenu | null>(null)
+      selectedMenu: new FormControl<Sidemenu | null>(null),
     });
   }
   formatDate(date: Date): string {
@@ -61,15 +82,13 @@ export class DeviceComponent {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
-      hour12: true
+      hour12: true,
     };
     return date.toLocaleString('en-EU', options);
   }
 
   showDialogToAdd() {
-    this.newDevice = true;
-    this.device = { deviceID: '', communication: '', lastseen: this.formatDate(new Date()) };
-    this.displayDialog = true;
+    this.router.navigateByUrl('/devices-create');
   }
 
   save() {
@@ -87,15 +106,15 @@ export class DeviceComponent {
   }
 
   delete() {
-    this.deviceList = this.deviceList.filter(dev => dev !== this.selectedDevice);
+    this.deviceList = this.deviceList.filter(
+      (dev) => dev !== this.selectedDevice,
+    );
     this.device = { deviceID: '', communication: '', lastseen: '' };
     this.displayDialog = false;
   }
 
   onRowSelect(event: any) {
-    this.newDevice = false;
-    this.device = { ...event.data };
-    this.displayDialog = true;
+    this.router.navigateByUrl('/device-detail');
   }
   onMenuSelect(event: any) {
     const selectedItem = event.value;
@@ -103,5 +122,4 @@ export class DeviceComponent {
       this.selectedMenuName = selectedItem.name;
     }
   }
-
 }

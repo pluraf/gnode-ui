@@ -15,8 +15,8 @@ import { PRIMENG_MODULES } from '../../shared/primeng-modules';
 })
 export class LoginComponent {
   loginObj: any = {
-    username: '',
-    password: '',
+    username: 'admin',
+    password: 'admin1234',
   };
   constructor(
     private router: Router,
@@ -34,7 +34,7 @@ export class LoginComponent {
         .set('username', this.loginObj.username)
         .set('password', this.loginObj.password);
       this.http
-        .post('api/auth/token/', body, { headers })
+        .post('api/auth/token/', body.toString(), { headers })
         .subscribe((res: any) => {
           console.log('res', res);
           if (res.access_token) {

@@ -14,6 +14,7 @@ import { PRIMENG_MODULES } from '../../shared/primeng-modules';
 })
 export class RegisterComponent {
   loginObj: any = {
+    email: '',
     username: '',
     password: '',
   };
@@ -21,9 +22,7 @@ export class RegisterComponent {
   http = inject(HttpClient);
 
   onRegistor() {
-    debugger;
     this.http.post('api/users/', this.loginObj).subscribe((res: any) => {
-      debugger;
       alert('register success!');
     });
   }

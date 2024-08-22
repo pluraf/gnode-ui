@@ -1,0 +1,54 @@
+<div class="p-grid ml-3">
+    <div class="p-col-12 p-md-6">
+        <h2>Create a Device</h2>
+        <div class="p-fluid">
+            <div class="p-field">
+                <p-floatLabel >
+                    <input pInputText id="deviceID" [(ngModel)]="value" />
+                    <label for="deviceID">Device ID</label>
+                </p-floatLabel>
+                <small>Permanent identifier for your device. 3-255 characters. Start with a letter. You can also include numbers and the following characters: + . % - _ ~</small>
+            </div>
+
+            <div class="p-field">
+                <label><strong>Device communication</strong></label>
+                <small>If blocked, all communications from the device will be rejected. Blocking a device may be useful if it's defective or not configured.</small>
+                <div class="card flex mt-2 ">
+                    <div class="flex flex-column gap-1">
+                        <div *ngFor="let category of categories" class="field-checkbox">
+                            <p-radioButton 
+                                [inputId]="category.key" 
+                                name="category" 
+                                [value]="category" 
+                                [(ngModel)]="selectedCategory" />
+                            <label [for]="category.key" class="ml-2">
+                                {{ category.name }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="p-field">
+                <label><strong>Authentication (optional)</strong></label>
+                <small>Specify the public key that will be used to authenticate this device. You can leave the key empty, but devices will not be able to connect to ClearBlade without a key.</small>
+                <div class="card flex mt-2 ">
+                    <div class="flex flex-column gap-1">
+                        <div *ngFor="let inputmethod of inputMethod" class="field-checkbox">
+                            <p-radioButton 
+                                [inputId]="inputmethod.key" 
+                                name="inputmethod" 
+                                [value]="inputmethod" 
+                                [(ngModel)]="selectedMethod" />
+                            <label [for]="inputmethod.key" class="ml-2">
+                                {{ inputmethod.name }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

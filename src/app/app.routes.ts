@@ -3,7 +3,8 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { authGuard } from './guards/auth.guard';
 import { DeviceComponent } from './device/device.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { DeviceDetailComponent } from './device/device-detail/device-detail.component';
+import { DevicesCreateComponent } from './device/devices-create/devices-create.component';
 
 export const routes: Routes = [
   {
@@ -20,12 +21,16 @@ export const routes: Routes = [
     component: RegisterComponent,
   },
   {
-    path: 'forgot-password',
-    component: ForgotPasswordComponent,
-  },
-  {
     path: 'device',
     component: DeviceComponent,
     canActivate: [authGuard],
+  },
+  {
+    path: 'devices-create',
+    component: DevicesCreateComponent,
+  },
+  {
+    path: 'device-detail',
+    component: DeviceDetailComponent,
   },
 ];
