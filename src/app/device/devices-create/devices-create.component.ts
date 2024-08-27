@@ -15,6 +15,8 @@ export class DevicesCreateComponent implements OnInit {
   selectedCategory: any = null;
   selectedMethod: any = null;
   communication: string = 'Allow';
+  showUserPassField = false;
+  showPublicKeyField = false;
 
   categories: any[] = [
     { name: 'Allow', key: 'A' },
@@ -22,12 +24,20 @@ export class DevicesCreateComponent implements OnInit {
   ];
 
   inputMethod: any[] = [
-    { name: 'Enter manually', key: 'EM' },
-    { name: 'Upload', key: 'U' },
+    { name: 'Username & Password', key: 'UP' },
+    { name: 'Public Key', key: 'PK' },
   ];
 
   ngOnInit() {
     this.selectedCategory = this.categories[1];
     this.selectedMethod = this.inputMethod[1];
+  }
+
+  onSelectedOption() {
+    if (this.selectedMethod.name === 'Username & Password') {
+      this.showUserPassField = true;
+    } else if (this.selectedMethod.name === 'Public Key') {
+      this.showPublicKeyField = true;
+    }
   }
 }

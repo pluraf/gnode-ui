@@ -1,3 +1,8 @@
+.createDevice-container {
+  max-height: 100vh;
+  flex-grow: 1;
+}
+
 #deviceID {
   width: 40%;
 }

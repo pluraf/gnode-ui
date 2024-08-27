@@ -5,7 +5,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   const localData = sessionStorage.getItem('access_token');
-  /*  console.log('Auth Guard triggered. Token:', localData); */
   if (localData) {
     return true;
   } else {

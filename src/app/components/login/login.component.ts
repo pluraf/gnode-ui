@@ -44,8 +44,6 @@ export class LoginComponent {
             if (user.is_admin) {
               this.userService.setAdminStatus(true);
             }
-            alert('Login successful!');
-            debugger;
             this.router.navigateByUrl('/device');
           } else {
             alert('Invalid Username or Password.');

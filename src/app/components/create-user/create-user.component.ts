@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Output, EventEmitter } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -19,6 +19,7 @@ export class CreateUserComponent {
     password: '',
     is_admin: false,
   };
+  @Output() buttonClick = new EventEmitter<void>();
 
   http = inject(HttpClient);
   constructor(
@@ -36,7 +37,6 @@ export class CreateUserComponent {
       this.http
         .post('api/users/', this.userObj, { headers })
         .subscribe((res: any) => {
-          alert('User created successfully!');
           this.router.navigateByUrl('/device');
         });
     } else {

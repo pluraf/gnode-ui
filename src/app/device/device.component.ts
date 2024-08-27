@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import {
   FormsModule,
   FormControl,
@@ -10,6 +11,9 @@ import { CommonModule } from '@angular/common';
 import { PRIMENG_MODULES } from '../shared/primeng-modules';
 import { Device, Sidemenu, PageEvent } from './device';
 import { Router, RouterModule } from '@angular/router';
+import { DevicesCreateComponent } from './devices-create/devices-create.component';
+import { DevicesEditComponent } from './devices-edit/devices-edit.component';
+import { StatusComponent } from '../components/sidemenu/status/status.component';
 
 @Component({
   selector: 'app-device',
@@ -20,12 +24,18 @@ import { Router, RouterModule } from '@angular/router';
     ReactiveFormsModule,
     PRIMENG_MODULES,
     RouterModule,
+    DevicesCreateComponent,
+    DevicesEditComponent,
+    StatusComponent,
   ],
   templateUrl: './device.component.html',
   styleUrl: './device.component.css',
 })
 export class DeviceComponent {
   value!: string;
+  hideDevices: boolean = true;
+  hideStatus: boolean = true;
+
   formGroup!: FormGroup<{ selectedMenu: FormControl<Sidemenu | null> }>;
 
   sidemenulist: Sidemenu[] = [{ name: 'Devices' }, { name: 'Status' }];
@@ -80,6 +90,7 @@ export class DeviceComponent {
       selectedMenu: new FormControl<Sidemenu | null>(null),
     });
   }
+
   formatDate(date: Date): string {
     const options: Intl.DateTimeFormatOptions = {
       month: 'numeric',
@@ -94,21 +105,7 @@ export class DeviceComponent {
   }
 
   showDialogToAdd() {
-    this.router.navigateByUrl('/devices-create');
-  }
-
-  save() {
-    let deviceList = [...this.deviceList];
-    if (this.newDevice) {
-      this.device.id = this.deviceList.length + 1;
-      deviceList.push(this.device);
-    } else {
-      deviceList[this.deviceList.indexOf(this.selectedDevice)] = this.device;
-    }
-
-    this.deviceList = deviceList;
-    this.device = { deviceID: '', communication: '', lastseen: '' };
-    this.displayDialog = false;
+    this.hideDevices = false;
   }
 
   delete() {
@@ -126,6 +123,10 @@ export class DeviceComponent {
     const selectedItem = event.value;
     if (selectedItem) {
       this.selectedMenuName = selectedItem.name;
+      if (this.selectedMenuName === 'Status') {
+        this.hideStatus = false; /* 
+        this.router.navigateByUrl('/status'); */
+      }
     }
   }
 }

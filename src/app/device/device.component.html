@@ -5,9 +5,9 @@
         <p class="m-2"><strong>{{ selectedMenuName }}</strong></p>
     </div>
     <div class="flex flex-row ml-auto">
-        <button pButton icon="pi pi-plus" pTooltip="Create devices" tooltipPosition="bottom" tooltipEvent="hover" (click)="showDialogToAdd()"></button>        
-        <button pButton icon="pi pi-trash" pTooltip="Delete devices" tooltipPosition="bottom" tooltipEvent="hover" (click)="delete()" *ngIf="!newDevice"></button>
-        <p-avatar icon="pi pi-user" pTooltip="Create user" tooltipPosition="bottom" tooltipEvent="hover"  class="usericon ml-3" [routerLink]="['/create-user']"/>
+        <button pButton *ngIf="hideDevices" icon="pi pi-plus"  pTooltip="Create devices" tooltipPosition="bottom" tooltipEvent="hover" (click)="showDialogToAdd()"></button>        
+        <button pButton *ngIf="hideDevices" icon="pi pi-trash" pTooltip="Delete devices" tooltipPosition="bottom" tooltipEvent="hover" (click)="delete()" ></button>
+        <p-avatar *ngIf="hideDevices" icon="pi pi-user" pTooltip="Create user" tooltipPosition="bottom" tooltipEvent="hover"  class="usericon ml-3" [routerLink]="['/create-user']"/>        
     </div>
 
 </div>
@@ -16,19 +16,25 @@
         <form [formGroup]="formGroup">
             <p-listbox [options]="sidemenulist" formControlName="selectedMenu" optionLabel="name"
                 [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}" (onChange)="onMenuSelect($event)" />
-        </form>
+        </form> 
     </ng-template>
-    <ng-template pTemplate>
-        <div class="flex flex-grow-1 flex-column m-3">
-            <div class="flex  flex-row align-items-center border-round h-3rem"
+    
+    <ng-template pTemplate >
+        <div >
+            <app-devices-create *ngIf="!hideDevices "></app-devices-create>
+            <app-status *ngIf="!hideStatus"></app-status>
+        </div>
+        
+        <div *ngIf="hideDevices && hideStatus" class="flex flex-grow-1 flex-column m-3">
+            <div  class="flex  flex-row align-items-center border-round h-3rem"
                 style="border:1px solid rgb(215, 211, 211); ">
                 <span class="pi pi-filter m-3"></span>
                 <p class="m-3">Filter</p>
-                <input type="text" class="filterContainer" pInputText [(ngModel)]="deviceList.deviceID"
+                <input type="text" name="search" class="filterContainer" pInputText [(ngModel)]="searchText"   
                     placeholder="Enter device ID" />
             </div>
-            <div class="flex flex-column justify-content-center border-round  deviceinfo">
-                <p-table [value]="deviceList" selectionMode="single" [(selection)]="selectedDevice"
+            <div  class="flex flex-column justify-content-center border-round  deviceinfo">
+                <p-table #deviceFilter [value]="deviceList" selectionMode="single" [(selection)]="selectedDevice"
                     (onRowSelect)="onRowSelect($event)" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>

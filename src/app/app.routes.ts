@@ -5,6 +5,7 @@ import { DeviceComponent } from './device/device.component';
 import { DeviceDetailComponent } from './device/device-detail/device-detail.component';
 import { DevicesCreateComponent } from './device/devices-create/devices-create.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
+import { StatusComponent } from './components/sidemenu/status/status.component';
 
 export const routes: Routes = [
   {
@@ -32,5 +33,9 @@ export const routes: Routes = [
   {
     path: 'device-detail',
     component: DeviceDetailComponent,
+  },
+  {
+    path: 'status',
+    component: StatusComponent,
   },
 ];
