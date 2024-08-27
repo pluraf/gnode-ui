@@ -3,5 +3,10 @@
       "target": "http://localhost:8888",
       "secure": false,
       "changeOrigin": true
+    },
+    "/broker": {
+      "target": "http://localhost:8888",
+      "secure": false,
+      "changeOrigin": true
     }
-  }
+}
