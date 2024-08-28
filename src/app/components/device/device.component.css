@@ -13,7 +13,7 @@
 }
 
 :host {
-  ::ng-deep .p-button {
+  .p-button {
     border: none;
     background-color: #fff;
     color: black;
@@ -21,7 +21,7 @@
 }
 
 :host {
-  ::ng-deep .p-radiobutton .p-radiobutton-box {
+  .p-radiobutton .p-radiobutton-box {
     background-color: #4caf50 !important;
     border: 2px solid green;
     color: white;

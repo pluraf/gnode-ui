@@ -7,13 +7,12 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-import { PRIMENG_MODULES } from '../shared/primeng-modules';
 import { Device, Sidemenu, PageEvent } from './device';
 import { Router, RouterModule } from '@angular/router';
 import { DevicesCreateComponent } from './devices-create/devices-create.component';
 import { DevicesEditComponent } from './devices-edit/devices-edit.component';
-import { StatusComponent } from '../components/sidemenu/status/status.component';
+import { PRIMENG_MODULES } from '../../shared/primeng-modules';
+import { StatusComponent } from '../sidemenu/status/status.component';
 
 @Component({
   selector: 'app-device',
@@ -27,6 +26,7 @@ import { StatusComponent } from '../components/sidemenu/status/status.component'
     DevicesCreateComponent,
     DevicesEditComponent,
     StatusComponent,
+    DevicesEditComponent,
   ],
   templateUrl: './device.component.html',
   styleUrl: './device.component.css',
@@ -35,6 +35,7 @@ export class DeviceComponent {
   value!: string;
   hideDevices: boolean = true;
   hideStatus: boolean = true;
+  hideEdit: boolean = true;
 
   formGroup!: FormGroup<{ selectedMenu: FormControl<Sidemenu | null> }>;
 
@@ -128,5 +129,8 @@ export class DeviceComponent {
         this.router.navigateByUrl('/status'); */
       }
     }
+  }
+  editDevice() {
+    this.hideEdit = false;
   }
 }

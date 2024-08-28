@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PRIMENG_MODULES } from '../../shared/primeng-modules';
+import { PRIMENG_MODULES } from '../../../shared/primeng-modules';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -29,8 +29,8 @@ export class DevicesCreateComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.selectedCategory = this.categories[1];
-    this.selectedMethod = this.inputMethod[1];
+    this.selectedCategory = this.categories[0];
+    this.selectedMethod = this.inputMethod[0];
   }
 
   onSelectedOption() {

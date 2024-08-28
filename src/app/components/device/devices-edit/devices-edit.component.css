@@ -1,0 +1,30 @@
+.editDevice-container {
+  max-height: 100vh;
+  flex-grow: 1;
+}
+
+#deviceID {
+  width: 40%;
+}
+.p-fluid .p-field {
+  margin-bottom: 1.5rem;
+}
+
+small {
+  display: block;
+  margin-top: 0.5rem;
+  color: black;
+}
+:host {
+  .p-radiobutton {
+    background-color: #0f5c30 !important;
+    border: 2px solid #0f5c30;
+    color: white;
+  }
+}
+
+button {
+  background-color: #0f5c30;
+  width: 7rem;
+  font-size: 18px;
+}

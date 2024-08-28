@@ -5,8 +5,9 @@
         <p class="m-2"><strong>{{ selectedMenuName }}</strong></p>
     </div>
     <div class="flex flex-row ml-auto">
-        <button pButton *ngIf="hideDevices" icon="pi pi-plus"  pTooltip="Create devices" tooltipPosition="bottom" tooltipEvent="hover" (click)="showDialogToAdd()"></button>        
-        <button pButton *ngIf="hideDevices" icon="pi pi-trash" pTooltip="Delete devices" tooltipPosition="bottom" tooltipEvent="hover" (click)="delete()" ></button>
+        <button pButton *ngIf="hideDevices" icon="pi pi-plus"  pTooltip="Create devices" tooltipPosition="bottom" tooltipEvent="hover" (click)="showDialogToAdd()"></button>  
+        <button pButton  icon="pi pi-pencil"  pTooltip="Edit" tooltipPosition="bottom" tooltipEvent="hover" (click)="editDevice()" ></button>        
+        <button pButton *ngIf="hideDevices" icon="pi pi-trash" pTooltip="Delete" tooltipPosition="bottom" tooltipEvent="hover" (click)="delete()" ></button>
         <p-avatar *ngIf="hideDevices" icon="pi pi-user" pTooltip="Create user" tooltipPosition="bottom" tooltipEvent="hover"  class="usericon ml-3" [routerLink]="['/create-user']"/>        
     </div>
 
@@ -21,11 +22,12 @@
     
     <ng-template pTemplate >
         <div >
-            <app-devices-create *ngIf="!hideDevices "></app-devices-create>
-            <app-status *ngIf="!hideStatus"></app-status>
+            <app-devices-create *ngIf="!hideDevices"></app-devices-create>
+            <app-status *ngIf="hideDevices && !hideStatus && hideEdit"></app-status>
+            <app-devices-edit *ngIf="hideDevices && hideStatus && !hideEdit"></app-devices-edit>
         </div>
         
-        <div *ngIf="hideDevices && hideStatus" class="flex flex-grow-1 flex-column m-3">
+        <div *ngIf="hideDevices && hideStatus && hideEdit" class="flex flex-grow-1 flex-column m-3">
             <div  class="flex  flex-row align-items-center border-round h-3rem"
                 style="border:1px solid rgb(215, 211, 211); ">
                 <span class="pi pi-filter m-3"></span>
@@ -38,7 +40,7 @@
                     (onRowSelect)="onRowSelect($event)" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th style="width: 4rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                            <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox"></p-tableHeaderCheckbox></th>
                             <th pSortableColumn="deviceID">Device ID<p-sortIcon field="deviceID"></p-sortIcon></th>
                             <th pSortableColumn="communication">Communication<p-sortIcon
                                     field="communication"></p-sortIcon></th>
@@ -48,7 +50,7 @@
                     </ng-template>
                     <ng-template pTemplate="body" class="device" let-device>
                         <tr>
-                            <td style="width: 4rem"><p-tableCheckbox [value]="device"></p-tableCheckbox></td>
+                            <td style="width: 4rem"><p-tableCheckbox name="checkbox" [value]="device"></p-tableCheckbox></td>
                             <td>{{ device.deviceID }}</td>
                             <td class="communicationBox" *ngIf="device.communication === 'Allowed'">
                                 <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false"

@@ -13,7 +13,7 @@
             </div>
 
             <div class="p-field">
-                <label><strong>Device communication</strong></label>
+                <span><strong>Device communication</strong></span>
                 <small>If blocked, all communications from the device will be rejected. Blocking a device may be useful if it's defective or not configured.</small>
                 <div class="card flex mt-2 ">
                     <div class="flex flex-column gap-1">
@@ -33,7 +33,7 @@
             </div>
 
             <div class="p-field">
-                <label><strong>Authentication (optional)</strong></label>
+                <span><strong>Authentication (optional)</strong></span>
                 <small>Specify the public key that will be used to authenticate this device. You can leave the key empty, but devices will not be able to connect to ClearBlade without a key.</small>
                 <div class="card flex mt-2 ">
                     <div class="flex flex-column gap-1">
@@ -50,12 +50,12 @@
                         <div >
                            <div *ngIf="!showUserPassField" class="flex flex-column gap-2">
                             <label for="username">Username</label>
-                            <input class="mb-4" name="username" pInputText id="username" aria-describedby="username-help" />
+                            <input class="mb-4" name="username" pInputText id="username" aria-describedby="username-help"autocomplete="off"/>
                           </div>
                           
                           <div *ngIf="!showUserPassField" class="flex flex-column gap-2 mb-4">
-                            <label for="passwordInput">Password</label>
-                           <p-password name="passwordInput" id="passwordInput" [inputId]="'passwordInput'"  class="w-full" promptLabel="Choose a password" 
+                            <span id="passwordInput">Password</span>
+                            <p-password name="passwordInput" id="passwordInput" [inputId]="'passwordInput'"  class="w-full" promptLabel="Choose a password" 
                              [toggleMask]="true" [style]="{'width':'100%'}"
                               [inputStyle]="{'width':'100%'}"/> 
                           </div>

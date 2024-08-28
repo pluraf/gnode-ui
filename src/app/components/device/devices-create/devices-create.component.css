@@ -15,3 +15,10 @@ small {
   margin-top: 0.5rem;
   color: black;
 }
+:host {
+  .p-radiobutton {
+    background-color: #4caf50 !important;
+    border: 2px solid green;
+    color: white;
+  }
+}

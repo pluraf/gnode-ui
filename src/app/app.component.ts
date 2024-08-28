@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
-import { DeviceComponent } from './device/device.component';
 import { CardModule } from 'primeng/card';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
@@ -13,7 +12,6 @@ import { FooterComponent } from './components/layouts/footer/footer.component';
   standalone: true,
   imports: [
     RouterOutlet,
-    DeviceComponent,
     CardModule,
     MenubarModule,
     HeaderComponent,

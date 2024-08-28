@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { authGuard } from './guards/auth.guard';
-import { DeviceComponent } from './device/device.component';
-import { DeviceDetailComponent } from './device/device-detail/device-detail.component';
-import { DevicesCreateComponent } from './device/devices-create/devices-create.component';
+import { DeviceComponent } from './components/device/device.component';
+import { DeviceDetailComponent } from './components/device/device-detail/device-detail.component';
+import { DevicesCreateComponent } from './components/device/devices-create/devices-create.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { StatusComponent } from './components/sidemenu/status/status.component';
+import { DevicesEditComponent } from './components/device/devices-edit/devices-edit.component';
 
 export const routes: Routes = [
   {
@@ -37,5 +38,9 @@ export const routes: Routes = [
   {
     path: 'status',
     component: StatusComponent,
+  },
+  {
+    path: 'device-edit',
+    component: DevicesEditComponent,
   },
 ];
