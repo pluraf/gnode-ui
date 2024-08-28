@@ -16,6 +16,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { AvatarModule } from 'primeng/avatar';
 import { TooltipModule } from 'primeng/tooltip';
 import { FieldsetModule } from 'primeng/fieldset';
+import { MenubarModule } from 'primeng/menubar';
 
 export const PRIMENG_MODULES = [
   ButtonModule,
@@ -36,4 +37,5 @@ export const PRIMENG_MODULES = [
   AvatarModule,
   TooltipModule,
   FieldsetModule,
+  MenubarModule,
 ];

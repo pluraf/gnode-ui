@@ -1,28 +1,31 @@
-import { Component } from '@angular/core';
-import { CardModule } from 'primeng/card';
-import { MenubarModule } from 'primeng/menubar';
+import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user.service';
+import { PRIMENG_MODULES } from '../../../shared/primeng-modules';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CardModule, MenubarModule],
+  imports: [PRIMENG_MODULES],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   items: MenuItem[] | undefined;
   constructor(
     private router: Router,
     private userService: UserService,
   ) {}
+
   ngOnInit() {
-    this.updateMenu();
+    this.userService.isUserLoggedIn().subscribe((isLoggedIn) => {
+      this.updateMenu(isLoggedIn);
+    });
   }
-  updateMenu() {
-    this.items = this.userService.isLoggedIn()
+
+  updateMenu(isLoggedIn: boolean) {
+    this.items = isLoggedIn
       ? [{ label: 'Sign out', command: () => this.onSignOut() }]
       : [{ label: 'Sign in', command: () => this.onSignIn() }];
   }
@@ -33,7 +36,6 @@ export class HeaderComponent {
 
   onSignOut() {
     this.userService.logout();
-    this.updateMenu();
     this.router.navigateByUrl('/login');
   }
 }

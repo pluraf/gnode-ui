@@ -13,7 +13,7 @@ export class MqttBrokerServiceService {
   testBroker(): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
-        Authorization: 'Bearer ey', // Replace 'ey' with your actual token
+        Authorization: 'Bearer ey',
         'Content-Type': 'application/json',
       }),
     };

@@ -1,44 +1,54 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private token: string | null = null;
-  private isAdmin: boolean = false;
+  private token: BehaviorSubject<string | null>;
+  private isAdmin: BehaviorSubject<boolean>;
+  private isLoggedIn: BehaviorSubject<boolean>;
 
-  constructor() {}
+  constructor() {
+    const storedToken = sessionStorage.getItem('access_token');
+    const storedAdminStatus = sessionStorage.getItem('is_admin') === 'true';
+
+    this.token = new BehaviorSubject<string | null>(storedToken);
+    this.isAdmin = new BehaviorSubject<boolean>(storedAdminStatus);
+
+    this.isLoggedIn = new BehaviorSubject<boolean>(!!storedToken);
+  }
 
   login(token: string) {
-    this.token = token;
     sessionStorage.setItem('access_token', token);
-
-    // Set the admin status based on the parsed token
     const user = this.parseJwt(token);
     this.setAdminStatus(user.is_admin);
+    this.token.next(token);
+    this.isLoggedIn.next(true);
   }
 
   logout() {
-    this.token = null;
-    this.isAdmin = false;
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('is_admin');
+    this.token.next(null);
+    this.isAdmin.next(false);
+    this.isLoggedIn.next(false);
   }
 
   setAdminStatus(status: boolean) {
-    this.isAdmin = status;
     sessionStorage.setItem('is_admin', String(status));
+    this.isAdmin.next(status);
   }
-  getAdminStatus(): boolean {
-    return this.isAdmin || sessionStorage.getItem('is_admin') === 'true';
-  }
-
-  getToken(): string | null {
-    return this.token || sessionStorage.getItem('access_token');
+  getAdminStatus(): Observable<boolean> {
+    return this.isAdmin.asObservable();
   }
 
-  isLoggedIn(): boolean {
-    return !!sessionStorage.getItem('access_token');
+  getToken(): Observable<string | null> {
+    return this.token.asObservable();
+  }
+
+  isUserLoggedIn(): Observable<boolean> {
+    return this.isLoggedIn.asObservable();
   }
 
   //function to parse JWT token

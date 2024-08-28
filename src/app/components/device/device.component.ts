@@ -125,9 +125,11 @@ export class DeviceComponent {
     if (selectedItem) {
       this.selectedMenuName = selectedItem.name;
       if (this.selectedMenuName === 'Status') {
-        this.hideStatus = false; /* 
-        this.router.navigateByUrl('/status'); */
+        this.hideStatus = false;
       }
+      /*   else if (this.selectedMenuName === 'Devices') {
+        this.hideDevices = false;
+      }*/
     }
   }
   editDevice() {
