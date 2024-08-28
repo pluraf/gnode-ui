@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class MqttBrokerServiceService {
-  private apiUrl = 'http://localhost:8888/broker/command';
+  private apiUrl = 'broker/command';
 
   constructor(private http: HttpClient) {}
 
