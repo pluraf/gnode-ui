@@ -1,7 +1,21 @@
 <!-- Header -->
 <app-header></app-header>
 
-<router-outlet></router-outlet>
+@if (router.url == "/login") {
+  <router-outlet></router-outlet>
+} @else {
+  <p-splitter [panelSizes]="[12, 88]" [style]="{ height: '100vh' }">
+      <ng-template pTemplate class="sidemenu">
+        <form [formGroup]="formGroup">
+          <p-listbox [options]="sidemenulist" formControlName="selectedMenu" optionLabel="name"
+              [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}" (onChange)="onMenuSelect($event)" />
+        </form>
+      </ng-template>
+      <ng-template pTemplate>
+        <router-outlet></router-outlet>
+      </ng-template>
+  </p-splitter>
+}
 
 <!-- Footer -->
 <app-footer></app-footer>

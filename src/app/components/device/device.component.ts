@@ -37,9 +37,6 @@ export class DeviceComponent {
   hideStatus: boolean = true;
   hideEdit: boolean = true;
 
-  formGroup!: FormGroup<{ selectedMenu: FormControl<Sidemenu | null> }>;
-
-  sidemenulist: Sidemenu[] = [{ name: 'Devices' }, { name: 'Status' }];
   first: number = 0;
   rows: number = 5;
   totalRecords: number = 5;
@@ -87,9 +84,7 @@ export class DeviceComponent {
   selectedMenuName: string = 'Devices';
 
   constructor(private router: Router) {
-    this.formGroup = new FormGroup({
-      selectedMenu: new FormControl<Sidemenu | null>(null),
-    });
+
   }
 
   formatDate(date: Date): string {
@@ -107,6 +102,7 @@ export class DeviceComponent {
 
   showDialogToAdd() {
     this.hideDevices = false;
+    this.router.navigate(['devices-create']);
   }
 
   delete() {

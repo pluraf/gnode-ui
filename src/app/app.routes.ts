@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { DeviceComponent } from './components/device/device.component';
-import { DeviceDetailComponent } from './components/device/device-detail/device-detail.component';
+import { DeviceDetailComponent } from './components/device/connector-details/device-detail.component';
 import { DevicesCreateComponent } from './components/device/devices-create/devices-create.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { StatusComponent } from './components/sidemenu/status/status.component';
@@ -32,7 +32,7 @@ export const routes: Routes = [
     component: DevicesCreateComponent,
   },
   {
-    path: 'device-detail',
+    path: 'connector/:connid',
     component: DeviceDetailComponent,
   },
   {
