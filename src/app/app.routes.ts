@@ -23,7 +23,7 @@ export const routes: Routes = [
     component: CreateUserComponent,
   },
   {
-    path: 'device',
+    path: 'connectors',
     component: DeviceComponent,
     canActivate: [authGuard],
   },

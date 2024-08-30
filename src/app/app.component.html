@@ -6,10 +6,8 @@
 } @else {
   <p-splitter [panelSizes]="[12, 88]" [style]="{ height: '100vh' }">
       <ng-template pTemplate class="sidemenu">
-        <form [formGroup]="formGroup">
-          <p-listbox [options]="sidemenulist" formControlName="selectedMenu" optionLabel="name"
-              [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}" (onChange)="onMenuSelect($event)" />
-        </form>
+          <a routerLink="/connectors">Connectors</a>
+          <a routerLink="/connectors">Pipelines</a>
       </ng-template>
       <ng-template pTemplate>
         <router-outlet></router-outlet>
