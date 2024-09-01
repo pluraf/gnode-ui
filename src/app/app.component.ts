@@ -1,33 +1,30 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
-import {
-  FormsModule,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { HeaderComponent } from './components/layouts/header/header.component';
-import { FooterComponent } from './components/layouts/footer/footer.component';
-import { PRIMENG_MODULES } from './shared/primeng-modules';
+import { HeaderComponent } from './components/header/header.component';
+import { MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
+import { DividerModule } from 'primeng/divider';
+import { SidebarModule } from 'primeng/sidebar';
+import { SplitterModule } from 'primeng/splitter';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, PRIMENG_MODULES],
+  imports: [RouterOutlet, HeaderComponent, MenuModule, SplitterModule, DividerModule, SidebarModule],
   providers: [Router],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'gnode-ui';
-  sidemenulist = ['Devices', 'Status'];
-  formGroup!: FormGroup<{ selectedMenu: FormControl<[] | null> }>;
   router: Router = inject(Router);
+  items : MenuItem[] = [
+    {label: 'Connectors', routerLink: '/connectors'},
+    {label: 'Pipelines', routerLink: '/pipelines'},
+    {label: 'Users', routerLink: '/users'},
+  ];
 
   constructor() {
-    this.formGroup = new FormGroup({
-      selectedMenu: new FormControl<[] | null>(null),
-    });
   }
 
 }

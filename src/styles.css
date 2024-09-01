@@ -12,3 +12,16 @@ body {
 a {
   text-decoration: none;
 }
+
+.no-border {
+  border: none;
+  box-shadow: none;
+}
+
+.p-menuitem-link-active {
+  background-color: rgb(247, 245, 245);
+}
+
+.p-sidebar {
+  width: 180px;
+}

@@ -1,13 +1,13 @@
-<div class="card flex flex-column justify-content-center">
-  <div class="mb-4  flex flex-column ">
+<div class="card flex flex-column justify-content-center" style="margin-top: 10vh">
+  <div class="mb-4 flex flex-column ">
     <h1 class=" flex flex-row justify-content-center mt-3 mb-auto">Log in</h1>
-    <p class="descText flex flex-row justify-content-center mt-2">Please enter your details.</p>
+    <p class="descText flex flex-row justify-content-center mt-2">Enter your login details</p>
   </div>
   <div class="flex flex-column justify-content-center mb-2">
     <form>
       <div class="card flex flex-row justify-content-center">
         <p-card>
-          
+
           <div class="flex flex-column gap-2">
             <label for="username">Username</label>
             <input class="mb-4" name="username" pInputText id="username" aria-describedby="username-help"
@@ -15,16 +15,13 @@
           </div>
           <div class="flex flex-column gap-2 mb-4">
             <span id="passwordInput">Password</span>
-            <p-password [(ngModel)]="loginObj.password" name="passwordInput"  class="w-full" promptLabel="Choose a password" 
+            <p-password [(ngModel)]="loginObj.password" name="passwordInput"  class="w-full" promptLabel="Choose a password"
              [toggleMask]="true" [style]="{'width':'100%'}"
-              [inputStyle]="{'width':'100%'}"/> 
+              [inputStyle]="{'width':'100%'}"/>
           </div>
           <button pButton pRipple label="LOG IN" (click)="onLogin()"> </button>
         </p-card>
       </div>
     </form>
-  </div>
-  <div class="flex flex-column justify-content-center">
-    <p-divider layout="horizontal" class="p-divider-center flex flex-row justify-content-center w-2 m-auto"></p-divider>
   </div>
 </div>

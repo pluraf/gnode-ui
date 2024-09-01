@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
-import { UserService } from '../../../services/user.service';
-import { PRIMENG_MODULES } from '../../../shared/primeng-modules';
+import { UserService } from '../../services/user.service';
+import { MenubarModule } from 'primeng/menubar';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [PRIMENG_MODULES],
+  imports: [MenubarModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })

@@ -1,19 +1,14 @@
 <!-- Header -->
-<app-header></app-header>
-
 @if (router.url == "/login") {
   <router-outlet></router-outlet>
 } @else {
-  <p-splitter [panelSizes]="[12, 88]">
-      <ng-template pTemplate class="sidemenu">
-          <a routerLink="/connectors">Connectors</a>
-          <a routerLink="/connectors">Pipelines</a>
-      </ng-template>
-      <ng-template pTemplate>
-        <router-outlet></router-outlet>
-      </ng-template>
-  </p-splitter>
-}
+  <app-header></app-header>
 
-<!-- Footer -->
-<app-footer></app-footer>
+<p-sidebar [visible]="true" [modal]="false" [showCloseIcon]="false" [transitionOptions]="''" [style]="{'padding-top': '40px'}">
+  <p-menu [model]="items" styleClass="no-border" [style]="{width: '100%'}"/>
+</p-sidebar>
+<div style="margin-left: 180px; margin-top: 70px;">
+<router-outlet></router-outlet>
+</div>
+
+}
