@@ -4,7 +4,7 @@
 @if (router.url == "/login") {
   <router-outlet></router-outlet>
 } @else {
-  <p-splitter [panelSizes]="[12, 88]" [style]="{ height: '100vh' }">
+  <p-splitter [panelSizes]="[12, 88]">
       <ng-template pTemplate class="sidemenu">
           <a routerLink="/connectors">Connectors</a>
           <a routerLink="/connectors">Pipelines</a>
