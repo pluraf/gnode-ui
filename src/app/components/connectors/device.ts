@@ -1,6 +1,6 @@
 export interface Device {
   id?: number;
-  deviceID: string;
+  clients: string;
   communication: string;
   lastseen?: string;
 }

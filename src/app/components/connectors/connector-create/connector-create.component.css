@@ -1,6 +1,7 @@
 .createDevice-container {
-  max-height: 100vh;
-  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
 }
 
 #deviceID {
@@ -21,4 +22,8 @@ small {
     border: 2px solid green;
     color: white;
   }
+}
+
+textarea {
+  border: none;
 }

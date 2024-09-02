@@ -28,4 +28,17 @@ export class MqttBrokerServiceService {
 
     return this.http.post(this.apiUrl, postData, httpOptions);
   }
+  updateData(id: any): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ey',
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    const url = `${this.apiUrl}/${id}`;
+
+    return this.http.put(url, httpOptions);
+  }
+  createConnector() {}
 }

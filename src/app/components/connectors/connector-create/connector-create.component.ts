@@ -4,13 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-devices-create',
+  selector: 'app-connector-create',
   standalone: true,
   imports: [PRIMENG_MODULES, CommonModule, FormsModule],
-  templateUrl: './devices-create.component.html',
-  styleUrl: './devices-create.component.css',
+  templateUrl: './connector-create.component.html',
+  styleUrl: './connector-create.component.css',
 })
-export class DevicesCreateComponent implements OnInit {
+export class ConnectorCreateComponent implements OnInit {
   value!: string;
   selectedCategory: any = null;
   selectedMethod: any = null;

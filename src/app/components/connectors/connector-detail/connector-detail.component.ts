@@ -1,5 +1,4 @@
 import {Component, inject} from '@angular/core';
-import {Device} from '../device';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
@@ -8,10 +7,10 @@ import {ActivatedRoute} from '@angular/router';
   selector: 'app-device-detail',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './device-detail.component.html',
-  styleUrl: './device-detail.component.css',
+  templateUrl: './connector-detail.component.html',
+  styleUrl: './connector-detail.component.css',
 })
-export class DeviceDetailComponent {
+export class ConnectorDetailComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   connector: any;
 

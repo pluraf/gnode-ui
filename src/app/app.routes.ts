@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { authGuard } from './guards/auth.guard';
-import { DeviceComponent } from './components/device/device.component';
-import { DeviceDetailComponent } from './components/device/connector-details/device-detail.component';
-import { DevicesCreateComponent } from './components/device/devices-create/devices-create.component';
+import { ConnectorDetailComponent } from './components/connectors/connector-detail/connector-detail.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { StatusComponent } from './components/sidemenu/status/status.component';
-import { DevicesEditComponent } from './components/device/devices-edit/devices-edit.component';
+import { ConnectorEditComponent } from './components/connectors/connector-edit/connector-edit.component';
+import { ConnectorCreateComponent } from './components/connectors/connector-create/connector-create.component';
+import { ConnectorListComponent } from './components/connectors/connector-list/connector-list.component';
 
 export const routes: Routes = [
   {
@@ -24,23 +24,23 @@ export const routes: Routes = [
   },
   {
     path: 'connectors',
-    component: DeviceComponent,
+    component: ConnectorListComponent,
     canActivate: [authGuard],
   },
   {
-    path: 'devices-create',
-    component: DevicesCreateComponent,
+    path: 'connector-create',
+    component: ConnectorCreateComponent,
   },
   {
     path: 'connector/:connid',
-    component: DeviceDetailComponent,
+    component: ConnectorDetailComponent,
   },
   {
     path: 'status',
     component: StatusComponent,
   },
   {
-    path: 'device-edit',
-    component: DevicesEditComponent,
+    path: 'connector-edit',
+    component: ConnectorEditComponent,
   },
 ];

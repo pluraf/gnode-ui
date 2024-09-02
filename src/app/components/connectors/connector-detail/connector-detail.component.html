@@ -1,0 +1,11 @@
+
+<div class="flex flex-row gap-4 m-auto">Connector ID: {{ connector.connid }}</div>
+<div class="flex flex-row gap-4 m-auto">Last seen: date</div>
+
+<div class="flex flex-row gap-4 m-auto">Authentication type: {{ connector.authtype }}</div>
+<div class="flex flex-row gap-4 m-auto">{{ connector.username }}</div>
+@if (connector.authtype == "password") {
+  <div class="flex flex-row gap-4 m-auto">password</div>
+} @else {
+  <div class="flex flex-row gap-4 m-auto">key</div>
+}
