@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Sidemenu } from '../device/device';
+import { Sidemenu } from '../connectors/device';
 
 @Component({
   selector: 'app-sidemenu',

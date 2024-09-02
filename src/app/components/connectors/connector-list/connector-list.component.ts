@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import {
   FormsModule,
   FormControl,
@@ -7,15 +6,17 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Device, Sidemenu, PageEvent } from './device';
+import { Device, Sidemenu, PageEvent } from '../device';
 import { Router, RouterModule } from '@angular/router';
-import { DevicesCreateComponent } from './devices-create/devices-create.component';
-import { DevicesEditComponent } from './devices-edit/devices-edit.component';
-import { PRIMENG_MODULES } from '../../shared/primeng-modules';
-import { StatusComponent } from '../sidemenu/status/status.component';
+import { PRIMENG_MODULES } from '../../../shared/primeng-modules';
+import { ConnectorEditComponent } from '../connector-edit/connector-edit.component';
+import { ConnectorCreateComponent } from '../connector-create/connector-create.component';
+import { StatusComponent } from '../../sidemenu/status/status.component';
+import { SubheaderComponent } from '../../subheader/subheader.component';
+import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
 
 @Component({
-  selector: 'app-device',
+  selector: 'app-connector-list',
   standalone: true,
   imports: [
     CommonModule,
@@ -23,19 +24,21 @@ import { StatusComponent } from '../sidemenu/status/status.component';
     ReactiveFormsModule,
     PRIMENG_MODULES,
     RouterModule,
-    DevicesCreateComponent,
-    DevicesEditComponent,
+    ConnectorCreateComponent,
+    ConnectorEditComponent,
     StatusComponent,
-    DevicesEditComponent,
+    ConnectorEditComponent,
+    SubheaderComponent,
   ],
-  templateUrl: './device.component.html',
-  styleUrl: './device.component.css',
+  templateUrl: './connector-list.component.html',
+  styleUrl: './connector-list.component.css',
 })
-export class DeviceComponent {
+export class ConnectorListComponent {
   value!: string;
   hideDevices: boolean = true;
   hideStatus: boolean = true;
   hideEdit: boolean = true;
+  filteredDeviceList: Device[] = [];
 
   formGroup!: FormGroup<{ selectedMenu: FormControl<Sidemenu | null> }>;
 
@@ -51,30 +54,25 @@ export class DeviceComponent {
 
   deviceList: Device[] = [
     {
+      id: 0,
+      clients: '',
+      communication: 'Allowed',
+      lastseen: this.formatDate(new Date()),
+    },
+    {
       id: 1,
-      deviceID: 'Device-1',
+      clients: '',
       communication: 'Allowed',
       lastseen: this.formatDate(new Date()),
     },
     {
       id: 2,
-      deviceID: 'Device-2',
-      communication: 'Allowed',
-      lastseen: this.formatDate(new Date()),
-    },
-    {
-      id: 3,
-      deviceID: 'Device-3',
-      communication: 'Allowed',
-      lastseen: this.formatDate(new Date()),
-    },
-    {
-      id: 4,
-      deviceID: 'Device-4',
+      clients: '',
       communication: 'Allowed',
       lastseen: this.formatDate(new Date()),
     },
   ];
+  data: any;
 
   onPageChange(event: PageEvent) {
     this.first = event!.first;
@@ -82,13 +80,25 @@ export class DeviceComponent {
   }
   displayDialog: boolean = false;
   newDevice: boolean = false;
-  device: Device = { deviceID: '', communication: '', lastseen: '' };
+  connector: Device = { clients: '', communication: '', lastseen: '' };
   selectedDevice!: Device;
   selectedMenuName: string = 'Devices';
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private brokerService: MqttBrokerServiceService,
+  ) {
     this.formGroup = new FormGroup({
       selectedMenu: new FormControl<Sidemenu | null>(null),
+    });
+    this.brokerService.testBroker().subscribe({
+      next: (response: { responses: any[] }) => {
+        console.log(response);
+        this.data = response.responses.find(
+          (r: { command: string }) => r.command === 'listClients',
+        )?.data;
+      },
+      error: (error: any) => console.error('There was an error!', error),
     });
   }
 
@@ -105,21 +115,6 @@ export class DeviceComponent {
     return date.toLocaleString('en-EU', options);
   }
 
-  showDialogToAdd() {
-    this.hideDevices = false;
-  }
-
-  delete() {
-    this.deviceList = this.deviceList.filter(
-      (dev) => dev !== this.selectedDevice,
-    );
-    this.device = { deviceID: '', communication: '', lastseen: '' };
-    this.displayDialog = false;
-  }
-
-  onRowSelect(event: any) {
-    this.router.navigateByUrl('/device-detail');
-  }
   onMenuSelect(event: any) {
     const selectedItem = event.value;
     if (selectedItem) {
@@ -127,12 +122,10 @@ export class DeviceComponent {
       if (this.selectedMenuName === 'Status') {
         this.hideStatus = false;
       }
-      /*   else if (this.selectedMenuName === 'Devices') {
-        this.hideDevices = false;
-      }*/
     }
   }
-  editDevice() {
-    this.hideEdit = false;
+
+  onRowSelect(event: any) {
+    this.router.navigateByUrl('/connector-detail');
   }
 }

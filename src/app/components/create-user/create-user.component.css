@@ -1,19 +1,20 @@
-:host {
-  ::ng-deep .p-card .p-card-body {
-    width: 400px;
-  }
-}
-
 button {
   background-color: rgb(22, 111, 103);
   color: #ffff;
-  font-weight: bold;
-  width: 100%;
+  width: 200px;
   height: 35px;
-  border-radius: 4px;
+  border-radius: 0;
   margin-top: 1rem;
 }
+
 h1 {
-  color: black;
+  margin: 1em 0.5em;
   font-weight: 400;
+}
+form {
+  margin: 1em;
+  padding-bottom: 2em;
+}
+input {
+  width: 17em;
 }

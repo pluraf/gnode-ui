@@ -1,18 +1,18 @@
 <div class="editDevice-container">
     <div class="p-grid ml-3 ">
         <div class="p-col-12 p-md-6">
-            <h3>Device ID: </h3>
+            <h3>Connector ID: </h3>
             <div class="p-fluid">
                 <div class="p-field">
                     <p-floatLabel >
                         <input pInputText id="deviceID" [(ngModel)]="value" />
-                        <label for="deviceID">Device ID</label>
+                        <label for="deviceID">Connector ID</label>
                     </p-floatLabel>
                     <small>Permanent identifier for your device. 3-255 characters. Start with a letter. You can also include numbers and the following characters: + . % - _ ~</small>
                 </div>
     
                 <div class="p-field">
-                    <span><strong>Device communication</strong></span>
+                    <span><strong>Connector communication</strong></span>
                     <small>If blocked, all communications from the device will be rejected. Blocking a device may be useful if it's defective or not configured.</small>
                     <div class="card flex mt-3 ">
                         <div class="flex flex-column gap-1">

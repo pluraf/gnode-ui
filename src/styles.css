@@ -1,14 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 body {
   margin: 0;
-  /*    background-image: url('/panoramic-view-city-illuminated-neon-spectrum.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    height:100vh;
-    color: #ffff */
   font-family: Helvetica, Arial, sans-serif;
 }
-
 a {
   text-decoration: none;
 }

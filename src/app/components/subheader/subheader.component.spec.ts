@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DevicesEditComponent } from './devices-edit.component';
+import { SubheaderComponent } from './subheader.component';
 
-describe('DevicesEditComponent', () => {
-  let component: DevicesEditComponent;
-  let fixture: ComponentFixture<DevicesEditComponent>;
+describe('SubheaderComponent', () => {
+  let component: SubheaderComponent;
+  let fixture: ComponentFixture<SubheaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DevicesEditComponent]
+      imports: [SubheaderComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DevicesEditComponent);
+    fixture = TestBed.createComponent(SubheaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
