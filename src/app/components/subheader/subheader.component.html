@@ -1,15 +1,14 @@
-<div class="flex flex-row align-items-center h-3rem" style="border:1px solid rgb(230, 227, 227); padding: 10px;">
+<div class="flex flex-row align-items-center  h-3rem" >
     <div class="flex flex-row align-items-center">
-        <p class="m-2">Registries</p>
-        <p-divider layout="vertical" />
         <p class="m-2"><strong>{{ selectedMenuName }}</strong></p>
     </div>
-    <div class="flex flex-row ml-auto">
-        @if(hideDevices == true){
-        <a [routerLink]="['/connector-create']" pTooltip="Create devices" tooltipPosition="bottom" tooltipEvent="hover" (click)="showDialogToAdd()"><i class="pi pi-plus m-3"></i></a>  
-        <a [routerLink]="['/connector-edit']" pTooltip="Edit" tooltipPosition="bottom" tooltipEvent="hover" (click)="editDevice()" ><i class="pi pi-pencil m-3"></i></a>        
+    <div class="flex flex-row align-items-center ml-auto">
+     <!--    <p-menubar [model]="items" class="subheader"/> -->
+        <a [routerLink]="['/connector-create']" pTooltip="Create connectors" tooltipPosition="bottom" tooltipEvent="hover" (click)="addConnector()"><i class="pi pi-plus m-3"></i></a>  
+        <a [routerLink]="['/connector-edit']" pTooltip="Edit" tooltipPosition="bottom" tooltipEvent="hover" (click)="editConnector()" ><i class="pi pi-pencil m-3"></i></a>        
         <a [routerLink]="['/connector-delete']" pTooltip="Delete" tooltipPosition="bottom" tooltipEvent="hover" (click)="delete()" ><i class="pi pi-trash m-3"></i></a>
-        <a [routerLink]="['/create-user']" pTooltip="Create user" tooltipPosition="bottom" tooltipEvent="hover"  class="usericon "><i class="pi pi-user m-3"></i>  </a> 
-        }
+        <a [routerLink]="['/create-user']" pTooltip="Create user" tooltipPosition="bottom" tooltipEvent="hover"  class="usericon "><i class="pi pi-user m-3"></i>  </a>  
+       
     </div>
 </div>
+

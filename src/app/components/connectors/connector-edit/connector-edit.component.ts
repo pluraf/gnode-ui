@@ -1,12 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { PRIMENG_MODULES } from '../../../shared/primeng-modules';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { RippleModule } from 'primeng/ripple';
 
 @Component({
   selector: 'app-connector-edit',
   standalone: true,
-  imports: [PRIMENG_MODULES, CommonModule],
+  imports: [
+    FormsModule,
+    ButtonModule,
+    RippleModule,
+    InputTextModule,
+    CommonModule,
+    RadioButtonModule,
+  ],
   templateUrl: './connector-edit.component.html',
   styleUrl: './connector-edit.component.css',
 })

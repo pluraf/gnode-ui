@@ -4,12 +4,23 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { UserService } from '../../services/user.service';
-import { PRIMENG_MODULES } from '../../shared/primeng-modules';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, PRIMENG_MODULES],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ButtonModule,
+    InputTextModule,
+    PasswordModule,
+    CardModule,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })

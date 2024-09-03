@@ -1,15 +1,26 @@
 import { Component, inject, Output, EventEmitter } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { PRIMENG_MODULES } from '../../shared/primeng-modules';
 import { UserService } from '../../services/user.service';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-create-user',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, PRIMENG_MODULES],
+  imports: [
+    CommonModule,
+    ButtonModule,
+    InputTextModule,
+    PasswordModule,
+    RouterModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
   templateUrl: './create-user.component.html',
   styleUrl: './create-user.component.css',
 })

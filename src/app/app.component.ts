@@ -6,11 +6,20 @@ import { MenuItem } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitterModule } from 'primeng/splitter';
+import { SubheaderComponent } from './components/subheader/subheader.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, MenuModule, SplitterModule, DividerModule, SidebarModule],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    MenuModule,
+    SplitterModule,
+    DividerModule,
+    SidebarModule,
+    SubheaderComponent,
+  ],
   providers: [Router],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -18,13 +27,11 @@ import { SplitterModule } from 'primeng/splitter';
 export class AppComponent {
   title = 'gnode-ui';
   router: Router = inject(Router);
-  items : MenuItem[] = [
-    {label: 'Connectors', routerLink: '/connectors'},
-    {label: 'Pipelines', routerLink: '/pipelines'},
-    {label: 'Users', routerLink: '/users'},
+  items: MenuItem[] = [
+    { label: 'Connectors', routerLink: '/connectors' },
+    { label: 'Pipelines', routerLink: '/pipelines' },
+    { label: 'Users', routerLink: '/users' },
   ];
 
-  constructor() {
-  }
-
+  constructor() {}
 }

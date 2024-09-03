@@ -1,10 +1,10 @@
-.createDevice-container {
+.createConnector-container {
   width: 100%;
   height: 100%;
   padding: 10px;
 }
 
-#deviceID {
+#connectorID {
   width: 40%;
 }
 .p-fluid .p-field {

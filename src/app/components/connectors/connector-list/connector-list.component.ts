@@ -6,14 +6,15 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Device, Sidemenu, PageEvent } from '../device';
+import { Connector, Sidemenu, PageEvent } from '../connector';
 import { Router, RouterModule } from '@angular/router';
-import { PRIMENG_MODULES } from '../../../shared/primeng-modules';
 import { ConnectorEditComponent } from '../connector-edit/connector-edit.component';
 import { ConnectorCreateComponent } from '../connector-create/connector-create.component';
 import { StatusComponent } from '../../sidemenu/status/status.component';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
+import { TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-connector-list',
@@ -22,13 +23,14 @@ import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    PRIMENG_MODULES,
     RouterModule,
     ConnectorCreateComponent,
     ConnectorEditComponent,
     StatusComponent,
     ConnectorEditComponent,
     SubheaderComponent,
+    TableModule,
+    PaginatorModule,
   ],
   templateUrl: './connector-list.component.html',
   styleUrl: './connector-list.component.css',
@@ -38,7 +40,7 @@ export class ConnectorListComponent {
   hideDevices: boolean = true;
   hideStatus: boolean = true;
   hideEdit: boolean = true;
-  filteredDeviceList: Device[] = [];
+  filteredDeviceList: Connector[] = [];
 
   formGroup!: FormGroup<{ selectedMenu: FormControl<Sidemenu | null> }>;
 
@@ -52,7 +54,7 @@ export class ConnectorListComponent {
     { label: 20, value: 20 },
   ];
 
-  deviceList: Device[] = [
+  connectorList: Connector[] = [
     {
       id: 0,
       clients: '',
@@ -80,8 +82,8 @@ export class ConnectorListComponent {
   }
   displayDialog: boolean = false;
   newDevice: boolean = false;
-  connector: Device = { clients: '', communication: '', lastseen: '' };
-  selectedDevice!: Device;
+  connector: Connector = { clients: '', communication: '', lastseen: '' };
+  selectedConnector!: Connector;
   selectedMenuName: string = 'Devices';
 
   constructor(
@@ -98,7 +100,6 @@ export class ConnectorListComponent {
           (r: { command: string }) => r.command === 'listClients',
         )?.data;
       },
-      error: (error: any) => console.error('There was an error!', error),
     });
   }
 

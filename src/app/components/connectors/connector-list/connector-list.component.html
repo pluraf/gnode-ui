@@ -1,5 +1,5 @@
         <app-subheader></app-subheader>
-        <div *ngIf="hideDevices && hideStatus && hideEdit" class="flex flex-grow-1 flex-column m-3">
+        <div *ngIf="hideDevices && hideStatus && hideEdit" class="flex flex-grow-1 flex-column ">
             <!-- <div  class="flex  flex-row align-items-center border-round h-3rem"
                 style="border:1px solid rgb(215, 211, 211); ">
                 <span class="pi pi-filter m-3"></span>
@@ -8,7 +8,7 @@
                     placeholder="Enter device ID" #filter (click)="filterResults(filter.value)"/>
             </div> -->
             <div  class="flex flex-column justify-content-center border-round  deviceinfo">
-                <p-table #deviceFilter [value]="deviceList" selectionMode="single" [(selection)]="selectedDevice"
+                <p-table [value]="connectorList" selectionMode="single" [(selection)]="selectedConnector"
                     (onRowSelect)="onRowSelect($event)" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
@@ -41,7 +41,7 @@
                     <span class=" m-2 text-color ">Items per page: </span>
                     <p-dropdown [options]="options" optionLabel="label" optionValue="value" [(ngModel)]="rows"
                         (ngModelChange)="first = 0" />
-                    <p-paginator [first]="first" [rows]="rows" [totalRecords]="deviceList.length"
+                    <p-paginator [first]="first" [rows]="rows" [totalRecords]="connectorList.length"
                         (onPageChange)="onPageChange($event)" [showCurrentPageReport]="true"
                         currentPageReportTemplate="{first} - {last} of {totalRecords}" [showPageLinks]="false"
                         [showFirstLastIcon]="false"></p-paginator>

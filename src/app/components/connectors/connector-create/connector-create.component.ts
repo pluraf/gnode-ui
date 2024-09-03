@@ -1,12 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { PRIMENG_MODULES } from '../../../shared/primeng-modules';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { RadioButtonModule } from 'primeng/radiobutton';
 @Component({
   selector: 'app-connector-create',
   standalone: true,
-  imports: [PRIMENG_MODULES, CommonModule, FormsModule],
+  imports: [
+    ButtonModule,
+    InputTextModule,
+    RadioButtonModule,
+    CommonModule,
+    FormsModule,
+    PasswordModule,
+  ],
   templateUrl: './connector-create.component.html',
   styleUrl: './connector-create.component.css',
 })

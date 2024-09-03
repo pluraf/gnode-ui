@@ -1,4 +1,4 @@
-export interface Device {
+export interface Connector {
   id?: number;
   clients: string;
   communication: string;
