@@ -1,4 +1,5 @@
-        <app-subheader></app-subheader>
+        <app-subheader selectedMenuName="Connectors" [items]="menubarItems">
+        </app-subheader>
         <div *ngIf="hideDevices && hideStatus && hideEdit" class="flex flex-grow-1 flex-column ">
             <!-- <div  class="flex  flex-row align-items-center border-round h-3rem"
                 style="border:1px solid rgb(215, 211, 211); ">

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
@@ -24,34 +24,8 @@ import { RippleModule } from 'primeng/ripple';
   styleUrl: './subheader.component.css',
 })
 export class SubheaderComponent {
-  selectedMenuName: string = 'Connectors';
-
-  /*   items: MenuItem[] = [
-    {
-      icon: 'pi pi-plus',
-      tooltip: '',
-      tooltipPosition: 'bottom',
-      routerLink: '/connector-create',
-    },
-    {
-      icon: 'pi pi-pencil',
-      tooltip: '',
-      tooltipPosition: 'bottom',
-      routerLink: '/connector-edit',
-    },
-    {
-      icon: 'pi pi-trash',
-      tooltip: '',
-      tooltipPosition: 'bottom',
-      routerLink: '/connector-delete',
-    },
-    {
-      icon: 'pi pi-user',
-      tooltip: '',
-      tooltipPosition: 'bottom',
-      routerLink: '/create-user',
-    },
-  ]; */
+  @Input() selectedMenuName: string = '';
+  @Input() items: MenuItem[] = [];
   constructor(private router: Router) {}
 
   addConnector() {}

@@ -3,12 +3,14 @@
         <p class="m-2"><strong>{{ selectedMenuName }}</strong></p>
     </div>
     <div class="flex flex-row align-items-center ml-auto">
-     <!--    <p-menubar [model]="items" class="subheader"/> -->
-        <a [routerLink]="['/connector-create']" pTooltip="Create connectors" tooltipPosition="bottom" tooltipEvent="hover" (click)="addConnector()"><i class="pi pi-plus m-3"></i></a>  
-        <a [routerLink]="['/connector-edit']" pTooltip="Edit" tooltipPosition="bottom" tooltipEvent="hover" (click)="editConnector()" ><i class="pi pi-pencil m-3"></i></a>        
-        <a [routerLink]="['/connector-delete']" pTooltip="Delete" tooltipPosition="bottom" tooltipEvent="hover" (click)="delete()" ><i class="pi pi-trash m-3"></i></a>
-        <a [routerLink]="['/create-user']" pTooltip="Create user" tooltipPosition="bottom" tooltipEvent="hover"  class="usericon "><i class="pi pi-user m-3"></i>  </a>  
-       
+        @for (item of items; track $index) {
+          <a [routerLink]="item.routerLink"
+             [pTooltip]="item.tooltipOptions.tooltipLabel"
+             [tooltipPosition]="item.tooltipOptions.tooltipPosition"
+             [tooltipEvent]="item.tooltipOptions.tooltipEvent"
+          >
+            <i [class]="item.iconClass"></i>
+          </a>
+        }
     </div>
 </div>
-

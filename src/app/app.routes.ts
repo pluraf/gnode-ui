@@ -7,6 +7,7 @@ import { StatusComponent } from './components/sidemenu/status/status.component';
 import { ConnectorEditComponent } from './components/connectors/connector-edit/connector-edit.component';
 import { ConnectorCreateComponent } from './components/connectors/connector-create/connector-create.component';
 import { ConnectorListComponent } from './components/connectors/connector-list/connector-list.component';
+import { UserListComponent } from './components/users/user-list/user-list.component';
 
 export const routes: Routes = [
   {
@@ -19,7 +20,11 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'create-user',
+    path: 'users',
+    component: UserListComponent,
+  },
+  {
+    path: 'user-create',
     component: CreateUserComponent,
   },
   {
@@ -36,11 +41,11 @@ export const routes: Routes = [
     component: ConnectorDetailComponent,
   },
   {
-    path: 'status',
-    component: StatusComponent,
-  },
-  {
     path: 'connector-edit',
     component: ConnectorEditComponent,
   },
+  {
+    path: 'status',
+    component: StatusComponent,
+  }
 ];

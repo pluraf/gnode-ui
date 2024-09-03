@@ -15,6 +15,7 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-connector-list',
@@ -45,6 +46,24 @@ export class ConnectorListComponent {
   formGroup!: FormGroup<{ selectedMenu: FormControl<Sidemenu | null> }>;
 
   sidemenulist: Sidemenu[] = [{ name: 'Devices' }, { name: 'Status' }];
+  menubarItems: MenuItem[] = [
+    {
+      routerLink: '/connector-create',
+      tooltipOptions: {tooltipEvent: 'hover', tooltipPosition: 'bottom', tooltipLabel: 'Create connector'},
+      iconClass: 'pi pi-plus m-3'
+    },
+    {
+      routerLink: '/connector-edit',
+      tooltipOptions: {tooltipEvent: 'hover', tooltipPosition: 'bottom', tooltipLabel: 'Edit connector'},
+      iconClass: 'pi pi-pencil m-3'
+    },
+    {
+      routerLink: '/connector-delete',
+      tooltipOptions: {tooltipEvent: 'hover', tooltipPosition: 'bottom', tooltipLabel: 'Delete connector'},
+      iconClass: 'pi pi-trash m-3'
+    }
+  ];
+
   first: number = 0;
   rows: number = 5;
   totalRecords: number = 5;
