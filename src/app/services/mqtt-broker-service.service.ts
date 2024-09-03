@@ -10,22 +10,16 @@ export class MqttBrokerServiceService {
 
   constructor(private http: HttpClient) {}
 
-  testBroker(): Observable<any> {
+  loadConnectorList(): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: 'Bearer ey',
         'Content-Type': 'application/json',
       }),
     };
-
     const postData = {
-      commands: [
-        { command: 'listClients' },
-        { command: 'listGroups' },
-        { command: 'listRoles' },
-      ],
+      commands: [{ command: 'listClients' }],
     };
-
     return this.http.post(this.apiUrl, postData, httpOptions);
   }
   updateData(id: any): Observable<any> {

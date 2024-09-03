@@ -2,8 +2,6 @@ import { Component, Input } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
-import { BadgeModule } from 'primeng/badge';
-import { AvatarModule } from 'primeng/avatar';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
@@ -17,8 +15,6 @@ import { RippleModule } from 'primeng/ripple';
     CommonModule,
     RippleModule,
     InputTextModule,
-    AvatarModule,
-    BadgeModule,
   ],
   templateUrl: './subheader.component.html',
   styleUrl: './subheader.component.css',

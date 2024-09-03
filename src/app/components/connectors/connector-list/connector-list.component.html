@@ -1,30 +1,23 @@
         <app-subheader selectedMenuName="Connectors" [items]="menubarItems">
         </app-subheader>
-        <div *ngIf="hideDevices && hideStatus && hideEdit" class="flex flex-grow-1 flex-column ">
-            <!-- <div  class="flex  flex-row align-items-center border-round h-3rem"
-                style="border:1px solid rgb(215, 211, 211); ">
-                <span class="pi pi-filter m-3"></span>
-                <p class="m-3">Filter</p>
-                <input type="text" name="deviceSearch" class="filterContainer" pInputText [(ngModel)]="searchText"
-                    placeholder="Enter device ID" #filter (click)="filterResults(filter.value)"/>
-            </div> -->
-            <div  class="flex flex-column justify-content-center border-round  deviceinfo">
+        <div class="flex flex-grow-1 flex-column ">
+            <div  class="flex flex-column justify-content-center border-round  connectorinfo">
                 <p-table [value]="connectorList" selectionMode="single" [(selection)]="selectedConnector"
-                    (onRowSelect)="onRowSelect($event)" [tableStyle]="{ 'min-width': '50rem' }">
+                     [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
                             <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox"></p-tableHeaderCheckbox></th>
-                            <th pSortableColumn="deviceID">Connector ID<p-sortIcon field="deviceID"></p-sortIcon></th>
+                            <th pSortableColumn="connectorID">Connector ID<p-sortIcon field="connectorID"></p-sortIcon></th>
                             <th pSortableColumn="communication">Communication<p-sortIcon
                                     field="communication"></p-sortIcon></th>
                             <th pSortableColumn="lastseen">Last Seen<p-sortIcon field="lastseen"></p-sortIcon></th>
 
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" class="device" let-connector>
+                    <ng-template pTemplate="body" class="connector" let-connector>
                         <tr>
                             <td ><p-tableCheckbox name="checkbox" [value]="connector"></p-tableCheckbox></td>
-                            <td >{{ data?.clients[0] }}</td>
+                            <td ><a routerLink='/'>{{ connector.clients }}</a></td>
                             <td class="communicationBox" *ngIf="connector.communication === 'Allowed'">
                                 <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false"
                                     color="green" aria-hidden="true" viewBox="0 0 24 24" data-testid="CheckCircleIcon">

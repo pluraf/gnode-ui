@@ -10,7 +10,6 @@ import { Connector, Sidemenu, PageEvent } from '../connector';
 import { Router, RouterModule } from '@angular/router';
 import { ConnectorEditComponent } from '../connector-edit/connector-edit.component';
 import { ConnectorCreateComponent } from '../connector-create/connector-create.component';
-import { StatusComponent } from '../../sidemenu/status/status.component';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
 import { TableModule } from 'primeng/table';
@@ -27,7 +26,6 @@ import { MenuItem } from 'primeng/api';
     RouterModule,
     ConnectorCreateComponent,
     ConnectorEditComponent,
-    StatusComponent,
     ConnectorEditComponent,
     SubheaderComponent,
     TableModule,
@@ -38,30 +36,35 @@ import { MenuItem } from 'primeng/api';
 })
 export class ConnectorListComponent {
   value!: string;
-  hideDevices: boolean = true;
-  hideStatus: boolean = true;
-  hideEdit: boolean = true;
-  filteredDeviceList: Connector[] = [];
 
-  formGroup!: FormGroup<{ selectedMenu: FormControl<Sidemenu | null> }>;
-
-  sidemenulist: Sidemenu[] = [{ name: 'Devices' }, { name: 'Status' }];
   menubarItems: MenuItem[] = [
     {
       routerLink: '/connector-create',
-      tooltipOptions: {tooltipEvent: 'hover', tooltipPosition: 'bottom', tooltipLabel: 'Create connector'},
-      iconClass: 'pi pi-plus m-3'
+      tooltipOptions: {
+        tooltipEvent: 'hover',
+        tooltipPosition: 'bottom',
+        tooltipLabel: 'Create connector',
+      },
+      iconClass: 'pi pi-plus m-3',
     },
     {
       routerLink: '/connector-edit',
-      tooltipOptions: {tooltipEvent: 'hover', tooltipPosition: 'bottom', tooltipLabel: 'Edit connector'},
-      iconClass: 'pi pi-pencil m-3'
+      tooltipOptions: {
+        tooltipEvent: 'hover',
+        tooltipPosition: 'bottom',
+        tooltipLabel: 'Edit connector',
+      },
+      iconClass: 'pi pi-pencil m-3',
     },
     {
       routerLink: '/connector-delete',
-      tooltipOptions: {tooltipEvent: 'hover', tooltipPosition: 'bottom', tooltipLabel: 'Delete connector'},
-      iconClass: 'pi pi-trash m-3'
-    }
+      tooltipOptions: {
+        tooltipEvent: 'hover',
+        tooltipPosition: 'bottom',
+        tooltipLabel: 'Delete connector',
+      },
+      iconClass: 'pi pi-trash m-3',
+    },
   ];
 
   first: number = 0;
@@ -73,51 +76,30 @@ export class ConnectorListComponent {
     { label: 20, value: 20 },
   ];
 
-  connectorList: Connector[] = [
-    {
-      id: 0,
-      clients: '',
-      communication: 'Allowed',
-      lastseen: this.formatDate(new Date()),
-    },
-    {
-      id: 1,
-      clients: '',
-      communication: 'Allowed',
-      lastseen: this.formatDate(new Date()),
-    },
-    {
-      id: 2,
-      clients: '',
-      communication: 'Allowed',
-      lastseen: this.formatDate(new Date()),
-    },
-  ];
-  data: any;
+  connectorList: Connector[] = [];
 
   onPageChange(event: PageEvent) {
     this.first = event!.first;
     this.rows = event!.rows;
   }
-  displayDialog: boolean = false;
-  newDevice: boolean = false;
   connector: Connector = { clients: '', communication: '', lastseen: '' };
   selectedConnector!: Connector;
-  selectedMenuName: string = 'Devices';
 
-  constructor(
-    private router: Router,
-    private brokerService: MqttBrokerServiceService,
-  ) {
-    this.formGroup = new FormGroup({
-      selectedMenu: new FormControl<Sidemenu | null>(null),
-    });
-    this.brokerService.testBroker().subscribe({
+  constructor(private brokerService: MqttBrokerServiceService) {
+    this.brokerService.loadConnectorList().subscribe({
       next: (response: { responses: any[] }) => {
         console.log(response);
-        this.data = response.responses.find(
+        const clientData = response.responses.find(
           (r: { command: string }) => r.command === 'listClients',
         )?.data;
+        if (clientData) {
+          this.connectorList = clientData.clients.map((client: string) => ({
+            clients: client,
+            communication: 'Allowed',
+            lastseen: this.formatDate(new Date()),
+          }));
+          this.totalRecords = this.connectorList.length;
+        }
       },
     });
   }
@@ -135,17 +117,7 @@ export class ConnectorListComponent {
     return date.toLocaleString('en-EU', options);
   }
 
-  onMenuSelect(event: any) {
-    const selectedItem = event.value;
-    if (selectedItem) {
-      this.selectedMenuName = selectedItem.name;
-      if (this.selectedMenuName === 'Status') {
-        this.hideStatus = false;
-      }
-    }
-  }
-
-  onRowSelect(event: any) {
-    this.router.navigateByUrl('/connector-detail');
-  }
+  /*  onConnectorSelect(event: any) {
+    this.router.navigateByUrl('/connector-edit');
+  } */
 }

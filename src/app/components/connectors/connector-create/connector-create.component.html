@@ -7,12 +7,12 @@
                 <div class="p-field">
                     <label for="connectorID"></label>
                     <input pInputText id="connectorID" [(ngModel)]="value" placeholder="Connector ID"/>
-                    <small>Permanent identifier for your device. 3-255 characters. Start with a letter. You can also include numbers and the following characters: + . % - _ ~</small>
+                    <small>Permanent identifier for your connector. 3-255 characters. Start with a letter. You can also include numbers and the following characters: + . % - _ ~</small>
                 </div>
 
                 <div class="p-field">
                     <span><strong>Connector communication</strong></span>
-                    <small>If blocked, all communications from the device will be rejected. Blocking a device may be useful if it's defective or not configured.</small>
+                    <small>If blocked, all communications from the connector will be rejected. Blocking a connector may be useful if it's defective or not configured.</small>
                     <div class="card flex mt-2 ">
                         <div class="flex flex-column gap-1">
                             <div *ngFor="let category of categories" class="field-checkbox">
@@ -31,7 +31,7 @@
 
                 <div class="p-field">
                     <span><strong>Authentication (optional)</strong></span>
-                    <small>Specify the public key that will be used to authenticate this device. You can leave the key empty, but devices will not be able to connect to ClearBlade without a key.</small>
+                    <small>Specify the public key that will be used to authenticate this connector. You can leave the key empty, but connectors will not be able to connect to ClearBlade without a key.</small>
                     <div class="card flex mt-2 ">
                         <div class="flex flex-column gap-1">
                             <div *ngFor="let inputmethod of inputMethod" class="field-checkbox">

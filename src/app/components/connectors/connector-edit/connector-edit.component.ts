@@ -27,7 +27,7 @@ export class ConnectorEditComponent implements OnInit {
   connID = '';
 
   constructor(private brokerService: MqttBrokerServiceService) {
-    this.brokerService.testBroker().subscribe({
+    this.brokerService.loadConnectorList().subscribe({
       next: (response: { responses: any[] }) => {
         console.log(response);
         this.data = response.responses.find(
