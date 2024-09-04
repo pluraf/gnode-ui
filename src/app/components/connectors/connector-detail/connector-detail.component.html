@@ -1,11 +1,17 @@
+<app-subheader selectedMenuName="Connector ID: {{connid}}" [items]="menubarItems"></app-subheader>
 
-<div class="flex flex-row gap-4 m-auto">Connector ID: {{ connector.connid }}</div>
-<div class="flex flex-row gap-4 m-auto">Last seen: date</div>
 
-<div class="flex flex-row gap-4 m-auto">Authentication type: {{ connector.authtype }}</div>
-<div class="flex flex-row gap-4 m-auto">{{ connector.username }}</div>
-@if (connector.authtype == "password") {
-  <div class="flex flex-row gap-4 m-auto">password</div>
-} @else {
-  <div class="flex flex-row gap-4 m-auto">key</div>
-}
+<p-table [value]="details" [tableStyle]="{ 'min-width': '10rem' }">
+    <ng-template pTemplate="body"  let-detail>
+        <tr>
+            <td style="max-width: 25rem; width:15rem">{{ detail[0] }}</td>
+            <td>
+              @if (detail[0].startsWith("JWT")) {
+                <textarea cols="60" rows="5" disabled="true" style="resize: none;">{{ detail[1] }}</textarea>
+              } @else {
+                {{ detail[1] }}
+              }
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
