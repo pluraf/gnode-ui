@@ -17,7 +17,11 @@
                     <ng-template pTemplate="body" class="connector" let-connector>
                         <tr>
                             <td ><p-tableCheckbox name="checkbox" [value]="connector"></p-tableCheckbox></td>
+<<<<<<< HEAD
                             <td ><a routerLink='/connector-edit'>{{ connector.connid }}</a></td>
+=======
+                            <td ><a routerLink="/connector/{{connector.clients}}">{{ connector.clients }}</a></td>
+>>>>>>> 742eacd89f38b5241415515d0803e7fe08d08a6e
                             <td class="communicationBox" *ngIf="connector.communication === 'Allowed'">
                                 <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false"
                                     color="green" aria-hidden="true" viewBox="0 0 24 24" data-testid="CheckCircleIcon">

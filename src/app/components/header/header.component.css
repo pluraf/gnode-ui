@@ -1,6 +1,6 @@
 ::ng-deep .p-menubar {
   flex-direction: row-reverse;
-  background-color: #0f5c55;
+  background-color: #006666;
   border-radius: 0px;
   position: fixed;
   width: 100%;
@@ -25,5 +25,5 @@
 }
 
 ::ng-deep .p-menubar .p-menuitem > .p-menuitem-content:hover {
-  background-color: #0a4f49;
+  background-color: #006666;
 }
