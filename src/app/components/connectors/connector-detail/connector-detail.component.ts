@@ -7,6 +7,7 @@ import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
+import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
 
 @Component({
   selector: 'app-device-detail',
@@ -17,6 +18,7 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
 })
 export class ConnectorDetailComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
+  brokerService = inject(MqttBrokerServiceService);
   connid = '';
   connector: any;
   details: any;
@@ -41,20 +43,9 @@ export class ConnectorDetailComponent {
     },
   ];
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.connid = this.route.snapshot.params['connid'];
-    this.loadConnectorDetails();
-  }
-  loadConnectorDetails() {
-    const command = {
-      commands: [
-        {
-          command: 'getClient',
-          connid: this.connid,
-        },
-      ],
-    };
-    this.http.post<any>('/broker/command', command).subscribe((response) => {
+    this.brokerService.loadConnectorDetails(this.connid).subscribe((response: any) => {
       this.connector = response.responses[0].data.client;
       this.details = [
         ['Enabled', !this.connector.disabled],

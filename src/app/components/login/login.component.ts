@@ -49,12 +49,6 @@ export class LoginComponent {
         .subscribe((res: any) => {
           if (res.access_token) {
             this.userService.login(res.access_token);
-
-            const user = this.userService.parseJwt(res.access_token);
-
-            if (user.is_admin) {
-              this.userService.setAdminStatus(true);
-            }
             this.router.navigateByUrl('/connectors');
           } else {
             alert('Invalid Username or Password.');

@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class UserService {
-  private token: BehaviorSubject<string | null>;
+  private token = "";
   private isAdmin: BehaviorSubject<boolean>;
   private isLoggedIn: BehaviorSubject<boolean>;
 
@@ -13,7 +13,6 @@ export class UserService {
     const storedToken = sessionStorage.getItem('access_token');
     const storedAdminStatus = sessionStorage.getItem('is_admin') === 'true';
 
-    this.token = new BehaviorSubject<string | null>(storedToken);
     this.isAdmin = new BehaviorSubject<boolean>(storedAdminStatus);
 
     this.isLoggedIn = new BehaviorSubject<boolean>(!!storedToken);
@@ -23,14 +22,14 @@ export class UserService {
     sessionStorage.setItem('access_token', token);
     const user = this.parseJwt(token);
     this.setAdminStatus(user.is_admin);
-    this.token.next(token);
+    this.token = token;
     this.isLoggedIn.next(true);
   }
 
   logout() {
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('is_admin');
-    this.token.next(null);
+    this.token = "";
     this.isAdmin.next(false);
     this.isLoggedIn.next(false);
   }
@@ -43,8 +42,8 @@ export class UserService {
     return this.isAdmin.asObservable();
   }
 
-  getToken(): Observable<string | null> {
-    return this.token.asObservable();
+  getToken(): string {
+    return this.token;
   }
 
   isUserLoggedIn(): Observable<boolean> {
