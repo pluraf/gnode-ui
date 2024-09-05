@@ -87,8 +87,8 @@ export class ConnectorListComponent {
           (r: { command: string }) => r.command === 'listClients',
         )?.data;
         if (clientData) {
-          this.connectorList = clientData.clients.map((connid: string) => ({
-            connid: connid,
+          this.connectorList = clientData.clients.map((client: string) => ({
+            clients: client,
             communication: 'Allowed',
             lastseen: this.formatDate(new Date()),
           }));
