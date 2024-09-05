@@ -33,3 +33,16 @@ button {
   font-size: 18px;
   justify-content: center;
 }
+select {
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  padding: 5px;
+  width: 100%;
+}
+select:focus {
+  outline: none;
+}
+option {
+  border-radius: 0;
+}

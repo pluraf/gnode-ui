@@ -45,7 +45,7 @@
                                 </label>
                             </div>
                         <div >
-                        <div *ngIf="!showUserPassField" class="flex flex-column gap-2">
+                    <!--     <div *ngIf="!showUserPassField" class="flex flex-column gap-2">
                             <label for="username">Username</label>
                             <input class="mb-4" name="username" pInputText id="username" aria-describedby="username-help"autocomplete="off"/>
                         </div>
@@ -54,17 +54,14 @@
                             <p-password name="passwordInput" id="passwordInput" [inputId]="'passwordInput'"  class="w-full" promptLabel="Choose a password" 
                                 [toggleMask]="true" [style]="{'width':'100%'}"
                                 [inputStyle]="{'width':'100%'}"/> 
-                        </div>
+                        </div> -->
                         </div>
                         <fieldset>
                             <legend>Public Key</legend>
-                            <textarea name="publicKey" rows="3" cols="30" ><div class="flex justify-content-center">
-                                <p-dropdown 
-                                    [options]="cities" 
-                                    [(ngModel)]="selectedCity" 
-                                    optionLabel="name"
-                                    placeholder="Select a City" />
-                            </div></textarea>
+                            <select name="keyOptions">
+                                <option value="key1">RS256</option>
+                                <option value="key2">Username and Password</option>
+                            </select>
                         </fieldset>
                     </div>
                 </div>

@@ -24,6 +24,7 @@ export class MqttBrokerServiceService {
     };
     return this.http.post(this.apiUrl, postData, httpOptions);
   }
+
   updateData(id: any): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
