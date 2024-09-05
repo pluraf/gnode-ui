@@ -33,8 +33,8 @@ export class ConnectorCreateComponent implements OnInit {
   ];
 
   inputMethod: any[] = [
-    { name: 'Username & Password', key: 'UP' },
-    { name: 'Public Key', key: 'PK' },
+    { name: 'Enter Manually', key: 'EM' },
+    { name: 'Upload', key: 'U' },
   ];
 
   ngOnInit() {
@@ -49,4 +49,6 @@ export class ConnectorCreateComponent implements OnInit {
       this.showPublicKeyField = true;
     }
   }
+
+  onSubmit() {}
 }

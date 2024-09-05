@@ -18,7 +18,9 @@ export class MqttBrokerServiceService {
       }),
     };
     const postData = {
-      commands: [{ command: 'listClients' }],
+      commands: [
+        { command: 'listClients', connid: 'connid', disabled: Boolean },
+      ],
     };
     return this.http.post(this.apiUrl, postData, httpOptions);
   }

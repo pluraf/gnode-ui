@@ -6,6 +6,8 @@
   width: 100%;
   top: 0px;
   z-index: 10000;
+  height: 60px;
+  padding: 0;
 }
 
 ::ng-deep div.p-menubar.p-component {

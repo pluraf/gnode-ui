@@ -6,7 +6,7 @@ import { MenuItem } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitterModule } from 'primeng/splitter';
-import { SubheaderComponent } from './components/subheader/subheader.component';
+import { ConnectorDetailComponent } from './components/connectors/connector-detail/connector-detail.component';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +18,7 @@ import { SubheaderComponent } from './components/subheader/subheader.component';
     SplitterModule,
     DividerModule,
     SidebarModule,
-    SubheaderComponent,
+    ConnectorDetailComponent,
   ],
   providers: [Router],
   templateUrl: './app.component.html',

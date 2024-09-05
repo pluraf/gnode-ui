@@ -1,6 +1,5 @@
 export interface Connector {
-  id?: number;
-  clients: string;
+  connid: string;
   communication: string;
   lastseen?: string;
 }

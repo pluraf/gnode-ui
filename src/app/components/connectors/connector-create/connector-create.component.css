@@ -27,3 +27,9 @@ small {
 textarea {
   border: none;
 }
+button {
+  background-color: #0f5c30;
+  width: 8rem;
+  font-size: 18px;
+  justify-content: center;
+}

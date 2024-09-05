@@ -1,7 +1,7 @@
-import {Component, inject} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {CommonModule} from '@angular/common';
-import {ActivatedRoute} from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-device-detail',
@@ -20,12 +20,14 @@ export class ConnectorDetailComponent {
   }
   loadConnectorDetails(connid: string) {
     const command = {
-      commands: [{
-        command: 'getClient',
-        connid: connid
-      }]
+      commands: [
+        {
+          command: 'getClient',
+          connid: connid,
+        },
+      ],
     };
-    this.http.post<any>('/broker/command', command).subscribe(response => {
+    this.http.post<any>('/broker/command', command).subscribe((response) => {
       this.connector = response.responses[0].data.client;
       console.log(this.connector);
     });

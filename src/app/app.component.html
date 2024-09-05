@@ -1,12 +1,15 @@
-<!-- Header -->
 @if (router.url == "/login") {
   <router-outlet></router-outlet>
 } @else {
-  <app-header></app-header>
+  <div>
+    <app-header></app-header>
+  </div>
+  
 <p-sidebar [visible]="true" [modal]="false" [showCloseIcon]="false" [transitionOptions]="'0s'" [style]="{'padding-top': '40px'}">
   <p-menu [model]="items" styleClass="no-border" [style]="{width: '100%'}"/>
 </p-sidebar>
 <div style="margin-left: 180px; margin-top: 56px;">
+  <app-connector-detail></app-connector-detail>
 <router-outlet></router-outlet>
 </div>
 

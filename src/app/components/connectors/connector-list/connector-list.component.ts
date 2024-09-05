@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
-import {
-  FormsModule,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Connector, Sidemenu, PageEvent } from '../connector';
+import { Connector, PageEvent } from '../connector';
 import { Router, RouterModule } from '@angular/router';
 import { ConnectorEditComponent } from '../connector-edit/connector-edit.component';
 import { ConnectorCreateComponent } from '../connector-create/connector-create.component';
@@ -76,13 +71,12 @@ export class ConnectorListComponent {
     { label: 20, value: 20 },
   ];
 
-  connectorList: Connector[] = [];
-
   onPageChange(event: PageEvent) {
     this.first = event!.first;
     this.rows = event!.rows;
   }
-  connector: Connector = { clients: '', communication: '', lastseen: '' };
+
+  connectorList: Connector[] = [];
   selectedConnector!: Connector;
 
   constructor(private brokerService: MqttBrokerServiceService) {
@@ -93,8 +87,8 @@ export class ConnectorListComponent {
           (r: { command: string }) => r.command === 'listClients',
         )?.data;
         if (clientData) {
-          this.connectorList = clientData.clients.map((client: string) => ({
-            clients: client,
+          this.connectorList = clientData.clients.map((connid: string) => ({
+            connid: connid,
             communication: 'Allowed',
             lastseen: this.formatDate(new Date()),
           }));
@@ -116,8 +110,4 @@ export class ConnectorListComponent {
     };
     return date.toLocaleString('en-EU', options);
   }
-
-  /*  onConnectorSelect(event: any) {
-    this.router.navigateByUrl('/connector-edit');
-  } */
 }
