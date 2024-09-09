@@ -1,63 +1,6 @@
-.sidemenu {
-  background-color: #fff;
-}
-
-.device {
-  border: 1px solid black;
-}
-
 :host {
   ::ng-deep .p-datatable {
     border: 1px solid rgb(193, 191, 191);
-  }
-}
-
-:host {
-  .p-button {
-    border: none;
-    background-color: #fff;
-    color: black;
-  }
-}
-
-:host {
-  .p-radiobutton .p-radiobutton-box {
-    background-color: #4caf50 !important;
-    border: 2px solid green;
-    color: white;
-  }
-}
-
-:host {
-  ::ng-deep .p-listbox .p-listbox-list {
-    border: none;
-  }
-}
-
-:host {
-  ::ng-deep .p-listbox {
-    border: none;
-    box-shadow: none;
-  }
-}
-
-:host {
-  ::ng-deep .p-divider-vertical.p-divider-center {
-    height: 1px;
-    width: 1px;
-  }
-}
-
-.filterContainer {
-  width: 100%;
-  border: none;
-  border-radius: none;
-}
-
-:host {
-  ::ng-deep .p-inputtext::placeholder {
-    color: rgb(201, 198, 198);
-    font-size: 15px;
   }
 }
 
@@ -75,10 +18,6 @@
   font-size: 24px;
 }
 
-.css-vubbuv {
+.css-svg {
   fill: green;
-}
-.usericon {
-  display: flex;
-  align-items: center;
 }

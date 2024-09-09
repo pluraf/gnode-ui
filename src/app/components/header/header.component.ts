@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { MenubarModule } from 'primeng/menubar';
@@ -11,28 +10,11 @@ import { MenubarModule } from 'primeng/menubar';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit {
-  items: MenuItem[] | undefined;
+export class HeaderComponent {
   constructor(
     private router: Router,
     private userService: UserService,
   ) {}
-
-  ngOnInit() {
-    this.userService.isUserLoggedIn().subscribe((isLoggedIn) => {
-      this.updateMenu(isLoggedIn);
-    });
-  }
-
-  updateMenu(isLoggedIn: boolean) {
-    this.items = isLoggedIn
-      ? [{ label: 'Sign out', command: () => this.onSignOut() }]
-      : [{ label: 'Sign in', command: () => this.onSignIn() }];
-  }
-
-  onSignIn() {
-    this.router.navigateByUrl('/login');
-  }
 
   onSignOut() {
     this.userService.logout();

@@ -1,29 +1,15 @@
-::ng-deep .p-menubar {
-  flex-direction: row-reverse;
+.menuitem {
   background-color: #006666;
   border-radius: 0px;
   position: fixed;
   width: 100%;
   top: 0px;
   z-index: 10000;
-  height: 60px;
+  height: 56px;
   padding: 0;
 }
-
-::ng-deep div.p-menubar.p-component {
-  border: none;
-}
-
-::ng-deep
-  .p-menubar
-  .p-menuitem
-  > .p-menuitem-content
-  .p-menuitem-link
-  .p-menuitem-text {
-  color: #ffff;
-  border: none;
-}
-
-::ng-deep .p-menubar .p-menuitem > .p-menuitem-content:hover {
-  background-color: #006666;
+a {
+  color: #fff;
+  padding: 0 10px;
+  font-size: 18px;
 }

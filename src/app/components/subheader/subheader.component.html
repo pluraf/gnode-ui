@@ -2,12 +2,12 @@
     <div class="flex flex-row align-items-center">
         <p class="m-2"><strong>{{ selectedMenuName }}</strong></p>
     </div>
-    <div class="flex flex-row align-items-center ml-auto">
-        @for (item of items; track $index) {
+    <div class=" flex flex-row align-items-center ml-auto">
+        @for (item of items; track $index) {             
           <a [routerLink]="item.routerLink"
              [pTooltip]="item.tooltipOptions.tooltipLabel"
              [tooltipPosition]="item.tooltipOptions.tooltipPosition"
-             [tooltipEvent]="item.tooltipOptions.tooltipEvent"
+             [tooltipEvent]="item.tooltipOptions.tooltipEvent" (click)="item.command ? item.command() : null"
           >
             <i [class]="item.iconClass"></i>
           </a>

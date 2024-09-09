@@ -10,7 +10,10 @@ import { UserService } from './user.service';
 export class MqttBrokerServiceService {
   private apiUrl = 'broker/command';
 
-  constructor(private http: HttpClient, private user: UserService) {}
+  constructor(
+    private http: HttpClient,
+    private user: UserService,
+  ) {}
 
   loadConnectorList(): Observable<any> {
     const httpOptions = {
@@ -20,27 +23,23 @@ export class MqttBrokerServiceService {
       }),
     };
     const postData = {
-      commands: [
-        { command: 'listClients', verbose: false },
-      ],
+      commands: [{ command: 'listClients', verbose: false }],
     };
     return this.http.post(this.apiUrl, postData, httpOptions);
   }
 
-  updateData(id: any): Observable<any> {
+  updateData(connid: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.user.getToken()}`,
         'Content-Type': 'application/json',
       }),
     };
-
-    const url = `${this.apiUrl}/${id}`;
-
-    return this.http.put(url, httpOptions);
+    const postData = {
+      commands: [{ command: 'modifyClient', connid: connid }],
+    };
+    return this.http.post(this.apiUrl, postData, httpOptions);
   }
-
-  createConnector() {}
 
   loadConnectorDetails(connid: string) {
     const httpOptions = {
@@ -50,9 +49,21 @@ export class MqttBrokerServiceService {
       }),
     };
     const postData = {
-      commands: [
-        { command: 'getClient', connid: connid },
-      ],
+      commands: [{ command: 'getClient', connid: connid }],
+    };
+
+    return this.http.post(this.apiUrl, postData, httpOptions);
+  }
+
+  deleteConnectors(connid: string) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.user.getToken()}`,
+        'Content-Type': 'application/json',
+      }),
+    };
+    const postData = {
+      commands: [{ command: 'deleteClient', connid: connid }],
     };
 
     return this.http.post(this.apiUrl, postData, httpOptions);

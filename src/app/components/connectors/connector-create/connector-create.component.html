@@ -13,7 +13,7 @@
                 <div class="p-field">
                     <span><strong>Connector communication</strong></span>
                     <small>If blocked, all communications from the connector will be rejected. Blocking a connector may be useful if it's defective or not configured.</small>
-                    <div class="card flex mt-2 ">
+                    <div class="card flex mt-3 ">
                         <div class="flex flex-column gap-1">
                             <div *ngFor="let category of categories" class="field-checkbox">
                                 <p-radioButton 
@@ -30,45 +30,35 @@
                 </div>
 
                 <div class="p-field">
-                    <span><strong>Authentication (optional)</strong></span>
-                    <small>Specify the public key that will be used to authenticate this connector. You can leave the key empty, but connectors will not be able to connect to ClearBlade without a key.</small>
-                    <div class="card flex mt-2 ">
-                        <div class="flex flex-column gap-1">
-                            <div *ngFor="let inputmethod of inputMethod" class="field-checkbox">
-                                <p-radioButton 
-                                    [inputId]="inputmethod.key" 
-                                    name="inputmethod" 
-                                    [value]="inputmethod" 
-                                    [(ngModel)]="selectedMethod" (click)="onSelectedOption()"/>
-                                <label [for]="inputmethod.key" class="ml-2">
-                                    {{ inputmethod.name }}
-                                </label>
-                            </div>
-                        <div >
-                    <!--     <div *ngIf="!showUserPassField" class="flex flex-column gap-2">
-                            <label for="username">Username</label>
-                            <input class="mb-4" name="username" pInputText id="username" aria-describedby="username-help"autocomplete="off"/>
-                        </div>
-                        <div *ngIf="!showUserPassField" class="flex flex-column gap-2 mb-4">
-                            <span id="passwordInput">Password</span>
-                            <p-password name="passwordInput" id="passwordInput" [inputId]="'passwordInput'"  class="w-full" promptLabel="Choose a password" 
-                                [toggleMask]="true" [style]="{'width':'100%'}"
-                                [inputStyle]="{'width':'100%'}"/> 
-                        </div> -->
-                        </div>
-                        <fieldset>
+                    <span><strong>Authentication</strong></span>
+                    <small>Specify the public key that will be used to authenticate this connector. You can leave the key empty, but connectors will not be able to connect to gnode without a key.</small>
+                    <div class="card mt-4">
+                        <fieldset class="w-4">
                             <legend>Public Key</legend>
-                            <select name="keyOptions">
-                                <option value="key1">RS256</option>
-                                <option value="key2">Username and Password</option>
-                            </select>
-                        </fieldset>
+                            <select [(ngModel)]="selectedOption" id="options">
+                                <option *ngFor="let option of options" [value]="option.value">
+                                  {{ option.label }}
+                                </option>
+                              </select>
+                        </fieldset>  
+                        <div class="mt-4" *ngIf="selectedOption === 'option2'" >  
+                            <div  class="flex flex-row gap-2 ">
+                                <label  for="username">Username</label>
+                                <input class="mb-4 w-3" name="username" pInputText id="username" aria-describedby="username-help"autocomplete="off"/>
+                            </div>
+                            <div class="flex flex-row gap-2 mb-4">
+                                <span id="passwordInput">Password</span>
+                                <p-password name="passwordInput" id="passwordInput" [inputId]="'passwordInput'"  class="w-3" promptLabel="Choose a password" 
+                                     [style]="{'width':'100%'}"
+                                    [inputStyle]="{'width':'100%'}"/> 
+                            </div> 
+                        <div > 
                     </div>
                 </div>
+            </div>
                 <div class="mt-5">
                     <button  pButton (click)="onSubmit()">Submit</button>  
                 </div>
-                
             </div>
         </div>
     </div>

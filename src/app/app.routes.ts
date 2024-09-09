@@ -7,6 +7,7 @@ import { ConnectorEditComponent } from './components/connectors/connector-edit/c
 import { ConnectorCreateComponent } from './components/connectors/connector-create/connector-create.component';
 import { ConnectorListComponent } from './components/connectors/connector-list/connector-list.component';
 import { UserListComponent } from './components/users/user-list/user-list.component';
+import { ConnectorDeleteComponent } from './components/connectors/connector-delete/connector-delete.component';
 
 export const routes: Routes = [
   {
@@ -42,5 +43,9 @@ export const routes: Routes = [
   {
     path: 'connector-edit',
     component: ConnectorEditComponent,
+  },
+  {
+    path: 'connector-delete',
+    component: ConnectorDeleteComponent,
   },
 ];
