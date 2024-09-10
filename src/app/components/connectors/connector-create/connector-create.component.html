@@ -6,7 +6,7 @@
             <div class="p-fluid">
                 <div class="p-field">
                     <label for="connectorID"></label>
-                    <input pInputText id="connectorID" [(ngModel)]="value" placeholder="Connector ID"/>
+                    <input pInputText id="connectorID" name="connid" [(ngModel)]="connid" placeholder="Connector ID"/>
                     <small>Permanent identifier for your connector. 3-255 characters. Start with a letter. You can also include numbers and the following characters: + . % - _ ~</small>
                 </div>
 
@@ -44,11 +44,11 @@
                         <div class="mt-4" *ngIf="selectedOption === 'option2'" >  
                             <div  class="flex flex-row gap-2 ">
                                 <label  for="username">Username</label>
-                                <input class="mb-4 w-3" name="username" pInputText id="username" aria-describedby="username-help"autocomplete="off"/>
+                                <input class="mb-4 w-3" name="username" pInputText id="username" [(ngModel)]="username" />
                             </div>
                             <div class="flex flex-row gap-2 mb-4">
-                                <span id="passwordInput">Password</span>
-                                <p-password name="passwordInput" id="passwordInput" [inputId]="'passwordInput'"  class="w-3" promptLabel="Choose a password" 
+                                <span id="password">Password</span>
+                                <p-password name="password" id="password" [(ngModel)]="password" [inputId]="password"  class="w-3" promptLabel="Choose a password" 
                                      [style]="{'width':'100%'}"
                                     [inputStyle]="{'width':'100%'}"/> 
                             </div> 

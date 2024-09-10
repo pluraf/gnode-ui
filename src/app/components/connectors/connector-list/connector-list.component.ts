@@ -81,30 +81,23 @@ export class ConnectorListComponent {
   constructor(private brokerService: MqttBrokerServiceService) {
     this.brokerService.loadConnectorList().subscribe({
       next: (response: { responses: any[] }) => {
-        console.log('API Response:', response);
-
         const clientResponse = response.responses.find(
           (r: { command: string }) => r.command === 'listClients',
         );
 
         if (clientResponse) {
           const clientData = clientResponse.data;
-          const verbose = clientResponse.verbose;
-          console.log('verbose:', verbose);
+          const disabled = clientResponse.verbose;
 
           if (clientData?.clients) {
             this.connectorList = clientData.clients.map((client: string) => ({
               clients: client,
-              communication: verbose ? 'Blocked' : 'Allowed',
+              communication: disabled ? 'Blocked' : 'Allowed',
               lastseen: this.formatDate(new Date()),
             }));
             this.totalRecords = this.connectorList.length;
-            console.log('Connector List:', this.connectorList);
           }
         }
-      },
-      error: (err) => {
-        console.error('Error fetching connectors:', err);
       },
     });
   }
@@ -129,32 +122,32 @@ export class ConnectorListComponent {
     this.visibleDialog = true;
   }
 
-  deleteConnector() {
-    if (!this.selectedConnector) {
-      alert('No connector selected for deletion');
-      return;
-    }
+  onDeleteConnector() {
+    const connectorId = this.selectedConnector.clients;
 
-    console.log('Selected connector:', this.selectedConnector);
+    console.log('connectorId', connectorId);
 
-    /*  this.brokerService
-      .deleteConnectors(this.selectedConnector.clients)
-      .subscribe({
-        next: (response) => {
-          console.log(
-            `Connector ${this.selectedConnector.clients} deleted successfully`,
-          );
+    this.brokerService.deleteConnectors([connectorId]).subscribe({
+      next: (response: { responses: any[] }) => {
+        console.log('API Response:', response);
+        const deleteResponse = response.responses.find(
+          (r: { command: string }) => r.command === 'deleteConnectors',
+        );
+        console.log('deleteResponse:', deleteResponse);
+        if (deleteResponse) {
+          if (deleteResponse.deleted?.includes(connectorId)) {
+            this.connectorList = this.connectorList.filter(
+              (connector) => connector.clients !== connectorId,
+            );
+            this.totalRecords = this.connectorList.length;
+          }
+        }
+        this.visibleDialog = false;
+      },
+    });
+  }
 
-          this.connectorList = this.connectorList.filter(
-            (connector) => connector.clients !== this.selectedConnector.clients,
-          );
-
-          this.totalRecords = this.connectorList.length;
-          this.visibleDialog = false;
-        },
-        error: (err) => {
-          console.error('Error deleting connector:', err);
-        },
-      }); */
+  onConnectorSelect(event: any) {
+    this.selectedConnector = event.data;
   }
 }

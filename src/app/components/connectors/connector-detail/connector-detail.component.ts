@@ -45,21 +45,26 @@ export class ConnectorDetailComponent {
 
   constructor() {
     this.connid = this.route.snapshot.params['connid'];
-    this.brokerService.loadConnectorDetails(this.connid).subscribe((response: any) => {
-      this.connector = response.responses[0].data.client;
-      this.details = [
-        ['Enabled', !this.connector.disabled],
-        ['Last seen', 'date'],
-        ['Authentication type', this.connector.authtype],
-        ['Username', this.connector.username],
-        ['MQTT Client ID', this.connector.clientid],
-      ];
-      if (this.connector.authtype.startsWith('jwt')) {
-        this.details.push([
-          'JWT key',
-          this.connector.jwtkey.replace(/(.{64})/g, '$1\n'),
-        ]);
-      }
-    });
+    this.brokerService
+      .loadConnectorDetails(this.connid)
+      .subscribe((response: any) => {
+        this.connector = response.responses[0].data.client;
+        this.details = [
+          ['Enabled', !this.connector.disabled],
+          ['Last seen', 'date'],
+          ['Authentication type', this.connector.authtype],
+          ['Username', this.connector.username],
+          ['MQTT Client ID', this.connector.clientid],
+        ];
+        if (
+          this.connector.authtype &&
+          this.connector.authtype.startsWith('jwt')
+        ) {
+          this.details.push([
+            'JWT key',
+            this.connector.jwtkey.replace(/(.{64})/g, '$1\n'),
+          ]);
+        }
+      });
   }
 }

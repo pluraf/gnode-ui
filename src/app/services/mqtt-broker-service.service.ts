@@ -55,7 +55,7 @@ export class MqttBrokerServiceService {
     return this.http.post(this.apiUrl, postData, httpOptions);
   }
 
-  deleteConnectors(connid: string) {
+  deleteConnectors(connid: string[]): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.user.getToken()}`,
@@ -63,7 +63,37 @@ export class MqttBrokerServiceService {
       }),
     };
     const postData = {
-      commands: [{ command: 'deleteClient', connid: connid }],
+      commands: [{ command: 'deleteConnectors', connectors: connid }],
+    };
+    console.log('Payload for deleteConnectors:', JSON.stringify(postData));
+    return this.http.post(this.apiUrl, postData, httpOptions);
+  }
+
+  createConnector(
+    connid: string,
+    username?: string,
+    password?: string,
+    authType?: string,
+    disabled: boolean = false,
+  ): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.user.getToken()}`,
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    const postData: any = {
+      commands: [
+        {
+          command: 'createClient',
+          connid: connid,
+          username: username,
+          password: password,
+          disabled: disabled,
+          authType: authType,
+        },
+      ],
     };
 
     return this.http.post(this.apiUrl, postData, httpOptions);

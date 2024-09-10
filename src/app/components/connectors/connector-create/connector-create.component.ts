@@ -37,8 +37,9 @@ export class ConnectorCreateComponent implements OnInit {
   showPublicKeyField = false;
 
   connid = '';
-  connector: any;
-  details: any;
+  username = '';
+  password = '';
+  authtype = '';
 
   categories: any[] = [
     { name: 'Allow', key: 'A' },
@@ -55,38 +56,23 @@ export class ConnectorCreateComponent implements OnInit {
     { value: 'option2', label: 'Username & Password' },
   ];
 
-  /*   constructor(private http: HttpClient) {
-    this.connid = this.route.snapshot.params['connid'];
-    this.brokerService
-      .loadConnectorDetails(this.connid)
-      .subscribe((response: any) => {
-        this.connector = response.responses[0].data.client;
-        this.details = ['Authentication type', this.connector.authtype];
-        if (this.connector.authtype.startsWith('jwt')) {
-          this.details.push([
-            'JWT key',
-            this.connector.jwtkey.replace(/(.{64})/g, '$1\n'),
-          ]);
-        }
-      });
-  } */
-  /* createConnector() {
-    const command = {
-      commands: [
-        {
-          command: 'createClient',
-          connid: this.connid,
-        },
-      ],
-    };
-    this.http.post<any>('/broker/command', command).subscribe((response) => {
-      this.connector = response.responses[0].data.client;
-      this.details = [
-        ['Enabled', !this.connector.disabled],
-        ['Last seen', 'date'],
-      ];
-    });
-  } */
+  onSubmit() {
+    this.authtype = this.selectedOption;
 
-  onSubmit() {}
+    const disabled = this.selectedCategory.name === 'Allow';
+
+    if (this.selectedOption === 'option2') {
+      this.brokerService
+        .createConnector(
+          this.connid,
+          this.username,
+          this.password,
+          this.authtype,
+          disabled,
+        )
+        .subscribe((response) => {
+          console.log('Connector created successfully', response);
+        });
+    }
+  }
 }
