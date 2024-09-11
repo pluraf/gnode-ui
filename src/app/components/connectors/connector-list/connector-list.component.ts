@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
+import { TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
+import { MenuItem } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+
 import { Connector, PageEvent } from '../connector';
-import { Router, RouterModule } from '@angular/router';
 import { ConnectorEditComponent } from '../connector-edit/connector-edit.component';
 import { ConnectorCreateComponent } from '../connector-create/connector-create.component';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
-import { TableModule } from 'primeng/table';
-import { PaginatorModule } from 'primeng/paginator';
-import { MenuItem } from 'primeng/api';
 import { ConnectorDeleteComponent } from '../connector-delete/connector-delete.component';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-connector-list',
@@ -38,6 +40,17 @@ import { ButtonModule } from 'primeng/button';
 export class ConnectorListComponent {
   value!: string;
   visibleDialog: boolean = false;
+  connectorList: Connector[] = [];
+  selectedConnector: Connector[] = [];
+  first: number = 0;
+  rows: number = 10;
+  totalRecords!: number;
+
+  options = [
+    { label: 10, value: 10 },
+    { label: 20, value: 20 },
+  ];
+
   menubarItems: MenuItem[] = [
     {
       routerLink: '/connector-create',
@@ -61,22 +74,10 @@ export class ConnectorListComponent {
     },
   ];
 
-  first: number = 0;
-  rows: number = 5;
-  totalRecords: number = 5;
-  options = [
-    { label: 5, value: 5 },
-    { label: 10, value: 10 },
-    { label: 20, value: 20 },
-  ];
-
   onPageChange(event: PageEvent) {
     this.first = event!.first;
     this.rows = event!.rows;
   }
-
-  connectorList: Connector[] = [];
-  selectedConnector!: Connector;
 
   constructor(private brokerService: MqttBrokerServiceService) {
     this.brokerService.loadConnectorList().subscribe({
@@ -123,31 +124,25 @@ export class ConnectorListComponent {
   }
 
   onDeleteConnector() {
-    const connectorId = this.selectedConnector.clients;
-
-    console.log('connectorId', connectorId);
-
-    this.brokerService.deleteConnectors([connectorId]).subscribe({
+    const connectorId = this.selectedConnector.map(
+      (connector) => connector.clients,
+    );
+    this.brokerService.deleteConnectors(connectorId).subscribe({
       next: (response: { responses: any[] }) => {
-        console.log('API Response:', response);
         const deleteResponse = response.responses.find(
           (r: { command: string }) => r.command === 'deleteConnectors',
         );
-        console.log('deleteResponse:', deleteResponse);
+
         if (deleteResponse) {
-          if (deleteResponse.deleted?.includes(connectorId)) {
-            this.connectorList = this.connectorList.filter(
-              (connector) => connector.clients !== connectorId,
-            );
-            this.totalRecords = this.connectorList.length;
-          }
+          const deletedConnectors = deleteResponse.deleted || [];
+          this.connectorList = this.connectorList.filter(
+            (connector) => !deletedConnectors.includes(connector.clients),
+          );
+          this.totalRecords = this.connectorList.length;
         }
+
         this.visibleDialog = false;
       },
     });
-  }
-
-  onConnectorSelect(event: any) {
-    this.selectedConnector = event.data;
   }
 }

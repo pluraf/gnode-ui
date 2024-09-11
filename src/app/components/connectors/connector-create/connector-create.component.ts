@@ -1,8 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -21,6 +20,7 @@ import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.
     CommonModule,
     FormsModule,
     PasswordModule,
+    RouterModule,
   ],
   templateUrl: './connector-create.component.html',
   styleUrl: './connector-create.component.css',
@@ -28,14 +28,9 @@ import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.
 export class ConnectorCreateComponent implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   brokerService = inject(MqttBrokerServiceService);
-
   value!: string;
   selectedCategory: any = null;
-  selectedMethod: any = null;
   communication: string = 'Allow';
-  showUserPassField = false;
-  showPublicKeyField = false;
-
   connid = '';
   username = '';
   password = '';
@@ -46,18 +41,24 @@ export class ConnectorCreateComponent implements OnInit {
     { name: 'Block', key: 'B' },
   ];
 
-  ngOnInit() {
-    this.selectedCategory = this.categories[0];
-  }
-  selectedOption: string = 'JWT_ES250';
+  selectedOption: string = 'option1';
 
-  options = [
+  atuthOptions = [
     { value: 'option1', label: 'JWT_ES250' },
     { value: 'option2', label: 'Username & Password' },
   ];
 
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    this.selectedCategory = this.categories[0];
+  }
+
   onSubmit() {
-    this.authtype = this.selectedOption;
+    const selectedOptionObj = this.atuthOptions.find(
+      (option) => option.value === this.selectedOption,
+    );
+    this.authtype = selectedOptionObj ? selectedOptionObj.label : '';
 
     const disabled = this.selectedCategory.name === 'Allow';
 
@@ -72,6 +73,14 @@ export class ConnectorCreateComponent implements OnInit {
         )
         .subscribe((response) => {
           console.log('Connector created successfully', response);
+          this.router.navigateByUrl('/connectors');
+        });
+    } else if (this.selectedOption === 'option1') {
+      this.brokerService
+        .createConnector(this.connid, this.authtype)
+        .subscribe((response) => {
+          console.log('Connector created successfully', response);
+          this.router.navigateByUrl('/connectors');
         });
     }
   }

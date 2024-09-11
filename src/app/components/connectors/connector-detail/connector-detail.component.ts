@@ -1,10 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
@@ -12,7 +14,14 @@ import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.
 @Component({
   selector: 'app-device-detail',
   standalone: true,
-  imports: [CommonModule, SubheaderComponent, TableModule],
+  imports: [
+    CommonModule,
+    SubheaderComponent,
+    TableModule,
+    DialogModule,
+    ButtonModule,
+    RouterModule,
+  ],
   templateUrl: './connector-detail.component.html',
   styleUrl: './connector-detail.component.css',
 })
@@ -22,6 +31,7 @@ export class ConnectorDetailComponent {
   connid = '';
   connector: any;
   details: any;
+  visibleDialog: boolean = false;
   menubarItems: MenuItem[] = [
     {
       routerLink: '/connector-edit',
@@ -33,17 +43,19 @@ export class ConnectorDetailComponent {
       iconClass: 'pi pi-pencil m-3',
     },
     {
-      routerLink: '/connector-delete',
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',
         tooltipLabel: 'Delete connector',
       },
       iconClass: 'pi pi-trash m-3',
+      command: () => {
+        this.showDialog();
+      },
     },
   ];
 
-  constructor() {
+  constructor(private router: Router) {
     this.connid = this.route.snapshot.params['connid'];
     this.brokerService
       .loadConnectorDetails(this.connid)
@@ -66,5 +78,22 @@ export class ConnectorDetailComponent {
           ]);
         }
       });
+  }
+
+  showDialog() {
+    this.visibleDialog = true;
+  }
+
+  onDeleteConnector() {
+    this.brokerService.deleteConnectors([this.connid]).subscribe({
+      next: (response: any) => {
+        if (response.success || response.status === 'success') {
+          this.details = [];
+          this.connector = null;
+        }
+        this.visibleDialog = false;
+        this.router.navigateByUrl('/connectors');
+      },
+    });
   }
 }

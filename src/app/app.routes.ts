@@ -22,10 +22,12 @@ export const routes: Routes = [
   {
     path: 'users',
     component: UserListComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'user-create',
     component: CreateUserComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'connectors',
@@ -35,17 +37,21 @@ export const routes: Routes = [
   {
     path: 'connector-create',
     component: ConnectorCreateComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'connector/:connid',
     component: ConnectorDetailComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'connector-edit',
     component: ConnectorEditComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'connector-delete',
     component: ConnectorDeleteComponent,
+    canActivate: [authGuard],
   },
 ];

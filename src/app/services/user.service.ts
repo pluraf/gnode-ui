@@ -1,53 +1,61 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private token = "";
-  private isAdmin: BehaviorSubject<boolean>;
-  private isLoggedIn: BehaviorSubject<boolean>;
+  private token = '';
+  private isAdmin: boolean = false;
+  private isLoggedIn: boolean = false;
 
-  constructor() {
-    const storedToken = sessionStorage.getItem('access_token');
-    const storedAdminStatus = sessionStorage.getItem('is_admin') === 'true';
+  constructor(private cookies: CookieService) {
+    const storedToken = this.cookies.get('access_token');
+    const storedAdminStatus = this.cookies.get('is_admin') === 'true';
 
-    this.isAdmin = new BehaviorSubject<boolean>(storedAdminStatus);
-
-    this.isLoggedIn = new BehaviorSubject<boolean>(!!storedToken);
+    if (storedToken) {
+      this.token = storedToken;
+      this.isLoggedIn = true;
+      this.isAdmin = storedAdminStatus;
+    }
   }
 
   login(token: string) {
-    sessionStorage.setItem('access_token', token);
     const user = this.parseJwt(token);
+    this.cookies.set('access_token', token, {
+      path: '/',
+      secure: true,
+      sameSite: 'Lax',
+    });
     this.setAdminStatus(user.is_admin);
+
     this.token = token;
-    this.isLoggedIn.next(true);
+    this.isLoggedIn = true;
   }
 
   logout() {
-    sessionStorage.removeItem('access_token');
-    sessionStorage.removeItem('is_admin');
-    this.token = "";
-    this.isAdmin.next(false);
-    this.isLoggedIn.next(false);
+    this.cookies.delete('access_token', '/');
+    this.cookies.delete('is_admin', '/');
+
+    this.token = '';
+    this.isAdmin = false;
+    this.isLoggedIn = false;
   }
 
   setAdminStatus(status: boolean) {
-    sessionStorage.setItem('is_admin', String(status));
-    this.isAdmin.next(status);
+    this.cookies.set('is_admin', String(status));
+    this.isAdmin = status;
   }
-  getAdminStatus(): Observable<boolean> {
-    return this.isAdmin.asObservable();
+  getAdminStatus(): boolean {
+    return this.isAdmin;
   }
 
   getToken(): string {
     return this.token;
   }
 
-  isUserLoggedIn(): Observable<boolean> {
-    return this.isLoggedIn.asObservable();
+  isUserLoggedIn(): boolean {
+    return this.isLoggedIn;
   }
 
   //function to parse JWT token

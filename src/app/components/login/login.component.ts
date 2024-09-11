@@ -25,7 +25,7 @@ import { PasswordModule } from 'primeng/password';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  loginObj: any = {
+  loginUser: any = {
     username: 'admin',
     password: 'admin1234',
   };
@@ -37,13 +37,13 @@ export class LoginComponent {
   http = inject(HttpClient);
 
   onLogin() {
-    if (this.loginObj.username && this.loginObj.password) {
+    if (this.loginUser.username && this.loginUser.password) {
       const headers = new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',
       });
       const body = new HttpParams()
-        .set('username', this.loginObj.username)
-        .set('password', this.loginObj.password);
+        .set('username', this.loginUser.username)
+        .set('password', this.loginUser.password);
       this.http
         .post('api/auth/token/', body.toString(), { headers })
         .subscribe((res: any) => {

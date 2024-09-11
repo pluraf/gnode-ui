@@ -35,8 +35,8 @@
                     <div class="card mt-4">
                         <fieldset class="w-4">
                             <legend>Public Key</legend>
-                            <select [(ngModel)]="selectedOption" id="options">
-                                <option *ngFor="let option of options" [value]="option.value">
+                            <select [(ngModel)]="selectedOption" id="atuthOptions">
+                                <option *ngFor="let option of atuthOptions" [value]="option.value">
                                   {{ option.label }}
                                 </option>
                               </select>
@@ -52,14 +52,14 @@
                                      [style]="{'width':'100%'}"
                                     [inputStyle]="{'width':'100%'}"/> 
                             </div> 
-                        <div > 
+                        </div> 
                     </div>
                 </div>
             </div>
-                <div class="mt-5">
-                    <button  pButton (click)="onSubmit()">Submit</button>  
-                </div>
+            <div class="mt-5">
+                <button  pButton (click)="onSubmit()">Submit</button>  
             </div>
+            
         </div>
     </div>
 </div>
