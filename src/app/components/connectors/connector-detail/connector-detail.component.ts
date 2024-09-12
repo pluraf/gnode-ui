@@ -5,11 +5,10 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
+import { ConnectorDeleteComponent } from '../connector-delete/connector-delete.component';
 
 @Component({
   selector: 'app-device-detail',
@@ -18,9 +17,8 @@ import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.
     CommonModule,
     SubheaderComponent,
     TableModule,
-    DialogModule,
-    ButtonModule,
     RouterModule,
+    ConnectorDeleteComponent,
   ],
   templateUrl: './connector-detail.component.html',
   styleUrl: './connector-detail.component.css',

@@ -45,8 +45,9 @@ export class ConnectorListComponent {
   first: number = 0;
   rows: number = 10;
   totalRecords!: number;
+  connid = '';
 
-  options = [
+  paginatorOptions = [
     { label: 10, value: 10 },
     { label: 20, value: 20 },
   ];
@@ -116,10 +117,11 @@ export class ConnectorListComponent {
     return date.toLocaleString('en-EU', options);
   }
   showDialog() {
-    if (!this.selectedConnector) {
+    if (this.selectedConnector.length === 0) {
       alert('No connector selected');
       return;
     }
+    this.connid = this.selectedConnector[0]?.clients;
     this.visibleDialog = true;
   }
 

@@ -16,14 +16,8 @@
                     <div class="card flex mt-3 ">
                         <div class="flex flex-column gap-1">
                             <div *ngFor="let category of categories" class="field-checkbox">
-                                <p-radioButton 
-                                    [inputId]="category.key" 
-                                    name="category" 
-                                    [value]="category" 
-                                    [(ngModel)]="selectedCategory" />
-                                <label [for]="category.key" class="ml-2">
-                                    {{ category.name }}
-                                </label>
+                                <p-radioButton [inputId]="category.key" name="category" [value]="category" [(ngModel)]="selectedCategory" />
+                                <label [for]="category.key" class="ml-2">{{ category.name }}</label>
                             </div>
                         </div>
                     </div>
@@ -34,12 +28,10 @@
                     <small>Specify the public key that will be used to authenticate this connector. You can leave the key empty, but connectors will not be able to connect to gnode without a key.</small>
                     <div class="card mt-4">
                         <fieldset class="w-4">
-                            <legend>Public Key</legend>
+                            <legend>Public key format</legend>
                             <select [(ngModel)]="selectedOption" id="atuthOptions">
-                                <option *ngFor="let option of atuthOptions" [value]="option.value">
-                                  {{ option.label }}
-                                </option>
-                              </select>
+                                <option *ngFor="let option of atuthOptions" [value]="option.value">{{ option.label }}</option>
+                            </select>
                         </fieldset>  
                         <div class="mt-4" *ngIf="selectedOption === 'option2'" >  
                             <div  class="flex flex-row gap-2 ">
@@ -48,10 +40,13 @@
                             </div>
                             <div class="flex flex-row gap-2 mb-4">
                                 <span id="password">Password</span>
-                                <p-password name="password" id="password" [(ngModel)]="password" [inputId]="password"  class="w-3" promptLabel="Choose a password" 
-                                     [style]="{'width':'100%'}"
-                                    [inputStyle]="{'width':'100%'}"/> 
+                                <p-password name="password" id="password" [(ngModel)]="password" [inputId]="password"  class="w-3" promptLabel="Choose a password" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"/> 
                             </div> 
+                        </div> 
+                        <div class="mt-4" *ngIf="selectedOption === 'option1'" >  
+                            <fieldset class="w-4">
+                                <textarea aria-invalid="false" name="authentication.publicKey.key" placeholder="-----BEGIN PUBLIC KEY-----(Public key value must be in PEM format)-----END PUBLIC KEY-----" class="pubKeyFormat" ></textarea>
+                            </fieldset> 
                         </div> 
                     </div>
                 </div>
@@ -59,7 +54,6 @@
             <div class="mt-5">
                 <button  pButton (click)="onSubmit()">Submit</button>  
             </div>
-            
         </div>
     </div>
 </div>

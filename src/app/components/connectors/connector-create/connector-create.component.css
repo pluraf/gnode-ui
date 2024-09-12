@@ -43,3 +43,25 @@ select {
 select:focus {
   outline: none;
 }
+.pubKeyFormat {
+  border: 0px;
+  box-sizing: content-box;
+  background: none;
+  height: auto;
+  margin: 0px;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  min-width: 0px;
+  width: 100%;
+  animation-name: mui-auto-fill-cancel;
+  animation-duration: 10ms;
+  resize: none;
+  padding: 0px;
+  outline: none;
+  height: 69px;
+  overflow: hidden;
+}
+legend {
+  color: grey;
+  font-size: 14px;
+}
