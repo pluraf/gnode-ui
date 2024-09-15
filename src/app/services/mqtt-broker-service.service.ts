@@ -69,13 +69,7 @@ export class MqttBrokerServiceService {
     return this.http.post(this.apiUrl, postData, httpOptions);
   }
 
-  createConnector(
-    connid: string,
-    username?: string,
-    password?: string,
-    authType?: string,
-    disabled: boolean = false,
-  ): Observable<any> {
+  createConnector(conn_params: object): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.user.getToken()}`,
@@ -87,11 +81,7 @@ export class MqttBrokerServiceService {
       commands: [
         {
           command: 'createClient',
-          connid: connid,
-          username: username,
-          password: password,
-          disabled: disabled,
-          authType: authType,
+          ...conn_params
         },
       ],
     };

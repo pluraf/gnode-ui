@@ -25,8 +25,9 @@ small {
 }
 
 textarea {
-  border: none;
+  /*border: none;*/
 }
+
 button {
   width: 8rem;
   font-size: 18px;
@@ -44,24 +45,45 @@ select:focus {
   outline: none;
 }
 .pubKeyFormat {
-  border: 0px;
   box-sizing: content-box;
-  background: none;
-  height: auto;
-  margin: 0px;
-  -webkit-tap-highlight-color: transparent;
-  display: block;
-  min-width: 0px;
-  width: 100%;
-  animation-name: mui-auto-fill-cancel;
-  animation-duration: 10ms;
-  resize: none;
-  padding: 0px;
-  outline: none;
-  height: 69px;
+  border:none;
+  resize: both;
+  padding: 0em;
+  margin: 0em;
   overflow: hidden;
+  outline: none;
 }
+
+input{
+  width:30em !important;
+  box-shadow: none;
+}
+
+.input_fieldset{
+  border:none;
+  padding:0px;
+  margin:0px;
+  outline:none;
+  width:100%;
+}
+
+.input_fieldset:focus{
+  outline:none;
+}
+
 legend {
   color: grey;
   font-size: 14px;
+}
+
+.padding-lagom{
+  padding-top: 0em;
+}
+
+.margin-lagom{
+  margin-top: 1em;
+}
+
+fieldset{
+  width: 30em;
 }
