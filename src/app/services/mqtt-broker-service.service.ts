@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -9,64 +9,60 @@ import { UserService } from './user.service';
 })
 export class MqttBrokerServiceService {
   private apiUrl = 'broker/command';
+  private httpOptions: { headers: HttpHeaders };
+  http = inject(HttpClient);
+  user = inject(UserService);
 
-  constructor(
-    private http: HttpClient,
-    private user: UserService,
-  ) {}
-
-  loadConnectorList(): Observable<any> {
-    const httpOptions = {
+  constructor() {
+    this.httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.user.getToken()}`,
         'Content-Type': 'application/json',
       }),
     };
+  }
+
+  loadConnectorList(): Observable<any> {
     const postData = {
       commands: [{ command: 'listClients', verbose: false }],
     };
-    return this.http.post(this.apiUrl, postData, httpOptions);
+    return this.http.post(this.apiUrl, postData, this.httpOptions);
   }
 
-  updateData(connid: string): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.user.getToken()}`,
-        'Content-Type': 'application/json',
-      }),
-    };
+  updateConnector(updateData: {
+    connid: string;
+    communicationStatus: string;
+  }): Observable<any> {
     const postData = {
-      commands: [{ command: 'modifyClient', connid: connid }],
+      commands: [
+        {
+          command: 'modifyClient',
+          clientid: updateData.connid,
+          textname: '',
+          textdescription: '',
+          roles: [],
+          groups: [],
+          communicationStatus: updateData.communicationStatus,
+        },
+      ],
     };
-    return this.http.post(this.apiUrl, postData, httpOptions);
+    return this.http.post(this.apiUrl, postData, this.httpOptions);
   }
 
   loadConnectorDetails(connid: string) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.user.getToken()}`,
-        'Content-Type': 'application/json',
-      }),
-    };
     const postData = {
       commands: [{ command: 'getClient', connid: connid }],
     };
 
-    return this.http.post(this.apiUrl, postData, httpOptions);
+    return this.http.post(this.apiUrl, postData, this.httpOptions);
   }
 
   deleteConnectors(connid: string[]): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.user.getToken()}`,
-        'Content-Type': 'application/json',
-      }),
-    };
     const postData = {
       commands: [{ command: 'deleteConnectors', connectors: connid }],
     };
-    console.log('Payload for deleteConnectors:', JSON.stringify(postData));
-    return this.http.post(this.apiUrl, postData, httpOptions);
+
+    return this.http.post(this.apiUrl, postData, this.httpOptions);
   }
 
   createConnector(
@@ -76,13 +72,6 @@ export class MqttBrokerServiceService {
     authType?: string,
     disabled: boolean = false,
   ): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.user.getToken()}`,
-        'Content-Type': 'application/json',
-      }),
-    };
-
     const postData: any = {
       commands: [
         {
@@ -96,6 +85,20 @@ export class MqttBrokerServiceService {
       ],
     };
 
-    return this.http.post(this.apiUrl, postData, httpOptions);
+    return this.http.post(this.apiUrl, postData, this.httpOptions);
+  }
+
+  // Temporaray service function for uploading files
+  uploadPrivatePublicKey(file: File): Observable<any> {
+    const formObj = new FormData();
+    formObj.append('file', file);
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.user.getToken()}`,
+      }),
+    };
+
+    return this.http.post(this.apiUrl, formObj, httpOptions);
   }
 }

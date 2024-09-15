@@ -31,6 +31,7 @@ export class AppComponent {
     { label: 'Connectors', routerLink: '/connectors' },
     { label: 'Pipelines', routerLink: '/pipelines' },
     { label: 'Users', routerLink: '/users' },
+    { label: 'Upload Files', routerLink: '/publickey' },
   ];
 
   constructor() {}

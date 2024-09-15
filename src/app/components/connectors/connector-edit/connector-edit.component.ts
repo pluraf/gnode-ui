@@ -23,20 +23,9 @@ import { RippleModule } from 'primeng/ripple';
 })
 export class ConnectorEditComponent implements OnInit {
   value: string = '';
-  data: any;
-  connID = '';
+  connid = '';
 
-  constructor(private brokerService: MqttBrokerServiceService) {
-    this.brokerService.loadConnectorList().subscribe({
-      next: (response: { responses: any[] }) => {
-        console.log(response);
-        this.data = response.responses.find(
-          (r: { command: string }) => r.command === 'listClients',
-        )?.data;
-      },
-      error: (error: any) => console.error('There was an error!', error),
-    });
-  }
+  constructor(private brokerService: MqttBrokerServiceService) {}
 
   selectedCategory: any = null;
   categories: any[] = [
@@ -46,9 +35,24 @@ export class ConnectorEditComponent implements OnInit {
   ngOnInit() {
     this.selectedCategory = this.categories[0];
   }
-  update() {
-    this.brokerService.updateData(this.connID).subscribe((response) => {
-      console.log('Update successful:', response);
-    });
+  onUpdate() {
+    const communicationStatus =
+      this.selectedCategory.key === 'A' ? 'Allow' : 'Block';
+
+    const updateData = {
+      connid: this.connid,
+      communicationStatus: communicationStatus,
+    };
+
+    console.log('Updating connector with ID:', updateData.connid);
+    console.log('Communication status:', updateData.communicationStatus);
+    this.brokerService.updateConnector(updateData).subscribe(
+      (response) => {
+        console.log('Update successful:', response);
+      },
+      (error) => {
+        console.error('Update failed:', error);
+      },
+    );
   }
 }

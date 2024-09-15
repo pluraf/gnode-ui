@@ -14,9 +14,7 @@
           </div>
           <div class="flex flex-column gap-2 mb-4">
             <span id="passwordInput">Password</span>
-            <p-password [(ngModel)]="loginUser.password" name="passwordInput"  class="w-full" promptLabel="Choose a password"
-             [toggleMask]="true" [style]="{'width':'100%'}"
-              [inputStyle]="{'width':'100%'}"/>
+            <p-password [(ngModel)]="loginUser.password" name="passwordInput"  class="w-full" [toggleMask]="true" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"/>
           </div>
           <button pButton pRipple label="LOG IN" (click)="onLogin()"> </button>
         </p-card>

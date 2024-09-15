@@ -1,11 +1,11 @@
 <div class="editConnector-container">
     <div class="p-grid ml-3 ">
         <div class="p-col-12 p-md-6">
-            <h3>Connector ID: </h3>
+            <h3>Connector ID: {{connid}}</h3>
             <div class="p-fluid">
                 <div class="p-field">
                     <label for="connectorID"></label>
-                    <input pInputText id="connectorID" [(ngModel)]="value" placeholder="Connector ID" />   
+                    <input pInputText id="connectorID" [(ngModel)]="connid" placeholder="Connector ID" />   
                     <small>Permanent identifier for your connector. 3-255 characters. Start with a letter. You can also include numbers and the following characters: + . % - _ ~</small>
                 </div>
     
@@ -27,7 +27,7 @@
                         </div>
                     </div>    
             </div>  
-            <button pButton (click)="update()">Update</button>        
+            <button pButton (click)="onUpdate()">Update</button>        
         </div>
     </div>
 </div>

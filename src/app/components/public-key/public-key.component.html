@@ -1,0 +1,26 @@
+<div class="upload-file m-4">
+    <h3 class="mt-8 mb-5">Upload Private and Public keys for TLS protocol</h3>
+    
+    <div class="flex flex-column gap-2 mb-4">
+      <div class="flex flex-row align-items-center gap-1">
+        <label for="privateKey" class="flex-1">Upload Private Key</label>
+        <input type="file" id="privateKey" name="privateKey" class="flex-1"  (change)="uplaodFile($event)">
+      </div>
+    </div>
+    
+       <div class="flex flex-column gap-2 mb-4">
+      <div class="flex flex-row align-items-center gap-1">
+        <label for="publicKey" class="flex-1">Upload Public Key</label>
+        <input type="file" id="publicKey" name="publicKey" class="flex-1"(change)="uplaodFile($event)">
+      </div>
+    </div>
+  
+   
+    <div class="flex flex-column gap-2 mb-4">
+      <div class="flex flex-row align-items-center gap-1">
+        <label for="gcpKey" class="flex-1">Upload GCP Access Key</label>
+        <input type="file" id="gcpKey" name="gcpKey"class="flex-1" (change)="uplaodFile($event)">
+      </div>
+    </div>
+  </div>
+  

@@ -8,6 +8,7 @@ import { ConnectorCreateComponent } from './components/connectors/connector-crea
 import { ConnectorListComponent } from './components/connectors/connector-list/connector-list.component';
 import { UserListComponent } from './components/users/user-list/user-list.component';
 import { ConnectorDeleteComponent } from './components/connectors/connector-delete/connector-delete.component';
+import { PublicKeyComponent } from './components/public-key/public-key.component';
 
 export const routes: Routes = [
   {
@@ -52,6 +53,11 @@ export const routes: Routes = [
   {
     path: 'connector-delete',
     component: ConnectorDeleteComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'publickey',
+    component: PublicKeyComponent,
     canActivate: [authGuard],
   },
 ];
