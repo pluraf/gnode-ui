@@ -26,8 +26,8 @@ import { PasswordModule } from 'primeng/password';
 })
 export class LoginComponent {
   loginUser: any = {
-    username: 'admin',
-    password: 'admin1234',
+    username: '',
+    password: '',
   };
   constructor(
     private router: Router,

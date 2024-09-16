@@ -19,3 +19,7 @@ a {
 .p-sidebar {
   width: 180px;
 }
+
+input {
+  box-shadow: none;
+}
