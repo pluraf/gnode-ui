@@ -1,5 +1,5 @@
         <app-subheader selectedMenuName="Connectors" [items]="menubarItems" (deleteConnectorEvent)="onDeleteConnector()"></app-subheader>
-        <app-connector-delete  [visible]="visibleDialog" [connid]="connid" (deleteConfirmed)="onDeleteConnector()" (cancel)="visibleDialog = false"></app-connector-delete>
+        <app-connector-delete  [visible]="visibleDialog" [connid]="selectedConnector" (deleteConfirmed)="onDeleteConnector()" (cancel)="visibleDialog = false"></app-connector-delete>
 
         <div class="flex flex-grow-1 flex-column ">
             <div  class="flex flex-column justify-content-center border-round  connectorinfo">
@@ -18,19 +18,13 @@
                             <td ><a routerLink="/connector/{{connector.clients}}">{{ connector.clients }}</a></td>
                             <td class="communicationBox" >
                                 @if(connector.communication === 'Allowed'){
-                                   <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-svg" focusable="false"
-                                    color="green" aria-hidden="true" viewBox="0 0 24 24" data-testid="CheckCircleIcon">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z">
-                                    </path>
-                                </svg> 
+                                    <svg class="comm-svg-icon" viewBox="0 0 24 24" fill="green" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                    </svg>
                                 }@else if(connector.communication === 'Blocked'){
-                                    <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium " focusable="false"
-                                    color="green" aria-hidden="true" viewBox="0 0 24 24" >
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z">
-                                    </path>
-                                </svg> 
+                                    <svg class="comm-svg-icon" viewBox="0 0 24 24" fill="gray" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                    </svg>
                                 }
                                 {{ connector.communication }}
                             </td>

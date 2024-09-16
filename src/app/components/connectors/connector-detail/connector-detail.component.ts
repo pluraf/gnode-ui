@@ -38,7 +38,7 @@ export class ConnectorDetailComponent {
         tooltipPosition: 'bottom',
         tooltipLabel: 'Edit connector',
       },
-      iconClass: 'pi pi-pencil m-3',
+      iconClass: 'pi pi-pencil m-1',
     },
     {
       tooltipOptions: {
@@ -46,7 +46,7 @@ export class ConnectorDetailComponent {
         tooltipPosition: 'bottom',
         tooltipLabel: 'Delete connector',
       },
-      iconClass: 'pi pi-trash m-3',
+      iconClass: 'pi pi-trash m-1',
       command: () => {
         this.showDialog();
       },

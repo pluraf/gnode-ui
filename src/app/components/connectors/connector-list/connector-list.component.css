@@ -8,16 +8,17 @@
   display: flex;
   align-items: center;
 }
-.MuiSvgIcon-root {
+.comm-svg-icon {
   width: 24px;
   height: 24px;
   margin-right: 8px;
-}
-
-.MuiSvgIcon-fontSizeMedium {
-  font-size: 24px;
-}
-
-.css-svg {
   fill: green;
+}
+.pi.pi-plus {
+  font-size: 24px;
+  margin-right: 8px;
+  color: inherit;
+  display: inline-block;
+  line-height: 1 !important;
+  vertical-align: middle;
 }

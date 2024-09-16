@@ -1,33 +1,29 @@
 <div class="editConnector-container">
-    <div class="p-grid ml-3 ">
+    <div class="p-grid ml-3">
         <div class="p-col-12 p-md-6">
-            <h3>Connector ID: {{connid}}</h3>
+            <h3>Connector ID: {{ connid }}</h3>
             <div class="p-fluid">
                 <div class="p-field">
-                    <label for="connectorID"></label>
-                    <input pInputText id="connectorID" [(ngModel)]="connid" placeholder="Connector ID" />   
-                    <small>Permanent identifier for your connector. 3-255 characters. Start with a letter. You can also include numbers and the following characters: + . % - _ ~</small>
+                    <fieldset class="padding-lagom margin-lagom">
+                        <legend>Connector ID</legend>
+                        <input pInputText id="connectorID" [(ngModel)]="connid" placeholder="{{connid}}" [disabled]="true" />
+                    </fieldset>
+                    <small>Permanent identifier for your connector.</small>
                 </div>
-    
+
                 <div class="p-field">
-                    <span><strong>Connector communication</strong></span>
-                    <small>If blocked, all communications from the connector will be rejected. Blocking a connector may be useful if it's defective or not configured.</small>
-                    <div class="card flex mt-3 ">
+                    <span><strong>Connector State</strong></span>
+                    <div class="card flex mt-3">
                         <div class="flex flex-column gap-1">
                             <div *ngFor="let category of categories" class="field-checkbox">
-                                <p-radioButton 
-                                    [inputId]="category.key" 
-                                    name="category" 
-                                    [value]="category" 
-                                    [(ngModel)]="selectedCategory" />
-                                <label [for]="category.key" class="ml-2">
-                                    {{ category.name }}
-                                </label>
+                                <p-radioButton [inputId]="category.key" name="category" [value]="category" [(ngModel)]="selectedCategory" />
+                                <label [for]="category.key" class="ml-2">{{ category.name }}</label>
                             </div>
                         </div>
                     </div>    
-            </div>  
-            <button pButton (click)="onUpdate()">Update</button>        
+                </div>  
+                <button pButton (click)="onUpdate()">Update</button>        
+            </div>
         </div>
-    </div>
+    </div>    
 </div>

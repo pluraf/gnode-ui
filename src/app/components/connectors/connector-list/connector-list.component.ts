@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -60,7 +60,7 @@ export class ConnectorListComponent {
         tooltipPosition: 'bottom',
         tooltipLabel: 'Create connector',
       },
-      iconClass: 'pi pi-plus m-3',
+      iconClass: 'pi pi-plus m-1',
     },
     {
       tooltipOptions: {
@@ -68,7 +68,7 @@ export class ConnectorListComponent {
         tooltipPosition: 'bottom',
         tooltipLabel: 'Delete connector',
       },
-      iconClass: 'pi pi-trash m-3',
+      iconClass: 'pi pi-trash m-1',
       command: () => {
         this.showDialog();
       },
@@ -80,7 +80,13 @@ export class ConnectorListComponent {
     this.rows = event!.rows;
   }
 
-  constructor(private brokerService: MqttBrokerServiceService) {
+  brokerService = inject(MqttBrokerServiceService);
+
+  constructor() {
+    this.loadConnectors();
+  }
+
+  loadConnectors() {
     this.brokerService.loadConnectorList().subscribe({
       next: (response: { responses: any[] }) => {
         const clientResponse = response.responses.find(
@@ -121,7 +127,7 @@ export class ConnectorListComponent {
       alert('No connector selected');
       return;
     }
-    this.connid = this.selectedConnector[0]?.clients;
+    this.connid = this.selectedConnector[0].clients;
     this.visibleDialog = true;
   }
 

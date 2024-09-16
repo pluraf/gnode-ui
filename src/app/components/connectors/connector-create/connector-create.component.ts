@@ -32,20 +32,21 @@ export class ConnectorCreateComponent implements OnInit {
   selectedCategory: any = null;
   communication: string = 'Allow';
   connid = '';
+  clientid = '';
   username = '';
   password = '';
   authtype = '';
 
   categories: any[] = [
-    { name: 'Allow', key: 'A' },
-    { name: 'Block', key: 'B' },
+    { name: 'Enabled', key: 'A' },
+    { name: 'Disabled', key: 'B' },
   ];
 
-  selectedOption: string = 'option1';
+  selectedOption: string = 'jwt';
 
-  atuthOptions = [
-    { value: 'option1', label: 'JWT_ES250' },
-    { value: 'option2', label: 'Username & Password' },
+  authOptions = [
+    { value: 'jwt', label: 'JWT_ES256' },
+    { value: 'password', label: 'Username & Password' },
   ];
 
   constructor(private router: Router) {}
@@ -55,33 +56,32 @@ export class ConnectorCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    const selectedOptionObj = this.atuthOptions.find(
+    const selectedOptionObj = this.authOptions.find(
       (option) => option.value === this.selectedOption,
     );
     this.authtype = selectedOptionObj ? selectedOptionObj.label : '';
 
     const disabled = this.selectedCategory.name === 'Allow';
 
-    if (this.selectedOption === 'option2') {
-      this.brokerService
-        .createConnector(
-          this.connid,
-          this.username,
-          this.password,
-          this.authtype,
-          disabled,
-        )
-        .subscribe((response) => {
-          console.log('Connector created successfully', response);
-          this.router.navigateByUrl('/connectors');
-        });
-    } else if (this.selectedOption === 'option1') {
-      this.brokerService
-        .createConnector(this.connid, this.authtype)
-        .subscribe((response) => {
-          console.log('Connector created successfully', response);
-          this.router.navigateByUrl('/connectors');
-        });
+    let payload: any = {
+      connid: this.connid,
+      authtype: this.authtype,
+      password: this.password,
+      disabled: disabled,
+    };
+    if (this.username !== '') {
+      payload.username = this.username;
     }
+    if (this.clientid !== '') {
+      payload.clientid = this.clientid;
+    }
+
+    this.brokerService.createConnector(payload).subscribe((response) => {
+      if (response.responses[0].hasOwnProperty('error')) {
+        alert(response.responses[0].error);
+      } else {
+        this.router.navigateByUrl('/connectors');
+      }
+    });
   }
 }

@@ -8,6 +8,7 @@
              [pTooltip]="item.tooltipOptions.tooltipLabel"
              [tooltipPosition]="item.tooltipOptions.tooltipPosition"
              [tooltipEvent]="item.tooltipOptions.tooltipEvent" (click)="item.command ? item.command() : null"
+             class="m-3"
           >
             <i [class]="item.iconClass"></i>
           </a>
