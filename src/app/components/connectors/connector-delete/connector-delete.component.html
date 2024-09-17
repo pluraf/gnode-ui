@@ -1,5 +1,5 @@
 
-<p-dialog  [(visible)]="visible" [modal]="true" [style]="{ width: '40rem' }">
+<p-dialog (click)="onClose()" [(visible)]="visible" [modal]="true" [style]="{ width: '40rem' }">
   <ng-template pTemplate="header">
     {{ isMultiple ? 'Delete connectors: ' + connectorIds.join(', ') + '?' : 'Delete connector: ' + connectorIds[0] + '?' }}
   </ng-template>

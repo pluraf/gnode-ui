@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -30,31 +30,34 @@ export class ConnectorDetailComponent {
   connector: any;
   details: any;
   visibleDialog: boolean = false;
-  menubarItems: MenuItem[] = [
-    {
-      routerLink: '/connector-edit',
-      tooltipOptions: {
-        tooltipEvent: 'hover',
-        tooltipPosition: 'bottom',
-        tooltipLabel: 'Edit connector',
-      },
-      iconClass: 'pi pi-pencil m-1',
-    },
-    {
-      tooltipOptions: {
-        tooltipEvent: 'hover',
-        tooltipPosition: 'bottom',
-        tooltipLabel: 'Delete connector',
-      },
-      iconClass: 'pi pi-trash m-1',
-      command: () => {
-        this.showDialog();
-      },
-    },
-  ];
+  menubarItems: MenuItem[] = [];
+  router = Inject(Router);
 
-  constructor(private router: Router) {
+  constructor() {
     this.connid = this.route.snapshot.params['connid'];
+    this.menubarItems = [
+      {
+        routerLink: ['/connector-edit', this.connid],
+        tooltipOptions: {
+          tooltipEvent: 'hover',
+          tooltipPosition: 'bottom',
+          tooltipLabel: 'Edit connector',
+        },
+        iconClass: 'pi pi-pencil m-1',
+      },
+      {
+        tooltipOptions: {
+          tooltipEvent: 'hover',
+          tooltipPosition: 'bottom',
+          tooltipLabel: 'Delete connector',
+        },
+        iconClass: 'pi pi-trash m-1',
+        command: () => {
+          this.showDialog();
+        },
+      },
+    ];
+
     this.brokerService
       .loadConnectorDetails(this.connid)
       .subscribe((response: any) => {

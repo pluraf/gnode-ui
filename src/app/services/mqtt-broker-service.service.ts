@@ -37,7 +37,7 @@ export class MqttBrokerServiceService {
       commands: [
         {
           command: 'modifyClient',
-          clientid: updateData.connid,
+          clientid: '',
           textname: '',
           textdescription: '',
           roles: [],
@@ -75,16 +75,11 @@ export class MqttBrokerServiceService {
     return this.http.post(this.apiUrl, postData, this.httpOptions);
   }
 
-  // Temporaray service function for uploading files
-  uploadPrivatePublicKey(file: File): Observable<any> {
-    const formObj = new FormData();
-    formObj.append('file', file);
+  uploadPrivatePublicKey(file: File, fileType: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('fileType', fileType);
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.user.getToken()}`,
-      }),
-    };
-    return this.http.post(this.apiUrl, formObj, httpOptions);
+    return this.http.post(this.apiUrl + '/upload-key', formData);
   }
 }

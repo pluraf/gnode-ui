@@ -14,18 +14,30 @@ export class PublicKeyComponent {
   brokerService = inject(MqttBrokerServiceService);
   uploadedFilesList: string[] = [];
 
-  uplaodFile(event: any) {
-    debugger;
+  uplaodFile(event: any, fileType: string) {
     const file = event.currentTarget.files[0];
 
-    if (file && file.type == 'image/jpeg' && file.size > 8000000) {
-      this.brokerService.uploadPrivatePublicKey(file).subscribe((response) => {
-        this.uploadedFilesList.push(response);
-      });
-    } else if (file.size < 8000000) {
-      console.warn('File size is greater');
+    if (file && this.isValidPemFile(file, fileType)) {
+      this.brokerService
+        .uploadPrivatePublicKey(file, fileType)
+        .subscribe((response) => {
+          this.uploadedFilesList.push(`${fileType}: ${file.name}`);
+        });
     } else {
-      console.warn('Only .pem file format is allowed!');
+      console.warn(
+        'Only .pem file format is allowed and size should be less than 8MB!',
+      );
     }
+  }
+
+  isValidPemFile(file: File, fileType: string): boolean {
+    const isPem = file.name.endsWith('.pem');
+    const isJson = file.name.endsWith('.json');
+
+    if (fileType === 'gcpKey') {
+      return isJson && file.size <= 8000000;
+    }
+
+    return (isPem || isJson) && file.size <= 8000000;
   }
 }

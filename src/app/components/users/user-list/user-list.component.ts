@@ -31,7 +31,7 @@ export class UserListComponent {
         tooltipPosition: 'bottom',
         tooltipLabel: 'Edit user',
       },
-      iconClass: 'pi pi-pencil m-3',
+      iconClass: 'pi pi-pencil m-1',
     },
     {
       routerLink: '/user-delete',
@@ -40,7 +40,7 @@ export class UserListComponent {
         tooltipPosition: 'bottom',
         tooltipLabel: 'Delete user',
       },
-      iconClass: 'pi pi-trash m-3',
+      iconClass: 'pi pi-trash m-1',
     },
   ];
 

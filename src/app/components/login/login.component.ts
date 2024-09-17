@@ -3,7 +3,9 @@ import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+
 import { UserService } from '../../services/user.service';
+
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -44,16 +46,29 @@ export class LoginComponent {
       const body = new HttpParams()
         .set('username', this.loginUser.username)
         .set('password', this.loginUser.password);
-      this.http
-        .post('api/auth/token/', body.toString(), { headers })
-        .subscribe((res: any) => {
+      this.http.post('api/auth/token/', body.toString(), { headers }).subscribe(
+        (res: any) => {
           if (res.access_token) {
             this.userService.login(res.access_token);
             this.router.navigateByUrl('/connectors');
           } else {
-            alert('Invalid Username or Password.');
+            this.showErrorMessage('Invalid Username or Password.');
           }
-        });
+        },
+        (error) => {
+          if (error.status === 401 || error.status === 400) {
+            this.showErrorMessage('Invalid Username or Password.');
+          } else {
+            this.showErrorMessage('An error occurred. Please try again later.');
+          }
+        },
+      );
+    } else {
+      this.showErrorMessage('Username and Password are required.');
     }
+  }
+
+  showErrorMessage(message: string) {
+    alert(message);
   }
 }

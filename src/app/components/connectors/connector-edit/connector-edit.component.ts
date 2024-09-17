@@ -1,14 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
+import { ActivatedRoute } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { RippleModule } from 'primeng/ripple';
-import { ActivatedRoute } from '@angular/router';
+
+import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
+import { SubheaderComponent } from '../../subheader/subheader.component';
 
 @Component({
   selector: 'app-connector-edit',
@@ -20,6 +21,7 @@ import { ActivatedRoute } from '@angular/router';
     InputTextModule,
     CommonModule,
     RadioButtonModule,
+    SubheaderComponent,
   ],
   templateUrl: './connector-edit.component.html',
   styleUrl: './connector-edit.component.css',
@@ -40,8 +42,11 @@ export class ConnectorEditComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      this.connid = params.get('connid') || '';
+    });
+
     this.selectedCategory = this.categories[0];
-    this.connid = this.route.snapshot.paramMap.get('connid') || '';
   }
 
   onUpdate() {

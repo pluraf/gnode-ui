@@ -9,6 +9,9 @@ import { ConnectorListComponent } from './components/connectors/connector-list/c
 import { UserListComponent } from './components/users/user-list/user-list.component';
 import { ConnectorDeleteComponent } from './components/connectors/connector-delete/connector-delete.component';
 import { PublicKeyComponent } from './components/public-key/public-key.component';
+import { PipelineCreateComponent } from './components/pipelines/pipeline-create/pipeline-create.component';
+import { PipelineListComponent } from './components/pipelines/pipeline-list/pipeline-list.component';
+import { PipelineEditComponent } from './components/pipelines/pipeline-edit/pipeline-edit.component';
 
 export const routes: Routes = [
   {
@@ -46,7 +49,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'connector-edit',
+    path: 'connector-edit/:connid',
     component: ConnectorEditComponent,
     canActivate: [authGuard],
   },
@@ -58,6 +61,21 @@ export const routes: Routes = [
   {
     path: 'publickey',
     component: PublicKeyComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'pipelines',
+    component: PipelineListComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'pipeline-create',
+    component: PipelineCreateComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'pipeline-edit',
+    component: PipelineEditComponent,
     canActivate: [authGuard],
   },
 ];

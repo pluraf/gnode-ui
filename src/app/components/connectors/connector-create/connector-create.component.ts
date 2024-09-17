@@ -9,6 +9,7 @@ import { PasswordModule } from 'primeng/password';
 import { RadioButtonModule } from 'primeng/radiobutton';
 
 import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
+import { SubheaderComponent } from '../../subheader/subheader.component';
 
 @Component({
   selector: 'app-connector-create',
@@ -21,6 +22,7 @@ import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.
     FormsModule,
     PasswordModule,
     RouterModule,
+    SubheaderComponent,
   ],
   templateUrl: './connector-create.component.html',
   styleUrl: './connector-create.component.css',

@@ -13,18 +13,22 @@ import { ButtonModule } from 'primeng/button';
 })
 export class ConnectorDeleteComponent {
   @Input() visible: boolean = false;
-  @Input() connid: any[] = [];
+  @Input() connid: any;
   @Output() deleteConfirmed = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
   constructor() {}
 
   get isMultiple(): boolean {
-    return this.connid.length > 1;
+    return Array.isArray(this.connid) && this.connid.length > 1;
   }
 
   get connectorIds(): string[] {
-    return this.connid.map((connector) => connector.clients);
+    if (Array.isArray(this.connid)) {
+      return this.connid.map((connector) => connector.clients);
+    } else {
+      return [this.connid];
+    }
   }
 
   onDelete() {
@@ -32,6 +36,10 @@ export class ConnectorDeleteComponent {
   }
 
   onCancel() {
+    this.cancel.emit();
+  }
+
+  onClose() {
     this.cancel.emit();
   }
 }

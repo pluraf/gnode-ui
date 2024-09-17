@@ -1,12 +1,12 @@
 .editConnector-container {
   max-height: 100vh;
   flex-grow: 1;
-  margin-top: 70px;
+  /* margin-top: 70px; */
 }
 
-#connectorID {
+/* #connectorID {
   width: 40%;
-}
+} */
 
 .p-fluid .p-field {
   margin-bottom: 1.5rem;
@@ -54,14 +54,13 @@ legend {
 }
 
 input {
-  width: 10em !important;
   box-shadow: none;
   border: none;
 }
 
 .input_fieldset {
   border: none;
-  padding: 0px;
+  padding: 10px;
   margin: 0px;
   outline: none;
   width: 100%;

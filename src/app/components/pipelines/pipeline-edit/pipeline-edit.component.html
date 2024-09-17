@@ -1,0 +1,27 @@
+<app-subheader selectedMenuName="Edit pipeline"></app-subheader>
+<div class="pipeline-container">
+    <div class="p-grid ml-3">
+        <div class="p-col-12 p-md-6">
+            <h3>Pipeline ID: </h3>
+            <div class="p-fluid">
+                <div class="p-field">
+                    <fieldset class="padding-lagom margin-lagom">
+                        <legend>Pipeline ID</legend>
+                        <input name="pipeid" id="pipeid" [disabled]="true" class="input_fieldset"/>
+                    </fieldset>
+                </div>
+
+                <div class="mt-4" >
+                    <fieldset>
+                      <legend>Pipeline json</legend>
+                      <textarea  cols="62" rows="6" class="pubKeyFormat" [(ngModel)]="objJson" (change)="updateObj()">{{ obj | json }}</textarea>
+                    </fieldset>
+                </div> 
+                <div class="mt-3">
+                    <button pButton (click)="onUpdatePipeline()">Update</button>      
+                </div>
+                      
+            </div>
+        </div>
+    </div>    
+</div>
