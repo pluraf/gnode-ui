@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,6 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -27,10 +26,13 @@ import { PasswordModule } from 'primeng/password';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  errorMessage: string = '';
+
   loginUser: any = {
     username: '',
     password: '',
   };
+
   constructor(
     private router: Router,
     private userService: UserService,
@@ -58,8 +60,6 @@ export class LoginComponent {
         (error) => {
           if (error.status === 401 || error.status === 400) {
             this.showErrorMessage('Invalid Username or Password.');
-          } else {
-            this.showErrorMessage('An error occurred. Please try again later.');
           }
         },
       );
@@ -69,6 +69,9 @@ export class LoginComponent {
   }
 
   showErrorMessage(message: string) {
-    alert(message);
+    this.errorMessage = message;
+    /* setTimeout(() => {
+      this.errorMessage = '';
+    }, 6000); */
   }
 }

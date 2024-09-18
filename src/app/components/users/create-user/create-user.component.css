@@ -7,11 +7,10 @@ button {
   color: #ffff;
   width: 200px;
   height: 35px;
-  border-radius: 0;
   margin-top: 1rem;
 }
 
-h1 {
+h2 {
   margin: 1em 0.5em;
   font-weight: 400;
 }
@@ -21,4 +20,15 @@ form {
 }
 input {
   width: 17em;
+}
+.alert {
+  padding: 10px;
+  background-color: rgb(253, 237, 237);
+  color: black;
+  margin: 1em 0.5em;
+  width: 29em;
+  height: 40px;
+  align-items: center;
+  border-radius: 4px;
+  font-size: 14px;
 }

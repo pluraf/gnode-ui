@@ -34,6 +34,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'user-list',
+    component: UserListComponent,
+    canActivate: [authGuard],
+  },
+  {
     path: 'connectors',
     component: ConnectorListComponent,
     canActivate: [authGuard],
