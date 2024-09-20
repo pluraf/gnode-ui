@@ -10,6 +10,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 
 import { MqttBrokerServiceService } from '../../../services/mqtt-broker-service.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-connector-create',

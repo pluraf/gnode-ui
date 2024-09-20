@@ -1,4 +1,4 @@
-import { Component, inject, Output, EventEmitter } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import { UserService } from '../../../services/user.service';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { SubheaderComponent } from '../../subheader/subheader.component';
 
 @Component({
   selector: 'app-create-user',
@@ -22,6 +23,7 @@ import { PasswordModule } from 'primeng/password';
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
+    SubheaderComponent,
   ],
   templateUrl: './create-user.component.html',
   styleUrl: './create-user.component.css',

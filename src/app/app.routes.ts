@@ -12,6 +12,7 @@ import { PublicKeyComponent } from './components/public-key/public-key.component
 import { PipelineCreateComponent } from './components/pipelines/pipeline-create/pipeline-create.component';
 import { PipelineListComponent } from './components/pipelines/pipeline-list/pipeline-list.component';
 import { PipelineEditComponent } from './components/pipelines/pipeline-edit/pipeline-edit.component';
+import { DeleteUserComponent } from './components/users/delete-user/delete-user.component';
 
 export const routes: Routes = [
   {
@@ -81,6 +82,11 @@ export const routes: Routes = [
   {
     path: 'pipeline-edit',
     component: PipelineEditComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'delete-user',
+    component: DeleteUserComponent,
     canActivate: [authGuard],
   },
 ];

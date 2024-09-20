@@ -1,0 +1,13 @@
+<p-dialog (click)="onClose()" [(visible)]="visible" [modal]="true" [style]="{ width: '40rem' }">
+    <ng-template pTemplate="header">
+      {{ isMultiple ? 'Delete users: ' + userIds.join(', ') + '?' : 'Delete user: ' + userIds[0] + '?' }}
+    </ng-template>
+      <span class="p-text-secondary block mb-5">
+        This action will delete {{ isMultiple ? 'these users' : 'this user' }}.
+      </span>
+      <div class="flex justify-content-end gap-2">
+        <p-button label="Cancel" severity="secondary" (click)="onCancel()"></p-button>
+        <p-button label="Delete" severity="danger" (click)="onDelete()"></p-button>
+      </div>
+  </p-dialog>
+  

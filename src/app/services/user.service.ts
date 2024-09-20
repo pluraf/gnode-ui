@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { CookieOptions, CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +11,7 @@ export class UserService {
   private isAdmin: boolean = false;
   private isLoggedIn: boolean = false;
 
+  http = inject(HttpClient);
   constructor(private cookies: CookieService) {
     const storedToken = this.cookies.get('access_token');
     const storedAdminStatus = this.cookies.get('is_admin') === 'true';
@@ -20,13 +23,14 @@ export class UserService {
     }
   }
 
+  cookieOptions: CookieOptions = {
+    secure: true,
+    sameSite: 'Lax',
+  };
+
   login(token: string) {
     const user = this.parseJwt(token);
-    this.cookies.set('access_token', token, {
-      path: '/',
-      secure: true,
-      sameSite: 'Lax',
-    });
+    this.cookies.set('access_token', token, this.cookieOptions);
     this.setAdminStatus(user.is_admin);
 
     this.token = token;
@@ -56,6 +60,36 @@ export class UserService {
 
   isUserLoggedIn(): boolean {
     return this.isLoggedIn;
+  }
+
+  // Function to fetch list of users from API
+  getUsers(): Observable<any> {
+    const token = this.getToken();
+    if (token) {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+      return this.http.get('api/users/', { headers });
+    } else {
+      throw new Error('Authorization token is required');
+    }
+  }
+
+  // Function to delete users from user list
+  deleteUsers(userIds: string[]): Observable<any> {
+    const token = this.getToken();
+    if (token) {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+
+      return this.http.delete(`api/users/`, {
+        headers,
+        body: { userIds },
+      });
+    } else {
+      throw new Error('Authorization token is required');
+    }
   }
 
   //function to parse JWT token

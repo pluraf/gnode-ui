@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { MqttBrokerServiceService } from '../../services/mqtt-broker-service.service';
+import { ButtonModule } from 'primeng/button';
+import { SubheaderComponent } from '../subheader/subheader.component';
 
 @Component({
   selector: 'app-public-key',
   standalone: true,
-  imports: [],
+  imports: [ButtonModule, SubheaderComponent],
   templateUrl: './public-key.component.html',
   styleUrl: './public-key.component.css',
 })
@@ -40,4 +42,6 @@ export class PublicKeyComponent {
 
     return (isPem || isJson) && file.size <= 8000000;
   }
+
+  onSubmit() {}
 }

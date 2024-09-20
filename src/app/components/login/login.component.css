@@ -4,6 +4,11 @@
   }
 }
 
+:host {
+  ::ng-deep .p-card .p-card-content {
+    padding: 0.75rem 0 1.25rem 0;
+  }
+}
 .descText {
   color: gray;
 }
