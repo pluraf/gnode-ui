@@ -1,4 +1,4 @@
-<app-subheader selectedMenuName="Users" [items]="menubarItems"></app-subheader>
+<app-subheader selectedMenuName="Users" [actions]="menubarItems"></app-subheader>
 <app-delete-user  [visible]="visibleDialog" [users]="selectedUser" (deleteConfirmed)="onDeleteUser()" (cancel)="visibleDialog = false"></app-delete-user>
 <div class="main-content">
         <p-table [value]="users" selectionMode="single" >
@@ -27,4 +27,3 @@
                 [showFirstLastIcon]="false"></p-paginator>
         </div>
 </div>
-

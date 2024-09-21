@@ -3,6 +3,7 @@ body {
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
 }
+
 a {
   text-decoration: none;
   cursor: pointer;
@@ -28,6 +29,7 @@ input {
 i {
   color: black;
 }
+
 .back-arrow {
   display: inline-block;
   width: 2rem;
@@ -45,6 +47,7 @@ i {
 .back-arrow:hover i {
   color: #000;
 }
+
 .main-content {
   margin-top: 104px;
   position: relative;
@@ -53,4 +56,19 @@ i {
 
 h3 {
   margin-top: 7.5rem;
+}
+
+div {
+  box-shadow: none;
+}
+
+textarea {
+  box-shadow: none;
+  outline: none;
+}
+
+.button {
+  padding: 0.375rem 0.625rem;
+  background-color: #006666;
+  box-shadow: none;
 }

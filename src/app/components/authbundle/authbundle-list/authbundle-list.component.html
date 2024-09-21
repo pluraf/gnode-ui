@@ -1,20 +1,21 @@
-        <app-subheader selectedMenuName="Connectors" [actions]="menubarItems" (deleteConnectorEvent)="onDeleteConnector()"></app-subheader>
-        <app-connector-delete  [visible]="visibleDialog" [connid]="selectedConnector" (deleteConfirmed)="onDeleteConnector()" (cancel)="visibleDialog = false"></app-connector-delete>
+        <app-subheader selectedMenuName="Authentication bundles" [actions]="menubarItems" (deleteConnectorEvent)="onDeleteConnector()"></app-subheader>
+        <app-authbundle-delete [visible]="visibleDialog" [connid]="selectedAuthbundle" (deleteConfirmed)="onDeleteConnector()" (cancel)="visibleDialog = false"></app-authbundle-delete>
 
-        <div  class="main-content">
-                <p-table [value]="connectorList" selectionMode="multiple" [(selection)]="selectedConnector" dataKey="clients" [tableStyle]="{ 'min-width': '50rem' }">
+        <div class="flex flex-grow-1 flex-column ">
+            <div  class="flex flex-column justify-content-center border-round  connectorinfo">
+                <p-table [value]="authbundleList" selectionMode="multiple" [(selection)]="selectedAuthbundle" dataKey="authbundles" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
                             <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
-                            <th >Connector ID</th>
-                            <th >Communication</th>
-                            <th >Last Seen</th>
+                            <th >Authbundle ID</th>
+                            <th >Type</th>
+                            <th >Description</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" class="connector" let-connector>
                         <tr>
                             <td ><p-tableCheckbox name="checkbox" [value]="connector" /></td>
-                            <td ><a routerLink="/connector/{{connector.id}}">{{ connector.id }}</a></td>
+                            <td ><a routerLink="/connector/{{connector.clients}}">{{ connector.clients }}</a></td>
                             <td class="communicationBox" >
                                 @if(connector.communication === 'Allowed'){
                                     <svg class="comm-svg-icon" viewBox="0 0 24 24" fill="green" xmlns="http://www.w3.org/2000/svg">
@@ -35,9 +36,10 @@
                     <span class=" m-2 text-color ">Items per page: </span>
                     <p-dropdown [options]="paginatorOptions" optionLabel="label" optionValue="value" [(ngModel)]="rows"
                         (ngModelChange)="first = 0" />
-                    <p-paginator [first]="first" [rows]="rows" [totalRecords]="connectorList.length"
+                    <p-paginator [first]="first" [rows]="rows" [totalRecords]="authbundleList.length"
                         (onPageChange)="onPageChange($event)" [showCurrentPageReport]="true"
                         currentPageReportTemplate="{first} - {last} of {totalRecords}" [showPageLinks]="false"
                         [showFirstLastIcon]="false"></p-paginator>
                 </div>
             </div>
+        </div>

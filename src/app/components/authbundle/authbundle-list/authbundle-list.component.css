@@ -1,0 +1,24 @@
+:host {
+  ::ng-deep .p-datatable {
+    border: 1px solid rgb(193, 191, 191);
+  }
+}
+
+.communicationBox {
+  display: flex;
+  align-items: center;
+}
+.comm-svg-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  fill: green;
+}
+.pi.pi-plus {
+  font-size: 24px;
+  margin-right: 8px;
+  color: inherit;
+  display: inline-block;
+  line-height: 1 !important;
+  vertical-align: middle;
+}

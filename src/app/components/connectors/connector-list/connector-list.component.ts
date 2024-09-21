@@ -26,7 +26,6 @@ import { ConnectorDeleteComponent } from '../connector-delete/connector-delete.c
     RouterModule,
     ConnectorCreateComponent,
     ConnectorEditComponent,
-    ConnectorEditComponent,
     SubheaderComponent,
     TableModule,
     PaginatorModule,
@@ -90,9 +89,11 @@ export class ConnectorListComponent {
   loadConnectors() {
     this.brokerService.loadConnectorList().subscribe({
       next: (response: { responses: any[] }) => {
+        console.log(response);
         const clientResponse = response.responses.find(
           (r: { command: string }) => r.command === 'listClients',
         );
+        console.log(clientResponse);
 
         if (clientResponse) {
           const clientData = clientResponse.data;
@@ -100,7 +101,7 @@ export class ConnectorListComponent {
 
           if (clientData?.clients) {
             this.connectorList = clientData.clients.map((client: string) => ({
-              clients: client,
+              id: client,
               communication: disabled ? 'Blocked' : 'Allowed',
               lastseen: this.formatDate(new Date()),
             }));
@@ -128,13 +129,13 @@ export class ConnectorListComponent {
       alert('No connector selected');
       return;
     }
-    this.connid = this.selectedConnector[0].clients;
+    this.connid = this.selectedConnector[0].id;
     this.visibleDialog = true;
   }
 
   onDeleteConnector() {
     const connectorId = this.selectedConnector.map(
-      (connector) => connector.clients,
+      (connector) => connector.id,
     );
     this.brokerService.deleteConnectors(connectorId).subscribe({
       next: (response: { responses: any[] }) => {
@@ -145,7 +146,7 @@ export class ConnectorListComponent {
         if (deleteResponse) {
           const deletedConnectors = deleteResponse.deleted || [];
           this.connectorList = this.connectorList.filter(
-            (connector) => !deletedConnectors.includes(connector.clients),
+            (connector) => !deletedConnectors.includes(connector.id),
           );
           this.totalRecords = this.connectorList.length;
         }

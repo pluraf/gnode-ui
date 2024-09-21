@@ -5,13 +5,13 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-connector-delete',
+  selector: 'app-authbundle-delete',
   standalone: true,
   imports: [DialogModule, ButtonModule, CommonModule],
-  templateUrl: './connector-delete.component.html',
-  styleUrl: './connector-delete.component.css',
+  templateUrl: './authbundle-delete.component.html',
+  styleUrl: './authbundle-delete.component.css',
 })
-export class ConnectorDeleteComponent {
+export class AuthbundleDeleteComponent {
   @Input() visible: boolean = false;
   @Input() connid: any;
   @Output() deleteConfirmed = new EventEmitter<void>();
@@ -25,7 +25,7 @@ export class ConnectorDeleteComponent {
 
   get connectorIds(): string[] {
     if (Array.isArray(this.connid)) {
-      return this.connid.map((connector) => connector.id);
+      return this.connid.map((connector) => connector.clients);
     } else {
       return [this.connid];
     }

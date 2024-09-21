@@ -14,7 +14,8 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
   styleUrl: './pipeline-list.component.css',
 })
 export class PipelineListComponent {
-  menubarItems: MenuItem[] = [
+
+  menubarActions: MenuItem[] = [
     {
       routerLink: '/pipeline-create',
       tooltipOptions: {

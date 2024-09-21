@@ -1,4 +1,4 @@
-export interface Connector {
+export interface Authbundle {
   id: string;
   communication: string;
   lastseen?: string;

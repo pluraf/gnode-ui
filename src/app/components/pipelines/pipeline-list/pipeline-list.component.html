@@ -1,4 +1,4 @@
-<app-subheader selectedMenuName="Pipelines" [items]="menubarItems" ></app-subheader>
+<app-subheader selectedMenuName="Pipelines" [actions]="menubarItems" ></app-subheader>
 <div  class="main-content">
     <p-table [value]="pipelineList" selectionMode="single" [tableStyle]="{ 'min-width': '50rem' }" class=" mt-10">
         <ng-template pTemplate="header">

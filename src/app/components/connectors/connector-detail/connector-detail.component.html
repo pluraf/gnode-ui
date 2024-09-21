@@ -1,4 +1,4 @@
-<app-subheader selectedMenuName="Connector ID: {{connid}}" [items]="menubarItems" [showBackArrow]="true" (deleteConnectorEvent)="onDeleteConnector()"></app-subheader>
+<app-subheader selectedMenuName="Connector ID: {{connid}}" [actions]="menubarItems" [showBackArrow]="true" (deleteConnectorEvent)="onDeleteConnector()"></app-subheader>
 <app-connector-delete  [visible]="visibleDialog" [connid]="connid" (deleteConfirmed)="onDeleteConnector()" (cancel)="visibleDialog = false"></app-connector-delete>
 <div class="main-content">
 <p-table [value]="details" [tableStyle]="{ 'min-width': '10rem' }">
