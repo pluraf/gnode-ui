@@ -24,3 +24,33 @@ a {
 input {
   box-shadow: none;
 }
+
+i {
+  color: black;
+}
+.back-arrow {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+  line-height: 2rem;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.back-arrow:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.back-arrow:hover i {
+  color: #000;
+}
+.main-content {
+  margin-top: 104px;
+  position: relative;
+  height: 100%;
+}
+
+h3 {
+  margin-top: 7.5rem;
+}

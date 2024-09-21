@@ -1,7 +1,8 @@
-<div class="flex flex-row align-items-center border-1 border-top-none border-300 h-3rem menuitem" >
-    <div class="flex flex-row align-items-center">
-        <p class="m-2"><strong>{{ selectedMenuName }}</strong></p>
-    </div>
+<div class="subheader-container flex flex-row align-items-center border-1 border-top-none border-300 h-3rem" >
+  <div class="flex flex-row align-items-center">
+    <i *ngIf="showBackArrow" class="pi pi-arrow-left ml-2 back-arrow" (click)="goBack()"></i> 
+    <p class="ml-2"><strong>{{ selectedMenuName }}</strong></p>
+  </div>
     <div class=" flex flex-row align-items-center ml-auto">
         @for (item of items; track $index) {             
           <a [routerLink]="item.routerLink"

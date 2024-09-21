@@ -1,6 +1,6 @@
-<app-subheader selectedMenuName="Create User"> </app-subheader>
-<div class="createUser-container">
-  <h2>Create new user</h2>
+<app-subheader selectedMenuName="Create User" [showBackArrow]="true" > </app-subheader>
+<div class="main-content ml-3">
+  <h3>Create new user</h3>
   @if(errorMessage){
     <div class="alert flex flex-row "> <i class="pi pi-exclamation-circle mr-3"style="color: red; font-size:18px" ></i> 
       {{ errorMessage }}

@@ -1,23 +1,19 @@
 <app-subheader selectedMenuName="Pipelines" [items]="menubarItems" ></app-subheader>
-<div class="flex flex-grow-1 flex-column ">
-    <div  class="flex flex-column justify-content-center border-round  connectorinfo">
-        <p-table [value]="pipelineList" selectionMode="single" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox"></p-tableHeaderCheckbox></th>
-                    <th >Pipeline ID</th>
-                    <th >Key</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" class="pipelines" let-pipeline>
-                <tr>
-                    <td ><p-tableCheckbox name="checkbox" [value]="pipelines"></p-tableCheckbox></td>
-                    <td ><a routerLink="/pipeline-edit">{{ pipeline.name }}</a></td>
-                    <td class="key">{{ pipeline.key }}</td>
-                </tr>
-            </ng-template>
-        </p-table>
-        
-    </div>
-
+<div  class="main-content">
+    <p-table [value]="pipelineList" selectionMode="single" [tableStyle]="{ 'min-width': '50rem' }" class=" mt-10">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox"></p-tableHeaderCheckbox></th>
+                <th >Pipeline ID</th>
+                <th >Key</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" class="pipelines" let-pipeline>
+            <tr>
+                <td ><p-tableCheckbox name="checkbox" [value]="pipelines"></p-tableCheckbox></td>
+                <td ><a routerLink="/pipeline-edit">{{ pipeline.name }}</a></td>
+                <td class="key">{{ pipeline.key }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>

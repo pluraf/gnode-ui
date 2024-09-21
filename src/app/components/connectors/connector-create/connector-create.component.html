@@ -1,16 +1,14 @@
-<app-subheader selectedMenuName="Create connector" ></app-subheader>
-<div class="createConnector-container">
+<app-subheader selectedMenuName="Create Connector" [showBackArrow]="true"></app-subheader>
+<div class="main-content">
     <div class="p-grid ml-3 ">
         <div class="p-col-12 p-md-6">
-            <h2>Create a Connector</h2>
+            <h3>Create a Connector</h3>
             <div class="p-fluid">
                 <div class="p-field">
                     <label for="connectorID"></label>
                     <input pInputText id="connectorID" name="connid" [(ngModel)]="connid" placeholder="Connector ID"/>
                     <small>Permanent identifier for your connector.</small>
                 </div>
-
-
                 <div class="p-field">
                     <span><strong>Authentication</strong></span>
                     <small>Specify the public key that will be used to authenticate this connector. You can leave the key empty, but connectors will not be able to connect to gnode without a key.</small>

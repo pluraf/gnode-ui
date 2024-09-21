@@ -87,4 +87,8 @@ export class ConnectorCreateComponent implements OnInit {
       }
     });
   }
+
+  previousPage() {
+    this.router.navigateByUrl('/connectors');
+  }
 }

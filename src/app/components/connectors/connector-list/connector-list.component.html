@@ -1,8 +1,7 @@
         <app-subheader selectedMenuName="Connectors" [items]="menubarItems" (deleteConnectorEvent)="onDeleteConnector()"></app-subheader>
         <app-connector-delete  [visible]="visibleDialog" [connid]="selectedConnector" (deleteConfirmed)="onDeleteConnector()" (cancel)="visibleDialog = false"></app-connector-delete>
 
-        <div class="flex flex-grow-1 flex-column ">
-            <div  class="flex flex-column justify-content-center border-round  connectorinfo">
+        <div  class="main-content">
                 <p-table [value]="connectorList" selectionMode="multiple" [(selection)]="selectedConnector" dataKey="clients" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
@@ -42,4 +41,4 @@
                         [showFirstLastIcon]="false"></p-paginator>
                 </div>
             </div>
-        </div>
+    

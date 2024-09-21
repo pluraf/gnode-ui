@@ -1,14 +1,13 @@
-<app-subheader selectedMenuName="Create pipeline" ></app-subheader>
-<div class="pipeline-container">
-    <div class="p-grid ml-3">
+<app-subheader selectedMenuName="Create pipeline" [showBackArrow]="true" ></app-subheader>
+<div class=" main-content ml-3">
         <div class="p-col-12 p-md-6">
             <h3>Pipeline ID: </h3>
             <div class="p-fluid">
                 <div class="p-field">
-                    <fieldset class="padding-lagom margin-lagom">
-                        <legend>Pipeline ID</legend>
+                    <div class="padding-lagom margin-lagom">
+                        <label for="">Pipeline ID</label>
                         <input name="pipeid"  id="pipeid" class="input_fieldset"/>
-                    </fieldset>
+                    </div>
                 </div>
 
                 <div class="mt-4" >
@@ -22,5 +21,4 @@
                 </div>
             </div>
         </div>
-    </div>    
 </div>

@@ -1,13 +1,12 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Component, inject, Input } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { InputTextModule } from 'primeng/inputtext';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { MqttBrokerServiceService } from '../../services/mqtt-broker-service.service';
 
 @Component({
   selector: 'app-subheader',
@@ -27,6 +26,10 @@ import { MqttBrokerServiceService } from '../../services/mqtt-broker-service.ser
 export class SubheaderComponent {
   @Input() selectedMenuName: string = '';
   @Input() items: MenuItem[] = [];
+  @Input() showBackArrow: boolean = false;
 
-  constructor() {}
+  constructor(private location: Location) {}
+  goBack() {
+    this.location.back();
+  }
 }

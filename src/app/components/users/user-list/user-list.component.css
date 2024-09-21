@@ -1,0 +1,11 @@
+.tableheader {
+  position: fixed;
+  z-index: 12;
+  background: white;
+  width: calc(100% - 178px);
+}
+.table-content {
+  margin-top: 100px;
+  position: relative;
+  z-index: 10;
+}
