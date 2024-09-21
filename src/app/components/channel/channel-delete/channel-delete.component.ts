@@ -5,30 +5,26 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-authbundle-delete',
+  selector: 'app-channel-delete',
   standalone: true,
   imports: [DialogModule, ButtonModule, CommonModule],
-  templateUrl: './authbundle-delete.component.html',
-  styleUrl: './authbundle-delete.component.css',
+  templateUrl: './channel-delete.component.html',
+  styleUrl: './channel-delete.component.css',
 })
-export class AuthbundleDeleteComponent {
+export class ChannelDeleteComponent {
   @Input() visible: boolean = false;
-  @Input() chanid: any;
+  @Input() channels: any[] = [];
   @Output() deleteConfirmed = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
   constructor() {}
 
   get isMultiple(): boolean {
-    return Array.isArray(this.chanid) && this.chanid.length > 1;
+    return this.channels.length > 1;
   }
 
   get channelIds(): string[] {
-    if (Array.isArray(this.chanid)) {
-      return this.chanid.map((channel) => channel.clients);
-    } else {
-      return [this.chanid];
-    }
+    return this.channels.map((channel) => channel.id);
   }
 
   onDelete() {

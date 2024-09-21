@@ -59,7 +59,7 @@ export class AuthbundleCreateComponent implements OnInit {
 
   authOptions: {[key: string]: string} = {};
 
-  connectorTypes: {[key: string]: string} = {};
+  ConnectorTypes: {[key: string]: string} = {};
 
   selConnectorType: any;
   selAuthOption: string;
@@ -89,9 +89,9 @@ export class AuthbundleCreateComponent implements OnInit {
     this.selConnectorType = ConnectorType.GCP_PUBSUB;
     this.selAuthOption = AuthType.SERVICE_KEY;
 
-    this.connectorTypes[ConnectorType.GCP_PUBSUB] = "Google Pubsub";
-    this.connectorTypes[ConnectorType.MQTT50] = 'MQTT v5.0';
-    this.connectorTypes[ConnectorType.MQTT311] = 'MQTT v3.11';
+    this.ConnectorTypes[ConnectorType.GCP_PUBSUB] = "Google Pubsub";
+    this.ConnectorTypes[ConnectorType.MQTT50] = 'MQTT v5.0';
+    this.ConnectorTypes[ConnectorType.MQTT311] = 'MQTT v3.11';
 
     this.authOptions[AuthType.SERVICE_KEY] = AuthTypeLabel.SERVICE_KEY;
   }

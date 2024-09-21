@@ -1,18 +1,17 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { authGuard } from './guards/auth.guard';
-import { ConnectorDetailComponent } from './components/connectors/connector-detail/connector-detail.component';
-import { CreateUserComponent } from './components/users/create-user/create-user.component';
-import { ConnectorEditComponent } from './components/connectors/connector-edit/connector-edit.component';
-import { ConnectorCreateComponent } from './components/connectors/connector-create/connector-create.component';
-import { ConnectorListComponent } from './components/connectors/connector-list/connector-list.component';
-import { UserListComponent } from './components/users/user-list/user-list.component';
-import { ConnectorDeleteComponent } from './components/connectors/connector-delete/connector-delete.component';
-import { PublicKeyComponent } from './components/public-key/public-key.component';
-import { PipelineCreateComponent } from './components/pipelines/pipeline-create/pipeline-create.component';
-import { PipelineListComponent } from './components/pipelines/pipeline-list/pipeline-list.component';
-import { PipelineEditComponent } from './components/pipelines/pipeline-edit/pipeline-edit.component';
-import { DeleteUserComponent } from './components/users/delete-user/delete-user.component';
+import { ChannelDetailComponent } from './components/channel/channel-detail/channel-detail.component';
+import { UserListComponent } from './components/user/user-list/user-list.component';
+import { UserCreateComponent } from './components/user/user-create/user-create.component';
+import { UserDeleteComponent } from './components/user/user-delete/user-delete.component';
+import { ChannelEditComponent } from './components/channel/channel-edit/channel-edit.component';
+import { ChannelCreateComponent } from './components/channel/channel-create/channel-create.component';
+import { ChannelListComponent } from './components/channel/channel-list/channel-list.component';
+import { ChannelDeleteComponent } from './components/channel/channel-delete/channel-delete.component';
+import { PipelineCreateComponent } from './components/pipeline/pipeline-create/pipeline-create.component';
+import { PipelineListComponent } from './components/pipeline/pipeline-list/pipeline-list.component';
+import { PipelineEditComponent } from './components/pipeline/pipeline-edit/pipeline-edit.component';
 import { AuthbundleListComponent } from './components/authbundle/authbundle-list/authbundle-list.component';
 import { AuthbundleCreateComponent } from './components/authbundle/authbundle-create/authbundle-create.component';
 import { AuthbundleDeleteComponent } from './components/authbundle/authbundle-delete/authbundle-delete.component';
@@ -34,42 +33,37 @@ export const routes: Routes = [
   },
   {
     path: 'user-create',
-    component: CreateUserComponent,
+    component: UserCreateComponent,
     canActivate: [authGuard],
   },
   {
-    path: 'user-list',
-    component: UserListComponent,
+    path: 'user-delete',
+    component: UserDeleteComponent,
     canActivate: [authGuard],
   },
   {
-    path: 'connectors',
-    component: ConnectorListComponent,
+    path: 'channels',
+    component: ChannelListComponent,
     canActivate: [authGuard],
   },
   {
-    path: 'connector-create',
-    component: ConnectorCreateComponent,
+    path: 'channel-create',
+    component: ChannelCreateComponent,
     canActivate: [authGuard],
   },
   {
-    path: 'connector/:connid',
-    component: ConnectorDetailComponent,
+    path: 'channel/:chanid',
+    component: ChannelDetailComponent,
     canActivate: [authGuard],
   },
   {
-    path: 'connector-edit/:connid',
-    component: ConnectorEditComponent,
+    path: 'channel-edit/:chanid',
+    component: ChannelEditComponent,
     canActivate: [authGuard],
   },
   {
-    path: 'connector-delete',
-    component: ConnectorDeleteComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'publickey',
-    component: PublicKeyComponent,
+    path: 'channel-delete',
+    component: ChannelDeleteComponent,
     canActivate: [authGuard],
   },
   {
@@ -89,10 +83,10 @@ export const routes: Routes = [
   },
   {
     path: 'delete-user',
-    component: DeleteUserComponent,
+    component: UserDeleteComponent,
   },
   {
-    path: 'authbundle-list',
+    path: 'authbundles',
     component: AuthbundleListComponent,
     canActivate: [authGuard],
   },

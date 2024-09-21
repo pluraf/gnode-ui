@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChannelDeleteComponent } from './authbundle-delete.component';
+import { ChannelDeleteComponent } from './channel-delete.component';
 
 describe('ChannelDeleteComponent', () => {
   let component: ChannelDeleteComponent;

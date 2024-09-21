@@ -1,0 +1,29 @@
+<app-subheader selectedMenuName="Users" [actions]="menubarItems"></app-subheader>
+<app-user-delete  [visible]="visibleDialog" [users]="selectedUsers" (deleteConfirmed)="onDeleteUser()" (cancel)="visibleDialog = false"></app-user-delete>
+<div class="main-content">
+        <p-table [value]="users" selectionMode="multiple" [(selection)]="selectedUsers"  >
+            <ng-template pTemplate="header"  >
+                <tr>
+                    <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox"></p-tableHeaderCheckbox></th>
+                    <th >Username</th>
+                    <th >Role</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" class="users " let-user>
+                <tr class="">
+                    <td ><p-tableCheckbox name="checkbox" [value]="user"></p-tableCheckbox></td>
+                    <td >{{ user.username }}</td>
+                    <td class="role">{{ user.is_admin ? 'Admin' : 'User' }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div class="flex flex-row align-items-center justify-content-end mt-auto">
+            <span class=" m-2 text-color ">Items per page: </span>
+            <p-dropdown [options]="paginatorOptions" optionLabel="label" optionValue="value" [(ngModel)]="rows"
+                (ngModelChange)="first = 0" />
+            <p-paginator [first]="first" [rows]="rows" [totalRecords]="users.length"
+                (onPageChange)="onPageChange($event)" [showCurrentPageReport]="true"
+                currentPageReportTemplate="{first} - {last} of {totalRecords}" [showPageLinks]="false"
+                [showFirstLastIcon]="false"></p-paginator>
+        </div>
+</div>

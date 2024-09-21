@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChannelDeleteComponent } from './authbundle-delete.component';
+import { ChannelEditComponent } from './channel-edit.component';
 
-describe('ChannelDeleteComponent', () => {
-  let component: ChannelDeleteComponent;
-  let fixture: ComponentFixture<ChannelDeleteComponent>;
+describe('ChannelEditComponent', () => {
+  let component: ChannelEditComponent;
+  let fixture: ComponentFixture<ChannelEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChannelDeleteComponent]
+      imports: [ChannelEditComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ChannelDeleteComponent);
+    fixture = TestBed.createComponent(ChannelEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

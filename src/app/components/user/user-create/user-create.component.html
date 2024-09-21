@@ -1,0 +1,19 @@
+<app-subheader selectedMenuName="Create User" [showBackArrow]="true" > </app-subheader>
+<div class="main-content ml-3">
+  <h3>Create new user</h3>
+  @if(errorMessage){
+    <div class="alert flex flex-row "> <i class="pi pi-exclamation-circle mr-3"style="color: red; font-size:18px" ></i>
+      {{ errorMessage }}
+    </div>
+    }
+  <form>
+    <div>
+    <label for="username">Enter Username: <input class="mb-4" name="username" required pInputText id="username"
+      [(ngModel)]="userObj.username" /></label>
+    </div>
+    <div>
+    <label for="passwordInput">Enter Password: <p-password [(ngModel)]="userObj.password" name="passwordInput" id="passwordInput" [toggleMask]="true" [feedback]="false"/></label>
+    </div>
+    <button class="mt-5" pButton pRipple label="Create User" (click)="onCreateUser()"> </button>
+  </form>
+</div>

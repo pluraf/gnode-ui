@@ -29,8 +29,8 @@ export class LoginComponent {
   errorMessage: string = '';
 
   loginUser: any = {
-    username: '',
-    password: '',
+    username: 'admin',
+    password: 'admin1234',
   };
 
   constructor(
@@ -52,7 +52,7 @@ export class LoginComponent {
         (res: any) => {
           if (res.access_token) {
             this.userService.login(res.access_token);
-            this.router.navigateByUrl('/connectors');
+            this.router.navigateByUrl('/channels');
           } else {
             this.showErrorMessage('Invalid Username or Password.');
           }

@@ -1,5 +1,7 @@
 .subheader-container {
   position: fixed;
+  border: none;
+  border-bottom: 1px solid black;
   top: 56px;
   z-index: 1100;
   background-color: white;

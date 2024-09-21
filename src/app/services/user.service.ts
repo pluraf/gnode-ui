@@ -69,7 +69,7 @@ export class UserService {
       const headers = new HttpHeaders({
         Authorization: `Bearer ${token}`,
       });
-      return this.http.get('api/users/', { headers });
+      return this.http.get('api/user/', { headers });
     } else {
       throw new Error('Authorization token is required');
     }
@@ -83,9 +83,9 @@ export class UserService {
         Authorization: `Bearer ${token}`,
       });
 
-      return this.http.delete(`api/users/`, {
+      return this.http.delete(`api/user`, {
         headers,
-        body: { userIds },
+        body: userIds,
       });
     } else {
       throw new Error('Authorization token is required');

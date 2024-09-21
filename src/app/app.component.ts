@@ -6,7 +6,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitterModule } from 'primeng/splitter';
-import { ConnectorDetailComponent } from './components/connectors/connector-detail/connector-detail.component';
+import { ChannelDetailComponent } from './components/channel/channel-detail/channel-detail.component';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +18,7 @@ import { ConnectorDetailComponent } from './components/connectors/connector-deta
     SplitterModule,
     DividerModule,
     SidebarModule,
-    ConnectorDetailComponent,
+    ChannelDetailComponent,
   ],
   providers: [Router],
   templateUrl: './app.component.html',
@@ -28,16 +28,16 @@ export class AppComponent {
   title = 'gnode-ui';
   router: Router = inject(Router);
   items: MenuItem[] = [
-    {label: 'Connectors', routerLink: '/connectors'},
+    {label: 'Channels', routerLink: '/channels'},
     {
       label: 'Pipelines',
       items:[
         {label: 'List', routerLink: '/pipelines'},
-        {label: 'Authentication', routerLink: '/authbundle-list'},
+        {label: 'Authentication', routerLink: '/authbundles'},
       ]
     },
     {label: 'Users', routerLink: '/users'},
-    {label: 'Upload Files', routerLink: '/publickey'},
+    {label: 'Settings', routerLink: '/settings'},
   ];
 
   constructor() {}

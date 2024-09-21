@@ -42,7 +42,7 @@ export class AuthbundleListComponent {
   first: number = 0;
   rows: number = 10;
   totalRecords!: number;
-  connid = '';
+  chanid = '';
 
   paginatorOptions = [
     { label: 10, value: 10 },
@@ -100,14 +100,14 @@ export class AuthbundleListComponent {
 
   showDialog() {
     if (this.selectedAuthbundle.length === 0) {
-      alert('No connector selected');
+      alert('No authbundles selected');
       return;
     }
-    this.connid = this.selectedAuthbundle[0].id;
+    this.chanid = this.selectedAuthbundle[0].id;
     this.visibleDialog = true;
   }
 
-  onDeleteConnector() {
+  onDeleteChannel() {
     const ids = this.selectedAuthbundle.map(
       (authbundle) => authbundle.id,
     );
