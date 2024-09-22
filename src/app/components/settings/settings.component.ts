@@ -36,7 +36,7 @@ export class SettingsComponent {
 
   constructor() {
     this.backendService.loadSettings().subscribe((resp) => {
-      console.log(resp.response);
+      this.settings = resp;
     });
   }
 
