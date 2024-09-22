@@ -55,6 +55,7 @@ export class AuthbundleCreateComponent implements OnInit {
   authbundleId = '';
   username = '';
   password = '';
+  description = '';
   autoId = true;
 
   authOptions: {[key: string]: string} = {};
@@ -96,12 +97,28 @@ export class AuthbundleCreateComponent implements OnInit {
     this.authOptions[AuthType.SERVICE_KEY] = AuthTypeLabel.SERVICE_KEY;
   }
 
-  cleanInputs() {
-    this.username = '';
-    this.password = '';
-    this.keyFile = null;
-    if (this.keyFileInput) {
-      this.keyFileInput.nativeElement.value = '';
+  cleanIrrelevantInputs() {
+    if (this.selAuthOption == AuthType.PASSWORD) {
+      this.keyFile = null;
+      if (this.keyFileInput) {
+        this.keyFileInput.nativeElement.value = '';
+      }
+    } else if (this.selAuthOption == AuthType.JWT_ES256
+        || this.selAuthOption == AuthType.SERVICE_KEY
+    ) {
+      this.password = '';
+    } else {
+      this.keyFile = null;
+      if (this.keyFileInput) {
+        this.keyFileInput.nativeElement.value = '';
+      }
+      this.username = '';
+      this.password = '';
+    }
+
+    if (this.selConnectorType == ConnectorType.GCP_PUBSUB) {
+      this.username = '';
+      this.password = '';
     }
   }
 
@@ -109,11 +126,10 @@ export class AuthbundleCreateComponent implements OnInit {
   }
 
   onChangeAuthOption(event: any) {
-    this.cleanInputs();
+    this.cleanIrrelevantInputs();
   }
 
   onChangeConnectorType(event: any) {
-    this.cleanInputs();
     this.authOptions = {};
     if (event === ConnectorType.GCP_PUBSUB) {
       this.authOptions[AuthType.SERVICE_KEY] = AuthTypeLabel.SERVICE_KEY;
@@ -123,6 +139,7 @@ export class AuthbundleCreateComponent implements OnInit {
       this.authOptions[AuthType.PASSWORD] = AuthTypeLabel.PASSWORD;
       this.selAuthOption = AuthType.JWT_ES256;
     }
+    this.cleanIrrelevantInputs();
   }
 
   onChangeAutoId(event: any) {
@@ -148,6 +165,9 @@ export class AuthbundleCreateComponent implements OnInit {
     }
     if (this.keyFile) {
       formData.append("keyfile", this.keyFile);
+    }
+    if (this.description) {
+      formData.append("description", this.description);
     }
     this.backendService.createAuthbundle(formData).subscribe((res) => {
     });
