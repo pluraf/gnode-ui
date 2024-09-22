@@ -83,7 +83,7 @@ export class UserService {
         Authorization: `Bearer ${token}`,
       });
 
-      return this.http.delete(`api/user`, {
+      return this.http.delete(`api/user/`, {
         headers,
         body: userIds,
       });
