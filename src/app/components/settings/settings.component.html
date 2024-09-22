@@ -1,0 +1,17 @@
+<app-subheader selectedMenuName="Create authentication bundle" [showBackArrow]="true"></app-subheader>
+
+<div class="main-content">
+  <p-divider align="left" type="solid"><b>MQTT Channels</b></p-divider>
+  <div class="formgrid grid w-full">
+    <div class="field col-12 w-full">
+      <div>
+        <p-checkbox [(ngModel)]="settings.allow_anonymous" [binary]="true" inputId="auto_id"/>
+        <label for="auto_id" class="pl-2">Enable public access</label>
+      </div>
+      <small class="text-color-secondary inline-block pt-1">MQTT clients are able to connect without authentication</small>
+    </div>
+    <div class="field col-12 mt-5">
+      <button pButton (click)="onSubmit()" class="button">Submit</button>
+    </div>
+  </div>
+</div>

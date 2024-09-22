@@ -5,7 +5,8 @@
       "changeOrigin": true
     },
     "/broker": {
-      "target": "http://localhost:8888",
+      "pathRewrite": {"^/broker" : ""},
+      "target": "http://localhost:8001",
       "secure": false,
       "changeOrigin": true
     }

@@ -33,7 +33,7 @@ export class AppComponent {
       label: 'Pipelines',
       items:[
         {label: 'List', routerLink: '/pipelines'},
-        {label: 'Authentication', routerLink: '/authbundles'},
+        {label: 'Authbundles', routerLink: '/authbundles'},
       ]
     },
     {label: 'Users', routerLink: '/users'},

@@ -17,6 +17,9 @@ export class BackendService {
   // Channel APIs
   private channelApiUrl = 'broker/command';
   private httpOptions: { headers: HttpHeaders };
+  // Settings APIs
+  private settingsUrl = 'api/settings/';
+
   http = inject(HttpClient);
   user = inject(UserService);
 
@@ -45,6 +48,19 @@ export class BackendService {
       this.authbundleCreateUrl, formData, this.httpOptions
     );
   }
-}
+
+
+/////////////////////////// Settings ///////////////////////////
+
+  loadSettings(): Observable<any> {
+    return this.http.get(this.settingsUrl, this.httpOptions);
+  }
+
+  updateSettings(settings: object): Observable<any> {
+    return this.http.put(this.settingsUrl, settings, this.httpOptions);
+  }
 
 /////////////////////////// Next ///////////////////////////
+
+
+}

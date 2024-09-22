@@ -10,7 +10,6 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-channel-create',
