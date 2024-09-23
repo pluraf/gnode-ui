@@ -28,16 +28,17 @@ export class AppComponent {
   title = 'gnode-ui';
   router: Router = inject(Router);
   items: MenuItem[] = [
-    {label: 'Channels', routerLink: '/channels'},
+    { label: 'Channels', routerLink: '/channels', styleClass: 'gap-2' },
     {
       label: 'Pipelines',
-      items:[
-        {label: 'List', routerLink: '/pipelines'},
-        {label: 'Authbundles', routerLink: '/authbundles'},
-      ]
+      items: [
+        { label: 'List', routerLink: '/pipelines' },
+        { label: 'Authbundles', routerLink: '/authbundles' },
+      ],
+      styleClass: 'gap-2',
     },
-    {label: 'Users', routerLink: '/users'},
-    {label: 'Settings', routerLink: '/settings'},
+    { label: 'Users', routerLink: '/users', styleClass: 'gap-4' },
+    { label: 'Settings', routerLink: '/settings', styleClass: 'gap-2' },
   ];
 
   constructor() {}

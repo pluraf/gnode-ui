@@ -25,12 +25,27 @@ a {
 input {
   box-shadow: none;
 }
-
-i {
-  color: black;
+.user-icon {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+  line-height: 2rem;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+.user-icon {
+  background-color: rgb(189, 189, 189);
+}
+.user-icon:hover {
+  background-color: rgba(229, 247, 235, 0.1);
 }
 
-.back-arrow {
+.user-icon:hover i {
+  color: #f3eded;
+}
+.back-arrow,
+.user-icon {
   display: inline-block;
   width: 2rem;
   height: 2rem;
@@ -52,7 +67,11 @@ i {
   margin-top: 124px;
   height: 100%;
 }
-
+.main-content-body {
+  margin-top: 143px;
+  height: 100%;
+  padding-bottom: 20px;
+}
 h3 {
   margin-top: 7.5rem;
 }
