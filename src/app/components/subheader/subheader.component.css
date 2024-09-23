@@ -1,12 +1,11 @@
 .subheader-container {
   position: fixed;
   border: none;
+  border-bottom: 1px solid black;
   top: 56px;
   z-index: 1100;
   background-color: white;
   width: calc(100% - 178px);
-  font-size: 20px;
-  padding-top: 30px;
 }
 i {
   color: black;
