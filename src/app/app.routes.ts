@@ -78,7 +78,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'pipeline-edit',
+    path: 'pipeline-edit/:pipeid',
     component: PipelineEditComponent,
     canActivate: [authGuard],
   },

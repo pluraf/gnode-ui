@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
 
@@ -16,27 +17,30 @@ import { InputTextModule } from 'primeng/inputtext';
     InputTextModule,
     CommonModule,
     FormsModule,
+    RouterModule,
   ],
   templateUrl: './pipeline-edit.component.html',
   styleUrl: './pipeline-edit.component.css',
 })
 export class PipelineEditComponent {
+  route: ActivatedRoute = inject(ActivatedRoute);
+
+  pipeid = '';
+
   obj = {
     name: 'Pipeline1',
     pipelineJson: 'pipelineJson',
   };
 
-  objJson: string;
+  objJson: string = "";
 
   constructor() {
-    this.objJson = JSON.stringify(this.obj);
+    this.pipeid = this.route.snapshot.params['chanid'];
+    console.log(this.pipeid);
   }
 
   updateObj() {
-    const tempObj = JSON.parse(this.objJson);
-    this.obj.name = tempObj.name;
-    this.obj.pipelineJson = tempObj.pipelineJson;
-    console.log('obj', this.obj);
   }
+
   onUpdatePipeline() {}
 }

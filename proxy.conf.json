@@ -9,5 +9,11 @@
       "target": "http://localhost:8888",
       "secure": false,
       "changeOrigin": true
+    },
+    "/m2e": {
+      "//pathRewrite": {"^/m2e" : ""},
+      "target": "http://localhost:8888",
+      "secure": false,
+      "changeOrigin": true
     }
 }

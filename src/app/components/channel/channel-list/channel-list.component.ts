@@ -91,7 +91,6 @@ export class ChannelListComponent {
         const clientResponse = response.responses.find(
           (r: { command: string }) => r.command === 'listChannels',
         );
-        console.log(clientResponse);
 
         if (clientResponse) {
           const clientData = clientResponse.data;

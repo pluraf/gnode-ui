@@ -9,16 +9,18 @@ import { UserService } from './user.service';
   providedIn: 'root',
 })
 export class BackendService {
-  // Authbundle APIs
+  // Authbundle API
   private authbundleUrl = 'api/authbundle/';
   private authbundleListUrl = this.authbundleUrl + 'list';
   private authbundleCreateUrl = this.authbundleUrl + 'create';
   private authbundleDeleteUrl = this.authbundleUrl + 'delete';
-  // Channel APIs
+  // Channel API
   private channelApiUrl = 'broker/command';
   private httpOptions: { headers: HttpHeaders };
-  // Settings APIs
+  // Settings API
   private settingsUrl = 'api/settings/';
+  // Pipeline API
+  private pipelineUrl = 'm2e/pipeline/';
 
   http = inject(HttpClient);
   user = inject(UserService);
@@ -60,7 +62,14 @@ export class BackendService {
     return this.http.put(this.settingsUrl, settings, this.httpOptions);
   }
 
+/////////////////////////// Pipelines ///////////////////////////
+
+  pipelinesList(): Observable<any> {
+    return this.http.get(this.pipelineUrl, this.httpOptions);
+  }
+
 /////////////////////////// Next ///////////////////////////
+
 
 
 }
