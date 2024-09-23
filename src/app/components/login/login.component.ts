@@ -51,7 +51,7 @@ export class LoginComponent {
       this.http.post('api/auth/token/', body.toString(), { headers }).subscribe(
         (res: any) => {
           if (res.access_token) {
-            this.userService.login(res.access_token);
+            this.userService.login(res.access_token, this.loginUser.username);
             this.router.navigateByUrl('/channels');
           } else {
             this.showErrorMessage('Invalid Username or Password.');

@@ -1,4 +1,13 @@
-   <div class=" menuitem flex flex-row-reverse align-items-center ml-auto">          
-        <a (click)="onSignOut()" routerLink="/login"><i class="pi pi-user mr-2 user-icon"></i></a>         
-   </div>
-   
+<div class=" menuitem flex flex-row-reverse align-items-center ml-auto">          
+     <a (click)="showDialog('top-right')"><i class=" user-icon">{{ userInitial }}</i></a>   
+     <p-dialog [(visible)]="visible" [position]="position" [showHeader]="false" [modal]="true" [closable]="true"  [style]="{ width: '14rem', 'margin-top': '56px', 'margin-left':'auto' }">
+          <div class="flex align-items-center" >
+               <i class="user-icon-popup">{{ userInitial }}</i>
+               <span >{{ displayUsername}}</span>
+             </div>
+          <div class="flex justify-content-end gap-2">
+               <button pButton (click)="onSignOut()" >Sign Out</button>
+          </div>
+     </p-dialog>
+</div>
+

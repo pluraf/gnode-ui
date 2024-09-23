@@ -28,22 +28,26 @@ export class UserService {
     sameSite: 'Lax',
   };
 
-  login(token: string) {
+  login(token: string, username: string) {
     const user = this.parseJwt(token);
     this.cookies.set('access_token', token, this.cookieOptions);
     this.setAdminStatus(user.is_admin);
 
     this.token = token;
     this.isLoggedIn = true;
+    this.cookies.set('username', username);
+  }
+
+  getUsername(): string | null {
+    return this.cookies.get('username') || null;
   }
 
   logout() {
     this.cookies.delete('access_token', '/');
     this.cookies.delete('is_admin', '/');
 
-    this.token = '';
-    this.isAdmin = false;
     this.isLoggedIn = false;
+    this.cookies.delete('username');
   }
 
   setAdminStatus(status: boolean) {
