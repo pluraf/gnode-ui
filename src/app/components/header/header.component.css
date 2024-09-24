@@ -46,3 +46,7 @@ button {
   color: #fff;
   border: none;
 }
+.user-icon,
+.user-icon-popup {
+  font-style: normal;
+}
