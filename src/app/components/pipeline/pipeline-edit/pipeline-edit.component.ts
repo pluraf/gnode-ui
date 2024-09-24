@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
-import { SubheaderComponent } from '../../subheader/subheader.component';
-
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+
+import { SubheaderComponent } from '../../subheader/subheader.component';
+import { BackendService } from '../../../services/backend.service';
+
+
 
 @Component({
   selector: 'app-pipeline-edit',
@@ -23,24 +26,21 @@ import { InputTextModule } from 'primeng/inputtext';
   styleUrl: './pipeline-edit.component.css',
 })
 export class PipelineEditComponent {
+  backendSerice = inject(BackendService);
   route: ActivatedRoute = inject(ActivatedRoute);
 
   pipeid = '';
-
-  obj = {
-    name: 'Pipeline1',
-    pipelineJson: 'pipelineJson',
-  };
-
-  objJson: string = "";
+  pipelineJson: string = "";
 
   constructor() {
-    this.pipeid = this.route.snapshot.params['chanid'];
-    console.log(this.pipeid);
+    this.pipeid = this.route.snapshot.params['pipeid'];
+    this.backendSerice.pipelineGet(this.pipeid).subscribe((resp) => {
+      this.pipelineJson = JSON.stringify(resp, null, 2);
+    });
   }
 
-  updateObj() {
+  onUpdatePipeline() {
+    this.backendSerice.pipelineEdit(this.pipeid, this.pipelineJson).subscribe((resp) => ({
+    }));
   }
-
-  onUpdatePipeline() {}
 }

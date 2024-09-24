@@ -15,12 +15,9 @@ button {
   background-color: #006666 !important;
 }
 
-.pubKeyFormat {
-  box-sizing: content-box;
+.pipeline-edit {
   resize: both;
-  overflow: hidden;
-  width: 28.5rem;
-  height: 10rem;
+  overflow: auto;
 }
 
 .input_field {

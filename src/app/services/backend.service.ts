@@ -68,6 +68,28 @@ export class BackendService {
     return this.http.get(this.pipelineUrl, this.httpOptions);
   }
 
+  pipelineGet(pipeid: string): Observable<any> {
+    return this.http.get(this.pipelineUrl + pipeid, {
+      ...this.httpOptions,
+      // responseType: 'text'
+    });
+  }
+
+  pipelineEdit(pipeid: string, pipedata: string): Observable<any> {
+    return this.http.put(this.pipelineUrl + pipeid, pipedata, this.httpOptions);
+  }
+
+  pipelineCreate(pipeid: string, pipedata: object): Observable<any> {
+    return this.http.post(this.pipelineUrl + pipeid, pipedata, this.httpOptions);
+  }
+
+  pipelineDelete(pipeid: string, pipeids: string[]): Observable<any> {
+    return this.http.delete(this.pipelineUrl + pipeid, {
+      headers: this.httpOptions.headers,
+      body: pipeids
+    });
+  }
+
 /////////////////////////// Next ///////////////////////////
 
 
