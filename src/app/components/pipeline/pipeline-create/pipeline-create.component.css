@@ -11,36 +11,16 @@ button {
 
 .pubKeyFormat {
   box-sizing: content-box;
-  border: none;
   resize: both;
-  padding: 0em;
-  margin: 0em;
+  padding: 10px;
   overflow: hidden;
-  outline: none;
+  width: 28rem;
+  height: 10rem;
 }
 
-.input_fieldset {
-  width: 30em;
-  padding: 0.375rem 0.625rem;
-}
-
-legend {
-  color: grey;
-  font-size: 14px;
-  letter-spacing: 1px;
-}
-
-.padding-lagom {
-  padding-top: 0em;
-}
-
-.margin-lagom {
-  margin-top: 1em;
-}
-
-fieldset {
-  width: 30em;
-  padding: 0.375rem 0.625rem;
+.input_field {
+  padding: 9px;
+  width: 29rem;
 }
 
 :host {
@@ -48,9 +28,3 @@ fieldset {
     padding: 0.375rem 0.625rem;
   }
 }
-
-/* :host {
-  ::ng-deep .p-inputtext {
-    padding: 0.375rem 0.625rem;
-  }
-} */

@@ -1,6 +1,6 @@
 <div class=" menuitem flex flex-row-reverse align-items-center ml-auto">          
      <a (click)="showDialog('top-right')"><i class=" user-icon">{{ userInitial }}</i></a>   
-     <p-dialog [(visible)]="visible" [position]="position" [showHeader]="false" [modal]="true" [closable]="true"  [style]="{ width: '14rem', 'margin-top': '56px', 'margin-left':'auto' }">
+     <p-dialog [(visible)]="visible" [position]="position" [showHeader]="false" [modal]="false" [dismissableMask]="true" [closeOnEscape]="true" [style]="{ width: '14rem', 'margin-top': '56px', 'margin-left':'auto' }">
           <div class="flex align-items-center" >
                <i class="user-icon-popup">{{ userInitial }}</i>
                <span >{{ displayUsername}}</span>

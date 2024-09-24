@@ -5,42 +5,38 @@
             <div class="p-fluid">
                 <div class="p-field">
                     <label for="channelID"></label>
-                    <input pInputText id="channelID" name="chanid" [(ngModel)]="chanid" placeholder="Channel ID"/>
+                    <input pInputText id="channelID" name="chanid" [(ngModel)]="chanid" placeholder="Channel ID" class="input_field border-1 border-round"/>
                     <small>Permanent identifier for your channel.</small>
                 </div>
                 <div class="p-field">
                     <span><strong>Authentication</strong></span>
                     <small>Specify the public key that will be used to authenticate this channel. You can leave the key empty, but channels will not be able to connect to gnode without a key.</small>
                     <div class="card mt-4">
-                        <fieldset class="padding-lagom margin-lagom">
-                            <legend>Authentication type</legend>
-                            <select [(ngModel)]="selectedOption" id="authOptions">
+                        <div class="flex flex-column gap-1">
+                            <label for="authOptions">Authentication type</label>
+                            <select [(ngModel)]="selectedOption" id="authOptions" class="border-1 border-round ">
                                 <option *ngFor="let option of authOptions" [value]="option.value">{{ option.label }}</option>
                             </select>
-                        </fieldset>
+                        </div>
                         <div class="mt-4">
-                          <fieldset class="padding-lagom margin-lagom">
-                            <legend>MQTT Client ID</legend>
-                            <input  name="clientid" id="clientid" [(ngModel)]="clientid" class="input_fieldset"/>
-                          </fieldset>
-                          <fieldset class="padding-lagom margin-lagom">
-                            <legend>Username</legend>
-                            <input  name="username" id="username" [(ngModel)]="username" class="input_fieldset"/>
-                          </fieldset>
-                         </div>
-                        <div class="mt-4" *ngIf="selectedOption === 'password'" >
-                          <fieldset class="padding-lagom margin-lagom">
-                            <legend>Password</legend>
-                            <input name="password" id="password" [(ngModel)]="password" class="input_fieldset"/>
-                          </fieldset>
+                            <div class="p-field flex flex-column gap-1">
+                              <label for="clientid">MQTT Client ID</label>
+                              <input  name="clientid" id="clientid" [(ngModel)]="clientid" class="input_field border-1 border-round"/>
+                            </div>
+                            <div class="p-field flex flex-column gap-1">
+                              <label for="username">Username</label>
+                              <input  name="username" id="username" [(ngModel)]="username" class="input_field border-1 border-round" />
+                            </div>
+                          </div>
+                          <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'password'" >
+                              <label for="password">Password</label>
+                              <input name="password" id="password" [(ngModel)]="password" class="input_field"/>
+                          </div>
+                          <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'jwt'">
+                              <label for="key">Key</label>
+                              <textarea [(ngModel)]="password" id="key" aria-invalid="false" name="authentication.publicKey.key" cols="62" rows="6" class="pubKeyFormat" ></textarea>
+                          </div>
                         </div>
-                        <div class="mt-4" *ngIf="selectedOption === 'jwt'">
-                          <fieldset>
-                            <legend>Key</legend>
-                            <textarea [(ngModel)]="password" aria-invalid="false" name="authentication.publicKey.key" cols="62" rows="6" class="pubKeyFormat" ></textarea>
-                          </fieldset>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="p-field">

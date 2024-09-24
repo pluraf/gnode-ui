@@ -29,34 +29,7 @@ button {
   }
 }
 
-legend {
-  color: grey;
-  font-size: 14px;
-  letter-spacing: 1px;
-}
-
-.padding-lagom {
-  padding-top: 0em;
-}
-
-.margin-lagom {
-  margin-top: 1em;
-}
-
-input {
-  box-shadow: none;
-  border: none;
-}
-
-.input_fieldset {
-  border: none;
+.input_field {
   padding: 10px;
-  margin: 0px;
-  outline: none;
-  width: 100%;
-}
-
-fieldset {
-  width: 30em;
-  height: 4em;
+  width: 50%;
 }

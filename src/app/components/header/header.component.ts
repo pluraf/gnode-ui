@@ -17,15 +17,15 @@ export class HeaderComponent {
     private router: Router,
     private userService: UserService,
   ) {}
+
   userInitial: string | null = null;
-  showDropdown = false;
   visible: boolean = false;
   position: string = 'top-right';
   displayUsername: string | null = null;
 
   showDialog(position: string) {
     this.position = position;
-    this.visible = true;
+    this.visible = !this.visible;
   }
 
   ngOnInit(): void {
@@ -36,9 +36,6 @@ export class HeaderComponent {
       : null;
   }
 
-  toggleDropdown() {
-    this.showDropdown = !this.showDropdown;
-  }
   onSignOut() {
     this.userService.logout();
     this.router.navigateByUrl('/login');

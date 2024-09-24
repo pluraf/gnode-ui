@@ -1,5 +1,5 @@
 #channelID {
-  width: 40%;
+  width: 29rem;
 }
 .p-fluid .p-field {
   margin-bottom: 1.5rem;
@@ -25,68 +25,29 @@ button {
   background-color: #006666 !important;
 }
 select {
-  border: none;
   background-color: transparent;
   font-size: 14px;
-  padding: 5px;
-  width: 100%;
+  padding: 10px;
+  width: 33em;
 }
-select:focus {
-  outline: none;
-}
+
 .pubKeyFormat {
   box-sizing: content-box;
-  border: none;
   resize: both;
   padding: 0em;
   margin: 0em;
   overflow: hidden;
-  outline: none;
+  width: 35em;
+  height: 15em;
 }
 
-input {
-  width: 30em !important;
-  box-shadow: none;
+.input_field {
+  padding: 10px;
+  width: 35em;
 }
 
-.input_fieldset {
-  border: none;
-  padding: 0px;
-  margin: 0px;
-  outline: none;
-  width: 100%;
-}
-
-.input_fieldset:focus {
-  outline: none;
-}
-
-legend {
-  color: grey;
-  font-size: 14px;
-  letter-spacing: 1px;
-}
-
-.padding-lagom {
-  padding-top: 0em;
-}
-
-.margin-lagom {
-  margin-top: 1em;
-}
-
-fieldset {
-  width: 30em;
-  padding: 0.375rem 0.625rem;
-}
 :host {
   ::ng-deep .p-button {
-    padding: 0.375rem 0.625rem;
-  }
-}
-
-:host {
-  ::ng-deep .p-inputtext {
     padding: 0.375rem 0.625rem;
   }
 }
