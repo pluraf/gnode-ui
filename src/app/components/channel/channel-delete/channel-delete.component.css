@@ -3,6 +3,7 @@ button {
   font-size: 18px;
   justify-content: center;
   background-color: #006666;
+  border-color: grey;
 }
 :host {
   ::ng-deep .p-button {

@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
+import { BackendService } from '../../../services/backend.service';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-pipeline-create',
@@ -21,15 +23,20 @@ import { InputTextModule } from 'primeng/inputtext';
   styleUrl: './pipeline-create.component.css',
 })
 export class PipelineCreateComponent {
-  obj = {
-    name: 'John',
-    city: 'Chicago',
-  };
+  backendService = inject(BackendService);
+  route: ActivatedRoute = inject(ActivatedRoute);
 
-  objJson: string;
+  pipeid = '';
+  pipelineJson: string = '';
 
-  constructor() {
-    this.objJson = JSON.stringify(this.obj);
+  constructor(private router: Router) {}
+
+  onCreatePipeline() {
+    let pipelineData = JSON.parse(this.pipelineJson);
+    this.backendService
+      .pipelineCreate(this.pipeid, pipelineData)
+      .subscribe((res: any) => {
+        this.router.navigateByUrl('/pipelines');
+      });
   }
-  onCreatePipeline() {}
 }

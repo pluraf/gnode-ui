@@ -1,9 +1,3 @@
-.pipeline-container {
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-}
-
 .p-fluid .p-field {
   margin-bottom: 1.5rem;
 }
@@ -23,14 +17,6 @@ button {
 .input_field {
   padding: 9px;
   width: 29rem;
-}
-
-.padding-lagom {
-  padding-top: 0em;
-}
-
-.margin-lagom {
-  margin-top: 1em;
 }
 
 :host {

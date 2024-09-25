@@ -1,4 +1,4 @@
-<app-subheader selectedMenuName="Channels" [actions]="menubarActions" (deleteChannelEvent)="onDeletePipelines()"></app-subheader>
+<app-subheader selectedMenuName="Pipelines" [actions]="menubarActions" (deleteChannelEvent)="onDeletePipelines()"></app-subheader>
 
 <div class="main-content">
   <p-table [value]="pipelines" selectionMode="multiple" [(selection)]="selectedPipelines" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }">

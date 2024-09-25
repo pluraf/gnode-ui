@@ -1,6 +1,7 @@
 :host {
   ::ng-deep .p-button {
     padding: 0.375rem 0.625rem;
+    border-color: grey;
   }
 }
 
