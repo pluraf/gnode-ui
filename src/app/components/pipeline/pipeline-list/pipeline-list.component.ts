@@ -4,10 +4,12 @@ import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { BackendService } from '../../../services/backend.service';
-
+import { PipelineDeleteComponent } from '../pipeline-delete/pipeline-delete.component';
 
 export interface Pipeline {
   id: string;
@@ -16,7 +18,6 @@ export interface Pipeline {
   description: string;
 }
 
-
 @Component({
   selector: 'app-pipeline-list',
   standalone: true,
@@ -24,19 +25,25 @@ export interface Pipeline {
     SubheaderComponent,
     TableModule,
     RouterModule,
-    PaginatorModule
+    PaginatorModule,
+    PipelineDeleteComponent,
+    DialogModule,
+    ButtonModule,
   ],
   templateUrl: './pipeline-list.component.html',
   styleUrl: './pipeline-list.component.css',
 })
 export class PipelineListComponent {
-  backendSerice = inject(BackendService);
+  backendService = inject(BackendService);
 
+  visibleDialog: boolean = false;
   pipelines: Pipeline[] = [];
   selectedPipelines: Pipeline[] = [];
+  pipeid = '';
 
   first: number = 0;
   rows: number = 10;
+  totalRecords!: number;
 
   menubarActions: MenuItem[] = [
     {
@@ -55,13 +62,10 @@ export class PipelineListComponent {
         tooltipLabel: 'Delete pipeline',
       },
       iconClass: 'pi pi-trash m-1',
+      command: () => {
+        this.showDialog();
+      },
     },
-  ];
-
-  paginatorOptions = [
-    { label: 5, value: 5 },
-    { label: 10, value: 10 },
-    { label: 20, value: 20 },
   ];
 
   constructor() {
@@ -69,34 +73,38 @@ export class PipelineListComponent {
   }
 
   load() {
-    this.backendSerice.pipelinesList().subscribe((response) => {
+    this.backendService.pipelinesList().subscribe((response) => {
       console.log(response);
 
       this.pipelines = Object.entries(response).map((entry: any) => ({
         id: entry[0],
         connector_in: entry[1].connector_in.type,
         connector_out: entry[1].connector_out.type,
-        description: "descr"
+        description: 'descr',
       }));
     });
   }
 
+  showDialog() {
+    if (this.selectedPipelines.length === 0) {
+      alert('No pipeline selected');
+      return;
+    }
+    this.visibleDialog = true;
+  }
+
   onDeletePipelines() {
-  }
+    const pipelineIDs = this.selectedPipelines.map((pipeline) => pipeline.id);
+    this.backendService.pipelineDelete(this.pipeid, pipelineIDs).subscribe({
+      next: (response: { deleted: string[] }) => {
+        const deletedPipelines = response.deleted || [];
+        this.pipelines = this.pipelines.filter(
+          (pipeline) => !deletedPipelines.includes(pipeline.id),
+        );
 
-  onPageChange(event: any) {
-    this.first = event!.first;
-    this.rows = event!.rows;
+        this.totalRecords = this.pipelines.length;
+        this.visibleDialog = false;
+      },
+    });
   }
-
-  pipelineList = [
-    {
-      name: 'Pipeline1',
-      key: 'Test',
-    },
-    {
-      name: 'Pipeline2',
-      key: 'Test',
-    },
-  ];
 }
