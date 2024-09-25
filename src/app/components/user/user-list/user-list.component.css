@@ -9,3 +9,14 @@
   position: relative;
   z-index: 10;
 }
+:host::ng-deep
+  p-dropdown.p-element
+  .p-inputwrapper
+  .ng-untouched
+  .ng-star-inserted
+  .p-inputwrapper-filled
+  .ng-dirty
+  .ng-valid {
+  position: absolute;
+  margin-right: 140px;
+}

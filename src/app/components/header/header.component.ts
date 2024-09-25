@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { MenubarModule } from 'primeng/menubar';
 import { DialogModule } from 'primeng/dialog';
@@ -13,20 +13,15 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  constructor(
-    private router: Router,
-    private userService: UserService,
-  ) {}
-
   userInitial: string | null = null;
   visible: boolean = false;
   position: string = 'top-right';
   displayUsername: string | null = null;
 
-  showDialog(position: string) {
-    this.position = position;
-    this.visible = !this.visible;
-  }
+  constructor(
+    private router: Router,
+    private userService: UserService,
+  ) {}
 
   ngOnInit(): void {
     const username = this.userService.getUsername();
@@ -36,8 +31,14 @@ export class HeaderComponent {
       : null;
   }
 
+  showDialog(position: string) {
+    this.position = position;
+    this.visible = !this.visible;
+  }
+
   onSignOut() {
     this.userService.logout();
     this.router.navigateByUrl('/login');
+    this.visible = false;
   }
 }

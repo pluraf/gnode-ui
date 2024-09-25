@@ -22,3 +22,14 @@
   line-height: 1 !important;
   vertical-align: middle;
 }
+/* :host::ng-deep
+  p-dropdown.p-element
+  .p-inputwrapper
+  .ng-untouched
+  .ng-star-inserted
+  .p-inputwrapper-filled
+  .ng-dirty
+  .ng-valid {
+  position: absolute;
+  margin-right: 140px;
+} */

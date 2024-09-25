@@ -26,7 +26,7 @@ export class UserListComponent {
   visibleDialog: boolean = false;
   selectedUsers: any[] = [];
   first: number = 0;
-  rows: number = 10;
+  rows: number = 5;
   totalRecords = 0;
   users: any[] = [];
 
@@ -85,9 +85,7 @@ export class UserListComponent {
     this.userService.deleteUsers(userIds).subscribe({
       next: (resp: any) => {
         const deleted = resp.deleted;
-        this.users = this.users.filter(
-          (user) => !deleted.includes(user.id),
-        );
+        this.users = this.users.filter((user) => !deleted.includes(user.id));
         this.visibleDialog = false;
         this.selectedUsers = [];
       },
@@ -98,8 +96,8 @@ export class UserListComponent {
   }
 
   onPageChange(event: PageEvent) {
-    this.first = event!.first;
-    this.rows = event!.rows;
+    this.first = event.first;
+    this.rows = event.rows;
   }
 
   showDialog() {

@@ -1,15 +1,34 @@
 <app-subheader selectedMenuName="Edit channel" [showBackArrow]="true"></app-subheader>
 <div class="main-content-body">
-  <div class="p-grid">
-    <div class="p-col-12 p-md-6">
+   <div class="p-grid">
       <h3>Channel ID: {{ chanid }}</h3>
       <div class="p-fluid">
-        <div class="p-field flex flex-column gap-1">
-            <label for="channelID">Channel ID</label>
-            <input name="channelID" id="channelID" [(ngModel)]="chanid" placeholder="{{ chanid }}" [disabled]="true"
-              class="input_field"/>
-            <small>Permanent identifier for your channel.</small>
-        </div>
+              <span><strong>Authentication</strong></span>
+              <small>Specify the public key that will be used to authenticate this channel. You can leave the key empty, but channels will not be able to connect to gnode without a key.</small>
+              <div class="flex flex-column gap-1 mt-4">
+                  <label for="authOptions">Authentication type</label>
+                  <select [(ngModel)]="selectedOption" id="authOptions" class="border-1 border-round ">
+                      <option *ngFor="let option of authOptions" [value]="option.value">{{ option.label }}</option>
+                  </select>
+                </div>   
+                <div class="mt-4">
+                    <div class="p-field flex flex-column gap-1">
+                      <label for="clientid">MQTT Client ID</label>
+                      <input  name="clientid" id="clientid" [(ngModel)]="clientid" class="input_field border-1 border-round"/>
+                    </div>
+                    <div class="p-field flex flex-column gap-1">
+                      <label for="username">Username</label>
+                      <input  name="username" id="username" [(ngModel)]="username" class="input_field border-1 border-round" />
+                    </div>
+                </div>
+                  <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'password'" >
+                      <label for="password">Password</label>
+                      <input name="password" id="password" [(ngModel)]="password" class="input_field"/>
+                  </div>
+                  <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'jwt'">
+                      <label for="key">Key</label>
+                      <textarea [(ngModel)]="password" id="key" aria-invalid="false" name="authentication.publicKey.key" cols="62" rows="6" class="pubKeyFormat" ></textarea>
+                  </div></div>     
         <div class="p-field">
           <span><strong>Channel State</strong></span>
           <div class="card flex mt-3">
@@ -23,6 +42,5 @@
         </div>
         <button pButton (click)="onUpdate()">Update</button>
       </div>
-    </div>
   </div>
-</div>
+

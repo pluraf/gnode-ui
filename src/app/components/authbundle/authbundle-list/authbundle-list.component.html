@@ -2,8 +2,8 @@
         <app-authbundle-delete [visible]="visibleDialog" [chanid]="selectedAuthbundle" (deleteConfirmed)="onDeleteChannel()" (cancel)="visibleDialog = false"></app-authbundle-delete>
 
         <div class="flex flex-grow-1 flex-column main-content">
-            <div  class="flex flex-column justify-content-center border-round  channelinfo">
-                <p-table [value]="authbundleList" selectionMode="multiple" [(selection)]="selectedAuthbundle" dataKey="authbundles" [tableStyle]="{ 'min-width': '50rem' }">
+            <div  class="flex flex-column justify-content-center  channelinfo">
+                <p-table [value]="authbundleList" selectionMode="multiple" [(selection)]="selectedAuthbundle" dataKey="authbundles" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
                             <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
@@ -32,7 +32,7 @@
                         </tr>
                     </ng-template>
                 </p-table>
-                <div class="flex flex-row align-items-center justify-content-end mt-auto">
+              <!--   <div class="flex flex-row align-items-center justify-content-end mt-auto">
                     <span class=" m-2 text-color ">Items per page: </span>
                     <p-dropdown [options]="paginatorOptions" optionLabel="label" optionValue="value" [(ngModel)]="rows"
                         (ngModelChange)="first = 0" />
@@ -40,6 +40,6 @@
                         (onPageChange)="onPageChange($event)" [showCurrentPageReport]="true"
                         currentPageReportTemplate="{first} - {last} of {totalRecords}" [showPageLinks]="false"
                         [showFirstLastIcon]="false"></p-paginator>
-                </div>
+                </div> -->
             </div>
         </div>

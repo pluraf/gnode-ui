@@ -42,7 +42,7 @@ export class ChannelListComponent {
   channelList: Channel[] = [];
   selectedChannels: Channel[] = [];
   first: number = 0;
-  rows: number = 10;
+  rows: number = 5;
   totalRecords!: number;
 
   paginatorOptions = [
@@ -131,9 +131,7 @@ export class ChannelListComponent {
   }
 
   onDeleteChannel() {
-    const channelId = this.selectedChannels.map(
-      (channel) => channel.id,
-    );
+    const channelId = this.selectedChannels.map((channel) => channel.id);
     this.brokerService.deleteChannels(channelId).subscribe({
       next: (response: { responses: any[] }) => {
         const deleteResponse = response.responses.find(
