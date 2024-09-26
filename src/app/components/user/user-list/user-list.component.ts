@@ -23,18 +23,13 @@ import { UserDeleteComponent } from '../user-delete/user-delete.component';
 })
 export class UserListComponent {
   userService = inject(UserService);
+
   visibleDialog: boolean = false;
   selectedUsers: any[] = [];
   first: number = 0;
   rows: number = 5;
   totalRecords = 0;
   users: any[] = [];
-
-  paginatorOptions = [
-    { label: 5, value: 5 },
-    { label: 10, value: 10 },
-    { label: 20, value: 20 },
-  ];
 
   menubarItems: MenuItem[] = [
     {
@@ -79,6 +74,14 @@ export class UserListComponent {
     });
   }
 
+  showDialog() {
+    if (this.selectedUsers.length === 0) {
+      alert('No users selected');
+      return;
+    }
+    this.visibleDialog = true;
+  }
+
   onDeleteUser() {
     const userIds: any[] = this.selectedUsers.map((user) => user.id);
 
@@ -93,18 +96,5 @@ export class UserListComponent {
         console.error('Error deleting users:', err);
       },
     });
-  }
-
-  onPageChange(event: PageEvent) {
-    this.first = event.first;
-    this.rows = event.rows;
-  }
-
-  showDialog() {
-    if (this.selectedUsers.length === 0) {
-      alert('No users selected');
-      return;
-    }
-    this.visibleDialog = true;
   }
 }

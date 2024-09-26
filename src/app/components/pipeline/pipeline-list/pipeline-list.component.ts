@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
@@ -40,6 +40,7 @@ export class PipelineListComponent {
   pipelines: Pipeline[] = [];
   selectedPipelines: Pipeline[] = [];
   pipeid = '';
+  errorMessage: string = '';
 
   first: number = 0;
   rows: number = 10;

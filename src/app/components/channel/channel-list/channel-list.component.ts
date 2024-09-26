@@ -10,8 +10,6 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
 import { Channel, PageEvent } from '../channel';
-import { ChannelEditComponent } from '../channel-edit/channel-edit.component';
-import { ChannelCreateComponent } from '../channel-create/channel-create.component';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { ChannelDeleteComponent } from '../channel-delete/channel-delete.component';
@@ -24,8 +22,6 @@ import { ChannelDeleteComponent } from '../channel-delete/channel-delete.compone
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    ChannelCreateComponent,
-    ChannelEditComponent,
     SubheaderComponent,
     TableModule,
     PaginatorModule,
@@ -41,15 +37,10 @@ export class ChannelListComponent {
   visibleDialog: boolean = false;
   channelList: Channel[] = [];
   selectedChannels: Channel[] = [];
+
   first: number = 0;
   rows: number = 5;
   totalRecords!: number;
-
-  paginatorOptions = [
-    { label: 5, value: 5 },
-    { label: 10, value: 10 },
-    { label: 20, value: 20 },
-  ];
 
   menubarItems: MenuItem[] = [
     {
@@ -73,11 +64,6 @@ export class ChannelListComponent {
       },
     },
   ];
-
-  onPageChange(event: PageEvent) {
-    this.first = event!.first;
-    this.rows = event!.rows;
-  }
 
   brokerService = inject(MBrokerCService);
 

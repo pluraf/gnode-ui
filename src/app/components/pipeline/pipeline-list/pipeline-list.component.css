@@ -1,0 +1,13 @@
+.alert {
+  padding: 10px;
+  background-color: rgb(129, 231, 142);
+  color: black;
+  margin-bottom: 100px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 400px;
+  height: 40px;
+  align-items: center;
+  border-radius: 4px;
+  font-size: 14px;
+}

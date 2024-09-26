@@ -16,6 +16,8 @@ import { AuthbundleListComponent } from './components/authbundle/authbundle-list
 import { AuthbundleCreateComponent } from './components/authbundle/authbundle-create/authbundle-create.component';
 import { AuthbundleDeleteComponent } from './components/authbundle/authbundle-delete/authbundle-delete.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { PipelineDeleteComponent } from './components/pipeline/pipeline-delete/pipeline-delete.component';
+import { PipelineDetailComponent } from './components/pipeline/pipeline-detail/pipeline-detail.component';
 
 export const routes: Routes = [
   {
@@ -83,8 +85,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'delete-user',
-    component: UserDeleteComponent,
+    path: 'pipeline-delete',
+    component: PipelineDeleteComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'pipeline-detail',
+    component: PipelineDetailComponent,
     canActivate: [authGuard],
   },
   {
