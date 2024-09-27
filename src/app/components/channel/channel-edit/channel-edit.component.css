@@ -44,8 +44,8 @@ select {
 .pubKeyFormat {
   box-sizing: content-box;
   resize: both;
-  padding: 0em;
-  margin: 0em;
+  padding: 2rem;
+  margin: 0;
   overflow: hidden;
   width: 35em;
   height: 15em;

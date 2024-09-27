@@ -27,16 +27,15 @@
                               <label for="username">Username</label>
                               <input  name="username" id="username" [(ngModel)]="username" class="input_field border-1 border-round" />
                             </div>
-                          </div>
-                          <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'password'" >
+                        </div>
+                        <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'password'" >
                               <label for="password">Password</label>
                               <input name="password" type="password" id="password" [(ngModel)]="password" class="input_field border-1 border-round"/>
-                          </div>
-                          <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'jwt'">
-                              <label for="key">Key</label>
-                              <textarea [(ngModel)]="password" id="key" aria-invalid="false" name="authentication.publicKey.key" cols="62" rows="6" class="pubKeyFormat" ></textarea>
-                          </div>
                         </div>
+                        <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'jwt_es256'">
+                            <label for="key">JWT Key</label><textarea [(ngModel)]="password" id="key" aria-invalid="false" name="jwtKey" cols="62" rows="6" class="pubKeyFormat"></textarea>
+                        </div>
+                     </div>
                 </div>
 
                 <div class="p-field">

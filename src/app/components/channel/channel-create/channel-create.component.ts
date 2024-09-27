@@ -38,16 +38,17 @@ export class ChannelCreateComponent implements OnInit {
   username = '';
   password = '';
   authtype = '';
+  jwtKey: string = '';
 
   categories: any[] = [
     { name: 'Enabled', key: 'A' },
     { name: 'Disabled', key: 'B' },
   ];
 
-  selectedOption: string = 'jwt';
+  selectedOption: string = 'jwt_es256';
 
   authOptions = [
-    { value: 'jwt', label: 'JWT_ES256' },
+    { value: 'jwt_es256', label: 'JWT_ES256' },
     { value: 'password', label: 'Username & Password' },
   ];
 
@@ -61,7 +62,7 @@ export class ChannelCreateComponent implements OnInit {
     const selectedOptionObj = this.authOptions.find(
       (option) => option.value === this.selectedOption,
     );
-    this.authtype = selectedOptionObj ? selectedOptionObj.label : '';
+    this.authtype = selectedOptionObj ? selectedOptionObj.value : '';
 
     const disabled = this.selectedCategory.name === 'Allow';
 
@@ -77,8 +78,7 @@ export class ChannelCreateComponent implements OnInit {
     if (this.clientid !== '') {
       payload.clientid = this.clientid;
     }
-
-    this.brokerService.createChannel(payload).subscribe((response) => {
+    this.brokerService.createChannel(payload).subscribe((response: any) => {
       if (response.responses[0].hasOwnProperty('error')) {
         alert(response.responses[0].error);
       } else {

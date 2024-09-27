@@ -33,6 +33,7 @@ export class ChannelEditComponent implements OnInit {
   username = '';
   password = '';
   authtype = '';
+  jwtKey = '';
 
   constructor(
     private brokerService: MBrokerCService,
@@ -41,6 +42,7 @@ export class ChannelEditComponent implements OnInit {
   ) {}
 
   selectedCategory: any = null;
+
   categories: any[] = [
     { name: 'Enabled', key: 'A' },
     { name: 'Disabled', key: 'B' },
@@ -56,8 +58,23 @@ export class ChannelEditComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.chanid = params.get('chanid') || '';
-    });
 
+      this.brokerService
+        .loadChannelDetails(this.chanid)
+        .subscribe((response: any) => {
+          const channel = response.responses[0].data.channel;
+
+          this.clientid = channel.clientid || '';
+          this.username = channel.username || '';
+          this.password = '';
+          this.selectedOption =
+            channel.authtype.toLowerCase() === 'jwt_es256' ? 'jwt' : 'password';
+
+          if (this.selectedOption === 'jwt' && channel.jwtkey) {
+            this.jwtKey = channel.jwtkey.replace(/(.{64})/g, '$1\n');
+          }
+        });
+    });
     this.selectedCategory = this.categories[0];
   }
 
@@ -67,31 +84,27 @@ export class ChannelEditComponent implements OnInit {
     const selectedOptionObj = this.authOptions.find(
       (option) => option.value === this.selectedOption,
     );
-    this.authtype = selectedOptionObj ? selectedOptionObj.label : '';
-
-    const disabled = this.selectedCategory.name === 'Allow';
+    this.authtype = selectedOptionObj ? selectedOptionObj.value : '';
 
     const updateData: any = {
       chanid: this.chanid,
       communicationStatus: communicationStatus,
       authtype: this.authtype,
-      password: this.password,
-      disabled: disabled,
+      clientid: this.clientid || undefined,
+      username: this.username || undefined,
+      password: this.selectedOption === 'password' ? this.password : undefined,
+      jwtkey:
+        this.selectedOption === 'jwt'
+          ? this.jwtKey.replace(/\n/g, '')
+          : undefined,
     };
-    if (this.username !== '') {
-      updateData.username = this.username;
-    }
-    if (this.clientid !== '') {
-      updateData.clientid = this.clientid;
-    }
-    this.brokerService.updateChannel(updateData).subscribe(
-      (response) => {
-        console.log('Update successful:', response);
-        this.router.navigateByUrl('/channels');
-      },
-      (error) => {
-        console.error('Update failed:', error);
-      },
-    );
+
+    this.brokerService.updateChannel(updateData).subscribe((response) => {
+      this.router.navigateByUrl('/channels');
+    });
+  }
+
+  previousPage() {
+    this.router.navigateByUrl('/channels');
   }
 }

@@ -29,20 +29,12 @@ export class MBrokerCService {
     return this.http.post(this.apiUrl, postData, this.httpOptions);
   }
 
-  updateChannel(updateData: {
-    chanid: string;
-    communicationStatus: string;
-  }): Observable<any> {
+  updateChannel(updateData: object): Observable<any> {
     const postData = {
       commands: [
         {
           command: 'modifyChannel',
-          clientid: '',
-          textname: '',
-          textdescription: '',
-          roles: [],
-          groups: [],
-          communicationStatus: updateData.communicationStatus,
+          ...updateData,
         },
       ],
     };
@@ -73,13 +65,5 @@ export class MBrokerCService {
       ],
     };
     return this.http.post(this.apiUrl, postData, this.httpOptions);
-  }
-
-  uploadPrivatePublicKey(file: File, fileType: string): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('fileType', fileType);
-
-    return this.http.post(this.apiUrl + '/upload-key', formData);
   }
 }

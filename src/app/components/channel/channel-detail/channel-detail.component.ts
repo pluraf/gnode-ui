@@ -68,15 +68,18 @@ export class ChannelDetailComponent {
           ['Username', this.channel.username],
           ['MQTT Client ID', this.channel.clientid],
         ];
-        if (
-          this.channel.authtype &&
-          this.channel.authtype.startsWith('jwt')
-        ) {
+        if (this.channel.authtype && this.channel.authtype.startsWith('jwt')) {
           this.details.push([
             'JWT key',
             this.channel.jwtkey.replace(/(.{64})/g, '$1\n'),
           ]);
         }
+        /*   if (this.channel.authtype && this.channel.authtype.startsWith('jwt')) { 
+            if (this.channel.jwtkey) {
+              const formattedJwtKey = this.channel.jwtkey.replace(/(.{64})/g, '$1\n');
+              this.details.push(['JWT key', formattedJwtKey]);
+            }
+          } */
       });
   }
 

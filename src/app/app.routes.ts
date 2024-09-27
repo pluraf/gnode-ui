@@ -90,7 +90,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'pipeline-detail',
+    path: 'pipeline-detail/:pipeid',
     component: PipelineDetailComponent,
     canActivate: [authGuard],
   },
