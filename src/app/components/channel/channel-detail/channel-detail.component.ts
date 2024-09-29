@@ -60,6 +60,7 @@ export class ChannelDetailComponent {
     this.brokerService
       .loadChannelDetails(this.chanid)
       .subscribe((response: any) => {
+        console.log(response);
         this.channel = response.responses[0].data.channel;
         this.details = [
           ['Enabled', !this.channel.disabled],

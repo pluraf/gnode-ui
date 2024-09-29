@@ -38,8 +38,6 @@ export class ChannelListComponent {
   channelList: Channel[] = [];
   selectedChannels: Channel[] = [];
 
-  first: number = 0;
-  rows: number = 5;
   totalRecords!: number;
 
   menubarItems: MenuItem[] = [

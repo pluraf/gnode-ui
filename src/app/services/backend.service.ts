@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 import { UserService } from './user.service';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -30,7 +29,7 @@ export class BackendService {
     };
   }
 
-/////////////////////////// Authbundles ///////////////////////////
+  /////////////////////////// Authbundles ///////////////////////////
 
   listAuthbundles(): Observable<any> {
     return this.http.get(this.authbundleUrl, this.httpOptions);
@@ -38,18 +37,16 @@ export class BackendService {
 
   deleteAuthbundles(authbundleId: string[]): Observable<any> {
     return this.http.delete(
-      this.authbundleUrl + authbundleId, this.httpOptions
+      this.authbundleUrl + authbundleId,
+      this.httpOptions,
     );
   }
 
   createAuthbundle(formData: object): Observable<any> {
-    return this.http.post(
-      this.authbundleUrl, formData, this.httpOptions
-    );
+    return this.http.post(this.authbundleUrl, formData, this.httpOptions);
   }
 
-
-/////////////////////////// Settings ///////////////////////////
+  /////////////////////////// Settings ///////////////////////////
 
   loadSettings(): Observable<any> {
     return this.http.get(this.settingsUrl, this.httpOptions);
@@ -59,7 +56,7 @@ export class BackendService {
     return this.http.put(this.settingsUrl, settings, this.httpOptions);
   }
 
-/////////////////////////// Pipelines ///////////////////////////
+  /////////////////////////// Pipelines ///////////////////////////
 
   pipelinesList(): Observable<any> {
     return this.http.get(this.pipelineUrl, this.httpOptions);
@@ -77,18 +74,19 @@ export class BackendService {
   }
 
   pipelineCreate(pipeid: string, pipedata: object): Observable<any> {
-    return this.http.post(this.pipelineUrl + pipeid, pipedata, this.httpOptions);
+    return this.http.post(
+      this.pipelineUrl + pipeid,
+      pipedata,
+      this.httpOptions,
+    );
   }
 
   pipelineDelete(pipeid: string, pipeids: string[]): Observable<any> {
     return this.http.delete(this.pipelineUrl + pipeid, {
       headers: this.httpOptions.headers,
-      body: pipeids
+      body: pipeids,
     });
   }
 
-/////////////////////////// Next ///////////////////////////
-
-
-
+  /////////////////////////// Next ///////////////////////////
 }

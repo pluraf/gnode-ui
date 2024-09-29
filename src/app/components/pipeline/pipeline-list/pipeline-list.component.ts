@@ -75,8 +75,6 @@ export class PipelineListComponent {
 
   load() {
     this.backendService.pipelinesList().subscribe((response) => {
-      console.log(response);
-
       this.pipelines = Object.entries(response).map((entry: any) => ({
         id: entry[0],
         connector_in: entry[1].connector_in.type,
