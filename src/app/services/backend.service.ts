@@ -11,9 +11,6 @@ import { UserService } from './user.service';
 export class BackendService {
   // Authbundle API
   private authbundleUrl = 'api/authbundle/';
-  private authbundleListUrl = this.authbundleUrl + 'list';
-  private authbundleCreateUrl = this.authbundleUrl + 'create';
-  private authbundleDeleteUrl = this.authbundleUrl + 'delete';
   // Channel API
   private channelApiUrl = 'broker/command';
   private httpOptions: { headers: HttpHeaders };
@@ -36,18 +33,18 @@ export class BackendService {
 /////////////////////////// Authbundles ///////////////////////////
 
   listAuthbundles(): Observable<any> {
-    return this.http.get(this.authbundleListUrl, this.httpOptions);
+    return this.http.get(this.authbundleUrl, this.httpOptions);
   }
 
   deleteAuthbundles(authbundleId: string[]): Observable<any> {
     return this.http.delete(
-      this.authbundleDeleteUrl + authbundleId, this.httpOptions
+      this.authbundleUrl + authbundleId, this.httpOptions
     );
   }
 
   createAuthbundle(formData: object): Observable<any> {
     return this.http.post(
-      this.authbundleCreateUrl, formData, this.httpOptions
+      this.authbundleUrl, formData, this.httpOptions
     );
   }
 

@@ -84,17 +84,8 @@ export class AuthbundleListComponent {
   }
 
   loadAuthbundles() {
-    this.backendService.listAuthbundles().subscribe({
-      next: (response: { responses: any[] }) => {
-        const clientResponse = response.responses.find(
-          (r: { command: string }) => r.command === 'listClients',
-        );
-
-        if (clientResponse) {
-          const clientData = clientResponse.data;
-          const disabled = clientResponse.verbose;
-        }
-      },
+    this.backendService.listAuthbundles().subscribe((resp) => {
+      this.authbundleList = resp;
     });
   }
 
