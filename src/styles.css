@@ -76,3 +76,34 @@ textarea {
   box-shadow: none;
   outline: none;
 }
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last {
+  min-width: 1.8rem;
+}
+.p-paginator .p-paginator-pages .p-paginator-page {
+  height: 1.7rem;
+  min-width: 1.7rem;
+  font-size: 0.9rem;
+}
+
+.p-paginator .p-dropdown .p-dropdown-label {
+  padding: 6px;
+  font-size: 0.9rem;
+}
+.p-paginator .p-dropdown {
+  height: 2rem;
+  width: 3rem;
+}
+.p-paginator .p-dropdown .p-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  padding-right: 6px;
+}
+.p-datatable .p-paginator-bottom {
+  border-bottom: none;
+}
+.p-dropdown-label {
+  overflow: visible;
+}
