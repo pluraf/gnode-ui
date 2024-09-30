@@ -41,7 +41,7 @@ export class UserListComponent {
       },
       iconClass: 'pi pi-plus m-1',
     },
-    {
+    /*     {
       routerLink: '/user-edit',
       tooltipOptions: {
         tooltipEvent: 'hover',
@@ -49,7 +49,7 @@ export class UserListComponent {
         tooltipLabel: 'Edit user',
       },
       iconClass: 'pi pi-pencil m-1',
-    },
+    }, */
     {
       tooltipOptions: {
         tooltipEvent: 'hover',
