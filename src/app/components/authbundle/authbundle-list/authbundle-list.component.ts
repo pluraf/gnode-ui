@@ -44,6 +44,8 @@ export class AuthbundleListComponent {
   totalRecords!: number;
   chanid = '';
 
+  showMessage: boolean = false;
+
   paginatorOptions = [
     { label: 10, value: 10 },
     { label: 20, value: 20 },
@@ -84,9 +86,21 @@ export class AuthbundleListComponent {
   }
 
   loadAuthbundles() {
-    this.backendService.listAuthbundles().subscribe((resp) => {
-      this.authbundleList = resp;
-    });
+    this.backendService.listAuthbundles().subscribe(
+      (resp) => {
+        console.log('authbundle resp', resp);
+        if (resp.length === 0) {
+          this.showMessage = !this.showMessage;
+        } else {
+          this.authbundleList = resp;
+        }
+      },
+      (error) => {
+        if (error.status === 404) {
+          this.showMessage = true;
+        }
+      },
+    );
   }
 
   showDialog() {
@@ -99,9 +113,7 @@ export class AuthbundleListComponent {
   }
 
   onDeleteChannel() {
-    const ids = this.selectedAuthbundle.map(
-      (authbundle) => authbundle.id,
-    );
+    const ids = this.selectedAuthbundle.map((authbundle) => authbundle.id);
     this.backendService.deleteAuthbundles(ids).subscribe({
       next: (response: { responses: any[] }) => {
         const deleteResponse = response.responses.find(

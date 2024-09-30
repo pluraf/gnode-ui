@@ -1,7 +1,10 @@
 <app-subheader selectedMenuName="Channels" [actions]="menubarItems" ></app-subheader>
 <app-channel-delete  [visible]="visibleDialog" [channels]="selectedChannels" (deleteConfirmed)="onDeleteChannel()" (cancel)="visibleDialog = false"></app-channel-delete>
-
-<div class="main-content">
+<div *ngIf="showMessage" class="showMessage flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
+  <div class="text-center">
+“No channels are available. To create one, click the plus sign in the top-right corner or use the <a routerLink="/channel-create" class="text-green-700">'Create Channel'</a> link.“</div>
+</div>
+<div *ngIf="!showMessage" class="main-content">
   <p-table [value]="channelList" selectionMode="multiple" [(selection)]="selectedChannels" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>

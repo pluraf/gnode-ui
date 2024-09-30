@@ -37,6 +37,7 @@ export class ChannelListComponent {
   visibleDialog: boolean = false;
   channelList: Channel[] = [];
   selectedChannels: Channel[] = [];
+  showMessage: boolean = false;
 
   totalRecords!: number;
 
@@ -88,6 +89,9 @@ export class ChannelListComponent {
             }));
             this.totalRecords = this.channelList.length;
           }
+        }
+        if (clientResponse.length === 0) {
+          this.showMessage = !this.showMessage;
         }
       },
     });

@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -29,6 +30,7 @@ export interface Pipeline {
     PipelineDeleteComponent,
     DialogModule,
     ButtonModule,
+    CommonModule,
   ],
   templateUrl: './pipeline-list.component.html',
   styleUrl: './pipeline-list.component.css',
@@ -41,6 +43,7 @@ export class PipelineListComponent {
   selectedPipelines: Pipeline[] = [];
   pipeid = '';
   errorMessage: string = '';
+  showMessage: boolean = false;
 
   first: number = 0;
   rows: number = 10;
@@ -75,12 +78,16 @@ export class PipelineListComponent {
 
   load() {
     this.backendService.pipelinesList().subscribe((response) => {
-      this.pipelines = Object.entries(response).map((entry: any) => ({
-        id: entry[0],
-        connector_in: entry[1].connector_in.type,
-        connector_out: entry[1].connector_out.type,
-        description: 'descr',
-      }));
+      if (response.length === 0) {
+        this.showMessage = true;
+      } else {
+        this.pipelines = Object.entries(response).map((entry: any) => ({
+          id: entry[0],
+          connector_in: entry[1].connector_in.type,
+          connector_out: entry[1].connector_out.type,
+          description: 'descr',
+        }));
+      }
     });
   }
 

@@ -1,8 +1,13 @@
         <app-subheader selectedMenuName="Authentication bundles" [actions]="menubarItems" (deleteChannelEvent)="onDeleteChannel()"></app-subheader>
         <app-authbundle-delete [visible]="visibleDialog" [chanid]="selectedAuthbundle" (deleteConfirmed)="onDeleteChannel()" (cancel)="visibleDialog = false"></app-authbundle-delete>
 
-        <div class="flex flex-grow-1 flex-column main-content">
-            <div  class="flex flex-column justify-content-center  channelinfo">
+        <div *ngIf="showMessage" class="showMessage flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
+            <div class="text-center">
+                “No authbundles available. To create one, click the plus sign in the top-right corner or use the 
+                <a routerLink="/authbundle-create" class="text-green-700">'Create Authbundle'</a> link.“
+            </div>
+        </div>
+        <div *ngIf="!showMessage" class="main-content">
                 <p-table [value]="authbundleList" selectionMode="multiple" [(selection)]="selectedAuthbundle" dataKey="authbundle_id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
@@ -21,5 +26,4 @@
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
         </div>
