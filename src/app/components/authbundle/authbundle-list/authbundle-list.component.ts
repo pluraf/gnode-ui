@@ -35,21 +35,13 @@ import { AuthbundleDeleteComponent } from '../authbundle-delete/authbundle-delet
   styleUrl: './authbundle-list.component.css',
 })
 export class AuthbundleListComponent {
-  value!: string;
   visibleDialog: boolean = false;
   authbundleList: Authbundle[] = [];
   selectedAuthbundle: Authbundle[] = [];
-  first: number = 0;
-  rows: number = 10;
   totalRecords!: number;
-  chanid = '';
+  authbundleid = '';
 
   showMessage: boolean = false;
-
-  paginatorOptions = [
-    { label: 10, value: 10 },
-    { label: 20, value: 20 },
-  ];
 
   menubarItems: MenuItem[] = [
     {
@@ -74,11 +66,6 @@ export class AuthbundleListComponent {
     },
   ];
 
-  onPageChange(event: PageEvent) {
-    this.first = event!.first;
-    this.rows = event!.rows;
-  }
-
   backendService = inject(BackendService);
 
   constructor() {
@@ -86,21 +73,13 @@ export class AuthbundleListComponent {
   }
 
   loadAuthbundles() {
-    this.backendService.listAuthbundles().subscribe(
-      (resp) => {
-        console.log('authbundle resp', resp);
-        if (resp.length === 0) {
-          this.showMessage = !this.showMessage;
-        } else {
-          this.authbundleList = resp;
-        }
-      },
-      (error) => {
-        if (error.status === 404) {
-          this.showMessage = true;
-        }
-      },
-    );
+    this.backendService.listAuthbundles().subscribe((resp) => {
+      if (resp.length === 0) {
+        this.showMessage = !this.showMessage;
+      } else {
+        this.authbundleList = resp;
+      }
+    });
   }
 
   showDialog() {
@@ -108,26 +87,21 @@ export class AuthbundleListComponent {
       alert('No authbundles selected');
       return;
     }
-    this.chanid = this.selectedAuthbundle[0].id;
     this.visibleDialog = true;
   }
 
-  onDeleteChannel() {
-    const ids = this.selectedAuthbundle.map((authbundle) => authbundle.id);
+  onDeleteAuthbundle() {
+    const ids = this.selectedAuthbundle.map(
+      (authbundle) => authbundle.authbundle_id,
+    );
     this.backendService.deleteAuthbundles(ids).subscribe({
-      next: (response: { responses: any[] }) => {
-        const deleteResponse = response.responses.find(
-          (r: { command: string }) => r.command === 'deleteAuthbundles',
+      next: (response: { deleted: any[] }) => {
+        const deletedAuthbundles = response.deleted || [];
+        this.authbundleList = this.authbundleList.filter(
+          (authbundle) =>
+            !deletedAuthbundles.includes(authbundle.authbundle_id),
         );
-
-        if (deleteResponse) {
-          const deletedAuthbundles = deleteResponse.deleted || [];
-          this.authbundleList = this.authbundleList.filter(
-            (authbundle) => !deletedAuthbundles.includes(authbundle.id),
-          );
-          this.totalRecords = this.authbundleList.length;
-        }
-
+        this.totalRecords = this.authbundleList.length;
         this.visibleDialog = false;
       },
     });

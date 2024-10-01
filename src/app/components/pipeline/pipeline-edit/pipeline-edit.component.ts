@@ -9,8 +9,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { BackendService } from '../../../services/backend.service';
 
-
-
 @Component({
   selector: 'app-pipeline-edit',
   standalone: true,
@@ -28,9 +26,11 @@ import { BackendService } from '../../../services/backend.service';
 export class PipelineEditComponent {
   backendSerice = inject(BackendService);
   route: ActivatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
 
   pipeid = '';
-  pipelineJson: string = "";
+  pipelineJson: string = '';
+  messages: string = '';
 
   constructor() {
     this.pipeid = this.route.snapshot.params['pipeid'];
@@ -40,7 +40,17 @@ export class PipelineEditComponent {
   }
 
   onUpdatePipeline() {
-    this.backendSerice.pipelineEdit(this.pipeid, this.pipelineJson).subscribe((resp) => ({
-    }));
+    this.backendSerice
+      .pipelineEdit(this.pipeid, this.pipelineJson)
+      .subscribe((response: any) => {
+        if (response?.responses?.[0]?.error) {
+          this.showMessage(response.responses[0].error);
+        }
+        this.showMessage('Pipeline updated successfully!');
+      });
+  }
+
+  showMessage(message: string) {
+    this.messages = message;
   }
 }

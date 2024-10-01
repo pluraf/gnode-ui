@@ -1,5 +1,5 @@
-        <app-subheader selectedMenuName="Authentication bundles" [actions]="menubarItems" (deleteChannelEvent)="onDeleteChannel()"></app-subheader>
-        <app-authbundle-delete [visible]="visibleDialog" [chanid]="selectedAuthbundle" (deleteConfirmed)="onDeleteChannel()" (cancel)="visibleDialog = false"></app-authbundle-delete>
+        <app-subheader selectedMenuName="Authentication bundles" [actions]="menubarItems" (deleteAuthBundleEvent)="onDeleteAuthbundle()"></app-subheader>
+        <app-authbundle-delete [visible]="visibleDialog" [authbundles]="selectedAuthbundle" (deleteConfirmed)="onDeleteAuthbundle()" (cancel)="visibleDialog = false"></app-authbundle-delete>
 
         <div *ngIf="showMessage" class="showMessage flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
             <div class="text-center">
@@ -8,7 +8,7 @@
             </div>
         </div>
         <div *ngIf="!showMessage" class="main-content">
-                <p-table [value]="authbundleList" selectionMode="multiple" [(selection)]="selectedAuthbundle" dataKey="authbundle_id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
+                <p-table [value]="authbundleList" selectionMode="multiple" [(selection)]="selectedAuthbundle" dataKey="authbundle_id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
                             <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
@@ -17,10 +17,10 @@
                             <th >Description</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" class="channel" let-authbundle>
+                    <ng-template pTemplate="body" let-authbundle>
                         <tr>
-                            <td ><p-tableCheckbox name="checkbox" [value]="channel" /></td>
-                            <td ><a routerLink="/channel/{{authbundle.authbundle_id}}">{{ authbundle.authbundle_id }}</a></td>
+                            <td ><p-tableCheckbox name="checkbox" [value]="authbundle" /></td>
+                            <td ><a routerLink="/authbundles/{{authbundle.authbundle_id}}">{{ authbundle.authbundle_id }}</a></td>
                               <td>{{authbundle.connector_type}}</td>
                               <td>{{authbundle.description}}</td>
                         </tr>

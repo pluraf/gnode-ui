@@ -1,8 +1,12 @@
 <app-subheader selectedMenuName="Edit pipeline" [showBackArrow]="true"></app-subheader>
 <div class="main-content-body">
-    <div class="p-grid ">
+    <div *ngIf="messages" class="alert flex flex-row mt-100" style="color: green; font-size:18px">
+        <div class="text-center">
+            {{ messages }}  To return to the pipeline details, click the back arrow in the top-left corner.
+        </div>
+    </div>
+    <div *ngIf="!messages" class="p-grid ">
         <div class="p-col-12 p-md-6">
-            <h3>Pipeline ID: {{pipeid}}</h3>
             <div class="p-fluid">
                 <div class="p-field gap-1">
                     <div class="mb-2">Configuration</div>

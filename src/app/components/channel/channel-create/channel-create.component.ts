@@ -39,6 +39,7 @@ export class ChannelCreateComponent implements OnInit {
   password = '';
   authtype = '';
   jwtKey: string = '';
+  messages: string = '';
 
   categories: any[] = [
     { name: 'Enabled', key: 'A' },
@@ -80,11 +81,15 @@ export class ChannelCreateComponent implements OnInit {
     }
     this.brokerService.createChannel(payload).subscribe((response: any) => {
       if (response.responses[0].hasOwnProperty('error')) {
-        alert(response.responses[0].error);
+        this.showMessage(response.responses[0].error)!;
       } else {
-        this.router.navigateByUrl('/channels');
+        this.showMessage('Channel created successfully!');
       }
     });
+  }
+
+  showMessage(message: string) {
+    this.messages = message;
   }
 
   previousPage() {

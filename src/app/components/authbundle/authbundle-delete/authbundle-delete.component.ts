@@ -13,21 +13,21 @@ import { ButtonModule } from 'primeng/button';
 })
 export class AuthbundleDeleteComponent {
   @Input() visible: boolean = false;
-  @Input() chanid: any;
+  @Input() authbundles: any[] = [];
   @Output() deleteConfirmed = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
   constructor() {}
 
   get isMultiple(): boolean {
-    return Array.isArray(this.chanid) && this.chanid.length > 1;
+    return Array.isArray(this.authbundles) && this.authbundles.length > 1;
   }
 
-  get channelIds(): string[] {
-    if (Array.isArray(this.chanid)) {
-      return this.chanid.map((channel) => channel.clients);
+  get authbundleIds(): string[] {
+    if (Array.isArray(this.authbundles)) {
+      return this.authbundles.map((authbundleid) => authbundleid.authbundle_id);
     } else {
-      return [this.chanid];
+      return [this.authbundles];
     }
   }
 

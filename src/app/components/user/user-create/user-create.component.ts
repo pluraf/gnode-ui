@@ -36,6 +36,7 @@ export class UserCreateComponent {
   };
 
   errorMessage: string = '';
+  successMessage: string = '';
 
   http = inject(HttpClient);
 
@@ -57,8 +58,14 @@ export class UserCreateComponent {
       });
 
       this.http.post('api/user/', this.userObj, { headers }).subscribe(
-        (res: any) => {
-          this.router.navigateByUrl('/users');
+        (response: any) => {
+          if (response?.responses?.[0]?.error) {
+            this.showMessage(response.responses[0].error);
+          }
+          this.showMessage('User created successfully!');
+          setTimeout(() => {
+            this.router.navigateByUrl('/users');
+          }, 1000);
         },
         (error) => {
           console.error('Error creating user:', error);
@@ -74,6 +81,9 @@ export class UserCreateComponent {
     }
   }
 
+  showMessage(message: string) {
+    this.successMessage = message;
+  }
   showErrorMessage(message: string) {
     this.errorMessage = message;
   }

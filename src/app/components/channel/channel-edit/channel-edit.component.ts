@@ -34,6 +34,7 @@ export class ChannelEditComponent implements OnInit {
   password = '';
   authtype = '';
   jwtKey = '';
+  messages: string = '';
 
   constructor(
     private brokerService: MBrokerCService,
@@ -100,10 +101,16 @@ export class ChannelEditComponent implements OnInit {
     };
 
     this.brokerService.updateChannel(updateData).subscribe((response) => {
-      this.router.navigateByUrl('/channels');
+      if (response.responses[0].hasOwnProperty('error')) {
+        this.showMessage(response.responses[0].error);
+      }
+      this.showMessage('Channel updated successfully!');
     });
   }
 
+  showMessage(message: string) {
+    this.messages = message;
+  }
   previousPage() {
     this.router.navigateByUrl('/channels');
   }

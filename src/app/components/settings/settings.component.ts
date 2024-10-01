@@ -38,7 +38,11 @@ export class SettingsComponent {
   backendService = inject(BackendService);
 
   tzNames = moment.tz.names();
-  selectedTz!: string;
+  selectedTz: string = 'UTC';
+  autoSyncEnabled: boolean = false;
+  manualDate: string = '';
+  manualTime: string = '';
+  currentDateTime: Date = new Date();
 
   settings = {
     allow_anonymous: false,
@@ -48,17 +52,42 @@ export class SettingsComponent {
   constructor() {
     this.backendService.loadSettings().subscribe((resp) => {
       this.settings = resp;
+      this.autoSyncEnabled = this.settings.autoSetTime;
+      this.updateDateTime();
     });
+  }
 
-    this.timeZoneChanged('Europe/Stockholm');
+  updateDateTime(): void {
+    this.setManualDateTime();
+  }
+
+  onAutoSyncChange(): void {
+    this.autoSyncEnabled = this.settings.autoSetTime;
+  }
+
+  setManualDateTime(): void {
+    const date = new Date(`${this.manualDate}T${this.manualTime}`);
+    this.currentDateTime = isNaN(date.getTime()) ? new Date() : date;
   }
 
   onSubmit() {
-    this.backendService.updateSettings(this.settings).subscribe();
+    this.backendService.updateSettings(this.settings).subscribe((resp) => {
+      this.updateDateTime();
+    });
   }
 
   timeZoneChanged(timeZone: string): void {
     this.selectedTz = timeZone;
+    this.updateCurrentDateTime();
+  }
+
+  updateCurrentDateTime(): void {
+    const nowInTz = moment.tz(this.selectedTz);
+    this.currentDateTime = nowInTz.toDate();
+
+    setInterval(() => {
+      this.currentDateTime = nowInTz.add(1, 'second').toDate();
+    }, 1000);
   }
 
   formatTimeZone(timeZone: string): string {

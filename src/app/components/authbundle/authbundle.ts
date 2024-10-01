@@ -1,11 +1,7 @@
 export interface Authbundle {
-  id: string;
-  communication: string;
-  lastseen?: string;
-}
-
-export interface Sidemenu {
-  name: string;
+  authbundle_id: string;
+  connector_type: string;
+  description?: string;
 }
 
 export interface PageEvent {

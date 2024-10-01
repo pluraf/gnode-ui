@@ -2,10 +2,12 @@
 <div class="main-content-body">
   <h3 class="field col-12">Create new user</h3>
   @if(errorMessage){
-    <div class="alert flex flex-row "> <i class="pi pi-exclamation-circle mr-3"style="color: red; font-size:18px" ></i>
+    <div class="erroralert flex flex-row "> <i class="pi pi-exclamation-circle mr-3"style="color: red; font-size:18px" ></i>
       {{ errorMessage }}
     </div>
-    }
+    }@if(successMessage){
+      <div class="alert flex flex-row mt-3" style="color: green; font-size:18px" >  {{ successMessage }} </div>
+      }   
   <div class="field col-12">
     <div class="mb-2"><label for="username">Username</label></div>
     <input id="username" type="text" pInputText [(ngModel)]="userObj.username" class="text-base p-2 w-20rem"/>
@@ -14,5 +16,8 @@
   <div class="field col-12">
     <div class="mb-2"><label for="password">Password</label></div>
     <input id="password" type="password" pInputText [(ngModel)]="userObj.password" class="text-base p-2  w-20rem">
+  </div>
+  <div class="field col-12">
+    <button class="mt-3" pButton pRipple label="Create User" (click)="onCreateUser()"> </button>  
   </div>
 </div>

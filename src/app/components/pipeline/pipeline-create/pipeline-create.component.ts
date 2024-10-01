@@ -29,14 +29,23 @@ export class PipelineCreateComponent {
   pipeid = '';
   pipelineJson: string = '';
 
+  messages: string = '';
+
   constructor(private router: Router) {}
 
   onCreatePipeline() {
     let pipelineData = JSON.parse(this.pipelineJson);
     this.backendService
       .pipelineCreate(this.pipeid, pipelineData)
-      .subscribe((res: any) => {
-        this.router.navigateByUrl('/pipelines');
+      .subscribe((response: any) => {
+        if (response?.responses?.[0]?.error) {
+          this.showMessage(response.responses[0].error);
+        }
+        this.showMessage('Pipeline created successfully!');
       });
+  }
+
+  showMessage(message: string) {
+    this.messages = message;
   }
 }

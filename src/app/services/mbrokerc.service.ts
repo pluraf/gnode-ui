@@ -31,12 +31,7 @@ export class MBrokerCService {
 
   updateChannel(updateData: object): Observable<any> {
     const postData = {
-      commands: [
-        {
-          command: 'modifyChannel',
-          ...updateData,
-        },
-      ],
+      commands: [{ command: 'modifyChannel', ...updateData }],
     };
     return this.http.post(this.apiUrl, postData, this.httpOptions);
   }
@@ -57,12 +52,7 @@ export class MBrokerCService {
 
   createChannel(conn_params: object): Observable<any> {
     const postData: any = {
-      commands: [
-        {
-          command: 'createChannel',
-          ...conn_params,
-        },
-      ],
+      commands: [{ command: 'createChannel', ...conn_params }],
     };
     return this.http.post(this.apiUrl, postData, this.httpOptions);
   }
