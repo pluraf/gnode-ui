@@ -1,13 +1,13 @@
-<div *ngIf="messages" class="alert flex flex-row mt-100" style="color: green; font-size:18px">
-    <div class="text-center">
-        {{ messages }}  To return to the pipelines, click the back arrow in the top-left corner.
-    </div>
-</div>
+
     
 <app-subheader selectedMenuName="Create pipeline" [showBackArrow]="true" ></app-subheader>
 
-<div *ngIf="!messages" class=" main-content-body">
-        <div class="p-col-12 p-md-6">
+<div class=" main-content-body">
+        <div class="p-col-12 p-md-6"><div *ngIf="messages" class="alert flex flex-row ">
+    <div class="text-center">
+        {{ messages }}
+    </div>
+</div>
             <div  class="p-fluid">                 
                 <div class="p-field flex flex-column gap-1">
                     <label for="pipeid">Pipeline ID</label>
@@ -21,9 +21,6 @@
                 <div class="p-field mt-3">
                     <button pButton (click)="onCreatePipeline()">Submit</button>      
                 </div>
-                @if(messages){
-                    <div class="alert flex flex-row mt-3" style="color: green; font-size:18px" >  {{ messages }} </div>
-                    } 
             </div>
         </div>
 </div>

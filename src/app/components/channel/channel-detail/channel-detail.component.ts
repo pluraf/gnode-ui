@@ -60,7 +60,6 @@ export class ChannelDetailComponent {
     this.brokerService
       .loadChannelDetails(this.chanid)
       .subscribe((response: any) => {
-        console.log(response);
         this.channel = response.responses[0].data.channel;
         this.details = [
           ['Enabled', !this.channel.disabled],
@@ -75,12 +74,6 @@ export class ChannelDetailComponent {
             this.channel.jwtkey.replace(/(.{64})/g, '$1\n'),
           ]);
         }
-        /*   if (this.channel.authtype && this.channel.authtype.startsWith('jwt')) { 
-            if (this.channel.jwtkey) {
-              const formattedJwtKey = this.channel.jwtkey.replace(/(.{64})/g, '$1\n');
-              this.details.push(['JWT key', formattedJwtKey]);
-            }
-          } */
       });
   }
 

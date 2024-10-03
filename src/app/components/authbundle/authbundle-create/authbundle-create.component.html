@@ -1,12 +1,8 @@
 <app-subheader selectedMenuName="Create authentication bundle" [showBackArrow]="true"></app-subheader>
 
 <div class="main-content">
-  <div *ngIf="messages" class="alert flex flex-row" style="color: green; font-size:18px">
-    <div class="text-center">
-        {{ messages }}  To return to the authbundle, click the back arrow in the top-left corner.
-    </div>
-  </div>
-  <div *ngIf="!messages" class="formgrid grid w-full">
+  <div *ngIf="messages" class="alert field col-12 w-full mb-2">{{ messages }}</div>
+  <div class="formgrid grid w-full">
       <div class="field col-12 w-full">
         <div class="mb-2"><label for="authbundle_id">Authbundle Id</label></div>
         <input id="authbundle_id" type="text" pInputText [disabled]="autoId" [(ngModel)]="authbundleId" class="text-base p-2 w-23rem mr-3">
@@ -55,8 +51,5 @@
       <div class="field col-12 mt-4">
         <button pButton (click)="onSubmit()" class="button">Submit</button>
       </div>
-      @if(messages){
-        <div class="alert flex flex-row mt-3" style="color: green; font-size:18px" >  {{ messages }} </div>
-        } 
   </div>
 </div>

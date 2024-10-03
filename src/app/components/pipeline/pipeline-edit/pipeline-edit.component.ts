@@ -40,14 +40,15 @@ export class PipelineEditComponent {
   }
 
   onUpdatePipeline() {
-    this.backendSerice
-      .pipelineEdit(this.pipeid, this.pipelineJson)
-      .subscribe((response: any) => {
-        if (response?.responses?.[0]?.error) {
-          this.showMessage(response.responses[0].error);
-        }
-        this.showMessage('Pipeline updated successfully!');
-      });
+    this.backendSerice.pipelineEdit(this.pipeid, this.pipelineJson).subscribe(
+      (response: any) => {
+        this.router.navigateByUrl(`pipeline-detail/${this.pipeid}`);
+      },
+      (error: any) => {
+        const errorMessage = error?.error.split('\n').pop();
+        this.showMessage(errorMessage);
+      },
+    );
   }
 
   showMessage(message: string) {

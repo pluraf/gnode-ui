@@ -35,14 +35,16 @@ export class PipelineCreateComponent {
 
   onCreatePipeline() {
     let pipelineData = JSON.parse(this.pipelineJson);
-    this.backendService
-      .pipelineCreate(this.pipeid, pipelineData)
-      .subscribe((response: any) => {
-        if (response?.responses?.[0]?.error) {
-          this.showMessage(response.responses[0].error);
-        }
-        this.showMessage('Pipeline created successfully!');
-      });
+    this.backendService.pipelineCreate(this.pipeid, pipelineData).subscribe(
+      (response: any) => {
+        this.router.navigateByUrl('/pipelines');
+      },
+      (error: any) => {
+        console.log('error from create:', error);
+        const errorMessage = error?.error.split('\n').pop();
+        this.showMessage(errorMessage);
+      },
+    );
   }
 
   showMessage(message: string) {

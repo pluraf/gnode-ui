@@ -1,13 +1,12 @@
  <app-subheader selectedMenuName="Edit channel" [showBackArrow]="true"></app-subheader>
 
 <div class="main-content-body">
-  <div *ngIf="messages" class="alert flex flex-row" style="color: green; font-size:18px">
-    <div class="text-center">
-        {{ messages }}  To return to the channel details, click the back arrow in the top-left corner.
-    </div>
-  </div>
-   <div *ngIf="!messages" class="p-grid">    
-      <h3>Channel ID: {{ chanid }}</h3>
+
+   <div class="p-grid"> 
+    <div *ngIf="messages" class="alert flex flex-row">
+      <div class="text-center">{{ messages }}</div>
+    </div>  
+      <h4>Channel ID: {{ chanid }}</h4>
       <div class="p-fluid">
               <span><strong>Authentication</strong></span>
               <small>Specify the public key that will be used to authenticate this channel. You can leave the key empty, but channels will not be able to connect to gnode without a key.</small>

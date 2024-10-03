@@ -80,10 +80,9 @@ export class ChannelCreateComponent implements OnInit {
       payload.clientid = this.clientid;
     }
     this.brokerService.createChannel(payload).subscribe((response: any) => {
+      console.log(response);
       if (response.responses[0].hasOwnProperty('error')) {
         this.showMessage(response.responses[0].error)!;
-      } else {
-        this.showMessage('Channel created successfully!');
       }
     });
   }

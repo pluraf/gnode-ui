@@ -1,14 +1,14 @@
-<div class=" menuitem flex flex-row-reverse align-items-center ml-auto">          
-     <a (click)="showDialog('top-right')"><i class=" user-icon">{{ userInitial }}</i></a>   
-     
+<div class=" menuitem flex flex-row-reverse align-items-center ml-auto">
+     <a (click)="showDialog('top-right')"><i class="text-white user-icon">{{ userInitial }}</i></a>
+     <p  class="text-white text-sm mr-2">{{showDateTime}}</p> 
 </div>
 
 <p-dialog [(visible)]="visible" [position]="position" [showHeader]="false" [modal]="true" [closeOnEscape]="true" [dismissableMask]="true" [style]="{ width: '14rem', 'margin-top': '56px', 'margin-left':'auto' }">
-          <div class="flex align-items-center" >
-               <i class="user-icon-popup">{{ userInitial }}</i>
-               <span >{{ displayUsername}}</span>
-             </div>
-          <div class="flex justify-content-end gap-2">
-               <button pButton (click)="onSignOut()" >Sign Out</button>
-          </div>
-     </p-dialog>
+     <div class="flex align-items-center" >
+          <i class="user-icon-popup">{{ userInitial }}</i>
+          <span >{{ displayUsername}}</span>
+     </div>
+     <div class="flex justify-content-end gap-2">
+          <button pButton (click)="onSignOut()" >Sign Out</button>
+     </div>
+</p-dialog>

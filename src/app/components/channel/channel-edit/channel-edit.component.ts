@@ -104,7 +104,7 @@ export class ChannelEditComponent implements OnInit {
       if (response.responses[0].hasOwnProperty('error')) {
         this.showMessage(response.responses[0].error);
       }
-      this.showMessage('Channel updated successfully!');
+      this.router.navigateByUrl(`channel/${this.chanid}`);
     });
   }
 
@@ -112,6 +112,6 @@ export class ChannelEditComponent implements OnInit {
     this.messages = message;
   }
   previousPage() {
-    this.router.navigateByUrl('/channels');
+    this.router.navigateByUrl(`channel/${this.chanid}`);
   }
 }

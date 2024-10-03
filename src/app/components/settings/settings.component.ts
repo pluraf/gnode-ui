@@ -4,12 +4,15 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
+  Output,
+  EventEmitter,
+  Input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
-import moment from 'moment-timezone';
+/* import moment from 'moment-timezone'; */
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,6 +21,8 @@ import { DividerModule } from 'primeng/divider';
 
 import { SubheaderComponent } from '../subheader/subheader.component';
 import { BackendService } from '../../services/backend.service';
+import { DatetimeService } from '../../services/datetime.service';
+import moment from 'moment-timezone';
 
 @Component({
   selector: 'app-settings',
@@ -36,13 +41,17 @@ import { BackendService } from '../../services/backend.service';
 })
 export class SettingsComponent {
   backendService = inject(BackendService);
+  timeService = inject(DatetimeService);
 
   tzNames = moment.tz.names();
   selectedTz: string = 'UTC';
+  currentDateTime = '';
   autoSyncEnabled: boolean = false;
   manualDate: string = '';
   manualTime: string = '';
-  currentDateTime: Date = new Date();
+
+  @Output() currentDateTimeChange = new EventEmitter<string>();
+  @Input() showDateTime: string = '';
 
   settings = {
     allow_anonymous: false,
@@ -50,54 +59,34 @@ export class SettingsComponent {
   };
 
   constructor() {
+    this.currentDateTime = this.timeService.getCurrentTime(this.selectedTz);
     this.backendService.loadSettings().subscribe((resp) => {
       this.settings = resp;
-      this.autoSyncEnabled = this.settings.autoSetTime;
-      this.updateDateTime();
     });
+    this.timeZoneChanged('Europe/Stockholm');
   }
-
-  updateDateTime(): void {
-    this.setManualDateTime();
-  }
-
-  onAutoSyncChange(): void {
-    this.autoSyncEnabled = this.settings.autoSetTime;
+  updateDateTime(timeZone: string): void {
+    const currentTime = new Date().getTime();
+    this.currentDateTime = this.timeService.getCurrentTime(timeZone);
   }
 
   setManualDateTime(): void {
     const date = new Date(`${this.manualDate}T${this.manualTime}`);
-    this.currentDateTime = isNaN(date.getTime()) ? new Date() : date;
-  }
-
-  onSubmit() {
-    this.backendService.updateSettings(this.settings).subscribe((resp) => {
-      this.updateDateTime();
-    });
+    this.currentDateTime = isNaN(date.getTime())
+      ? this.timeService.getCurrentTime(this.selectedTz)
+      : moment(date).format('YYYY-MM-DD HH:mm:ss');
+    this.currentDateTimeChange.emit(this.currentDateTime);
   }
 
   timeZoneChanged(timeZone: string): void {
     this.selectedTz = timeZone;
-    this.updateCurrentDateTime();
+    this.updateDateTime(timeZone);
+    this.currentDateTimeChange.emit(this.currentDateTime);
   }
-
-  updateCurrentDateTime(): void {
-    const nowInTz = moment.tz(this.selectedTz);
-    this.currentDateTime = nowInTz.toDate();
-
-    setInterval(() => {
-      this.currentDateTime = nowInTz.add(1, 'second').toDate();
-    }, 1000);
-  }
-
   formatTimeZone(timeZone: string): string {
-    const offset = moment.tz(timeZone).utcOffset();
-    const sign = offset >= 0 ? '+' : '-';
-    const hours = Math.floor(Math.abs(offset) / 60)
-      .toString()
-      .padStart(2, '0');
-    const minutes = (Math.abs(offset) % 60).toString().padStart(2, '0');
-    const formattedOffset = `UTC${sign}${hours}:${minutes}`;
-    return `(${formattedOffset}) ${timeZone}`;
+    return this.timeService.formatTimeZone(timeZone);
+  }
+  onSubmit() {
+    this.backendService.updateSettings(this.settings).subscribe((resp) => {});
   }
 }

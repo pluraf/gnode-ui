@@ -179,9 +179,12 @@ export class AuthbundleCreateComponent {
     if (this.description) {
       formData.append('description', this.description);
     }
-    this.backendService.createAuthbundle(formData).subscribe((res) => {
-      this.showMessage('Authbundle created successfully!');
+    this.backendService.createAuthbundle(formData).subscribe((response) => {
+      if (response.responses[0].hasOwnProperty('error')) {
+        this.showMessage(response.responses[0].error)!;
+      }
     });
+    this.router.navigateByUrl('/authbundles');
   }
   showMessage(message: string) {
     this.messages = message;

@@ -15,11 +15,11 @@
         <div class="mb-2"><label for="tz-name">Select time zone </label></div>
         <select name="timeZone" id="tz-name" [ngModel]="selectedTz" (ngModelChange)="timeZoneChanged($event)" class="text-color surface-overlay p-2 border-1 border-round w-15rem">
           <option *ngFor="let tz of tzNames" [value]="tz">
-            {{ formatTimeZone(tz) }}
+            {{ tz }}
           </option>
         </select>
       </div>
-        <small class="text-color-secondary inline-block pt-1 mb-2">G-Node Date/Time: {{ currentDateTime | date:'full' }}</small>
+        <small class="text-color-secondary inline-block pt-1 mb-2">G-Node Date/Time: {{ currentDateTime }}</small>
     </div>
 <!--     <div class=" field col-12 mt-3">
       <div>
@@ -41,7 +41,6 @@
       </div>
 
     </div>
-
     <div class="field col-12 mt-4">
       <button pButton (click)="onSubmit()" class="button">Submit</button>
     </div>

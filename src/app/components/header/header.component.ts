@@ -1,14 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
+
 import { UserService } from '../../services/user.service';
+import { SettingsComponent } from '../settings/settings.component';
 import { MenubarModule } from 'primeng/menubar';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MenubarModule, DialogModule, ButtonModule],
+  imports: [
+    MenubarModule,
+    DialogModule,
+    ButtonModule,
+    SettingsComponent,
+    CommonModule,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -17,6 +26,9 @@ export class HeaderComponent {
   visible: boolean = false;
   position: string = 'top-right';
   displayUsername: string | null = null;
+  visibleTime: boolean = false;
+
+  @Input() showDateTime: string = '';
 
   constructor(
     private router: Router,
