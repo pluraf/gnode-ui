@@ -9,6 +9,7 @@ import { SplitterModule } from 'primeng/splitter';
 import { ChannelDetailComponent } from './components/channel/channel-detail/channel-detail.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { DatetimeService } from './services/datetime.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-root',
@@ -33,16 +34,48 @@ export class AppComponent implements OnInit {
   router: Router = inject(Router);
   timeService = inject(DatetimeService);
 
-  currentDateTime: string | undefined;
+  currentDateTime: string = '';
+  currentTimeZone: string = 'Europe/Stockholm';
+  intervalId: any;
 
   constructor() {}
 
   ngOnInit() {
-    this.currentDateTime = this.timeService.getCurrentTime('UTC');
+    this.updateRealTimeClock();
+    this.startRealTimeClock();
   }
 
-  updateDateTime(newDateTime: string): void {
-    this.currentDateTime = newDateTime;
+  ngOnDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
+  startRealTimeClock(): void {
+    this.intervalId = setInterval(() => {
+      this.updateRealTimeClock();
+    }, 1000);
+  }
+
+  updateRealTimeClock(): void {
+    const currentTime = moment().tz(this.currentTimeZone).format('lll');
+    this.currentDateTime = currentTime;
+  }
+
+  updateDateTime({
+    dateTime,
+    timeZone,
+  }: {
+    dateTime: string;
+    timeZone: string;
+  }): void {
+    this.currentDateTime = dateTime;
+    this.currentTimeZone = timeZone;
+
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+    this.startRealTimeClock();
   }
 
   items: MenuItem[] = [
