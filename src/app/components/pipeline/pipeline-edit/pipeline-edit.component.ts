@@ -24,7 +24,7 @@ import { BackendService } from '../../../services/backend.service';
   styleUrl: './pipeline-edit.component.css',
 })
 export class PipelineEditComponent {
-  backendSerice = inject(BackendService);
+  backendService = inject(BackendService);
   route: ActivatedRoute = inject(ActivatedRoute);
   router = inject(Router);
 
@@ -34,13 +34,13 @@ export class PipelineEditComponent {
 
   constructor() {
     this.pipeid = this.route.snapshot.params['pipeid'];
-    this.backendSerice.pipelineGet(this.pipeid).subscribe((resp) => {
+    this.backendService.pipelineGet(this.pipeid).subscribe((resp) => {
       this.pipelineJson = JSON.stringify(resp, null, 2);
     });
   }
 
   onUpdatePipeline() {
-    this.backendSerice.pipelineEdit(this.pipeid, this.pipelineJson).subscribe(
+    this.backendService.pipelineEdit(this.pipeid, this.pipelineJson).subscribe(
       (response: any) => {
         this.router.navigateByUrl(`pipeline-detail/${this.pipeid}`);
       },

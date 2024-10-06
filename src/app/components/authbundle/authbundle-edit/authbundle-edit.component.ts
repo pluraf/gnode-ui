@@ -1,17 +1,10 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  ViewChild,
-  ElementRef,
-} from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { CheckboxModule } from 'primeng/checkbox';
 
 import { BackendService } from '../../../services/backend.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
@@ -23,21 +16,23 @@ import {
 } from '../authbundle';
 
 @Component({
-  selector: 'app-authbundle-create',
+  selector: 'app-authbundle-edit',
   standalone: true,
   imports: [
+    SubheaderComponent,
+    CommonModule,
     ButtonModule,
     InputTextModule,
-    CheckboxModule,
-    CommonModule,
     FormsModule,
-    SubheaderComponent,
   ],
-  templateUrl: './authbundle-create.component.html',
-  styleUrl: './authbundle-create.component.css',
+  templateUrl: './authbundle-edit.component.html',
+  styleUrl: './authbundle-edit.component.css',
 })
-export class AuthbundleCreateComponent {
+export class AuthbundleEditComponent {
   backendService = inject(BackendService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
   authbundleId = '';
   username = '';
   password = '';
@@ -87,7 +82,8 @@ export class AuthbundleCreateComponent {
     return this.selAuthOption == AuthType.PASSWORD;
   }
 
-  constructor(private router: Router) {
+  constructor() {
+    this.authbundleId = this.route.snapshot.params['authbundleId'];
     this.selConnectorType = ConnectorType.GCP_PUBSUB;
     this.selAuthOption = AuthType.SERVICE_KEY;
 
@@ -97,7 +93,6 @@ export class AuthbundleCreateComponent {
 
     this.authOptions[AuthType.SERVICE_KEY] = AuthTypeLabel.SERVICE_KEY;
   }
-
   cleanIrrelevantInputs() {
     if (this.selAuthOption == AuthType.PASSWORD) {
       this.keyFile = null;
@@ -152,7 +147,7 @@ export class AuthbundleCreateComponent {
     this.keyFile = event.target.files[0];
   }
 
-  onSubmit() {
+  onUpdate() {
     const formData = new FormData();
     formData.append('connector_type', this.selConnectorType);
     formData.append('auth_type', this.selAuthOption);
@@ -171,11 +166,9 @@ export class AuthbundleCreateComponent {
     if (this.description) {
       formData.append('description', this.description);
     }
-    this.backendService.createAuthbundle(formData).subscribe((response) => {
-      if (response && response.responses && response.responses.length > 0) {
-        if (response.responses[0].hasOwnProperty('error')) {
-          this.showMessage(response.responses[0].error)!;
-        }
+    this.backendService.editAuthbundle(formData).subscribe((response) => {
+      if (response.responses[0].hasOwnProperty('error')) {
+        this.showMessage(response.responses[0].error)!;
       }
     });
     this.router.navigateByUrl('/authbundles');

@@ -15,7 +15,9 @@
                 </div>
                 
                 <div class="p-field gap-1">
-                    <div class="mb-2">Configuration</div>
+                    <div class="mb-2"><p-checkbox [binary]="true" 
+                        [(ngModel)]="isConfigGenerated"
+                        (onChange)="onGenerateConfig()" class="mr-2"/>Generate Configuration </div>
                     <textarea cols="60" rows="20" class="pipeline-create" [(ngModel)]="pipelineJson"></textarea>
                 </div>
                 <div class="p-field mt-3">

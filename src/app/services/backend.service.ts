@@ -41,9 +41,18 @@ export class BackendService {
       this.httpOptions,
     );
   }
+  getAuthbundles(authbundleId: string): Observable<any> {
+    return this.http.get(this.authbundleUrl + authbundleId, {
+      ...this.httpOptions,
+    });
+  }
 
   createAuthbundle(formData: object): Observable<any> {
     return this.http.post(this.authbundleUrl, formData, this.httpOptions);
+  }
+
+  editAuthbundle(formData: object): Observable<any> {
+    return this.http.put(this.authbundleUrl + formData, this.httpOptions);
   }
 
   /////////////////////////// Settings ///////////////////////////
@@ -87,6 +96,11 @@ export class BackendService {
       body: pipeids,
     });
   }
+
+  /*   getPipelineConfig(): Observable<any> {
+    console.log(this.httpOptions);
+    return this.http.get(`${this.pipelineUrl}config-file`, this.httpOptions);
+  } */
 
   /////////////////////////// Next ///////////////////////////
 }

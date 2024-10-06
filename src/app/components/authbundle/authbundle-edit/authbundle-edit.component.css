@@ -1,0 +1,17 @@
+button {
+  background-color: #006666 !important;
+  width: 7rem;
+  font-size: 18px;
+  justify-content: center;
+}
+:host {
+  ::ng-deep .p-button {
+    padding: 0.375rem 0.625rem;
+  }
+}
+.alert {
+  padding: 10px;
+  align-items: center;
+  font-size: 14px;
+  background: rgba(240, 253, 244, 0.95);
+}

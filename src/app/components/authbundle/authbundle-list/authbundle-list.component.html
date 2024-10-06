@@ -20,7 +20,7 @@
                     <ng-template pTemplate="body" let-authbundle>
                         <tr>
                             <td ><p-tableCheckbox name="checkbox" [value]="authbundle" /></td>
-                            <td ><a routerLink="/authbundles/{{authbundle.authbundle_id}}">{{ authbundle.authbundle_id }}</a></td>
+                            <td ><a routerLink="/authbundle-detail/{{authbundle.authbundle_id}}">{{ authbundle.authbundle_id }}</a></td>
                               <td>{{authbundle.connector_type}}</td>
                               <td>{{authbundle.description}}</td>
                         </tr>
