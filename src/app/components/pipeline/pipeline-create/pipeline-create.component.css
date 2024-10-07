@@ -3,10 +3,24 @@
 }
 
 button {
-  width: 8rem;
-  font-size: 18px;
+  width: auto;
+  font-size: 16px;
   justify-content: center;
   background-color: #006666 !important;
+}
+
+button.genconfig {
+  background-color: #f7f7f7 !important;
+  color: black;
+}
+button.genconfig:hover {
+  background-color: #006666 !important;
+  color: #fff;
+  border: 1px solid #c5c4c4;
+}
+
+button:hover {
+  background-color: #017777 !important;
 }
 
 .input_field {
@@ -17,9 +31,15 @@ button {
 :host {
   ::ng-deep .p-button {
     padding: 0.375rem 0.625rem;
+    border: 1px solid #2a2929;
   }
 }
 
+:host {
+  ::ng-deep .p-button:hover {
+    border: 1px solid #007979;
+  }
+}
 .pipeline-create {
   resize: both;
   overflow: auto;
@@ -40,4 +60,7 @@ button {
 a {
   z-index: 10;
   position: relative;
+}
+::ng-deep .p-tooltip > .p-tooltip-text {
+  width: 220px;
 }

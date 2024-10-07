@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
@@ -8,10 +9,9 @@ import { BackendService } from '../../../services/backend.service';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { ActivatedRoute, Router } from '@angular/router';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TooltipModule } from 'primeng/tooltip';
 
-import * as pipelineConfig from '../pipelineConfig.json';
 @Component({
   selector: 'app-pipeline-create',
   standalone: true,
@@ -22,11 +22,12 @@ import * as pipelineConfig from '../pipelineConfig.json';
     CommonModule,
     FormsModule,
     CheckboxModule,
+    TooltipModule,
   ],
   templateUrl: './pipeline-create.component.html',
   styleUrl: './pipeline-create.component.css',
 })
-export class PipelineCreateComponent {
+export class PipelineCreateComponent implements OnInit {
   backendService = inject(BackendService);
   route: ActivatedRoute = inject(ActivatedRoute);
   http = inject(HttpClient);
@@ -34,9 +35,15 @@ export class PipelineCreateComponent {
   pipeid = '';
   pipelineJson: string = '';
   messages: string = '';
-  isConfigGenerated: boolean = false;
+  pipelineConfig: any = {};
 
   constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.http.get('/assets/pipelineConfig.json').subscribe((data) => {
+      this.pipelineConfig = data;
+    });
+  }
 
   onCreatePipeline() {
     let pipelineData = JSON.parse(this.pipelineJson);
@@ -56,10 +63,6 @@ export class PipelineCreateComponent {
   }
 
   onGenerateConfig() {
-    if (this.isConfigGenerated) {
-      this.pipelineJson = JSON.stringify(pipelineConfig, null, 2);
-    } else {
-      this.pipelineJson = '';
-    }
+    this.pipelineJson = JSON.stringify(this.pipelineConfig, null, 2);
   }
 }

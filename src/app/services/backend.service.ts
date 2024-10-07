@@ -97,10 +97,5 @@ export class BackendService {
     });
   }
 
-  /*   getPipelineConfig(): Observable<any> {
-    console.log(this.httpOptions);
-    return this.http.get(`${this.pipelineUrl}config-file`, this.httpOptions);
-  } */
-
   /////////////////////////// Next ///////////////////////////
 }

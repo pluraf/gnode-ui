@@ -1,0 +1,19 @@
+{
+  "connector_in": {
+    "type": "mqtt",
+    "topic": "/topic1",
+    "server": "mqtt://localhost:1883",
+    "qos": 1,
+    "retry_attempts": 5,
+    "authbundle_id": ""
+  },
+  "filters": [],
+  "transformers": [],
+  "connector_out": {
+    "type": "gcp_pubsub",
+    "authbundle_id": "",
+    "project_id": "",
+    "topic_id": "",
+    "subscription_id": ""
+  }
+}

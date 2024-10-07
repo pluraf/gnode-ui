@@ -2,11 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { BackendService } from '../../../services/backend.service';
@@ -31,12 +32,15 @@ export interface Pipeline {
     DialogModule,
     ButtonModule,
     CommonModule,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './pipeline-list.component.html',
   styleUrl: './pipeline-list.component.css',
 })
 export class PipelineListComponent {
   backendService = inject(BackendService);
+  messageService = inject(MessageService);
 
   visibleDialog: boolean = false;
   pipelines: Pipeline[] = [];
@@ -93,7 +97,11 @@ export class PipelineListComponent {
 
   showDialog() {
     if (this.selectedPipelines.length === 0) {
-      alert('No pipeline selected');
+      /* alert('No pipeline selected'); */
+      this.messageService.add({
+        severity: 'info',
+        detail: 'No pipeline selected',
+      });
       return;
     }
     this.visibleDialog = true;

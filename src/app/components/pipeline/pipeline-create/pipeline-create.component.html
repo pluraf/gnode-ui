@@ -1,28 +1,37 @@
-
-    
-<app-subheader selectedMenuName="Create pipeline" [showBackArrow]="true" ></app-subheader>
-
-<div class=" main-content-body">
-        <div class="p-col-12 p-md-6"><div *ngIf="messages" class="alert flex flex-row ">
-    <div class="text-center">
-        {{ messages }}
+<app-subheader
+  selectedMenuName="Create pipeline"
+  [showBackArrow]="true"
+></app-subheader>
+<div class="main-content-body">
+  <div class="p-col-12 p-md-6">
+    <div *ngIf="messages" class="alert flex flex-row">
+      <div class="text-center">{{ messages }}</div>
     </div>
-</div>
-            <div  class="p-fluid">                 
-                <div class="p-field flex flex-column gap-1">
-                    <label for="pipeid">Pipeline ID</label>
-                    <input name="pipeid" id="pipeid" class="input_field border-1 border-round" [(ngModel)]="pipeid"/>
-                </div>
-                
-                <div class="p-field gap-1">
-                    <div class="mb-2"><p-checkbox [binary]="true" 
-                        [(ngModel)]="isConfigGenerated"
-                        (onChange)="onGenerateConfig()" class="mr-2"/>Generate Configuration </div>
-                    <textarea cols="60" rows="20" class="pipeline-create" [(ngModel)]="pipelineJson"></textarea>
-                </div>
-                <div class="p-field mt-3">
-                    <button pButton (click)="onCreatePipeline()">Submit</button>      
-                </div>
-            </div>
+    <div class="p-fluid">
+      <div class="p-field flex flex-column gap-1">
+        <label for="pipeid">Pipeline ID</label>
+        <input
+          name="pipeid"
+          id="pipeid"
+          class="input_field border-1 border-round"
+          [(ngModel)]="pipeid"
+        />
+      </div>
+      <div class="p-field gap-1">
+        <div class="mb-2">
+          <button pButton (click)="onGenerateConfig()" class="genconfig" pTooltip="Generate Pipeline config" >Generate Configuration</button>
         </div>
+
+        <textarea
+          cols="60"
+          rows="20"
+          class="pipeline-create"
+          [(ngModel)]="pipelineJson"
+        ></textarea>
+      </div>
+      <div class="p-field mt-3">
+        <button pButton (click)="onCreatePipeline()">Submit</button>
+      </div>
+    </div>
+  </div>
 </div>
