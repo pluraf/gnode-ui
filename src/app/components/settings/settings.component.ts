@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
-/* import moment from 'moment-timezone'; */
+import moment from 'moment-timezone';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -23,7 +23,6 @@ import { CalendarModule } from 'primeng/calendar';
 import { SubheaderComponent } from '../subheader/subheader.component';
 import { BackendService } from '../../services/backend.service';
 import { DatetimeService } from '../../services/datetime.service';
-import moment from 'moment-timezone';
 
 @Component({
   selector: 'app-settings',

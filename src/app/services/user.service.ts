@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, isDevMode } from '@angular/core';
 import { CookieOptions, CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 
@@ -24,7 +24,7 @@ export class UserService {
   }
 
   cookieOptions: CookieOptions = {
-    secure: true,
+    secure: !isDevMode(),
     sameSite: 'Lax',
   };
 
