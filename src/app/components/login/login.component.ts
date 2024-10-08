@@ -30,7 +30,7 @@ export class LoginComponent {
 
   loginUser: any = {
     username: 'admin',
-    password: 'admin1234',
+    password: 'admin',
   };
 
   constructor(
