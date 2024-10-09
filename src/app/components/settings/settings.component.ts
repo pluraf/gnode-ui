@@ -51,6 +51,7 @@ export class SettingsComponent {
   manualDate: string = '';
   manualTime: string = '';
   datetime12h: Date[] | undefined;
+  successMessage: string = '';
 
   @Output() currentDateTimeChange = new EventEmitter<{
     dateTime: string;
@@ -108,6 +109,19 @@ export class SettingsComponent {
     return this.timeService.formatTimeZone(timeZone);
   }
   onSubmit() {
-    this.backendService.updateSettings(this.settings).subscribe((resp) => {});
+    this.backendService.updateSettings(this.settings).subscribe((resp) => {
+      this.showMessage('Submitted successfully');
+    }),
+      (error: any) => {
+        const errorMessage = error?.error;
+        this.showMessage(errorMessage);
+      };
+  }
+
+  showMessage(message: string) {
+    this.successMessage = message;
+    setTimeout(() => {
+      this.successMessage = '';
+    }, 4000);
   }
 }

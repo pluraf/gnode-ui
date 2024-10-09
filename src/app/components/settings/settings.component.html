@@ -1,6 +1,9 @@
 <app-subheader selectedMenuName="Settings" [showBackArrow]="true"></app-subheader>
 
 <div class="main-content-body">
+  <div *ngIf="successMessage" class="alert flex bg-green-100 flex-row">
+    <div class="text-center">{{ successMessage }}</div>
+  </div>
   <p-divider align="left" type="solid"><b>MQTT Channels</b></p-divider>
   <div class="formgrid grid w-full">
     <div class="field col-12 w-full">
