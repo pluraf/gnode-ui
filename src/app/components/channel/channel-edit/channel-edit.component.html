@@ -28,7 +28,7 @@
               </div>
                 <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'password'" >
                     <label for="password">Password</label>
-                    <input name="password" id="password" [(ngModel)]="password" class="input_field"/>
+                    <input type="password" name="password" id="password" [(ngModel)]="password" class="input_field border-1 border-round"/>
                 </div>
                 <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'jwt'">
                       <label for="key">JWT Key</label>

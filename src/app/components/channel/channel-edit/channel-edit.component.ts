@@ -101,10 +101,14 @@ export class ChannelEditComponent implements OnInit {
     };
 
     this.brokerService.updateChannel(updateData).subscribe((response) => {
-      if (response.responses[0].hasOwnProperty('error')) {
-        this.showMessage(response.responses[0].error);
+      if (response.responses && response.responses[0]) {
+        const resp = response.responses[0];
+        if (resp.hasOwnProperty('error') && resp.error) {
+          this.showMessage(resp.error);
+        } else {
+          this.router.navigateByUrl(`channel/${this.chanid}`);
+        }
       }
-      this.router.navigateByUrl(`channel/${this.chanid}`);
     });
   }
 

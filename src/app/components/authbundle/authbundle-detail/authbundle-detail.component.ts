@@ -28,7 +28,7 @@ export class AuthbundleDetailComponent {
 
   constructor() {
     this.authbundleId = this.route.snapshot.params['authbundleId'];
-    this.loadAuthbundleDetails();
+    this.loadAuthbundleDetails(this.authbundleId);
     this.menubarItems = [
       {
         routerLink: ['/authbundle-edit', this.authbundleId],
@@ -53,7 +53,7 @@ export class AuthbundleDetailComponent {
     ];
   }
 
-  /*   loadAuthbundleDetails(authbundleId: string) {
+  loadAuthbundleDetails(authbundleId: string) {
     this.backendService
       .getAuthbundles(authbundleId)
       .subscribe((response: any) => {
@@ -66,13 +66,6 @@ export class AuthbundleDetailComponent {
           ];
         }
       });
-  } */
-
-  loadAuthbundleDetails() {
-    this.details = [
-      ['Type', 'type'],
-      ['Description', 'description'],
-    ];
   }
 
   showDialog() {

@@ -1,7 +1,6 @@
 <app-subheader selectedMenuName="Pipelines" [actions]="menubarActions" ></app-subheader>
 
 <app-pipeline-delete  [visible]="visibleDialog" [pipelines]="selectedPipelines" (deleteConfirmed)="onDeletePipelines()" (cancel)="visibleDialog = false"></app-pipeline-delete >
-  <p-toast size="small" position="left" [life]="1000000" class="small-icon" styleClass="w-3" iconClass="w-1"/>
 <div *ngIf="showMessage" class="showMessage flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
   <div class="text-center">No pipelines available. To create one, click the plus sign in the top-right corner or use the <a routerLink="/pipeline-create" class="text-green-700">Create Pipeline</a> link or go back to the <a routerLink="/pipelines">pipeline</a></div>
 </div>
