@@ -7,53 +7,63 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class UserService {
-  private token = '';
+  private token: string = '';
   private isAdmin: boolean = false;
   private isLoggedIn: boolean = false;
 
-  http = inject(HttpClient);
-  constructor(private cookies: CookieService) {
-    const storedToken = this.cookies.get('access_token');
-    const storedAdminStatus = this.cookies.get('is_admin') === 'true';
+  private readonly http = inject(HttpClient);
 
-    if (storedToken) {
-      this.token = storedToken;
-      this.isLoggedIn = true;
-      this.isAdmin = storedAdminStatus;
-    }
-  }
-
-  cookieOptions: CookieOptions = {
+  private cookieOptions: CookieOptions = {
     secure: !isDevMode(),
     sameSite: 'Lax',
   };
 
-  login(token: string, username: string) {
+  constructor(private cookies: CookieService) {
+    this.loadUserFromCookies();
+  }
+
+  private loadUserFromCookies() {
+    this.token = this.cookies.get('access_token') || '';
+    this.isLoggedIn = !!this.token;
+    this.isAdmin = this.cookies.get('is_admin') === 'true';
+  }
+
+  login(token: string, username: string): void {
     const user = this.parseJwt(token);
-    this.cookies.set('access_token', token, this.cookieOptions);
-    this.setAdminStatus(user.is_admin);
+    this.setAuthCookies(token, user.is_admin, username);
 
     this.token = token;
     this.isLoggedIn = true;
-    this.cookies.set('username', username);
+    this.isAdmin = user.is_admin;
+  }
+
+  logout(): void {
+    this.clearAuthCookies();
+    this.isLoggedIn = false;
+    this.isAdmin = false;
+    this.token = '';
+  }
+
+  private setAuthCookies(
+    token: string,
+    isAdmin: boolean,
+    username: string,
+  ): void {
+    this.cookies.set('access_token', token, this.cookieOptions);
+    this.cookies.set('is_admin', String(isAdmin), this.cookieOptions);
+    this.cookies.set('username', username, this.cookieOptions);
+  }
+
+  private clearAuthCookies(): void {
+    this.cookies.delete('access_token', '/');
+    this.cookies.delete('is_admin', '/');
+    this.cookies.delete('username', '/');
   }
 
   getUsername(): string | null {
     return this.cookies.get('username') || null;
   }
 
-  logout() {
-    this.cookies.delete('access_token', '/');
-    this.cookies.delete('is_admin', '/');
-
-    this.isLoggedIn = false;
-    this.cookies.delete('username');
-  }
-
-  setAdminStatus(status: boolean) {
-    this.cookies.set('is_admin', String(status));
-    this.isAdmin = status;
-  }
   getAdminStatus(): boolean {
     return this.isAdmin;
   }
@@ -66,48 +76,29 @@ export class UserService {
     return this.isLoggedIn;
   }
 
-  // Function to fetch list of users from API
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    if (!token) {
+      throw new Error('Authorization token is required');
+    }
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  }
+
   getUsers(): Observable<any> {
-    const token = this.getToken();
-    if (token) {
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      });
-      return this.http.get('api/user/', { headers });
-    } else {
-      throw new Error('Authorization token is required');
-    }
+    return this.http.get('api/user/', { headers: this.getAuthHeaders() });
   }
 
-  // Function to delete users from user list
   deleteUsers(userIds: string[]): Observable<any> {
-    const token = this.getToken();
-    if (token) {
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      });
-
-      return this.http.delete(`api/user/`, {
-        headers,
-        body: userIds,
-      });
-    } else {
-      throw new Error('Authorization token is required');
-    }
+    return this.http.delete('api/user/', {
+      headers: this.getAuthHeaders(),
+      body: userIds,
+    });
   }
 
-  //function to parse JWT token
-  parseJwt(token: string) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(function (c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join(''),
-    );
-    return JSON.parse(jsonPayload);
+  private parseJwt(token: string): any {
+    const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(atob(payload));
   }
 }

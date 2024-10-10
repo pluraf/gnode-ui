@@ -40,6 +40,12 @@ export class LoginComponent {
 
   http = inject(HttpClient);
 
+  ngOnInit(): void {
+    if (this.userService.isUserLoggedIn()) {
+      this.router.navigateByUrl('/channels');
+    }
+  }
+
   onLogin() {
     if (this.loginUser.username && this.loginUser.password) {
       const headers = new HttpHeaders({
