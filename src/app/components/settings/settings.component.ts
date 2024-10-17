@@ -19,6 +19,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { CalendarModule } from 'primeng/calendar';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 import { SubheaderComponent } from '../subheader/subheader.component';
 import { BackendService } from '../../services/backend.service';
@@ -36,9 +38,11 @@ import { DatetimeService } from '../../services/datetime.service';
     DividerModule,
     SubheaderComponent,
     CalendarModule,
+    ToastModule,
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css',
+  providers: [MessageService],
 })
 export class SettingsComponent {
   backendService = inject(BackendService);
@@ -65,7 +69,7 @@ export class SettingsComponent {
     autoSetTime: false,
   };
 
-  constructor() {
+  constructor(private messageService: MessageService) {
     this.currentDateTime = this.timeService.getCurrentTime(this.selectedTz);
     this.backendService.loadSettings().subscribe((resp) => {
       this.settings = resp;
@@ -110,18 +114,19 @@ export class SettingsComponent {
   }
   onSubmit() {
     this.backendService.updateSettings(this.settings).subscribe((resp) => {
-      this.showMessage('Submitted successfully');
+      this.messageService.add({
+        sticky: true,
+        severity: 'success',
+        detail: 'Setting submitted successfully',
+      });
     }),
       (error: any) => {
         const errorMessage = error?.error;
-        this.showMessage(errorMessage);
+        this.messageService.add({
+          sticky: true,
+          severity: 'error',
+          detail: errorMessage,
+        });
       };
-  }
-
-  showMessage(message: string) {
-    this.successMessage = message;
-    setTimeout(() => {
-      this.successMessage = '';
-    }, 4000);
   }
 }
