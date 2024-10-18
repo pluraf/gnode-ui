@@ -1,0 +1,20 @@
+<app-subheader selectedMenuName="Status" [showBackArrow]="true"></app-subheader>
+<div class="main-content-body">
+    <p-table [value]="statuslist"  [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th >Name</th>
+                <th >Description</th>
+                <th >Status</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-status>
+            <tr>
+                <td>{{status.name}}</td>
+                <td>{{status.description}}</td>
+                <td>{{status.status}}</td>
+            </tr>
+        </ng-template>
+    </p-table>  
+</div>
+

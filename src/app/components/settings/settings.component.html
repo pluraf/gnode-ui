@@ -11,6 +11,12 @@
       </div>
       <small class="text-color-secondary inline-block pt-1">MQTT clients are able to connect without authentication</small>
     </div>
+    <div class="field col-12 w-full mt-2">
+      <div>
+        <p-checkbox [(ngModel)]="settings.allow_gnode_cloud" [binary]="true" inputId="cloud_id"/>
+        <label for="cloud_id" class="pl-2">Enable G-Node cloud</label>
+      </div>
+    </div>
     <div class="field col-12 mt-2">
       <div>
         <div class="mb-2"><label for="tz-name">Select time zone </label></div>

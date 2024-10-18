@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { StatusComponent } from './components/status/status.component';
 
 export const routes: Routes = [
   {
@@ -13,6 +14,7 @@ export const routes: Routes = [
       import('./components/login/login.component').then(
         (m) => m.LoginComponent,
       ),
+    canActivate: [authGuard],
   },
 
   {
@@ -167,5 +169,9 @@ export const routes: Routes = [
         (m) => m.SettingsComponent,
       ),
     canActivate: [authGuard],
+  },
+  {
+    path: 'status',
+    component: StatusComponent,
   },
 ];

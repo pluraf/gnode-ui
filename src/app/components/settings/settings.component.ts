@@ -66,6 +66,7 @@ export class SettingsComponent {
 
   settings = {
     allow_anonymous: false,
+    allow_gnode_cloud: false,
     autoSetTime: false,
   };
 

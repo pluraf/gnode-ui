@@ -90,5 +90,6 @@ export class AppComponent implements OnInit {
     },
     { label: 'Users', routerLink: '/users', styleClass: 'gap-4' },
     { label: 'Settings', routerLink: '/settings', styleClass: 'gap-2' },
+    { label: 'Status', routerLink: '/status', styleClass: 'gap-2' },
   ];
 }
