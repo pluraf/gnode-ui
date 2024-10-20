@@ -16,7 +16,9 @@ export class BackendService {
   // Settings API
   private settingsUrl = 'api/settings/';
   // Pipeline API
-  private pipelineUrl = 'm2e/pipeline/';
+  private pipelineConfigUrl = 'm2e/pipeline/config/';
+  private pipelineControlUrl = 'm2e/pipeline/control/';
+  private pipelineStatusUrl = 'm2e/pipeline/status/';
 
   http = inject(HttpClient);
   user = inject(UserService);
@@ -68,30 +70,30 @@ export class BackendService {
   /////////////////////////// Pipelines ///////////////////////////
 
   pipelinesList(): Observable<any> {
-    return this.http.get(this.pipelineUrl, this.httpOptions);
+    return this.http.get(this.pipelineConfigUrl, this.httpOptions);
   }
 
   pipelineGet(pipeid: string): Observable<any> {
-    return this.http.get(this.pipelineUrl + pipeid, {
+    return this.http.get(this.pipelineConfigUrl + pipeid, {
       ...this.httpOptions,
       // responseType: 'text'
     });
   }
 
   pipelineEdit(pipeid: string, pipedata: string): Observable<any> {
-    return this.http.put(this.pipelineUrl + pipeid, pipedata, this.httpOptions);
+    return this.http.put(this.pipelineConfigUrl + pipeid, pipedata, this.httpOptions);
   }
 
   pipelineCreate(pipeid: string, pipedata: object): Observable<any> {
     return this.http.post(
-      this.pipelineUrl + pipeid,
+      this.pipelineConfigUrl + pipeid,
       pipedata,
       this.httpOptions,
     );
   }
 
   pipelineDelete(pipeid: string, pipeids: string[]): Observable<any> {
-    return this.http.delete(this.pipelineUrl + pipeid, {
+    return this.http.delete(this.pipelineConfigUrl + pipeid, {
       headers: this.httpOptions.headers,
       body: pipeids,
     });
