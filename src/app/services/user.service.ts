@@ -14,7 +14,7 @@ export class UserService {
   private readonly http = inject(HttpClient);
 
   private cookieOptions: CookieOptions = {
-    secure: !isDevMode(),
+    secure: window.location.protocol === 'https:',
     sameSite: 'Lax',
   };
 

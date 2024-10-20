@@ -1,12 +1,10 @@
-button {
-  width: 8rem;
-  font-size: 18px;
-  justify-content: center;
-  background-color: #006666;
-  border-color: grey;
-}
 :host {
   ::ng-deep .p-button {
     padding: 0.375rem 0.625rem;
   }
+}
+button {
+  width: 8rem;
+  font-size: 18px;
+  justify-content: center;
 }
