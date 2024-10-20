@@ -21,7 +21,7 @@ export class AuthbundleDetailComponent {
   router = inject(Router);
 
   authbundleId: string = '';
-  authbundles: any;
+  authbundle: any;
   details: any;
   visibleDialog: boolean = false;
   menubarItems: MenuItem[] = [];
@@ -57,12 +57,13 @@ export class AuthbundleDetailComponent {
     this.backendService
       .getAuthbundles(authbundleId)
       .subscribe((response: any) => {
-        console.log(response);
         if (response) {
-          this.authbundles = response[0];
+          this.authbundle = response;
           this.details = [
-            ['Type', this.authbundles.connector_type],
-            ['Description', 'descr'],
+            ['Type', this.authbundle.connector_type],
+            ['Authentication type', this.authbundle.auth_type],
+            ['Username', this.authbundle.username],
+            ['Description', this.authbundle.description],
           ];
         }
       });
@@ -72,19 +73,17 @@ export class AuthbundleDetailComponent {
     this.visibleDialog = true;
   }
 
-  onDeletePipelines() {
-    const authbundleids = [this.authbundleId];
-    this.backendService
-      .pipelineDelete(this.authbundleId, authbundleids)
-      .subscribe({
-        next: (response: any) => {
-          if (response.success || response.status === 'success') {
-            this.details = [];
-            this.authbundles = null;
-          }
-          this.visibleDialog = false;
-          this.router.navigateByUrl('/authbundles');
-        },
-      });
+  onDeleteAuthbundle() {
+    const ids = [this.authbundleId];
+    this.backendService.deleteAuthbundles(ids).subscribe({
+      next: (response: any) => {
+        if (response.success || response.status === 'success') {
+          this.details = [];
+          this.authbundle = null;
+        }
+        this.visibleDialog = false;
+        this.router.navigateByUrl('/authbundles');
+      },
+    });
   }
 }

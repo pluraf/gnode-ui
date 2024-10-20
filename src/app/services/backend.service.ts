@@ -17,6 +17,8 @@ export class BackendService {
   private settingsUrl = 'api/settings/';
   // Pipeline API
   private pipelineUrl = 'm2e/pipeline/';
+  // API Version
+  private apiVersionUrl = '/api/version';
 
   http = inject(HttpClient);
   user = inject(UserService);
@@ -35,12 +37,13 @@ export class BackendService {
     return this.http.get(this.authbundleUrl, this.httpOptions);
   }
 
-  deleteAuthbundles(authbundleId: string[]): Observable<any> {
-    return this.http.delete(
-      this.authbundleUrl + authbundleId,
-      this.httpOptions,
-    );
+  deleteAuthbundles(authbundleIds: string[]): Observable<any> {
+    return this.http.delete(this.authbundleUrl, {
+      headers: this.httpOptions.headers,
+      body: authbundleIds,
+    });
   }
+
   getAuthbundles(authbundleId: string): Observable<any> {
     return this.http.get(this.authbundleUrl + authbundleId, {
       ...this.httpOptions,
@@ -51,8 +54,12 @@ export class BackendService {
     return this.http.post(this.authbundleUrl, formData, this.httpOptions);
   }
 
-  editAuthbundle(formData: object): Observable<any> {
-    return this.http.put(this.authbundleUrl + formData, this.httpOptions);
+  editAuthbundle(authbundle_id: string, formData: FormData): Observable<any> {
+    return this.http.put(
+      this.authbundleUrl + authbundle_id,
+      formData,
+      this.httpOptions,
+    );
   }
 
   /////////////////////////// Settings ///////////////////////////
@@ -98,4 +105,8 @@ export class BackendService {
   }
 
   /////////////////////////// Next ///////////////////////////
+
+  getApiVersion(): Observable<any> {
+    return this.http.get<any>(this.apiVersionUrl);
+  }
 }

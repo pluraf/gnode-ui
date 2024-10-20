@@ -1,5 +1,5 @@
-import { Component, AfterViewInit, ViewChild, Input } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { Component, inject, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { UserService } from '../../services/user.service';
 import { SettingsComponent } from '../settings/settings.component';
@@ -7,6 +7,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { BackendService } from '../../services/backend.service';
 
 @Component({
   selector: 'app-header',
@@ -28,6 +29,11 @@ export class HeaderComponent {
   displayUsername: string | null = null;
   visibleTime: boolean = false;
 
+  apiVersion: any;
+  serialNumber: string = '';
+
+  backendService = inject(BackendService);
+
   @Input() showDateTime: string = '';
 
   constructor(
@@ -41,6 +47,16 @@ export class HeaderComponent {
     this.displayUsername = username
       ? username.charAt(0).toUpperCase() + username.slice(1)
       : null;
+    this.getApiVersion();
+  }
+
+  getApiVersion(): void {
+    this.backendService.getApiVersion().subscribe({
+      next: (response) => {
+        console.log(response);
+        this.apiVersion = response['api_versions'];
+      },
+    });
   }
 
   showDialog(position: string) {

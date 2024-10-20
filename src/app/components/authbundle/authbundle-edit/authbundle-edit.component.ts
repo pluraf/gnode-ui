@@ -166,11 +166,16 @@ export class AuthbundleEditComponent {
     if (this.description) {
       formData.append('description', this.description);
     }
-    this.backendService.editAuthbundle(formData).subscribe((response) => {
-      if (response.responses[0].hasOwnProperty('error')) {
-        this.showMessage(response.responses[0].error)!;
-      }
-    });
+    this.backendService
+      .editAuthbundle(this.authbundleId, formData)
+      .subscribe((response) => {
+        if (
+          response.responses &&
+          response.responses[0].hasOwnProperty('error')
+        ) {
+          this.showMessage(response.responses[0].error)!;
+        }
+      });
     this.router.navigateByUrl('/authbundles');
   }
 

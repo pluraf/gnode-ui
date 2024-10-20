@@ -116,7 +116,6 @@ export class SettingsComponent {
   onSubmit() {
     this.backendService.updateSettings(this.settings).subscribe((resp) => {
       this.messageService.add({
-        sticky: true,
         severity: 'success',
         detail: 'Setting submitted successfully',
       });
@@ -124,7 +123,6 @@ export class SettingsComponent {
       (error: any) => {
         const errorMessage = error?.error;
         this.messageService.add({
-          sticky: true,
           severity: 'error',
           detail: errorMessage,
         });
