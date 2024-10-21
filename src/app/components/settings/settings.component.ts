@@ -1,13 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  Output,
-  EventEmitter,
-  Input,
-} from '@angular/core';
+import { Component, inject, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
@@ -21,6 +12,7 @@ import { DividerModule } from 'primeng/divider';
 import { CalendarModule } from 'primeng/calendar';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { TabViewModule } from 'primeng/tabview';
 
 import { SubheaderComponent } from '../subheader/subheader.component';
 import { BackendService } from '../../services/backend.service';
@@ -39,6 +31,7 @@ import { DatetimeService } from '../../services/datetime.service';
     SubheaderComponent,
     CalendarModule,
     ToastModule,
+    TabViewModule,
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css',
@@ -56,6 +49,7 @@ export class SettingsComponent {
   manualTime: string = '';
   datetime12h: Date[] | undefined;
   successMessage: string = '';
+  loading: boolean = false;
 
   @Output() currentDateTimeChange = new EventEmitter<{
     dateTime: string;
@@ -113,19 +107,26 @@ export class SettingsComponent {
   formatTimeZone(timeZone: string): string {
     return this.timeService.formatTimeZone(timeZone);
   }
+
   onSubmit() {
-    this.backendService.updateSettings(this.settings).subscribe((resp) => {
-      this.messageService.add({
-        severity: 'success',
-        detail: 'Setting submitted successfully',
-      });
-    }),
+    this.backendService.updateSettings(this.settings).subscribe(
+      (resp) => {
+        this.handleMessage('success', 'Setting submitted successfully');
+      },
       (error: any) => {
         const errorMessage = error?.error;
-        this.messageService.add({
-          severity: 'error',
-          detail: errorMessage,
-        });
-      };
+        this.handleMessage('error', errorMessage);
+      },
+    );
+  }
+
+  handleMessage(severity: 'success' | 'error', detail: string) {
+    this.messageService.add({ severity, detail });
+    this.loading = true;
+
+    setTimeout(() => {
+      this.messageService.clear();
+      this.loading = false;
+    }, 3000);
   }
 }

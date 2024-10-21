@@ -1,23 +1,28 @@
 <app-subheader selectedMenuName="Settings" [showBackArrow]="true"></app-subheader>
 
-<div class="main-content-body">
+<div class="main-content-body" [style]="{'margin-top': '120px'}">
   <p-toast position="top-right" [baseZIndex]="5000"/>
-  <p-divider align="left" type="solid"><b>MQTT Channels</b></p-divider>
+  
   <div class="formgrid grid w-full">
+    <p><b class="text-lg pl-2">MQTT Channels</b></p>
     <div class="field col-12 w-full">
       <div>
         <p-checkbox [(ngModel)]="settings.allow_anonymous" [binary]="true" inputId="auto_id"/>
         <label for="auto_id" class="pl-2">Enable public access</label>
       </div>
-      <small class="text-color-secondary inline-block pt-1">MQTT clients are able to connect without authentication</small>
+      <small class="text-color-secondary inline-block pt-1">MQTT clients are able to connect without authentication</small><br><br>
     </div>
-    <div class="field col-12 w-full mt-2">
+
+    <p ><b class="text-lg pl-2">G-Cloud</b></p>
+    <div class="field col-12">
       <div>
         <p-checkbox [(ngModel)]="settings.allow_gnode_cloud" [binary]="true" inputId="cloud_id"/>
-        <label for="cloud_id" class="pl-2">Enable G-Node cloud</label>
+        <label for="cloud_id" class="pl-2">Enable G-Node cloud</label><br><br>
       </div>
     </div>
-    <div class="field col-12 mt-2">
+
+    <p><b class="text-lg pl-2">G-Time</b></p>
+    <div class="field col-12">
       <div>
         <div class="mb-2"><label for="tz-name">Select time zone </label></div>
         <select name="timeZone" id="tz-name" [ngModel]="selectedTz" (ngModelChange)="timeZoneChanged($event)" class="text-color surface-overlay p-2 border-1 border-round w-15rem">
@@ -47,7 +52,67 @@
       </div>
     </div>
     <div class="field col-12 mt-4">
-      <button pButton (click)="onSubmit()" class="button">Submit</button>
+      <button pButton (click)="onSubmit()" class="button" [disabled]="loading">Submit</button>
     </div>
   </div>
 </div>
+
+<!-- <div class="main-content-body" [style]="{'margin-top': '114px'}">
+  <p-toast position="top-right" [baseZIndex]="5000"/>
+  <p-tabView>
+    <p-tabPanel header="MQTT Channels">
+        <div class="field col-12 w-full">
+          <div>
+            <p-checkbox [(ngModel)]="settings.allow_anonymous" [binary]="true" inputId="auto_id"/>
+            <label for="auto_id" class="pl-2">Enable public access</label>
+          </div>
+          <small class="text-color-secondary inline-block pt-1">MQTT clients are able to connect without authentication</small>
+        </div>
+      </p-tabPanel>
+      
+      <p-tabPanel header="G-Cloud">
+        <div class="field col-12 w-full mt-2">
+          <div>
+            <p-checkbox [(ngModel)]="settings.allow_gnode_cloud" [binary]="true" inputId="cloud_id"/>
+            <label for="cloud_id" class="pl-2">Enable G-Node cloud</label>
+          </div>
+        </div>  
+      </p-tabPanel>
+      
+      <p-tabPanel header="G-Time">
+          <div class="field col-12 mt-2">
+            <div>
+              <div class="mb-2"><label for="tz-name">Select time zone </label></div>
+                <select name="timeZone" id="tz-name" [ngModel]="selectedTz" (ngModelChange)="timeZoneChanged($event)" class="text-color surface-overlay p-2 border-1 border-round w-15rem">
+                  <option *ngFor="let tz of tzNames" [value]="tz">
+                    {{ tz }}
+                  </option>
+                </select>
+            </div>
+                <small class="text-color-secondary inline-block pt-1">Current Date/Time: {{ currentDateTime }}</small>
+          </div> 
+
+          <div *ngIf="!autoSyncEnabled" class=" field col-12 mt-2">
+            <div class="mb-2">
+              <label for="manualDate" class="mr-2">Set Date:</label>
+            </div>
+            <div>  
+              <input id="manualDate" type="date" [(ngModel)]="manualDate" class="text-color surface-overlay p-2 border-1 border-round w-15rem" (change)="setManualDateTime()">
+            </div>
+          </div>  
+          
+          <div *ngIf="!autoSyncEnabled" class=" field col-12 mt-2"> 
+            <div class="mb-2">
+              <label for="manualTime" class="mr-2">Set Time:</label>
+            </div>  
+            <div>
+              <input id="manualTime" type="time" [(ngModel)]="manualTime" class="text-color surface-overlay p-2 border-1 border-round w-15rem" (change)="setManualDateTime()">
+            </div>
+          </div>  
+      </p-tabPanel>
+
+      <div class="field col-12 mt-4">
+        <button pButton (click)="onSubmit()" class="button" [disabled]="loading">Submit</button>
+      </div>
+    </p-tabView>
+ </div> -->
