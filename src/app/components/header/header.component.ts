@@ -53,7 +53,6 @@ export class HeaderComponent {
   getApiVersion(): void {
     this.backendService.getApiVersion().subscribe({
       next: (response) => {
-        console.log(response);
         this.apiVersion = response['api_version'];
         this.serialNumber = response['serial_number'];
       },

@@ -13,7 +13,7 @@
         <th >Pipeline ID</th>
         <th >Connector In</th>
         <th >Connector Out</th>
-        <th >Description</th>    
+        <th >Status</th>   
       </tr>
     </ng-template>
     <ng-template pTemplate="body" class="pipeline" let-pipeline>
@@ -22,7 +22,7 @@
         <td><a routerLink="/pipeline-detail/{{pipeline.id}}">{{pipeline.id}}</a></td>
         <td>{{pipeline.connector_in}}</td>
         <td>{{pipeline.connector_out}}</td>
-        <td>{{pipeline.description}}</td>
+        <td>{{pipeline.status}}</td>
       </tr>
     </ng-template>
   </p-table>

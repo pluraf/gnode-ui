@@ -110,6 +110,11 @@ export class BackendService {
     });
   }
 
+  getPipelineStatus(pipeid: string): Observable<any> {
+    return this.http.get(this.pipelineStatusUrl + pipeid, {
+      ...this.httpOptions,
+    });
+  }
   /////////////////////////// Next ///////////////////////////
 
   getApiVersion(): Observable<any> {

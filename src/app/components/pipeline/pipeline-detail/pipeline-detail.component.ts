@@ -69,11 +69,21 @@ export class PipelineDetailComponent {
     this.backendService.pipelineGet(pipeid).subscribe((response: any) => {
       if (response) {
         this.pipelines = response;
-        this.details = [
-          ['Connector In', this.pipelines.connector_in.type],
-          ['Connector Out', this.pipelines.connector_out.type],
-          ['Description', 'descr'],
-        ];
+        // Fetch the status for the specific pipeline
+        this.backendService
+          .getPipelineStatus(pipeid)
+          .subscribe((statusResponse) => {
+            this.pipelines.status = statusResponse.status;
+            this.pipelines.error = statusResponse.error;
+            this.details = [
+              ['Connector In', this.pipelines.connector_in.type],
+              ['Connector Out', this.pipelines.connector_out.type],
+              ['Pipeline Status', this.pipelines.status],
+            ];
+            if (this.pipelines.status === 'malformed') {
+              this.details.push(['Error', this.pipelines.error]);
+            }
+          });
       }
     });
   }

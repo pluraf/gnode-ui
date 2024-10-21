@@ -16,7 +16,8 @@ export interface Pipeline {
   id: string;
   connector_in: string;
   connector_out: string;
-  description: string;
+  status?: string;
+  error?: string;
 }
 
 @Component({
@@ -73,20 +74,31 @@ export class PipelineListComponent {
   ];
 
   constructor() {
-    this.load();
+    this.loadPipelines();
   }
 
-  load() {
+  loadPipelines() {
     this.backendService.pipelinesList().subscribe((response) => {
-      if (response.length === 0) {
-        this.showMessage = true;
-      } else {
+      if (response && Object.keys(response).length > 0) {
         this.pipelines = Object.entries(response).map((entry: any) => ({
           id: entry[0],
           connector_in: entry[1].connector_in.type,
           connector_out: entry[1].connector_out.type,
-          description: 'descr',
+          status: '',
+          error: '',
         }));
+
+        // Fetch the status for each pipeline
+        this.pipelines.forEach((pipeline: any) => {
+          this.backendService
+            .getPipelineStatus(pipeline.id)
+            .subscribe((statusResponse) => {
+              pipeline.status = statusResponse.status;
+              pipeline.error = statusResponse.error;
+            });
+        });
+      } else {
+        this.showMessage = true;
       }
     });
   }
