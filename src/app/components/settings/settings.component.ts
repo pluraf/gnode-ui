@@ -50,6 +50,7 @@ export class SettingsComponent {
   datetime12h: Date[] | undefined;
   successMessage: string = '';
   loading: boolean = false;
+  ntpServer: string = '';
 
   @Output() currentDateTimeChange = new EventEmitter<{
     dateTime: string;
@@ -65,11 +66,15 @@ export class SettingsComponent {
   };
 
   constructor(private messageService: MessageService) {
-    this.currentDateTime = this.timeService.getCurrentTime(this.selectedTz);
+    this.loadGNodeTime();
+    this.timeZoneChanged(this.selectedTz);
+  }
+
+  loadGNodeTime() {
     this.backendService.loadSettings().subscribe((resp) => {
       this.settings = resp;
+      this.currentDateTime = this.timeService.getCurrentTime(this.selectedTz);
     });
-    this.timeZoneChanged(this.selectedTz);
   }
 
   setManualDateTime(): void {
@@ -104,12 +109,34 @@ export class SettingsComponent {
   updateDateTime(timeZone: string): void {
     this.currentDateTime = this.timeService.getCurrentTime(timeZone);
   }
-  formatTimeZone(timeZone: string): string {
-    return this.timeService.formatTimeZone(timeZone);
+
+  toggleAutoSync(): void {
+    if (this.autoSyncEnabled) {
+      this.ntpServer = '';
+    } else {
+      this.manualDate = '';
+      this.manualTime = '';
+    }
   }
 
   onSubmit() {
-    this.backendService.updateSettings(this.settings).subscribe(
+    this.loading = true;
+    const payload: any = {
+      allow_anonymous: this.settings.allow_anonymous,
+      allow_gnode_cloud: this.settings.allow_gnode_cloud,
+      gnode_time: {
+        timezone: this.selectedTz,
+        automatic: this.autoSyncEnabled,
+      },
+    };
+
+    if (this.autoSyncEnabled && this.ntpServer) {
+      payload.gnode_time.ntp_server = this.ntpServer;
+    } else if (!this.autoSyncEnabled && this.manualDate && this.manualTime) {
+      payload.gnode_time.date = this.manualDate;
+      payload.gnode_time.time = this.manualTime;
+    }
+    this.backendService.updateSettings(payload).subscribe(
       (resp) => {
         this.handleMessage('success', 'Setting submitted successfully');
       },
