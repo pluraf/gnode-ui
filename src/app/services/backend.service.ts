@@ -74,6 +74,21 @@ export class BackendService {
     return this.http.put(this.settingsUrl, settings, this.httpOptions);
   }
 
+  getNetworkSettings(): Observable<any> {
+    return this.http.get<any>(this.settingsUrl, this.httpOptions);
+  }
+
+  connectToWifi(ssid: string, password: string): Observable<any> {
+    const body = {
+      network_settings: {
+        TYPE: 'wifi',
+        SSID: ssid,
+        PASSWORD: password,
+      },
+    };
+    return this.http.put<any>(this.settingsUrl, body, this.httpOptions);
+  }
+
   /////////////////////////// Pipelines ///////////////////////////
 
   pipelinesList(): Observable<any> {
@@ -83,7 +98,6 @@ export class BackendService {
   pipelineGet(pipeid: string): Observable<any> {
     return this.http.get(this.pipelineConfigUrl + pipeid, {
       ...this.httpOptions,
-      // responseType: 'text'
     });
   }
 
@@ -114,6 +128,14 @@ export class BackendService {
     return this.http.get(this.pipelineStatusUrl + pipeid, {
       ...this.httpOptions,
     });
+  }
+
+  controlPipeline(pipeid: string, command: string): Observable<any> {
+    return this.http.put(
+      this.pipelineControlUrl + pipeid,
+      command,
+      this.httpOptions,
+    );
   }
   /////////////////////////// Next ///////////////////////////
 

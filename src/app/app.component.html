@@ -2,14 +2,14 @@
   <router-outlet></router-outlet>
 } @else {
 
-<app-header [showDateTime]="currentDateTime"></app-header>
+<app-header [currentDateTime]="currentDateTime"></app-header>
 
 <p-sidebar [visible]="true" [modal]="false" [showCloseIcon]="false" [transitionOptions]="'0s'" [style]="{'padding-top': '40px'}" styleClass="no-border">
   <p-panelMenu [model]="items" [multiple]="true" />
 </p-sidebar>
 <div style="margin-left: 210px; margin-top: 56px;">
   <app-channel-detail></app-channel-detail>
-<router-outlet (currentDateTimeChange)="updateDateTime($event)"></router-outlet>
+<router-outlet></router-outlet>
 </div>
 
 }

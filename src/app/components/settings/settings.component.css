@@ -12,7 +12,7 @@ button {
 
 ::ng-deep .p-toast .p-toast-message {
   margin-top: 3rem !important;
-  border: 1px solid #1ea97c;
+  border: 1px solid;
 }
 ::ng-deep
   .p-toast
@@ -21,4 +21,7 @@ button {
   .p-icon:not(.p-toast-icon-close-icon) {
   width: 1.5rem;
   height: 1.5rem;
+}
+::ng-deep .p-divider.p-divider-horizontal {
+  margin: 1.25rem 0 0.75rem 0;
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { MenuItem } from 'primeng/api';
@@ -9,7 +9,6 @@ import { SplitterModule } from 'primeng/splitter';
 import { ChannelDetailComponent } from './components/channel/channel-detail/channel-detail.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { DatetimeService } from './services/datetime.service';
-import moment from 'moment';
 
 @Component({
   selector: 'app-root',
@@ -30,52 +29,20 @@ import moment from 'moment';
 })
 export class AppComponent implements OnInit {
   title = 'gnode-ui';
+  currentDateTime: string = '';
 
   router: Router = inject(Router);
-  timeService = inject(DatetimeService);
-
-  currentDateTime: string = '';
-  currentTimeZone: string = 'Europe/Stockholm';
-  intervalId: any;
+  dateTimeService = inject(DatetimeService);
+  cdr = inject(ChangeDetectorRef);
 
   constructor() {}
 
   ngOnInit() {
-    this.updateRealTimeClock();
-    this.startRealTimeClock();
-  }
-
-  ngOnDestroy() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-  }
-
-  startRealTimeClock(): void {
-    this.intervalId = setInterval(() => {
-      this.updateRealTimeClock();
-    }, 1000);
-  }
-
-  updateRealTimeClock(): void {
-    const currentTime = moment().tz(this.currentTimeZone).format('lll');
-    this.currentDateTime = currentTime;
-  }
-
-  updateDateTime({
-    dateTime,
-    timeZone,
-  }: {
-    dateTime: string;
-    timeZone: string;
-  }): void {
-    this.currentDateTime = dateTime;
-    this.currentTimeZone = timeZone;
-
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-    this.startRealTimeClock();
+    this.dateTimeService.currentDateTime$.subscribe((dateTime) => {
+      this.currentDateTime = dateTime;
+      this.cdr.detectChanges();
+    });
+    this.currentDateTime = new Date().toISOString();
   }
 
   items: MenuItem[] = [

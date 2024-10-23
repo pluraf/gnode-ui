@@ -1,22 +1,32 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DatetimeService {
+  currentDateTimeSubject = new BehaviorSubject<string>(
+    this.getInitialDateTime(),
+  );
+
+  currentDateTime$ = this.currentDateTimeSubject.asObservable();
+
   constructor() {}
-  getCurrentTime(timeZone: string): string {
-    return moment.tz(timeZone).format('lll');
+
+  updateDateTime(newDateTime: string) {
+    this.currentDateTimeSubject.next(newDateTime);
   }
 
-  formatTimeZone(timeZone: string): string {
-    const offset = moment.tz(timeZone).utcOffset();
-    const sign = offset >= 0 ? '+' : '-';
-    const hours = Math.floor(Math.abs(offset) / 60)
-      .toString()
-      .padStart(2, '0');
-    const minutes = (Math.abs(offset) % 60).toString().padStart(2, '0');
-    return `UTC${sign}${hours}:${minutes} (${timeZone})`;
+  getInitialDateTime(): string {
+    const manualDate = localStorage.getItem('manualDate');
+    const manualTime = localStorage.getItem('manualTime');
+    const manualTimestamp = localStorage.getItem('manualTimestamp');
+    if (manualDate && manualTime && manualTimestamp) {
+      const manualDateTime = moment(`${manualDate}T${manualTime}`);
+      const elapsedTime = Date.now() - parseInt(manualTimestamp);
+      return manualDateTime.add(elapsedTime, 'milliseconds').format('lll');
+    }
+    return moment().format('lll');
   }
 }
