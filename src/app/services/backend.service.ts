@@ -142,4 +142,8 @@ export class BackendService {
   getApiVersion(): Observable<any> {
     return this.http.get<any>(this.apiVersionUrl);
   }
+
+  getNetworkStatus(): Observable<any> {
+    return this.http.get<any>(this.settingsUrl, this.httpOptions);
+  }
 }

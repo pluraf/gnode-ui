@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { CheckboxModule } from 'primeng/checkbox';
 import { TableModule } from 'primeng/table';
 
 import { SubheaderComponent } from '../subheader/subheader.component';
+import { TabViewModule } from 'primeng/tabview';
+import { BackendService } from '../../services/backend.service';
 
 @Component({
   selector: 'app-status',
@@ -16,23 +18,40 @@ import { SubheaderComponent } from '../subheader/subheader.component';
     FormsModule,
     SubheaderComponent,
     TableModule,
+    TabViewModule,
   ],
   templateUrl: './status.component.html',
   styleUrl: './status.component.css',
 })
 export class StatusComponent {
-  statuslist: any[] = [
-    {
-      id: 1,
-      name: 'Network Status',
-      description: 'descr',
-      status: 'Running/Stop',
-    },
-    {
-      id: 2,
-      name: 'G-Node cloud status',
-      description: 'descr',
-      status: 'Running/Stop',
-    },
+  backendService = inject(BackendService);
+  details: any[] = [
+    ['Name', 'Network Status'],
+    ['Status', 'Running/Stop'],
+    ['Uptime', ''],
+
+    /*       [1, 'Network Status', 'descr', 'Running/Stop'],
+      [2, 'G-Node Cloud Status', 'descr', 'Running/Stop'] */
   ];
+  details2: any[] = [
+    ['Name', 'G-Cloud Status'],
+    ['Status', 'Running/Stop'],
+    ['Uptime', ''],
+  ];
+
+  loadStatusDetails(name: string) {
+    /* 
+    this.backendService
+      .getNetworkStatus(networkName)
+      .subscribe((response: any) => {
+        if (response) {
+          this.networkName = response;
+          this.details = [
+            ['Name', 'type'],
+            ['Id', ''],
+            ['Uptime', ''],
+          ];
+        }
+      }); */
+  }
 }
