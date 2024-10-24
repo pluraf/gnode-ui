@@ -1,8 +1,8 @@
 <div class=" menuitem flex flex-row-reverse align-items-center ml-auto">
      <a (click)="showDialog('top-right')"><i class="text-white user-icon">{{ userInitial }}</i></a>
      <p  class="text-white text-sm mr-2">{{currentDateTime}}</p> 
-     <p class="text-white text-sm font-semibold mr-3">SN: <small class="text-base font-normal">{{serialNumber}}</small></p>
-     <p class="text-white text-sm font-semibold mr-3">API: <small class="text-base font-normal">{{apiVersion}}</small></p>
+     <p class="text-white text-m font-semibold mr-3">SN: <small class="text-base font-normal">{{serialNumber}}</small></p>
+     <p class="text-white text-m font-semibold mr-3">V: <small class="text-base font-normal">{{apiVersion}}</small></p>
 </div>
 
 <p-dialog [(visible)]="visible" [position]="position" [showHeader]="false" [modal]="true" [closeOnEscape]="true" [dismissableMask]="true" [style]="{ width: '14rem', 'margin-top': '56px', 'margin-left':'auto' }">

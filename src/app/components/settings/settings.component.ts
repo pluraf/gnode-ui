@@ -69,7 +69,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
     autoSetTime: false,
   };
 
-  constructor() {}
+  constructor() {
+    this.backendService.loadSettings().subscribe((resp) => {
+      this.settings = resp;
+    });
+  }
 
   ngOnInit() {
     //this.getNetworkSettings();
@@ -151,28 +155,33 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.loading = true;
-    const payload = {
-      allow_anonymous: this.settings.allow_anonymous,
-      allow_gnode_cloud: this.settings.allow_gnode_cloud,
+    const gnodeTime: any = {
       auto_set_time: this.autoSyncEnabled,
       timezone: this.selectedAutoTz,
-      ...(this.manualDate && this.manualTime
-        ? { date: this.manualDate, time: this.manualTime }
-        : {}),
-      ...(this.ntpServer && this.autoSyncEnabled
-        ? { time_server: this.ntpServer }
-        : {}),
+    };
+
+    if (this.autoSyncEnabled) {
+      gnodeTime.time_server = this.ntpServer;
+    } else {
+      gnodeTime.date = this.manualDate;
+      gnodeTime.time = this.manualTime;
+    }
+
+    const payload = {
+      allow_anonymous: this.settings.allow_anonymous,
+      gnode_time: gnodeTime,
     };
 
     this.backendService.updateSettings(payload).subscribe(
       () => {
         this.handleMessage('success', 'Submitted successfully');
       },
-      (error: any) =>
+      (error: any) => {
         this.handleMessage(
           'error',
           error.status === 500 ? error.error : error.error.detail,
-        ),
+        );
+      },
     );
   }
 

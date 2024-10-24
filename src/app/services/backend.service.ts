@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { UserService } from './user.service';
 
@@ -130,13 +130,36 @@ export class BackendService {
     });
   }
 
-  controlPipeline(pipeid: string, command: string): Observable<any> {
+  /*   controlPipeline(pipeid: string, command: string): Observable<any> {
     return this.http.put(
       this.pipelineControlUrl + pipeid,
       command,
       this.httpOptions,
     );
+  } */
+
+  startPipeline(pipeid: string): Observable<any> {
+    const postData = {
+      commands: [{ command: 'start' }],
+    };
+    return this.http.put(
+      `${this.pipelineControlUrl}/start/${pipeid}`,
+      postData,
+      this.httpOptions,
+    );
   }
+
+  stopPipeline(pipeid: string): Observable<any> {
+    const postData = {
+      commands: [{ command: 'stop' }],
+    };
+    return this.http.put(
+      this.pipelineControlUrl + '/stop/' + pipeid,
+      postData,
+      this.httpOptions,
+    );
+  }
+
   /////////////////////////// Next ///////////////////////////
 
   getApiVersion(): Observable<any> {

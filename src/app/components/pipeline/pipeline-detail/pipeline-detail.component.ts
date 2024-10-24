@@ -69,7 +69,6 @@ export class PipelineDetailComponent {
     this.backendService.pipelineGet(pipeid).subscribe((response: any) => {
       if (response) {
         this.pipelines = response;
-        // Fetch the status for the specific pipeline
         this.backendService
           .getPipelineStatus(pipeid)
           .subscribe((statusResponse) => {
@@ -83,6 +82,7 @@ export class PipelineDetailComponent {
             if (this.pipelines.status === 'malformed') {
               this.details.push(['Error', this.pipelines.error]);
             }
+            this.OnStartSpinner();
           });
       }
     });
@@ -115,5 +115,19 @@ export class PipelineDetailComponent {
     if (this.isStartSpinning) {
       this.isStartSpinning = false;
     }
+  }
+
+  OnStartSpinner() {
+    this.backendService.startPipeline(this.pipeid).subscribe({
+      next: () => {
+        console.log('Pipeline started successfully');
+        this.backendService
+          .getPipelineStatus(this.pipeid)
+          .subscribe((status) => {
+            console.log('Current pipeline status:', status);
+          });
+      },
+      error: (error) => console.error('Error starting pipeline:', error),
+    });
   }
 }

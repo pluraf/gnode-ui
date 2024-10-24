@@ -2,7 +2,7 @@
 <app-pipeline-delete  [visible]="visibleDialog" [pipelines]="[{'id': pipeid}]" (deleteConfirmed)="onDeletePipelines()" (cancel)="visibleDialog = false"></app-pipeline-delete >
 <div class="main-content">
     <div class="mb-3">
-        <button pButton  (click)="showStartSpinner()" pTooltip="Start Pipeline" tooltipPosition="bottom" class="mr-2">
+        <button pButton  (click)="OnStartSpinner()" pTooltip="Start Pipeline" tooltipPosition="bottom" class="mr-2">
             <span *ngIf="!isStartSpinning" class="pi pi-play-circle text-xl"></span>
             <span *ngIf="isStartSpinning" class="pi pi-spin pi-spinner text-xl"></span>
         </button>
