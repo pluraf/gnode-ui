@@ -156,12 +156,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.loading = true;
     const gnodeTime: any = {
-      auto_set_time: this.autoSyncEnabled,
+      automatic: this.autoSyncEnabled,
       timezone: this.selectedAutoTz,
     };
 
     if (this.autoSyncEnabled) {
-      gnodeTime.time_server = this.ntpServer;
+      gnodeTime.ntp_server = this.ntpServer;
     } else {
       gnodeTime.date = this.manualDate;
       gnodeTime.time = this.manualTime;
@@ -174,25 +174,37 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     this.backendService.updateSettings(payload).subscribe(
       () => {
-        this.handleMessage('success', 'Submitted successfully');
+        this.handleMessage('success', 'Submitted successfully', false);
       },
       (error: any) => {
         this.handleMessage(
           'error',
           error.status === 500 ? error.error : error.error.detail,
+          true,
         );
       },
     );
   }
 
-  handleMessage(severity: 'success' | 'error', detail: string) {
-    this.messageService.add({ severity, detail });
-    this.loading = true;
-
-    setTimeout(() => {
-      this.messageService.clear();
+  handleMessage(
+    severity: 'success' | 'error',
+    detail: string,
+    sticky: boolean,
+  ) {
+    if (severity === 'success') {
+      this.messageService.add({ severity, detail });
       this.loading = false;
-    }, 3000);
+      setTimeout(() => {
+        this.clear();
+      }, 3000);
+    } else if (severity === 'error') {
+      this.messageService.add({ severity, detail, sticky: true });
+    }
+  }
+
+  clear() {
+    this.messageService.clear();
+    this.loading = false;
   }
 
   restartClock() {
@@ -204,8 +216,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     clearInterval(this.timer);
   }
 
-  /*   // Fetch network settings on load
-  getNetworkSettings(): void {
+  /////////// Fetch network settings on load//////////////
+
+  /*  getNetworkSettings(): void {
     this.backendService.getNetworkSettings().subscribe(
       (response) => {
         this.networkSettings = response.network_settings;

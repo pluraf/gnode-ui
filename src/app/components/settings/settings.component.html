@@ -1,7 +1,7 @@
 <app-subheader selectedMenuName="Settings" [showBackArrow]="true"></app-subheader>
 
 <div class="main-content-body" [style]="{'margin-top': '120px'}">
-  <p-toast position="top-right" [baseZIndex]="5000"/>
+  <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
   <div class="formgrid grid ml-0 w-full">
     <p-divider align="left" type="solid" class="w-full"><b class="text-lg">MQTT Channels</b></p-divider>
     <div class="field col-12 w-full mt-1">
