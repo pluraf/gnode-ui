@@ -2,13 +2,13 @@
 <app-pipeline-delete  [visible]="visibleDialog" [pipelines]="[{'id': pipeid}]" (deleteConfirmed)="onDeletePipelines()" (cancel)="visibleDialog = false"></app-pipeline-delete >
 <div class="main-content">
     <div class="mb-3">
-        <button pButton  (click)="OnStartSpinner()" pTooltip="Start Pipeline" tooltipPosition="bottom" class="mr-2">
-            <span *ngIf="!isStartSpinning" class="pi pi-play-circle text-xl"></span>
-            <span *ngIf="isStartSpinning" class="pi pi-spin pi-spinner text-xl"></span>
+        <button pButton *ngIf="!showSpinnerButton" (click)="OnStartSpinner()" pTooltip="Start Pipeline" tooltipPosition="bottom" class="mr-2" [disabled]="isStarting">
+            <span *ngIf="!isStarting" class="pi pi-play-circle text-xl"></span>
+            <span *ngIf="isStarting" class="pi pi-spin pi-spinner text-xl"></span>
         </button>
-        <button pButton (click)="toggleStopSpinner()" pTooltip="Stop Pipeline" tooltipPosition="bottom">
-            <span *ngIf="!isStopSpinning" class="pi pi-stop-circle text-xl"></span>
-            <span *ngIf="isStopSpinning" class="pi pi-spin pi-spinner text-xl"></span>
+        <button pButton *ngIf="showSpinnerButton" (click)="OnStopSpinner()" pTooltip="Stop Pipeline" tooltipPosition="bottom" [disabled]="isStopping">
+            <span *ngIf="!isStopping" class="pi pi-stop-circle text-xl"></span>
+            <span *ngIf="isStopping" class="pi pi-spin pi-spinner text-xl"></span>
         </button>
     </div>
     <p-table [value]="details" [tableStyle]="{ 'min-width': '10rem' }">

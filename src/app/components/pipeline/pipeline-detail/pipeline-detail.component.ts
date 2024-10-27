@@ -10,6 +10,7 @@ import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pipeline-detail',
@@ -35,8 +36,10 @@ export class PipelineDetailComponent {
   details: any;
   visibleDialog: boolean = false;
   menubarItems: MenuItem[] = [];
-  isStartSpinning: boolean = false;
-  isStopSpinning: boolean = false;
+  showSpinnerButton: boolean = false;
+  isStarting: boolean = false;
+  isStopping: boolean = false;
+  pollingSubscription: Subscription | null = null;
 
   constructor() {
     this.pipeid = this.route.snapshot.params['pipeid'];
@@ -69,23 +72,51 @@ export class PipelineDetailComponent {
     this.backendService.pipelineGet(pipeid).subscribe((response: any) => {
       if (response) {
         this.pipelines = response;
-        this.backendService
-          .getPipelineStatus(pipeid)
-          .subscribe((statusResponse) => {
-            this.pipelines.status = statusResponse.status;
-            this.pipelines.error = statusResponse.error;
-            this.details = [
-              ['Connector In', this.pipelines.connector_in.type],
-              ['Connector Out', this.pipelines.connector_out.type],
-              ['Pipeline Status', this.pipelines.status],
-            ];
-            if (this.pipelines.status === 'malformed') {
-              this.details.push(['Error', this.pipelines.error]);
-            }
-            this.OnStartSpinner();
-          });
+        this.updatePipelineStatus();
       }
     });
+  }
+
+  updatePipelineStatus() {
+    this.backendService.getPipelineStatus(this.pipeid).subscribe({
+      next: (statusResponse) => {
+        this.pipelines.status = statusResponse.status;
+        this.pipelines.error = statusResponse.error;
+        this.updateDetails();
+
+        this.showSpinnerButton = this.pipelines.status === 'running';
+        this.isStarting = this.pipelines.status === 'starting';
+
+        if (
+          this.pollingSubscription &&
+          this.pipelines.status !== 'starting' &&
+          this.pipelines.status !== 'stopping'
+        ) {
+          this.stopPolling();
+        }
+      },
+    });
+  }
+
+  updateDetails() {
+    this.details = [
+      ['Connector In', this.pipelines.connector_in.type],
+      ['Connector Out', this.pipelines.connector_out.type],
+      ['Pipeline Status', this.pipelines.status],
+    ];
+
+    if (
+      this.pipelines.status === 'malformed' ||
+      this.pipelines.status === 'failed'
+    ) {
+      this.details.push(['Error', this.pipelines.error]);
+      if (this.pipelines.status === 'starting') {
+        this.details = this.details.filter(
+          (detail: any) => detail[0] !== 'Error',
+        );
+        this.pipelines.error = null;
+      }
+    }
   }
 
   showDialog() {
@@ -106,28 +137,56 @@ export class PipelineDetailComponent {
     });
   }
 
-  showStartSpinner() {
-    this.isStartSpinning = true;
-  }
-
-  toggleStopSpinner() {
-    this.isStopSpinning = !this.isStopSpinning;
-    if (this.isStartSpinning) {
-      this.isStartSpinning = false;
-    }
-  }
-
   OnStartSpinner() {
+    if (
+      this.pipelines.status === 'malformed' ||
+      this.pipelines.status === 'failed'
+    ) {
+      this.details = this.details.filter(
+        (detail: any) => detail[0] !== 'Error',
+      );
+      this.pipelines.error = null;
+    }
+
+    this.isStarting = true;
+
     this.backendService.startPipeline(this.pipeid).subscribe({
       next: () => {
-        console.log('Pipeline started successfully');
-        this.backendService
-          .getPipelineStatus(this.pipeid)
-          .subscribe((status) => {
-            console.log('Current pipeline status:', status);
-          });
+        this.startPolling();
       },
-      error: (error) => console.error('Error starting pipeline:', error),
+      complete: () => {
+        setTimeout(() => {
+          this.isStarting = false;
+        }, 1000);
+      },
     });
+  }
+
+  OnStopSpinner() {
+    this.isStopping = true;
+    this.backendService.stopPipeline(this.pipeid).subscribe({
+      next: () => {
+        this.startPolling();
+      },
+      complete: () => {
+        setTimeout(() => {
+          this.isStopping = false;
+        }, 1000);
+      },
+    });
+  }
+
+  startPolling() {
+    this.stopPolling();
+    this.pollingSubscription = interval(1000).subscribe(() => {
+      this.updatePipelineStatus();
+    });
+  }
+
+  stopPolling() {
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe();
+      this.pollingSubscription = null;
+    }
   }
 }
