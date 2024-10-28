@@ -1,4 +1,4 @@
-<app-subheader selectedMenuName="Edit authbundle" [showBackArrow]="true"></app-subheader>
+<app-subheader selectedMenuName="Edit authbundle" [showBackArrow]="true" [useExplicitNavigation]="true" [backRoute]="'authbundle-detail/' + authbundleId"></app-subheader>
 
 <div class="main-content">
     <div *ngIf="messages" class="alert field col-12 w-full mb-2">{{ messages }}</div>

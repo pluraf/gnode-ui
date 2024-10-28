@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { InputTextModule } from 'primeng/inputtext';
@@ -28,9 +28,19 @@ export class SubheaderComponent {
   @Input() actions: MenuItem[] = [];
   @Input() items: MenuItem[] = [];
   @Input() showBackArrow: boolean = false;
+  @Input() useExplicitNavigation: boolean = false;
+  @Input() backRoute: string = '';
 
-  constructor(private location: Location) {}
+  constructor(
+    private location: Location,
+    private router: Router,
+  ) {}
+
   goBack() {
-    this.location.back();
+    if (this.useExplicitNavigation && this.backRoute) {
+      this.router.navigate([this.backRoute]);
+    } else {
+      this.location.back();
+    }
   }
 }

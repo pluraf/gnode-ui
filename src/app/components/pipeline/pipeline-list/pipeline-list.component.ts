@@ -36,7 +36,7 @@ export interface Pipeline {
   templateUrl: './pipeline-list.component.html',
   styleUrl: './pipeline-list.component.css',
 })
-export class PipelineListComponent {
+export class PipelineListComponent implements OnInit {
   backendService = inject(BackendService);
 
   visibleDialog: boolean = false;
@@ -73,7 +73,7 @@ export class PipelineListComponent {
     },
   ];
 
-  constructor() {
+  ngOnInit() {
     this.loadPipelines();
   }
 

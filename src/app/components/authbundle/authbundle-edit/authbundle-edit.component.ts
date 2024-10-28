@@ -176,7 +176,7 @@ export class AuthbundleEditComponent {
           this.showMessage(response.responses[0].error)!;
         }
       });
-    this.router.navigateByUrl('/authbundles');
+    this.router.navigateByUrl(`authbundle-detail/${this.authbundleId}`);
   }
 
   showMessage(message: string) {

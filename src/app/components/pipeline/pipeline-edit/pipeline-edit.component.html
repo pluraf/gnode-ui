@@ -1,4 +1,5 @@
-<app-subheader selectedMenuName="Edit pipeline" [showBackArrow]="true"></app-subheader>
+<app-subheader selectedMenuName="Edit pipeline" [showBackArrow]="true" [useExplicitNavigation]="true"
+[backRoute]="'pipeline-detail/' + pipeid"></app-subheader>
 <div class="main-content-body">
     <div *ngIf="messages" class="alert flex flex-row mt-100">
         <div class="text-center">
