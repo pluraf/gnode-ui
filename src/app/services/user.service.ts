@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable, isDevMode } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CookieOptions, CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 
@@ -11,14 +11,15 @@ export class UserService {
   private isAdmin: boolean = false;
   private isLoggedIn: boolean = false;
 
-  private readonly http = inject(HttpClient);
+  private http = inject(HttpClient);
+  private cookies = inject(CookieService);
 
   private cookieOptions: CookieOptions = {
     secure: window.location.protocol === 'https:',
     sameSite: 'Lax',
   };
 
-  constructor(private cookies: CookieService) {
+  constructor() {
     this.loadUserFromCookies();
   }
 

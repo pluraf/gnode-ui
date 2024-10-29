@@ -8,7 +8,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   const token = cookies.get('access_token');
 
-  if (token) {
+  if (token && isTokenValid(token)) {
     if (state.url === '/login') {
       router.navigateByUrl('/channels');
       return false;
@@ -22,3 +22,14 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
 };
+
+// Function to check token expiration
+function isTokenValid(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const expiry = payload.exp * 1000;
+    return Date.now() < expiry;
+  } catch (error) {
+    return false;
+  }
+}
