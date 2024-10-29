@@ -31,7 +31,7 @@ export class AuthbundleDetailComponent {
     this.loadAuthbundleDetails(this.authbundleId);
     this.menubarItems = [
       {
-        routerLink: ['/authbundle-edit', this.authbundleId],
+        routerLink: ['/authbundles/authbundle-edit', this.authbundleId],
         tooltipOptions: {
           tooltipEvent: 'hover',
           tooltipPosition: 'bottom',

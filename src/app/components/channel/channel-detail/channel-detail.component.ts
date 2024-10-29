@@ -36,7 +36,7 @@ export class ChannelDetailComponent {
     this.chanid = this.route.snapshot.params['chanid'];
     this.menubarItems = [
       {
-        routerLink: ['/channel-edit', this.chanid],
+        routerLink: ['/channels/channel-edit', this.chanid],
         tooltipOptions: {
           tooltipEvent: 'hover',
           tooltipPosition: 'bottom',

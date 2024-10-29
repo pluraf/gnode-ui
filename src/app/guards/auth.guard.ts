@@ -7,6 +7,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const cookies = inject(CookieService);
 
   const token = cookies.get('access_token');
+
   if (token) {
     if (state.url === '/login') {
       router.navigateByUrl('/channels');

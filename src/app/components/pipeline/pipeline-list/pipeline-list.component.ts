@@ -52,7 +52,7 @@ export class PipelineListComponent implements OnInit {
 
   menubarActions: MenuItem[] = [
     {
-      routerLink: '/pipeline-create',
+      routerLink: '/pipelines/pipeline-create',
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',

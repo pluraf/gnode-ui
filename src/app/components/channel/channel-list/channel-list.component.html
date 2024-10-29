@@ -17,7 +17,7 @@ No channels are available. To create one, click the plus sign in the top-right c
     <ng-template pTemplate="body" class="channel" let-channel>
       <tr>
         <td ><p-tableCheckbox name="checkbox" [value]="channel" /></td>
-        <td ><a routerLink="/channel/{{channel.id}}">{{ channel.id }}</a></td>
+        <td ><a routerLink="/channels/channel/{{channel.id}}">{{ channel.id }}</a></td>
         <td class="communicationBox" >
           @if(channel.communication === 'Allowed'){
               <svg class="comm-svg-icon" viewBox="0 0 24 24" fill="green" xmlns="http://www.w3.org/2000/svg">

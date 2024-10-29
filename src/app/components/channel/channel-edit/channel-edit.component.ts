@@ -106,7 +106,7 @@ export class ChannelEditComponent implements OnInit {
         if (resp.hasOwnProperty('error') && resp.error) {
           this.showMessage(resp.error);
         } else {
-          this.router.navigateByUrl(`channel/${this.chanid}`);
+          this.router.navigateByUrl(`channels/channel/${this.chanid}`);   `authbundles/authbundle-detail/${this.authbundleId}`,
         }
       }
     });
@@ -114,8 +114,5 @@ export class ChannelEditComponent implements OnInit {
 
   showMessage(message: string) {
     this.messages = message;
-  }
-  previousPage() {
-    this.router.navigateByUrl(`channel/${this.chanid}`);
   }
 }

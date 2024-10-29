@@ -42,7 +42,7 @@ export class PipelineEditComponent {
   onUpdatePipeline() {
     this.backendService.pipelineEdit(this.pipeid, this.pipelineJson).subscribe(
       (response: any) => {
-        this.router.navigateByUrl(`pipeline-detail/${this.pipeid}`);
+        this.router.navigateByUrl(`pipelines/pipeline-detail/${this.pipeid}`);
       },
       (error: any) => {
         const errorMessage = error?.error.split('\n').pop();

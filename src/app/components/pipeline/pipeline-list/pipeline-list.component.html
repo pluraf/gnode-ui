@@ -19,7 +19,7 @@
     <ng-template pTemplate="body" class="pipeline" let-pipeline>
       <tr>
         <td><p-tableCheckbox name="checkbox" [value]="pipeline" /></td>
-        <td><a routerLink="/pipeline-detail/{{pipeline.id}}">{{pipeline.id}}</a></td>
+        <td><a routerLink="/pipelines/pipeline-detail/{{pipeline.id}}">{{pipeline.id}}</a></td>
         <td>{{pipeline.connector_in}}</td>
         <td>{{pipeline.connector_out}}</td>
         <td>{{pipeline.status}}</td>

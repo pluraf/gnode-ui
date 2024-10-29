@@ -4,7 +4,7 @@
         <div *ngIf="showMessage" class="showMessage flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
             <div class="text-center">
                 No authbundles available. To create one, click the plus sign in the top-right corner or use the 
-                <a routerLink="/authbundle-create" class="text-green-700">Create Authbundle</a> link.
+                <a routerLink="/authbundles/authbundle-create" class="text-green-700">Create Authbundle</a> link.
             </div>
         </div>
         <div *ngIf="!showMessage" class="main-content">
@@ -20,7 +20,7 @@
                     <ng-template pTemplate="body" let-authbundle>
                         <tr>
                             <td ><p-tableCheckbox name="checkbox" [value]="authbundle" /></td>
-                            <td ><a routerLink="/authbundle-detail/{{authbundle.authbundle_id}}">{{ authbundle.authbundle_id }}</a></td>
+                            <td ><a routerLink="/authbundles/authbundle-detail/{{authbundle.authbundle_id}}">{{ authbundle.authbundle_id }}</a></td>
                               <td>{{authbundle.connector_type}}</td>
                               <td>{{authbundle.description}}</td>
                         </tr>

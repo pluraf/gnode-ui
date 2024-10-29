@@ -46,7 +46,7 @@ export class PipelineDetailComponent {
     this.loadPipelineDetails(this.pipeid);
     this.menubarItems = [
       {
-        routerLink: ['/pipeline-edit', this.pipeid],
+        routerLink: ['/pipelines/pipeline-edit', this.pipeid],
         tooltipOptions: {
           tooltipEvent: 'hover',
           tooltipPosition: 'bottom',

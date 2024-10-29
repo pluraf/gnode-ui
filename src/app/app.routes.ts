@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { StatusComponent } from './components/status/status.component';
 import { HandleMessageComponent } from './components/handle-message/handle-message.component';
+import { LoginComponent } from './components/login/login.component';
 
 export const routes: Routes = [
   {
@@ -11,10 +12,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () =>
-      import('./components/login/login.component').then(
-        (c) => c.LoginComponent,
-      ),
+    component: LoginComponent,
     canActivate: [authGuard],
   },
 
@@ -44,13 +42,12 @@ export const routes: Routes = [
   },
   {
     path: 'channels',
-    loadComponent: () =>
-      import('./components/channel/channel-list/channel-list.component').then(
-        (c) => c.ChannelListComponent,
+    loadChildren: () =>
+      import('./components/channel/channels.routes').then(
+        (r) => r.CHANNELS_ROUTES,
       ),
-    canActivate: [authGuard],
   },
-  {
+  /* {
     path: 'channel-create',
     loadComponent: () =>
       import(
@@ -82,86 +79,21 @@ export const routes: Routes = [
         './components/channel/channel-delete/channel-delete.component'
       ).then((c) => c.ChannelDeleteComponent),
     canActivate: [authGuard],
-  },
+  }, */
   {
     path: 'pipelines',
-    loadComponent: () =>
-      import(
-        './components/pipeline/pipeline-list/pipeline-list.component'
-      ).then((c) => c.PipelineListComponent),
-    canActivate: [authGuard],
+    loadChildren: () =>
+      import('./components/pipeline/pipelines.routes').then(
+        (r) => r.PIPELINES_ROUTES,
+      ),
   },
-  {
-    path: 'pipeline-create',
-    loadComponent: () =>
-      import(
-        './components/pipeline/pipeline-create/pipeline-create.component'
-      ).then((c) => c.PipelineCreateComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'pipeline-edit/:pipeid',
-    loadComponent: () =>
-      import(
-        './components/pipeline/pipeline-edit/pipeline-edit.component'
-      ).then((c) => c.PipelineEditComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'pipeline-delete',
-    loadComponent: () =>
-      import(
-        './components/pipeline/pipeline-delete/pipeline-delete.component'
-      ).then((c) => c.PipelineDeleteComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'pipeline-detail/:pipeid',
-    loadComponent: () =>
-      import(
-        './components/pipeline/pipeline-detail/pipeline-detail.component'
-      ).then((c) => c.PipelineDetailComponent),
-    canActivate: [authGuard],
-  },
+
   {
     path: 'authbundles',
-    loadComponent: () =>
-      import(
-        './components/authbundle/authbundle-list/authbundle-list.component'
-      ).then((c) => c.AuthbundleListComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'authbundle-create',
-    loadComponent: () =>
-      import(
-        './components/authbundle/authbundle-create/authbundle-create.component'
-      ).then((c) => c.AuthbundleCreateComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'authbundle-delete',
-    loadComponent: () =>
-      import(
-        './components/authbundle/authbundle-delete/authbundle-delete.component'
-      ).then((c) => c.AuthbundleDeleteComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'authbundle-detail/:authbundleId',
-    loadComponent: () =>
-      import(
-        './components/authbundle/authbundle-detail/authbundle-detail.component'
-      ).then((c) => c.AuthbundleDetailComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'authbundle-edit/:authbundleId',
-    loadComponent: () =>
-      import(
-        './components/authbundle/authbundle-edit/authbundle-edit.component'
-      ).then((c) => c.AuthbundleEditComponent),
-    canActivate: [authGuard],
+    loadChildren: () =>
+      import('./components/authbundle/authbundles.routes').then(
+        (r) => r.AUTHBUNDLES_ROUTES,
+      ),
   },
   {
     path: 'settings',

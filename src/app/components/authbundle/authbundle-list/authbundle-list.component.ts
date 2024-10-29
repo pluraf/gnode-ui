@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
@@ -34,7 +34,7 @@ import { AuthbundleDeleteComponent } from '../authbundle-delete/authbundle-delet
   templateUrl: './authbundle-list.component.html',
   styleUrl: './authbundle-list.component.css',
 })
-export class AuthbundleListComponent {
+export class AuthbundleListComponent implements OnInit {
   visibleDialog: boolean = false;
   authbundleList: Authbundle[] = [];
   selectedAuthbundle: Authbundle[] = [];
@@ -45,7 +45,7 @@ export class AuthbundleListComponent {
 
   menubarItems: MenuItem[] = [
     {
-      routerLink: '/authbundle-create',
+      routerLink: '/authbundles/authbundle-create',
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',
@@ -67,8 +67,13 @@ export class AuthbundleListComponent {
   ];
 
   backendService = inject(BackendService);
+  router = inject(Router);
 
-  constructor() {
+  constructor() {}
+
+  ngOnInit(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
     this.loadAuthbundles();
   }
 

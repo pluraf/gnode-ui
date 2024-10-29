@@ -43,7 +43,7 @@ export class ChannelListComponent {
 
   menubarItems: MenuItem[] = [
     {
-      routerLink: '/channel-create',
+      routerLink: '/channels/channel-create',
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',
