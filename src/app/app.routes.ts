@@ -47,39 +47,6 @@ export const routes: Routes = [
         (r) => r.CHANNELS_ROUTES,
       ),
   },
-  /* {
-    path: 'channel-create',
-    loadComponent: () =>
-      import(
-        './components/channel/channel-create/channel-create.component'
-      ).then((c) => c.ChannelCreateComponent),
-    canActivate: [authGuard],
-  },
-
-  {
-    path: 'channel/:chanid',
-    loadComponent: () =>
-      import(
-        './components/channel/channel-detail/channel-detail.component'
-      ).then((c) => c.ChannelDetailComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'channel-edit/:chanid',
-    loadComponent: () =>
-      import('./components/channel/channel-edit/channel-edit.component').then(
-        (c) => c.ChannelEditComponent,
-      ),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'channel-delete',
-    loadComponent: () =>
-      import(
-        './components/channel/channel-delete/channel-delete.component'
-      ).then((c) => c.ChannelDeleteComponent),
-    canActivate: [authGuard],
-  }, */
   {
     path: 'pipelines',
     loadChildren: () =>

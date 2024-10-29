@@ -9,22 +9,22 @@ import { PipelineListComponent } from './pipeline-list/pipeline-list.component';
 export const PIPELINES_ROUTES: Routes = [
   { path: '', component: PipelineListComponent },
   {
-    path: 'channel-create',
+    path: 'pipeline-create',
     canActivate: [authGuard],
     component: PipelineCreateComponent,
   },
   {
-    path: 'channel/:chanid',
+    path: 'pipeline-detail/:pipeid',
     canActivate: [authGuard],
     component: PipelineDetailComponent,
   },
   {
-    path: 'channel-edit/:chanid',
+    path: 'pipeline-edit/:pipeid',
     canActivate: [authGuard],
     component: PipelineEditComponent,
   },
   {
-    path: 'channel-delete',
+    path: 'pipeline-delete',
     canActivate: [authGuard],
     component: PipelineDeleteComponent,
   },

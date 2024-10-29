@@ -9,7 +9,7 @@ import { MenuItem } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
-import { Authbundle, PageEvent } from '../authbundle';
+import { Authbundle } from '../authbundle';
 import { AuthbundleCreateComponent } from '../authbundle-create/authbundle-create.component';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { BackendService } from '../../../services/backend.service';
