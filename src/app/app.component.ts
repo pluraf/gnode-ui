@@ -56,7 +56,16 @@ export class AppComponent implements OnInit {
       styleClass: 'gap-2',
     },
     { label: 'Users', routerLink: '/users', styleClass: 'gap-4' },
-    { label: 'Settings', routerLink: '/settings', styleClass: 'gap-2' },
+    {
+      label: 'Settings',
+      items: [
+        { label: 'MQTT Channels', routerLink: '/settings' },
+        { label: 'G-Cloud', routerLink: '/settings/g-cloud' },
+        { label: 'Time', routerLink: '/settings/g-time' },
+        { label: 'Network Settings', routerLink: '/settings/network-settings' },
+      ],
+      styleClass: 'gap-2',
+    },
     { label: 'Status', routerLink: '/status', styleClass: 'gap-2' },
   ];
 }

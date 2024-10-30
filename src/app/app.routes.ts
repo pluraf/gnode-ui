@@ -64,11 +64,10 @@ export const routes: Routes = [
   },
   {
     path: 'settings',
-    loadComponent: () =>
-      import('./components/settings/settings.component').then(
-        (c) => c.SettingsComponent,
+    loadChildren: () =>
+      import('./components/settings/settings.routes').then(
+        (r) => r.SETTINGS_ROUTES,
       ),
-    canActivate: [authGuard],
   },
   {
     path: 'status',

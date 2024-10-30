@@ -1,0 +1,8 @@
+<app-subheader selectedMenuName="Network Settings"></app-subheader>
+
+<div class="main-content-body" [style]="{'margin-top': '120px'}">
+    <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/> 
+    <div class="field col-12 mt-4">
+        <button pButton (click)="onSubmit()" class="button" [disabled]="loading">Submit</button>
+    </div>
+</div> 
