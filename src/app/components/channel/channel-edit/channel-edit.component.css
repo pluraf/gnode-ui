@@ -51,15 +51,15 @@ select {
   height: 15em;
 }
 
-.alert {
-  padding: 10px;
-  margin-top: -12px;
-  margin-bottom: 15px;
-  width: 29rem;
-  height: 35px;
-  align-items: center;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: rgb(253, 237, 237);
-  border: 1px solid #e4b9b9f2;
+::ng-deep .p-toast .p-toast-message {
+  margin-top: 3rem !important;
+  border: 1px solid;
+}
+::ng-deep
+  .p-toast
+  .p-toast-message
+  .p-toast-message-content
+  .p-icon:not(.p-toast-icon-close-icon) {
+  width: 1.5rem;
+  height: 1.5rem;
 }

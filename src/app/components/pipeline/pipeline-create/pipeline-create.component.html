@@ -3,10 +3,9 @@
   [showBackArrow]="true"
 ></app-subheader>
 <div class="main-content-body">
+  <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
+  
   <div class="p-col-12 p-md-6">
-    <div *ngIf="messages" class="alert flex flex-row">
-      <div class="text-center">{{ messages }}</div>
-    </div>
     <div class="p-fluid">
       <div class="p-field flex flex-column gap-1">
         <label for="pipeid">Pipeline ID</label>
@@ -30,7 +29,7 @@
         ></textarea>
       </div>
       <div class="p-field mt-3">
-        <button pButton (click)="onCreatePipeline()">Submit</button>
+        <button pButton (click)="onCreatePipeline()" [disabled]="loading">Submit</button>
       </div>
     </div>
   </div>

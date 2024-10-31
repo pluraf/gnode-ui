@@ -7,11 +7,12 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
+import { MessageService } from 'primeng/api';
 
 import { BackendService } from '../../../services/backend.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
@@ -21,6 +22,7 @@ import {
   ConnectorType,
   ConnectorTypeLabel,
 } from '../authbundle';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-authbundle-create',
@@ -32,19 +34,23 @@ import {
     CommonModule,
     FormsModule,
     SubheaderComponent,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './authbundle-create.component.html',
   styleUrl: './authbundle-create.component.css',
 })
 export class AuthbundleCreateComponent {
   backendService = inject(BackendService);
+  messageService = inject(MessageService);
+
   authbundleId = '';
   username = '';
   password = '';
   description = '';
   autoId = true;
-  messages: string = '';
   usermessage: string = '';
+  loading: boolean = false;
 
   authOptions: { [key: string]: string } = {};
 
@@ -171,17 +177,41 @@ export class AuthbundleCreateComponent {
     if (this.description) {
       formData.append('description', this.description);
     }
-    this.backendService.createAuthbundle(formData).subscribe((response) => {
-      if (response && response.responses && response.responses.length > 0) {
-        if (response.responses[0].hasOwnProperty('error')) {
-          this.showMessage(response.responses[0].error)!;
+    this.backendService.createAuthbundle(formData).subscribe(
+      (response) => {
+        if (response && response.responses && response.responses.length > 0) {
+          if (response.responses[0].hasOwnProperty('error')) {
+            this.handleMessage('error', response.responses[0].error, true);
+          }
+        } else {
+          this.handleMessage('success', 'Submitted successfully', false);
         }
-      }
-    });
-    this.router.navigateByUrl('/authbundles');
+      },
+      (error: any) => {
+        const errorDetail = error.error?.detail;
+        this.handleMessage('error', errorDetail, true);
+      },
+    );
   }
 
-  showMessage(message: string) {
-    this.messages = message;
+  handleMessage(
+    severity: 'success' | 'error',
+    detail: string,
+    sticky: boolean,
+  ) {
+    if (severity === 'success') {
+      this.messageService.add({ severity, detail });
+      this.loading = true;
+      setTimeout(() => {
+        this.clear();
+      }, 3000);
+    } else if (severity === 'error') {
+      this.messageService.add({ severity, detail, sticky: true });
+    }
+  }
+
+  clear() {
+    this.messageService.clear();
+    this.router.navigateByUrl('/authbundles');
   }
 }

@@ -11,6 +11,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-pipeline-create',
@@ -23,7 +25,9 @@ import { TooltipModule } from 'primeng/tooltip';
     FormsModule,
     CheckboxModule,
     TooltipModule,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './pipeline-create.component.html',
   styleUrl: './pipeline-create.component.css',
 })
@@ -31,10 +35,11 @@ export class PipelineCreateComponent implements OnInit {
   backendService = inject(BackendService);
   route: ActivatedRoute = inject(ActivatedRoute);
   http = inject(HttpClient);
+  messageService = inject(MessageService);
 
   pipeid = '';
   pipelineJson: string = '';
-  messages: string = '';
+  loading: boolean = false;
   pipelineConfig: any = {};
 
   constructor(private router: Router) {}
@@ -46,20 +51,42 @@ export class PipelineCreateComponent implements OnInit {
   }
 
   onCreatePipeline() {
-    let pipelineData = JSON.parse(this.pipelineJson);
-    this.backendService.pipelineCreate(this.pipeid, pipelineData).subscribe(
-      (response: any) => {
-        this.router.navigateByUrl('/pipelines');
+    let pipelineData;
+    try {
+      pipelineData = JSON.parse(this.pipelineJson);
+    } catch (error) {
+      pipelineData = this.pipelineJson;
+    }
+    this.backendService.pipelineEdit(this.pipeid, pipelineData).subscribe(
+      () => {
+        this.handleMessage('success', 'Pipeline edited successfully!', false);
       },
-      (error: any) => {
+      (error) => {
         const errorMessage = error?.error.split('\n').pop();
-        this.showMessage(errorMessage);
+        this.handleMessage('error', errorMessage, true);
       },
     );
   }
 
-  showMessage(message: string) {
-    this.messages = message;
+  handleMessage(
+    severity: 'success' | 'error',
+    detail: string,
+    sticky: boolean,
+  ) {
+    if (severity === 'success') {
+      this.messageService.add({ severity, detail });
+      this.loading = true;
+      setTimeout(() => {
+        this.clear();
+      }, 3000);
+    } else if (severity === 'error') {
+      this.messageService.add({ severity, detail, sticky: true });
+    }
+  }
+
+  clear() {
+    this.messageService.clear();
+    this.router.navigateByUrl('/pipelines');
   }
 
   onGenerateConfig() {

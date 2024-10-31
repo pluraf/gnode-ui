@@ -1,11 +1,8 @@
  <app-subheader selectedMenuName="Edit channel" [showBackArrow]="true" [useExplicitNavigation]="true" [backRoute]="'channels/channel/' + chanid"></app-subheader>
 
 <div class="main-content-body">
-
-   <div class="p-grid"> 
-    <div *ngIf="messages" class="alert flex flex-row">
-      <div class="text-center">{{ messages }}</div>
-    </div>  
+  <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
+     <div class="p-grid"> 
       <h4>Channel ID: {{ chanid }}</h4>
       <div class="p-fluid">
               <span><strong>Authentication</strong></span>
@@ -46,7 +43,7 @@
             </div>
           </div>
         </div>
-        <button pButton (click)="onUpdate()">Update</button>
+        <button pButton (click)="onUpdate()" [disabled]="loading">Update</button>
       </div>
 
   </div>

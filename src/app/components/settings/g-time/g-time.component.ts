@@ -7,7 +7,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { DatetimeService } from '../../../services/datetime.service';
-import moment from 'moment';
+import * as moment from 'moment-timezone';
+
 import { Subscription } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';

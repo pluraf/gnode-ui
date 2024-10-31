@@ -10,6 +10,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-channel-create',
@@ -23,13 +25,17 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
     PasswordModule,
     RouterModule,
     SubheaderComponent,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './channel-create.component.html',
   styleUrl: './channel-create.component.css',
 })
 export class ChannelCreateComponent implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   brokerService = inject(MBrokerCService);
+  messageService = inject(MessageService);
+
   value!: string;
   selectedCategory: any = null;
   communication: string = 'Allow';
@@ -39,7 +45,7 @@ export class ChannelCreateComponent implements OnInit {
   password = '';
   authtype = '';
   jwtKey: string = '';
-  messages: string = '';
+  loading: boolean = false;
 
   categories: any[] = [
     { name: 'Enabled', key: 'A' },
@@ -79,20 +85,39 @@ export class ChannelCreateComponent implements OnInit {
     if (this.clientid !== '') {
       payload.clientid = this.clientid;
     }
-    this.brokerService.createChannel(payload).subscribe((response: any) => {
-      if (response.responses[0].hasOwnProperty('error')) {
-        this.showMessage(response.responses[0].error)!;
-      } else {
-        this.router.navigateByUrl('/channels');
-      }
-    });
+    this.brokerService.createChannel(payload).subscribe(
+      (response: any) => {
+        if (response.responses[0].hasOwnProperty('error')) {
+          this.handleMessage('error', response.responses[0].error, true)!;
+        } else {
+          this.handleMessage('success', 'Channel created successfully', false);
+        }
+      },
+      (error: any) => {
+        const errorDetail = error.error?.detail;
+        this.handleMessage('error', errorDetail, true);
+      },
+    );
   }
 
-  showMessage(message: string) {
-    this.messages = message;
+  handleMessage(
+    severity: 'success' | 'error',
+    detail: string,
+    sticky: boolean,
+  ) {
+    if (severity === 'success') {
+      this.messageService.add({ severity, detail });
+      this.loading = true;
+      setTimeout(() => {
+        this.clear();
+      }, 3000);
+    } else if (severity === 'error') {
+      this.messageService.add({ severity, detail, sticky: true });
+    }
   }
 
-  previousPage() {
+  clear() {
+    this.messageService.clear();
     this.router.navigateByUrl('/channels');
   }
 }

@@ -1,11 +1,10 @@
 <app-subheader
   selectedMenuName="Create authentication bundle"
   [showBackArrow]="true" [useExplicitNavigation]="true" backRoute="/authbundles"></app-subheader>
+  
 
-<div class="main-content">
-  <div *ngIf="messages" class="alert field col-12 w-full mb-2">
-    {{ messages }}
-  </div>
+<div class="main-content" [style]="{'margin-top': '120px'}">
+  <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
   <div class="formgrid grid w-full">
     <div class="field col-12 w-full">
       <div class="mb-2"><label for="authbundle_id">Authbundle Id</label></div>
@@ -113,7 +112,7 @@
       />
     </div>
     <div class="field col-12 mt-4">
-      <button pButton (click)="onSubmit()" class="button">Submit</button>
+      <button pButton (click)="onSubmit()" class="button" [disabled]="loading">Submit</button>
     </div>
   </div>
 </div>

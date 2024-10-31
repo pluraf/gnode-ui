@@ -10,6 +10,8 @@ import { RippleModule } from 'primeng/ripple';
 
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-channel-edit',
@@ -22,7 +24,9 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
     CommonModule,
     RadioButtonModule,
     SubheaderComponent,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './channel-edit.component.html',
   styleUrl: './channel-edit.component.css',
 })
@@ -34,12 +38,13 @@ export class ChannelEditComponent implements OnInit {
   password = '';
   authtype = '';
   jwtKey = '';
-  messages: string = '';
+  loading: boolean = false;
 
   constructor(
     private brokerService: MBrokerCService,
     private route: ActivatedRoute,
     private router: Router,
+    private messageService: MessageService,
   ) {}
 
   selectedCategory: any = null;
@@ -104,15 +109,32 @@ export class ChannelEditComponent implements OnInit {
       if (response.responses && response.responses[0]) {
         const resp = response.responses[0];
         if (resp.hasOwnProperty('error') && resp.error) {
-          this.showMessage(resp.error);
+          this.handleMessage('error', resp.error, true);
         } else {
-          this.router.navigateByUrl(`channels/channel/${this.chanid}`);
+          this.handleMessage('success', 'Channel edited successfully', false);
         }
       }
     });
   }
 
-  showMessage(message: string) {
-    this.messages = message;
+  handleMessage(
+    severity: 'success' | 'error',
+    detail: string,
+    sticky: boolean,
+  ) {
+    if (severity === 'success') {
+      this.messageService.add({ severity, detail });
+      this.loading = true;
+      setTimeout(() => {
+        this.clear();
+      }, 3000);
+    } else if (severity === 'error') {
+      this.messageService.add({ severity, detail, sticky: true });
+    }
+  }
+
+  clear() {
+    this.messageService.clear();
+    this.router.navigateByUrl(`channels/channel/${this.chanid}`);
   }
 }

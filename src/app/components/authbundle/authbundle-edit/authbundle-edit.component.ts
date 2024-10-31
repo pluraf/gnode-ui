@@ -14,6 +14,8 @@ import {
   ConnectorType,
   ConnectorTypeLabel,
 } from '../authbundle';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-authbundle-edit',
@@ -24,7 +26,9 @@ import {
     ButtonModule,
     InputTextModule,
     FormsModule,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './authbundle-edit.component.html',
   styleUrl: './authbundle-edit.component.css',
 })
@@ -32,13 +36,13 @@ export class AuthbundleEditComponent {
   backendService = inject(BackendService);
   route = inject(ActivatedRoute);
   router = inject(Router);
+  messageService = inject(MessageService);
 
   authbundleId = '';
   username = '';
   password = '';
   description = '';
   autoId = true;
-  messages: string = '';
   usermessage: string = '';
 
   authOptions: { [key: string]: string } = {};
@@ -48,6 +52,7 @@ export class AuthbundleEditComponent {
   selConnectorType: any;
   selAuthOption: string;
   keyFile: File | null = null;
+  loading: boolean = false;
 
   @ViewChild('keyFile') keyFileInput!: ElementRef;
 
@@ -166,22 +171,48 @@ export class AuthbundleEditComponent {
     if (this.description) {
       formData.append('description', this.description);
     }
-    this.backendService
-      .editAuthbundle(this.authbundleId, formData)
-      .subscribe((response) => {
+    this.backendService.editAuthbundle(this.authbundleId, formData).subscribe(
+      (response) => {
         if (
           response.responses &&
           response.responses[0].hasOwnProperty('error')
         ) {
-          this.showMessage(response.responses[0].error)!;
+          this.handleMessage('error', response.responses[0].error, true)!;
+        } else {
+          this.handleMessage(
+            'success',
+            'Authbundle edited successfully',
+            false,
+          );
         }
-      });
-    this.router.navigateByUrl(
-      `authbundles/authbundle-detail/${this.authbundleId}`,
+      },
+      (error: any) => {
+        const errorDetail = error.error?.detail;
+        this.handleMessage('error', errorDetail, true);
+      },
     );
   }
 
-  showMessage(message: string) {
-    this.messages = message;
+  handleMessage(
+    severity: 'success' | 'error',
+    detail: string,
+    sticky: boolean,
+  ) {
+    if (severity === 'success') {
+      this.messageService.add({ severity, detail });
+      this.loading = true;
+      setTimeout(() => {
+        this.clear();
+      }, 3000);
+    } else if (severity === 'error') {
+      this.messageService.add({ severity, detail, sticky: true });
+    }
+  }
+
+  clear() {
+    this.messageService.clear();
+    this.router.navigateByUrl(
+      `authbundles/authbundle-detail/${this.authbundleId}`,
+    );
   }
 }

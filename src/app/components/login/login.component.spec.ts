@@ -29,4 +29,12 @@ describe('LoginComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should show an error message when fields are empty', () => {
+    component.loginUser.username = '';
+    component.loginUser.password = '';
+    component.onLogin();
+
+    expect(component.errorMessage).toBe('Username and Password are required.');
+  });
 });

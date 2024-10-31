@@ -44,23 +44,23 @@ button:hover {
   resize: both;
   overflow: auto;
 }
-.alert {
-  padding: 10px;
-  width: 29rem;
-  height: 40px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: rgb(253, 237, 237);
-  border: 1px solid #e4b9b9f2;
-  margin-top: 110px;
-  margin-bottom: 15px;
-}
+
 a {
   z-index: 10;
   position: relative;
 }
 ::ng-deep .p-tooltip > .p-tooltip-text {
   width: 220px;
+}
+::ng-deep .p-toast .p-toast-message {
+  margin-top: 3rem !important;
+  border: 1px solid;
+}
+::ng-deep
+  .p-toast
+  .p-toast-message
+  .p-toast-message-content
+  .p-icon:not(.p-toast-icon-close-icon) {
+  width: 1.5rem;
+  height: 1.5rem;
 }

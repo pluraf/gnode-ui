@@ -1,9 +1,7 @@
 <app-subheader selectedMenuName="Create Channel" [showBackArrow]="true"></app-subheader>
 <div class="main-content-body">
-    <div *ngIf="messages" class="alert">
-        <div class="mb-2 text-center">{{ messages }}</div>
-    </div>
-    <div class="p-grid">
+    <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
+      <div class="p-grid">
         <div class="p-col-12 p-md-6">
             <div class="p-fluid">
                 <div class="p-field">
@@ -54,7 +52,7 @@
                 </div>
             </div>
             <div class="mt-2">
-                <button pButton (click)="onSubmit()">Submit</button>
+                <button pButton (click)="onSubmit()" [disabled]="loading">Submit</button>
             </div>
         </div>
     </div>
