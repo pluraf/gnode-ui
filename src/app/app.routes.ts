@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { StatusComponent } from './components/status/status.component';
-import { HandleMessageComponent } from './components/handle-message/handle-message.component';
 import { LoginComponent } from './components/login/login.component';
 
 export const routes: Routes = [
@@ -72,9 +71,5 @@ export const routes: Routes = [
   {
     path: 'status',
     component: StatusComponent,
-  },
-  {
-    path: 'messages',
-    component: HandleMessageComponent,
   },
 ];

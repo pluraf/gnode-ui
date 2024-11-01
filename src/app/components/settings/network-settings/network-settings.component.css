@@ -22,3 +22,13 @@ button {
   width: 1.5rem;
   height: 1.5rem;
 }
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: auto;
+}
+
+label {
+  margin-top: 10px;
+}

@@ -5,11 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { BackendService } from '../../../services/backend.service';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-g-cloud',
   standalone: true,
-  imports: [SubheaderComponent, CheckboxModule, FormsModule, ButtonModule],
+  imports: [
+    SubheaderComponent,
+    CheckboxModule,
+    FormsModule,
+    ButtonModule,
+    ToastModule,
+  ],
   providers: [MessageService],
   templateUrl: './g-cloud.component.html',
   styleUrl: './g-cloud.component.css',
@@ -31,8 +38,6 @@ export class GCloudComponent {
   }
 
   onSubmit() {
-    this.loading = true;
-
     const payload = {
       allow_gnode_cloud: this.settings.allow_gnode_cloud,
     };
@@ -58,7 +63,7 @@ export class GCloudComponent {
   ) {
     if (severity === 'success') {
       this.messageService.add({ severity, detail });
-      this.loading = false;
+      this.loading = true;
       setTimeout(() => {
         this.clear();
       }, 3000);

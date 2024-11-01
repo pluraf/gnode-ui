@@ -28,7 +28,7 @@ export class MqttChannelsComponent {
   backendService = inject(BackendService);
   messageService = inject(MessageService);
 
-  loading1: boolean = false;
+  loading: boolean = false;
 
   settings = {
     allow_anonymous: false,
@@ -41,8 +41,6 @@ export class MqttChannelsComponent {
   }
 
   onSubmit() {
-    this.loading1 = true;
-
     const payload = {
       allow_anonymous: this.settings.allow_anonymous,
     };
@@ -69,7 +67,7 @@ export class MqttChannelsComponent {
     this.messageService.add({ severity, detail });
     this.cdr.markForCheck();
     if (severity === 'success') {
-      this.loading1 = false;
+      this.loading = true;
       setTimeout(() => {
         this.clear();
       }, 3000);
@@ -80,6 +78,6 @@ export class MqttChannelsComponent {
 
   clear() {
     this.messageService.clear();
-    this.loading1 = false;
+    this.loading = false;
   }
 }

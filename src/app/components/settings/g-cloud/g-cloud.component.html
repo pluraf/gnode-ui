@@ -1,7 +1,8 @@
 <app-subheader selectedMenuName="G-Cloud"></app-subheader>
 
 <div class="main-content-body" [style]="{'margin-top': '120px'}">
-<div class="field col-12 w-full mt-2">
+  <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
+  <div class="field col-12 w-full mt-2">
     <div>
       <p-checkbox [(ngModel)]="settings.allow_gnode_cloud" [binary]="true" inputId="cloud_id"/>
       <label for="cloud_id" class="pl-2">Enable G-Node cloud</label>
