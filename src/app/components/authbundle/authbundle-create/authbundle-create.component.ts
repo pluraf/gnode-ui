@@ -56,8 +56,8 @@ export class AuthbundleCreateComponent {
 
   ConnectorTypes: { [key: string]: string } = {};
 
-  selConnectorType: any;
-  selAuthOption: string;
+  selServiceType: any;
+  selAuthOption: string = '';
   keyFile: File | null = null;
 
   @ViewChild('keyFile') keyFileInput!: ElementRef;
@@ -68,40 +68,59 @@ export class AuthbundleCreateComponent {
 
   showUploadKey(): boolean {
     return (
-      this.selConnectorType == ConnectorType.GCP_PUBSUB ||
+      this.selServiceType == ConnectorType.GCP ||
       this.selAuthOption == AuthType.JWT_ES256
     );
   }
 
   showUsername(): boolean {
     return (
-      this.selConnectorType == ConnectorType.MQTT50 ||
-      this.selConnectorType == ConnectorType.MQTT311
+      this.selServiceType == ConnectorType.MQTT50
+      || this.selServiceType == ConnectorType.MQTT311
+      || this.selServiceType == ConnectorType.AWS
     );
   }
 
-  getUsernameMessage(): string {
-    if (this.selConnectorType === ConnectorType.MQTT50) {
+  getUsernameMQTTMessage(): string {
+    if (this.selServiceType === ConnectorType.MQTT50) {
       this.usermessage = 'Username can be empty for MQTT v5.0';
-    } else if (this.selConnectorType === ConnectorType.MQTT311) {
+    } else if (this.selServiceType === ConnectorType.MQTT311) {
       this.usermessage = 'Username can be empty for MQTT v3.11';
+    } else {
+      this.usermessage = '';
     }
     return this.usermessage;
   }
 
+  getUsernameLabel(): string {
+    if (this.selServiceType == ConnectorType.AWS){
+      return "Access key";
+    }
+    return "Username";
+  }
+
+  getPasswordLabel(): string {
+    if (this.selServiceType == ConnectorType.AWS){
+      return "Secret access key";
+    }
+    return "Password";
+  }
+
   showPassword(): boolean {
-    return this.selAuthOption == AuthType.PASSWORD;
+    console.log(this.selAuthOption);
+    return (this.selAuthOption === AuthType.PASSWORD
+        || this.selAuthOption == AuthType.ACCESS_KEY
+    );
   }
 
   constructor(private router: Router) {
-    this.selConnectorType = ConnectorType.GCP_PUBSUB;
-    this.selAuthOption = AuthType.SERVICE_KEY;
+    this.ConnectorTypes[ConnectorType.GCP] = ConnectorTypeLabel.GCP;
+    this.ConnectorTypes[ConnectorType.AWS] = ConnectorTypeLabel.AWS;
+    this.ConnectorTypes[ConnectorType.MQTT50] = ConnectorTypeLabel.MQTT50;
+    this.ConnectorTypes[ConnectorType.MQTT311] = ConnectorTypeLabel.MQTT311;
 
-    this.ConnectorTypes[ConnectorType.GCP_PUBSUB] = 'Google Pubsub';
-    this.ConnectorTypes[ConnectorType.MQTT50] = 'MQTT v5.0';
-    this.ConnectorTypes[ConnectorType.MQTT311] = 'MQTT v3.11';
-
-    this.authOptions[AuthType.SERVICE_KEY] = AuthTypeLabel.SERVICE_KEY;
+    this.selServiceType = ConnectorType.GCP;
+    this.onChangeConnectorType(this.selServiceType);
   }
 
   cleanIrrelevantInputs() {
@@ -111,8 +130,9 @@ export class AuthbundleCreateComponent {
         this.keyFileInput.nativeElement.value = '';
       }
     } else if (
-      this.selAuthOption == AuthType.JWT_ES256 ||
-      this.selAuthOption == AuthType.SERVICE_KEY
+      this.selAuthOption == AuthType.JWT_ES256
+      || this.selAuthOption == AuthType.SERVICE_KEY
+      || this.selAuthOption == AuthType.ACCESS_KEY
     ) {
       this.password = '';
     } else {
@@ -124,7 +144,7 @@ export class AuthbundleCreateComponent {
       this.password = '';
     }
 
-    if (this.selConnectorType == ConnectorType.GCP_PUBSUB) {
+    if (this.selServiceType == ConnectorType.GCP) {
       this.username = '';
       this.password = '';
     }
@@ -136,9 +156,12 @@ export class AuthbundleCreateComponent {
 
   onChangeConnectorType(event: any) {
     this.authOptions = {};
-    if (event === ConnectorType.GCP_PUBSUB) {
+    if (event === ConnectorType.GCP) {
       this.authOptions[AuthType.SERVICE_KEY] = AuthTypeLabel.SERVICE_KEY;
       this.selAuthOption = AuthType.SERVICE_KEY;
+    }else if (event === ConnectorType.AWS){
+      this.authOptions[AuthType.ACCESS_KEY] = AuthTypeLabel.ACCESS_KEY;
+      this.selAuthOption = AuthType.ACCESS_KEY;
     } else if (
       event === ConnectorType.MQTT311 ||
       event == ConnectorType.MQTT50
@@ -160,7 +183,7 @@ export class AuthbundleCreateComponent {
 
   onSubmit() {
     const formData = new FormData();
-    formData.append('connector_type', this.selConnectorType);
+    formData.append('service_type', this.selServiceType);
     formData.append('auth_type', this.selAuthOption);
     if (!this.autoId) {
       formData.append('authbundle_id', this.authbundleId);

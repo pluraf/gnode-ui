@@ -4,11 +4,11 @@
 <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
     <div class="formgrid grid w-full">
         <div class="field col-12 w-full">
-          <h4>Authbundle Id: {{authbundleId}}</h4>        
+          <h4>Authbundle Id: {{authbundleId}}</h4>
         </div>
         <div class="field col-12">
           <div class="mb-2"><label for="Connector-types">Connector type</label></div>
-          <select id="Connector-types" [(ngModel)]="selConnectorType" (ngModelChange)="onChangeConnectorType($event)" class="text-color surface-overlay p-2 border-1 border-round w-12rem">
+          <select id="Connector-types" [(ngModel)]="selServiceType" (ngModelChange)="onChangeConnectorType($event)" class="text-color surface-overlay p-2 border-1 border-round w-12rem">
             <option *ngFor="let option of objectKeys(ConnectorTypes)" [value]="option">{{ConnectorTypes[option]}}</option>
           </select>
         </div>

@@ -49,7 +49,7 @@ export class AuthbundleEditComponent {
 
   ConnectorTypes: { [key: string]: string } = {};
 
-  selConnectorType: any;
+  selServiceType: any;
   selAuthOption: string;
   keyFile: File | null = null;
   loading: boolean = false;
@@ -62,22 +62,22 @@ export class AuthbundleEditComponent {
 
   showUploadKey(): boolean {
     return (
-      this.selConnectorType == ConnectorType.GCP_PUBSUB ||
+      this.selServiceType == ConnectorType.GCP ||
       this.selAuthOption == AuthType.JWT_ES256
     );
   }
 
   showUsername(): boolean {
     return (
-      this.selConnectorType == ConnectorType.MQTT50 ||
-      this.selConnectorType == ConnectorType.MQTT311
+      this.selServiceType == ConnectorType.MQTT50 ||
+      this.selServiceType == ConnectorType.MQTT311
     );
   }
 
   getUsernameMessage(): string {
-    if (this.selConnectorType === ConnectorType.MQTT50) {
+    if (this.selServiceType === ConnectorType.MQTT50) {
       this.usermessage = 'Username can be empty for MQTT v5.0';
-    } else if (this.selConnectorType === ConnectorType.MQTT311) {
+    } else if (this.selServiceType === ConnectorType.MQTT311) {
       this.usermessage = 'Username can be empty for MQTT v3.11';
     }
     return this.usermessage;
@@ -89,10 +89,10 @@ export class AuthbundleEditComponent {
 
   constructor() {
     this.authbundleId = this.route.snapshot.params['authbundleId'];
-    this.selConnectorType = ConnectorType.GCP_PUBSUB;
+    this.selServiceType = ConnectorType.GCP;
     this.selAuthOption = AuthType.SERVICE_KEY;
 
-    this.ConnectorTypes[ConnectorType.GCP_PUBSUB] = 'Google Pubsub';
+    this.ConnectorTypes[ConnectorType.GCP] = 'Google Pubsub';
     this.ConnectorTypes[ConnectorType.MQTT50] = 'MQTT v5.0';
     this.ConnectorTypes[ConnectorType.MQTT311] = 'MQTT v3.11';
 
@@ -118,7 +118,7 @@ export class AuthbundleEditComponent {
       this.password = '';
     }
 
-    if (this.selConnectorType == ConnectorType.GCP_PUBSUB) {
+    if (this.selServiceType == ConnectorType.GCP) {
       this.username = '';
       this.password = '';
     }
@@ -130,7 +130,7 @@ export class AuthbundleEditComponent {
 
   onChangeConnectorType(event: any) {
     this.authOptions = {};
-    if (event === ConnectorType.GCP_PUBSUB) {
+    if (event === ConnectorType.GCP) {
       this.authOptions[AuthType.SERVICE_KEY] = AuthTypeLabel.SERVICE_KEY;
       this.selAuthOption = AuthType.SERVICE_KEY;
     } else if (
@@ -154,7 +154,7 @@ export class AuthbundleEditComponent {
 
   onUpdate() {
     const formData = new FormData();
-    formData.append('connector_type', this.selConnectorType);
+    formData.append('connector_type', this.selServiceType);
     formData.append('auth_type', this.selAuthOption);
     if (!this.autoId) {
       formData.append('authbundle_id', this.authbundleId);
