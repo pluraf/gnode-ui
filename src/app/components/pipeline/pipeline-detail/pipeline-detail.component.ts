@@ -72,6 +72,7 @@ export class PipelineDetailComponent {
     this.backendService.pipelineGet(pipeid).subscribe((response: any) => {
       if (response) {
         this.pipelines = response;
+        console.log(response);
         this.updatePipelineStatus();
       }
     });
@@ -81,6 +82,10 @@ export class PipelineDetailComponent {
     this.backendService.getPipelineStatus(this.pipeid).subscribe({
       next: (statusResponse) => {
         this.pipelines.status = statusResponse.status;
+        this.pipelines.count_in = statusResponse.count_in;
+        this.pipelines.last_in = statusResponse.last_in;
+        this.pipelines.count_out = statusResponse.count_out;
+        this.pipelines.last_out = statusResponse.last_out;
         this.pipelines.error = statusResponse.error;
         this.updateDetails();
 
@@ -103,6 +108,10 @@ export class PipelineDetailComponent {
       ['Connector In', this.pipelines.connector_in.type],
       ['Connector Out', this.pipelines.connector_out.type],
       ['Pipeline Status', this.pipelines.status],
+      ['Messages received', this.pipelines.count_in],
+      ['Last message received timestamp', this.pipelines.last_in],
+      ['Messages sent', this.pipelines.count_out],
+      ['Last message sent timestamp', this.pipelines.last_out],
     ];
 
     if (

@@ -67,6 +67,8 @@ export class ChannelDetailComponent {
           ['Authentication type', this.channel.authtype],
           ['Username', this.channel.username],
           ['MQTT Client ID', this.channel.clientid],
+          ['Messages received', this.channel.msg_received],
+          ['Last message timestamp', this.channel.msg_timestamp],
         ];
         if (this.channel.authtype && this.channel.authtype.startsWith('jwt')) {
           this.details.push([
