@@ -19,8 +19,10 @@ export class BackendService {
   private pipelineConfigUrl = 'm2e/pipeline/config/';
   private pipelineControlUrl = 'm2e/pipeline/control/';
   private pipelineStatusUrl = 'm2e/pipeline/status/';
-  // API Version
+  // Version API
   private apiVersionUrl = '/api/version';
+  // Status API
+  private statusUrl = '/api/status';
 
   http = inject(HttpClient);
   user = inject(UserService);
@@ -160,13 +162,17 @@ export class BackendService {
     );
   }
 
-  /////////////////////////// Next ///////////////////////////
+  /////////////////////////// Version ///////////////////////////
 
   getApiVersion(): Observable<any> {
     return this.http.get<any>(this.apiVersionUrl);
   }
 
-  getNetworkStatus(): Observable<any> {
-    return this.http.get<any>(this.settingsUrl, this.httpOptions);
+  /////////////////////////// Status ///////////////////////////
+
+  getStatus(): Observable<any> {
+    return this.http.get<any>(this.statusUrl, this.httpOptions);
   }
+
+  /////////////////////////// Next ///////////////////////////
 }
