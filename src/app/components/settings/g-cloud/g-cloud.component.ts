@@ -28,7 +28,7 @@ export class GCloudComponent {
   loading: boolean = false;
 
   settings = {
-    allow_gnode_cloud: false,
+    allow_gcloud: false,
   };
 
   constructor() {
@@ -37,9 +37,15 @@ export class GCloudComponent {
     });
   }
 
+  ngOnInit() {
+    this.backendService.getApiInfo().subscribe((resp) => {
+      console.log(resp);
+    });
+  }
+
   onSubmit() {
     const payload = {
-      allow_gnode_cloud: this.settings.allow_gnode_cloud,
+      gcloud: this.settings.allow_gcloud,
     };
 
     this.backendService.updateSettings(payload).subscribe(
@@ -47,11 +53,9 @@ export class GCloudComponent {
         this.handleMessage('success', 'Submitted successfully', false);
       },
       (error: any) => {
-        this.handleMessage(
-          'error',
-          error.status === 500 ? error.error : error.error.detail,
-          true,
-        );
+        const errorMsg =
+          error.status === 500 ? error.error.detail : error.error;
+        this.handleMessage('error', errorMsg, true);
       },
     );
   }

@@ -23,6 +23,8 @@ export class BackendService {
   private apiVersionUrl = '/api/version';
   // Status API
   private statusUrl = '/api/status';
+  // Info API
+  private apiInfoUrl = '/api/info';
 
   http = inject(HttpClient);
   user = inject(UserService);
@@ -132,14 +134,6 @@ export class BackendService {
     });
   }
 
-  /*   controlPipeline(pipeid: string, command: string): Observable<any> {
-    return this.http.put(
-      this.pipelineControlUrl + pipeid,
-      command,
-      this.httpOptions,
-    );
-  } */
-
   startPipeline(pipeid: string): Observable<any> {
     const postData = {
       commands: [{ command: 'start' }],
@@ -172,6 +166,12 @@ export class BackendService {
 
   getStatus(): Observable<any> {
     return this.http.get<any>(this.statusUrl, this.httpOptions);
+  }
+
+  /////////////////////////// API Info ///////////////////////////
+
+  getApiInfo(): Observable<any> {
+    return this.http.get<any>(this.apiInfoUrl, this.httpOptions);
   }
 
   /////////////////////////// Next ///////////////////////////
