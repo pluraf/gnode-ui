@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 
 import { UserService } from './user.service';
 
@@ -29,12 +29,20 @@ export class BackendService {
   http = inject(HttpClient);
   user = inject(UserService);
 
+  private cachedApiInfo: any = null;
+
   constructor() {
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.user.getToken()}`,
-      }),
-    };
+    if (this.user.getToken()) {
+      this.httpOptions = {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${this.user.getToken()}`,
+        }),
+      };
+    } else {
+      this.httpOptions = {
+        headers: new HttpHeaders(),
+      };
+    }
   }
 
   /////////////////////////// Authbundles ///////////////////////////
@@ -155,8 +163,32 @@ export class BackendService {
 
   /////////////////////////// API Info ///////////////////////////
 
+  loadApiInfo(): Observable<any> {
+    if (this.cachedApiInfo) {
+      return of(this.cachedApiInfo);
+    } else {
+      return new Observable((observer) => {
+        this.http
+          .get<any>(this.apiInfoUrl, this.httpOptions)
+          .subscribe((response) => {
+            this.cachedApiInfo = response;
+            observer.next(response);
+            observer.complete();
+          });
+      });
+    }
+  }
+
   getApiInfo(): Observable<any> {
-    return this.http.get<any>(this.apiInfoUrl, this.httpOptions);
+    if (this.cachedApiInfo) {
+      return of(this.cachedApiInfo);
+    } else {
+      return this.loadApiInfo();
+    }
+  }
+
+  clearApiInfoCache() {
+    this.cachedApiInfo = null;
   }
 
   /////////////////////////// Next ///////////////////////////

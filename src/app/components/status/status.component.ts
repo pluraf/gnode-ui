@@ -18,7 +18,7 @@ import { BackendService } from '../../services/backend.service';
     FormsModule,
     SubheaderComponent,
     TableModule,
-    DividerModule
+    DividerModule,
   ],
   templateUrl: './status.component.html',
   styleUrl: './status.component.css',
@@ -29,7 +29,7 @@ export class StatusComponent {
     ['IP address', '-.-.-.-'],
     ['Netmask', '-.-.-.-'],
     ['Gateway', '-.-.-.-'],
-    ['DNS', '-.-.-.-']
+    ['DNS', '-.-.-.-'],
   ];
   serviceDetails: any[] = [
     ['M2E-Bridge', '-'],
@@ -43,12 +43,11 @@ export class StatusComponent {
 
   loadStatusDetails() {
     this.backendService.getStatus().subscribe((response: any) => {
-      console.log(response);
       this.networkDetails = [
         ['IP Address', response.network['ipv4']],
         ['Netmask', response.network['netmask']],
         ['Gateway', response.network['gateway']],
-        ['DNS', response.network['dns']]
+        ['DNS', response.network['dns']],
       ];
       this.serviceDetails = [
         ['M2E-Bridge', response.service['m2eb']],

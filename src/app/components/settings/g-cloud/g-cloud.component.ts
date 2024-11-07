@@ -37,12 +37,6 @@ export class GCloudComponent {
     });
   }
 
-  ngOnInit() {
-    this.backendService.getApiInfo().subscribe((resp) => {
-      console.log(resp);
-    });
-  }
-
   onSubmit() {
     const payload = {
       gcloud: this.settings.allow_gcloud,

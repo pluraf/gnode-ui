@@ -9,6 +9,8 @@ import { SplitterModule } from 'primeng/splitter';
 import { ChannelDetailComponent } from './components/channel/channel-detail/channel-detail.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { DatetimeService } from './services/datetime.service';
+import { BackendService } from './services/backend.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +36,10 @@ export class AppComponent implements OnInit {
   router: Router = inject(Router);
   dateTimeService = inject(DatetimeService);
   cdr = inject(ChangeDetectorRef);
+  backendService = inject(BackendService);
+  http = inject(HttpClient);
+
+  isVirtualMode: boolean = false;
 
   constructor() {}
 
@@ -41,6 +47,12 @@ export class AppComponent implements OnInit {
     this.dateTimeService.currentDateTime$.subscribe((dateTime) => {
       this.currentDateTime = dateTime;
       this.cdr.detectChanges();
+      this.backendService.getApiInfo().subscribe((resp) => {
+        if (resp) {
+          this.isVirtualMode = resp.mode === 'virtual';
+          this.updateMenuItems();
+        }
+      });
     });
     this.currentDateTime = new Date().toISOString();
   }
@@ -68,4 +80,18 @@ export class AppComponent implements OnInit {
     },
     { label: 'Status', routerLink: '/status', styleClass: 'gap-2' },
   ];
+
+  updateMenuItems() {
+    const settingsMenu = this.items.find((item) => item.label === 'Settings');
+    if (settingsMenu && settingsMenu.items) {
+      settingsMenu.items.forEach((item) => {
+        if (item.label === 'G-Cloud') {
+          item.visible = !this.isVirtualMode;
+        }
+        if (item.label === 'Network Settings') {
+          item.visible = !this.isVirtualMode;
+        }
+      });
+    }
+  }
 }

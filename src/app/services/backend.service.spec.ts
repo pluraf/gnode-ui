@@ -34,7 +34,7 @@ describe('BackendService', () => {
     service = TestBed.inject(BackendService);
   });
 
-  it('should Get method', () => {
+  it('should create backendService', () => {
     expect(service).toBeTruthy();
   });
 

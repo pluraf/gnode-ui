@@ -1,25 +1,41 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { BackendService } from '../services/backend.service';
+import { catchError, map, of } from 'rxjs';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const cookies = inject(CookieService);
+  const backendService = inject(BackendService);
 
   const token = cookies.get('access_token');
 
   if (token && isTokenValid(token)) {
-    if (state.url === '/login') {
-      router.navigateByUrl('/channels');
-      return false;
-    }
-    return true;
+    return backendService.getApiInfo().pipe(
+      map((resp) => {
+        if (resp && resp.mode === 'virtual') {
+          if (
+            state.url === '/settings/g-cloud' ||
+            state.url === '/settings/network-settings'
+          ) {
+            router.navigateByUrl('/settings');
+            return false;
+          }
+        }
+        return true;
+      }),
+      catchError((error) => {
+        router.navigateByUrl('/login');
+        return of(false);
+      }),
+    );
   } else {
     if (state.url === '/login') {
-      return true;
+      return of(true);
     }
     router.navigateByUrl('/login');
-    return false;
+    return of(false);
   }
 };
 

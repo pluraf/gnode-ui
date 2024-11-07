@@ -75,9 +75,9 @@ export class AuthbundleCreateComponent {
 
   showUsername(): boolean {
     return (
-      this.selServiceType == ConnectorType.MQTT50
-      || this.selServiceType == ConnectorType.MQTT311
-      || this.selServiceType == ConnectorType.AWS
+      this.selServiceType == ConnectorType.MQTT50 ||
+      this.selServiceType == ConnectorType.MQTT311 ||
+      this.selServiceType == ConnectorType.AWS
     );
   }
 
@@ -93,23 +93,23 @@ export class AuthbundleCreateComponent {
   }
 
   getUsernameLabel(): string {
-    if (this.selServiceType == ConnectorType.AWS){
-      return "Access key";
+    if (this.selServiceType == ConnectorType.AWS) {
+      return 'Access key';
     }
-    return "Username";
+    return 'Username';
   }
 
   getPasswordLabel(): string {
-    if (this.selServiceType == ConnectorType.AWS){
-      return "Secret access key";
+    if (this.selServiceType == ConnectorType.AWS) {
+      return 'Secret access key';
     }
-    return "Password";
+    return 'Password';
   }
 
   showPassword(): boolean {
-    console.log(this.selAuthOption);
-    return (this.selAuthOption === AuthType.PASSWORD
-        || this.selAuthOption == AuthType.ACCESS_KEY
+    return (
+      this.selAuthOption === AuthType.PASSWORD ||
+      this.selAuthOption == AuthType.ACCESS_KEY
     );
   }
 
@@ -130,9 +130,9 @@ export class AuthbundleCreateComponent {
         this.keyFileInput.nativeElement.value = '';
       }
     } else if (
-      this.selAuthOption == AuthType.JWT_ES256
-      || this.selAuthOption == AuthType.SERVICE_KEY
-      || this.selAuthOption == AuthType.ACCESS_KEY
+      this.selAuthOption == AuthType.JWT_ES256 ||
+      this.selAuthOption == AuthType.SERVICE_KEY ||
+      this.selAuthOption == AuthType.ACCESS_KEY
     ) {
       this.password = '';
     } else {
@@ -159,7 +159,7 @@ export class AuthbundleCreateComponent {
     if (event === ConnectorType.GCP) {
       this.authOptions[AuthType.SERVICE_KEY] = AuthTypeLabel.SERVICE_KEY;
       this.selAuthOption = AuthType.SERVICE_KEY;
-    }else if (event === ConnectorType.AWS){
+    } else if (event === ConnectorType.AWS) {
       this.authOptions[AuthType.ACCESS_KEY] = AuthTypeLabel.ACCESS_KEY;
       this.selAuthOption = AuthType.ACCESS_KEY;
     } else if (

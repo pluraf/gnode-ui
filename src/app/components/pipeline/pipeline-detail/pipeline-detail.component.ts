@@ -72,7 +72,6 @@ export class PipelineDetailComponent {
     this.backendService.pipelineGet(pipeid).subscribe((response: any) => {
       if (response) {
         this.pipelines = response;
-        console.log(response);
         this.updatePipelineStatus();
       }
     });
