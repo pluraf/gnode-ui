@@ -7,7 +7,11 @@ import { ChannelEditComponent } from './channel-edit/channel-edit.component';
 import { ChannelDeleteComponent } from './channel-delete/channel-delete.component';
 
 export const CHANNELS_ROUTES: Routes = [
-  { path: '', component: ChannelListComponent },
+  {
+    path: '',
+    canActivate: [authGuard],
+    component: ChannelListComponent
+  },
   {
     path: 'channel-create',
     canActivate: [authGuard],

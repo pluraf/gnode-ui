@@ -70,27 +70,12 @@ export class BackendService {
 
   /////////////////////////// Settings ///////////////////////////
 
-  loadSettings(): Observable<any> {
-    return this.http.get(this.settingsUrl, this.httpOptions);
+  getSettings(): Observable<any> {
+    return this.http.get<any>(this.settingsUrl, this.httpOptions);
   }
 
   updateSettings(settings: object): Observable<any> {
     return this.http.put(this.settingsUrl, settings, this.httpOptions);
-  }
-
-  getNetworkSettings(): Observable<any> {
-    return this.http.get<any>(this.settingsUrl, this.httpOptions);
-  }
-
-  connectToWifi(ssid: string, password: string): Observable<any> {
-    const body = {
-      network_settings: {
-        TYPE: 'wifi',
-        SSID: ssid,
-        PASSWORD: password,
-      },
-    };
-    return this.http.put<any>(this.settingsUrl, body, this.httpOptions);
   }
 
   /////////////////////////// Pipelines ///////////////////////////

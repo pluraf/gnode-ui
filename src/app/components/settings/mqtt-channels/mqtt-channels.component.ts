@@ -35,7 +35,7 @@ export class MqttChannelsComponent {
   };
 
   constructor(private cdr: ChangeDetectorRef) {
-    this.backendService.loadSettings().subscribe((resp) => {
+    this.backendService.getSettings().subscribe((resp) => {
       this.settings = resp;
     });
   }

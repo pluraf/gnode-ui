@@ -70,6 +70,7 @@ export const routes: Routes = [
   },
   {
     path: 'status',
+    canActivate: [authGuard],
     component: StatusComponent,
   },
 ];

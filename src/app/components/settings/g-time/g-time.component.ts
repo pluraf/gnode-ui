@@ -56,7 +56,7 @@ export class GTimeComponent {
   };
 
   constructor() {
-    this.backendService.loadSettings().subscribe((resp) => {
+    this.backendService.getSettings().subscribe((resp) => {
       this.settings = resp;
     });
   }
@@ -119,7 +119,7 @@ export class GTimeComponent {
 
   loadGNodeTime() {
     if (!this.manualDate || !this.manualTime) {
-      this.backendService.loadSettings().subscribe((resp) => {
+      this.backendService.getSettings().subscribe((resp) => {
         this.settings = resp;
         this.currentDateTime = this.dateTimeService.getInitialDateTime();
       });

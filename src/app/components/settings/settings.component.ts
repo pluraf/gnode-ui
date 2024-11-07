@@ -70,8 +70,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   };
 
   constructor() {
-    this.backendService.loadSettings().subscribe((resp) => {
-      this.settings = resp;
+    this.backendService.getSettings().subscribe((resp) => {
     });
   }
 
@@ -134,7 +133,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   loadGNodeTime() {
     if (!this.manualDate || !this.manualTime) {
-      this.backendService.loadSettings().subscribe((resp) => {
+      this.backendService.getSettings().subscribe((resp) => {
         this.settings = resp;
         this.currentDateTime = this.dateTimeService.getInitialDateTime();
       });

@@ -32,7 +32,7 @@ export class GCloudComponent {
   };
 
   constructor() {
-    this.backendService.loadSettings().subscribe((resp) => {
+    this.backendService.getSettings().subscribe((resp) => {
       this.settings = resp;
     });
   }

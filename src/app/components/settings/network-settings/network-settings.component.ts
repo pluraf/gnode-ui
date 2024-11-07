@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { TabViewModule } from 'primeng/tabview';
 import { BackendService } from '../../../services/backend.service';
 
 import {
@@ -36,6 +37,7 @@ interface Ipv4Setting {
     FormsModule,
     ToastModule,
     ReactiveFormsModule,
+    TabViewModule
   ],
   providers: [MessageService],
   templateUrl: './network-settings.component.html',
@@ -45,20 +47,20 @@ export class NetworkSettingsComponent {
   backendService = inject(BackendService);
   messageService = inject(MessageService);
 
-  loading: boolean = false;
-  networkSetting: string = '';
-  autoSyncEnabled: boolean = false;
-
   availableWifi: any[] = [];
-  ssid: string = '';
-  password: string = '';
+  wifiPassword: string = '';
 
-  settings = {
-    allow_anonymous: false,
-  };
+  loading = false;
 
-  selConnectionType: any;
-  wifi = '';
+  selWifiSecurity = '';
+  selWifiSignal = '';
+  selWifiRate = '';
+  wifiConnectionStatus = '';
+  wifiEnabled : boolean = false;
+  selSSID: any;
+  allSSID : string[] = [];
+  allWifi : any[] = [];
+  allActive : any[] = [];
 
   ipv4_method = 'auto';
   ipv4_settings: Ipv4Setting[] = [
@@ -70,41 +72,57 @@ export class NetworkSettingsComponent {
     },
   ];
 
-  onChangeConnectorType(event: any) {}
+  constructor() {
+    this.load();
+  }
+
+  load() {
+    this.backendService.getSettings().subscribe((resp) => {
+      this.allSSID = resp.network_settings.available_wifi.map((wifi: any) => wifi.ssid);
+      this.allWifi = resp.network_settings.available_wifi.reduce((acc: any, wifi: any) => {
+        acc[wifi.ssid] = wifi;
+        return acc;
+      }, {});
+      this.allActive = resp.network_settings.active_connections.reduce((acc: any, conn: any) => {
+        acc[conn.name] = conn;
+        return acc;
+      }, {});
+    });
+  }
+
+  onChangeWifiEnabled(event: any) {
+    console.log(event);
+  }
+
+  onChangeSSID(event: any) {
+    this.selWifiSecurity = this.allWifi[this.selSSID]['security'];
+    this.selWifiSignal = this.allWifi[this.selSSID]['signal'];
+    this.selWifiRate = this.allWifi[this.selSSID]['rate'];
+  }
+
+  onRescan() {
+    this.load();
+  }
+
+  onWifiConnect() {
+    this.backendService.updateSettings({
+      network_settings: {
+        type: 'wifi',
+        ssid: this.selSSID,
+        password: this.wifiPassword,
+      }}
+    ).subscribe();
+  }
 
   onSubmit() {
-    this.loading = true;
-
-    const payload = this.createPayload();
-
-    this.backendService.updateSettings(payload).subscribe(
-      () => {
-        this.handleMessage('success', 'Submitted successfully', false);
-      },
-      (error: any) => {
-        this.handleMessage(
-          'error',
-          error.status === 500 ? error.error : error.error.detail,
-          true,
-        );
-      },
-    );
-  }
-  private createPayload() {
-    return {
-      network_setting: this.networkSetting,
-      ipv4_settings: this.ipv4_settings,
-    };
   }
 
   handleMessage(
     severity: 'success' | 'error',
     detail: string,
-    sticky: boolean,
   ) {
     if (severity === 'success') {
       this.messageService.add({ severity, detail });
-      this.loading = false;
       setTimeout(() => {
         this.clear();
       }, 3000);
@@ -115,6 +133,5 @@ export class NetworkSettingsComponent {
 
   clear() {
     this.messageService.clear();
-    this.loading = false;
   }
 }
