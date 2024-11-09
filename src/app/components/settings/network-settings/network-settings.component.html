@@ -2,41 +2,47 @@
 
 <p-tabView class="main-content-body" [style]="{'margin-top': '120px'}">
   <p-tabPanel header="WiFi">
-    <div>
-      <div class="formgrid grid w-full">
+    <div class="formgrid grid align-content-start">
+      <div class="field col flex-grow-0 mr-7">
+        <div class="field col-12 mt-2">
+          Status:
+          @if (isLoaded) {
+            @if (wifiEnabled) {
+              {{wifiActiveSSID}} | {{wifiConnectionStatus}}
+            } @else {
+              Disabled
+            }
+          }
+        </div>
         <div class="field col-12 mt-2 mb-2">
-          <span class="inline-block">
-            <p-checkbox
-              [(ngModel)]="wifiEnabled"
-              [binary]="true"
-              inputId="auto_id"
-              (ngModelChange)="onChangeWifiEnabled($event)"
-            />
-            <label for="auto_id" class="pl-2">WiFi Enabled</label>
-          </span>
+          <button pButton (click)="onEnableWifi()">Enable</button>
+          <button pButton (click)="onDisableWifi()" class="ml-4">Disable</button>
         </div>
         <div class="field col-12 mt-2 mb-2">
           <div class="mb-2"><label for="ssid">SSID</label></div>
-          <select
-            id="Connector-types"
-            [(ngModel)]="selSSID"
-            (ngModelChange)="onChangeSSID($event)"
-            class="text-color surface-overlay p-2 border-1 border-round w-12rem"
-          >
-            <option *ngFor="let ssid of allSSID" [value]="ssid">{{ssid}}</option>
-          </select>
-          <button (click)="onRescan()" class="ml-4">Rescan</button>
+          <div class="flex flex-row">
+            <select
+              id="Connector-types"
+              [(ngModel)]="selSSID"
+              (ngModelChange)="onChangeSSID($event)"
+              class="text-color surface-overlay p-2 border-1 border-round w-12rem"
+            >
+              <option *ngFor="let ssid of allSSID" [value]="ssid">{{ssid}}</option>
+            </select>
+            <button pButton (click)="onRescan()" class="ml-4 w-3rem">
+              <span *ngIf="isStarting" class="pi pi-sync text-xl"></span>
+            </button>
+          </div>
         </div>
-        <div *ngIf="selSSID" class="field col-12 mt-0">
-          <small>Signal strength: {{selWifiSignal}} | Signal rate: {{selWifiRate}} | Security: {{selWifiSecurity}}</small>
+        <div class="field col-12 mt-0 w-max">
+          <small>Signal strength: {{selWifiSignal}}, rate: {{selWifiRate}} | Security: {{selWifiSecurity}}</small>
         </div>
         <div class="field col-12 mt-2">
             <div class="mb-2"><label for="password">Password</label></div>
             <input id="password" type="password" pInputText [(ngModel)]="wifiPassword" class="text-base p-2 w-18rem"/>
         </div>
         <div class="field col-12 mt-2">
-          <button (click)="onWifiConnect()">Connect</button>
-          Status: {{wifiConnectionStatus}}
+          <button pButton (click)="onConnectWifi()">Connect</button>
         </div>
         <div class="field col-12 mt-2">
             <div class="mb-2"><label for="ipv4_method">IPv4 Method</label></div>
@@ -48,24 +54,95 @@
         <div *ngIf="ipv4_method === 'manual'">
             <div class="field col-12 mt-2">
                 <div class="mb-2"><label for="ip-address">IP Address</label></div>
-                <input id="ip-address" type="text" pInputText [(ngModel)]="ipv4_settings[0].address" class="text-base p-2 w-18rem"/>
+                <input id="ip-address" type="text" pInputText [(ngModel)]="ipv4_settings.address" class="text-base p-2 w-18rem"/>
             </div>
             <div class="field col-12 mt-2">
                 <div class="mb-2"><label for="netmask">Netmask</label></div>
-                <input id="netmask"  type="text" pInputText [(ngModel)]="ipv4_settings[0].netmask" class="text-base p-2 w-18rem"/>
+                <input id="netmask"  type="text" pInputText [(ngModel)]="ipv4_settings.netmask" class="text-base p-2 w-18rem"/>
             </div>
             <div class="field col-12 mt-2">
                 <div class="mb-2"><label for="gateway">Gateway</label></div>
-                <input id="gateway" type="text" pInputText [(ngModel)]="ipv4_settings[0].gateway" class="text-base p-2 w-18rem"/>
+                <input id="gateway" type="text" pInputText [(ngModel)]="ipv4_settings.gateway" class="text-base p-2 w-18rem"/>
             </div>
             <div class="field col-12 mt-2">
                 <div class="mb-2"><label for="dns">DNS</label></div>
-                <input id="dns" type="text" pInputText [(ngModel)]="ipv4_settings[0].dns" class="text-base p-2 w-18rem"/>
+                <input id="dns" type="text" pInputText [(ngModel)]="ipv4_settings.dns" class="text-base p-2 w-18rem"/>
             </div>
         </div>
         <div class="field col-12 mt-4">
-          <button pButton (click)="onSubmit()" class="button" [disabled]="loading">Submit</button>
+          <button pButton (click)="onSubmitWifi()" class="button">Submit</button>
         </div>
+      </div>
+      <div class="field col flex-grow-0">
+        <div class="field col-12 mt-2 w-max">Current Configuration:</div>
+        <p-table [value]="[['IPv4', ipv4SettingsCurrent.address], ['Netmask', ipv4SettingsCurrent.netmask], ['Gateway', ipv4SettingsCurrent.gateway], ['DNS', ipv4SettingsCurrent.dns]]">
+          <ng-template pTemplate="body" let-v>
+            <tr>
+              <td>{{v[0]}}</td>
+              <td>{{v[1]}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+  <p-tabPanel header="Ethernet">
+    <div class="formgrid grid align-content-start">
+      <div class="field col flex-grow-0">
+        <div class="field col-12 mt-2">
+          Status:
+          @if (isLoaded) {
+            @if (ethernet.isEnabled) {
+              enabled
+            } @else {
+              disabled
+            }
+            @if (ethernet.isConnected) {
+              | connected
+            } @else {
+              | disconnected
+            }
+          }
+        </div>
+        <div class="field col-12 mt-2">
+          <div class="mb-2">IPv4 Method</div>
+          <select [(ngModel)]="ethernet.ipv4Method" class="text-color surface-overlay p-2 border-1 border-round w-18rem">
+              <option value="auto">Automatic</option>
+              <option value="manual">Manual</option>
+          </select>
+        </div>
+        <div *ngIf="ethernet.ipv4Method === 'manual'">
+            <div class="field col-12 mt-2">
+                <div class="mb-2"><label for="ip-address">IP Address</label></div>
+                <input id="ip-address" type="text" pInputText [(ngModel)]="ethernet.ipv4Settings.address" class="text-base p-2 w-18rem"/>
+            </div>
+            <div class="field col-12 mt-2">
+                <div class="mb-2"><label for="netmask">Netmask</label></div>
+                <input id="netmask"  type="text" pInputText [(ngModel)]="ethernet.ipv4Settings.netmask" class="text-base p-2 w-18rem"/>
+            </div>
+            <div class="field col-12 mt-2">
+                <div class="mb-2"><label for="gateway">Gateway</label></div>
+                <input id="gateway" type="text" pInputText [(ngModel)]="ethernet.ipv4Settings.gateway" class="text-base p-2 w-18rem"/>
+            </div>
+            <div class="field col-12 mt-2">
+                <div class="mb-2"><label for="dns">DNS</label></div>
+                <input id="dns" type="text" pInputText [(ngModel)]="ethernet.ipv4Settings.dns" class="text-base p-2 w-18rem"/>
+            </div>
+        </div>
+        <div class="field col-12 mt-4">
+          <button pButton (click)="onSubmitEthernet()" class="button">Submit</button>
+        </div>
+      </div>
+      <div class="field col flex-grow-0 ml-7">
+        <div class="field col-12 mt-2 w-max">Current Configuration:</div>
+        <p-table [value]="[['IPv4', ethernet.ipv4SettingsCurrent.address], ['Netmask', ethernet.ipv4SettingsCurrent.netmask], ['Gateway', ethernet.ipv4SettingsCurrent.gateway], ['DNS', ethernet.ipv4SettingsCurrent.dns]]">
+          <ng-template pTemplate="body" let-v>
+            <tr>
+              <td>{{v[0]}}</td>
+              <td>{{v[1]}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
       </div>
     </div>
   </p-tabPanel>
