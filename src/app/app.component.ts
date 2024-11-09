@@ -71,10 +71,10 @@ export class AppComponent implements OnInit {
     {
       label: 'Settings',
       items: [
-        { label: 'MQTT Channels', routerLink: '/settings' },
+        { label: 'Channels', routerLink: '/settings' },
         { label: 'G-Cloud', routerLink: '/settings/g-cloud' },
         { label: 'Time', routerLink: '/settings/g-time' },
-        { label: 'Network Settings', routerLink: '/settings/network-settings' },
+        { label: 'Network', routerLink: '/settings/network-settings' },
       ],
       styleClass: 'gap-2',
     },

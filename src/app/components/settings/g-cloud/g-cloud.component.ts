@@ -27,31 +27,22 @@ export class GCloudComponent {
 
   loading: boolean = false;
 
-  settings = {
-    allow_gcloud: false,
-  };
+  isGCloudEnabled = false;
+
 
   constructor() {
     this.backendService.getSettings().subscribe((resp) => {
-      this.settings = resp;
+      this.isGCloudEnabled = resp.gcloud;
     });
   }
 
   onSubmit() {
     const payload = {
-      gcloud: this.settings.allow_gcloud,
+      gcloud: this.isGCloudEnabled,
     };
 
-    this.backendService.updateSettings(payload).subscribe(
-      () => {
-        this.handleMessage('success', 'Submitted successfully', false);
-      },
-      (error: any) => {
-        const errorMsg =
-          error.status === 500 ? error.error.detail : error.error;
-        this.handleMessage('error', errorMsg, true);
-      },
-    );
+    this.backendService.updateSettings(payload).subscribe(resp => {
+    });
   }
 
   handleMessage(

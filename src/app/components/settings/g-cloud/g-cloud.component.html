@@ -1,14 +1,14 @@
-<app-subheader selectedMenuName="G-Cloud"></app-subheader>
+<app-subheader selectedMenuName="G-Cloud Client"></app-subheader>
 
 <div class="main-content-body" [style]="{'margin-top': '120px'}">
   <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
   <div class="field col-12 w-full mt-2">
     <div>
-      <p-checkbox [(ngModel)]="settings.allow_gcloud" [binary]="true" inputId="cloud_id"/>
-      <label for="cloud_id" class="pl-2">Enable G-Node cloud</label>
+      <p-checkbox [(ngModel)]="isGCloudEnabled" [binary]="true" inputId="gcloud_id"/>
+      <label for="gcloud_id" class="pl-2">Enable G-Node Cloud Client</label>
     </div>
-  </div> 
+  </div>
   <div class="field col-12 mt-4">
     <button pButton (click)="onSubmit()" class="button" [disabled]="loading">Submit</button>
   </div>
-</div>   
+</div>
