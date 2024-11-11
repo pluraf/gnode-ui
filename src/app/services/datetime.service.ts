@@ -1,32 +1,68 @@
-import { Injectable } from '@angular/core';
-import moment from 'moment';
+import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { BackendService } from '../services/backend.service';
+import moment from 'moment-timezone';
+
+export interface Settings {
+  gdate: string;
+  gtime: string;
+  timezone: string;
+  currentDateTime: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class DatetimeService {
-  currentDateTimeSubject = new BehaviorSubject<string>(
-    this.getInitialDateTime(),
-  );
-
+export class DatetimeService implements OnDestroy {
+  private timer: any;
+  private currentDateTimeSubject = new BehaviorSubject<string>('');
   currentDateTime$ = this.currentDateTimeSubject.asObservable();
 
-  constructor() {}
+  settings: Settings = {
+    gdate: '',
+    gtime: '',
+    timezone: '',
+    currentDateTime: '',
+  };
+
+  constructor(private backendService: BackendService) {
+    this.syncWithGtime();
+  }
+
+  private syncWithGtime() {
+    this.backendService.getSettings().subscribe((resp) => {
+      const isoDate = new Date(resp.time.iso8601);
+      const gnodeDateTime = `${isoDate.toISOString().slice(0, 10)} ${isoDate.toISOString().slice(11, 19)}`;
+
+      this.settings.currentDateTime = gnodeDateTime;
+      this.settings.timezone = resp.time.timezone;
+      this.currentDateTimeSubject.next(gnodeDateTime);
+
+      this.startClock();
+    });
+  }
+
+  private startClock() {
+    this.timer = setInterval(() => {
+      const currentMoment = moment(this.settings.currentDateTime).add(
+        1,
+        'second',
+      );
+      this.settings.currentDateTime = currentMoment.format(
+        'YYYY-MM-DD HH:mm:ss',
+      );
+      this.currentDateTimeSubject.next(this.settings.currentDateTime);
+    }, 1000);
+  }
 
   updateDateTime(newDateTime: string) {
+    this.settings.currentDateTime = newDateTime;
     this.currentDateTimeSubject.next(newDateTime);
   }
 
-  getInitialDateTime(): string {
-    const manualDate = localStorage.getItem('manualDate');
-    const manualTime = localStorage.getItem('manualTime');
-    const manualTimestamp = localStorage.getItem('manualTimestamp');
-    if (manualDate && manualTime && manualTimestamp) {
-      const manualDateTime = moment(`${manualDate}T${manualTime}`);
-      const elapsedTime = Date.now() - parseInt(manualTimestamp);
-      return manualDateTime.add(elapsedTime, 'milliseconds').format('lll');
+  ngOnDestroy(): void {
+    if (this.timer) {
+      clearInterval(this.timer);
     }
-    return moment().format('lll');
   }
 }

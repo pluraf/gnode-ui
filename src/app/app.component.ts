@@ -6,8 +6,6 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitterModule } from 'primeng/splitter';
-import { ChannelDetailComponent } from './components/channel/channel-detail/channel-detail.component';
-import { SettingsComponent } from './components/settings/settings.component';
 import { DatetimeService } from './services/datetime.service';
 import { BackendService } from './services/backend.service';
 import { HttpClient } from '@angular/common/http';
@@ -22,8 +20,6 @@ import { HttpClient } from '@angular/common/http';
     SplitterModule,
     DividerModule,
     SidebarModule,
-    ChannelDetailComponent,
-    SettingsComponent,
   ],
   providers: [Router],
   templateUrl: './app.component.html',
@@ -46,15 +42,14 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.dateTimeService.currentDateTime$.subscribe((dateTime) => {
       this.currentDateTime = dateTime;
-      this.cdr.detectChanges();
-      this.backendService.getApiInfo().subscribe((resp) => {
-        if (resp) {
-          this.isVirtualMode = resp.mode === 'virtual';
-          this.updateMenuItems();
-        }
-      });
     });
-    this.currentDateTime = new Date().toISOString();
+
+    this.backendService.getApiInfo().subscribe((resp) => {
+      if (resp) {
+        this.isVirtualMode = resp.mode === 'virtual';
+        this.updateMenuItems();
+      }
+    });
   }
 
   items: MenuItem[] = [
@@ -88,7 +83,7 @@ export class AppComponent implements OnInit {
         if (item.label === 'G-Cloud') {
           item.visible = !this.isVirtualMode;
         }
-        if (item.label === 'Network Settings') {
+        if (item.label === 'Network') {
           item.visible = !this.isVirtualMode;
         }
       });

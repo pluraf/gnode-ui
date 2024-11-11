@@ -10,18 +10,12 @@ import { CommonModule } from '@angular/common';
 import { BackendService } from '../../services/backend.service';
 import { DatetimeService } from '../../services/datetime.service';
 import { UserService } from '../../services/user.service';
-import { SettingsComponent } from '../settings/settings.component';
+import moment from 'moment';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [
-    MenubarModule,
-    DialogModule,
-    ButtonModule,
-    SettingsComponent,
-    CommonModule,
-  ],
+  imports: [MenubarModule, DialogModule, ButtonModule, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -53,7 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.timerSubscription = this.datetimeService.currentDateTime$.subscribe(
       (dateTime: string) => {
-        this.currentDateTime = dateTime;
+        this.currentDateTime = moment(dateTime).format('MMM DD, YYYY hh:mm A');
       },
     );
   }
