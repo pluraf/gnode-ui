@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { BackendService } from '../../../services/backend.service';
 import { MessageService } from 'primeng/api';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ToastModule } from 'primeng/toast';
@@ -7,10 +6,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { DatetimeService } from '../../../services/datetime.service';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CommonModule } from '@angular/common';
+import { ApiService } from '../../../services/api.service';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
   selector: 'app-g-time',
@@ -31,7 +32,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './g-time.component.css',
 })
 export class GTimeComponent implements OnInit, OnDestroy {
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
+  settingsService = inject(SettingsService);
   dateTimeService = inject(DatetimeService);
   messageService = inject(MessageService);
 
@@ -52,23 +54,24 @@ export class GTimeComponent implements OnInit, OnDestroy {
 
   currentDateTime$ = this.dateTimeService.currentDateTime$;
 
-  constructor() {}
-
-  ngOnInit() {
+  constructor() {
     this.dateTimeService.currentDateTime$.subscribe((currentDateTime) => {
       this.settings.currentDateTime = currentDateTime;
     });
+  }
+
+  ngOnInit() {
     this.loadInitialDateTime();
   }
 
   loadInitialDateTime() {
-    this.backendService.getSettings().subscribe((resp) => {
-      const isoDate = new Date(resp.time.iso8601);
+    this.settingsService.loadSettingsData().subscribe((resp) => {
+      const isoDate = moment(resp.time.iso8601).tz(this.selectedAutoTz, true);
 
-      this.settings.gdate = isoDate.toISOString().slice(0, 10);
-      this.settings.gtime = isoDate.toISOString().slice(11, 19);
+      this.settings.gdate = isoDate.format('YYYY-MM-DD');
+      this.settings.gtime = isoDate.format('HH:mm');
       this.settings.timezone = resp.time.timezone;
-      this.settings.currentDateTime = `${this.settings.gdate} ${this.settings.gtime}`;
+      this.settings.currentDateTime = isoDate.format('MMM DD, YYYY hh:mm A');
       this.dateTimeService.updateDateTime(this.settings.currentDateTime);
 
       this.startClock();
@@ -76,17 +79,15 @@ export class GTimeComponent implements OnInit, OnDestroy {
   }
 
   startClock() {
-    this.timer = setInterval(() => {
-      this.updateLocalClock();
-    }, 1000);
+    this.timer = setInterval(() => {}, 1000);
   }
 
-  updateLocalClock() {
+  /*   updateLocalClock() {
     const now = new Date();
 
     this.settings.gtime = now.toISOString().slice(11, 19);
     this.settings.currentDateTime = `${this.settings.gdate} ${this.settings.gtime}`;
-  }
+  } */
 
   toggleAutoSync() {
     this.settings.autoSetTime = !this.settings.autoSetTime;
@@ -99,9 +100,11 @@ export class GTimeComponent implements OnInit, OnDestroy {
 
   setManualDateTime() {
     if (this.settings.gdate && this.settings.gtime) {
-      const dateTimeString = `${this.settings.gdate}T${this.settings.gtime}`;
+      const dateTimeString = `${this.settings.gdate} ${this.settings.gtime}`;
       const manualDateTime = moment.tz(dateTimeString, this.selectedManualTz);
-      this.settings.currentDateTime = manualDateTime.format('lll');
+      this.settings.currentDateTime = manualDateTime.format(
+        'MMM DD, YYYY hh:mm A',
+      );
       this.dateTimeService.updateDateTime(this.settings.currentDateTime);
     }
   }
@@ -110,12 +113,14 @@ export class GTimeComponent implements OnInit, OnDestroy {
     if (this.settings.autoSetTime) {
       this.settings.currentDateTime = moment
         .tz(this.selectedAutoTz)
-        .format('lll');
+        .format('MMMM DD, YYYY hh:mm A');
     } else {
       if (this.settings.gdate && this.settings.gtime) {
-        const dateTimeString = `${this.settings.gdate}T${this.settings.gtime}`;
+        const dateTimeString = `${this.settings.gdate} ${this.settings.gtime}`;
         const manualDateTime = moment.tz(dateTimeString, this.selectedManualTz);
-        this.settings.currentDateTime = manualDateTime.format('lll');
+        this.settings.currentDateTime = manualDateTime.format(
+          'MMM DD, YYYY hh:mm A',
+        );
       }
     }
     this.dateTimeService.updateDateTime(this.settings.currentDateTime);
@@ -149,7 +154,7 @@ export class GTimeComponent implements OnInit, OnDestroy {
       gnode_time: gnodeTime,
     };
 
-    this.backendService.updateSettings(payload).subscribe(
+    this.apiService.updateSettings(payload).subscribe(
       () => {
         this.handleMessage('success', 'Submitted successfully', false);
       },

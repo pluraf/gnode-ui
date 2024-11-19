@@ -1,9 +1,16 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  inject,
+  Injectable,
+  OnDestroy,
+} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { BackendService } from '../services/backend.service';
 import moment from 'moment-timezone';
+import { SettingsService } from './settings.service';
+import { Settings } from './service';
+import { ApiService } from './api.service';
 
-export interface Settings {
+export interface Settings1 {
   gdate: string;
   gtime: string;
   timezone: string;
@@ -14,31 +21,30 @@ export interface Settings {
   providedIn: 'root',
 })
 export class DatetimeService implements OnDestroy {
+  settingsService = inject(SettingsService);
+
   private timer: any;
   private currentDateTimeSubject = new BehaviorSubject<string>('');
   currentDateTime$ = this.currentDateTimeSubject.asObservable();
 
-  settings: Settings = {
+  settingsItem: Settings | null = null;
+
+  settings: Settings1 = {
     gdate: '',
     gtime: '',
     timezone: '',
     currentDateTime: '',
   };
 
-  constructor(private backendService: BackendService) {
-    this.syncWithGtime();
-  }
+  constructor(private apiService: ApiService) {}
 
-  private syncWithGtime() {
-    this.backendService.getSettings().subscribe((resp) => {
-      const isoDate = new Date(resp.time.iso8601);
-      const gnodeDateTime = `${isoDate.toISOString().slice(0, 10)} ${isoDate.toISOString().slice(11, 19)}`;
+  ngOnInit(): void {
+    // Fetch settings if not already fetched
+    this.settingsService.loadSettingsData();
 
-      this.settings.currentDateTime = gnodeDateTime;
-      this.settings.timezone = resp.time.timezone;
-      this.currentDateTimeSubject.next(gnodeDateTime);
-
-      this.startClock();
+    // Subscribe to settings$
+    this.settingsService.settings$.subscribe((settings) => {
+      this.settingsItem = settings;
     });
   }
 
@@ -48,9 +54,7 @@ export class DatetimeService implements OnDestroy {
         1,
         'second',
       );
-      this.settings.currentDateTime = currentMoment.format(
-        'YYYY-MM-DD HH:mm:ss',
-      );
+      this.settings.currentDateTime = currentMoment.toISOString();
       this.currentDateTimeSubject.next(this.settings.currentDateTime);
     }, 1000);
   }

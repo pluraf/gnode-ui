@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { BackendService } from '../../../services/backend.service';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -13,6 +12,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-pipeline-create',
@@ -32,7 +32,7 @@ import { MessageService } from 'primeng/api';
   styleUrl: './pipeline-create.component.css',
 })
 export class PipelineCreateComponent implements OnInit {
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
   route: ActivatedRoute = inject(ActivatedRoute);
   http = inject(HttpClient);
   messageService = inject(MessageService);
@@ -57,7 +57,7 @@ export class PipelineCreateComponent implements OnInit {
     } catch (error) {
       pipelineData = this.pipelineJson;
     }
-    this.backendService.pipelineEdit(this.pipeid, pipelineData).subscribe(
+    this.apiService.pipelineEdit(this.pipeid, pipelineData).subscribe(
       () => {
         this.handleMessage('success', 'Pipeline edited successfully!', false);
       },

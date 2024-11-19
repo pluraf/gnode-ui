@@ -8,6 +8,7 @@ import { PageEvent } from '../../channel/channel';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { UserDeleteComponent } from '../user-delete/user-delete.component';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-user-list',
@@ -22,18 +23,16 @@ import { UserDeleteComponent } from '../user-delete/user-delete.component';
   styleUrl: './user-list.component.css',
 })
 export class UserListComponent {
-  userService = inject(UserService);
+  apiService = inject(ApiService);
 
   visibleDialog: boolean = false;
   selectedUsers: any[] = [];
-  first: number = 0;
-  rows: number = 5;
   totalRecords = 0;
   users: any[] = [];
 
   menubarItems: MenuItem[] = [
     {
-      routerLink: '/user-create',
+      routerLink: ['user-create'],
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',
@@ -41,15 +40,6 @@ export class UserListComponent {
       },
       iconClass: 'pi pi-plus m-1',
     },
-    /*     {
-      routerLink: '/user-edit',
-      tooltipOptions: {
-        tooltipEvent: 'hover',
-        tooltipPosition: 'bottom',
-        tooltipLabel: 'Edit user',
-      },
-      iconClass: 'pi pi-pencil m-1',
-    }, */
     {
       tooltipOptions: {
         tooltipEvent: 'hover',
@@ -68,7 +58,7 @@ export class UserListComponent {
   }
 
   fetchUsers() {
-    this.userService.getUsers().subscribe((res: any) => {
+    this.apiService.getUsers().subscribe((res: any) => {
       this.users = res;
       this.totalRecords = this.users.length;
     });
@@ -85,7 +75,7 @@ export class UserListComponent {
   onDeleteUser() {
     const userIds: any[] = this.selectedUsers.map((user) => user.id);
 
-    this.userService.deleteUsers(userIds).subscribe({
+    this.apiService.deleteUsers(userIds).subscribe({
       next: (resp: any) => {
         const deleted = resp.deleted;
         this.users = this.users.filter((user) => !deleted.includes(user.id));

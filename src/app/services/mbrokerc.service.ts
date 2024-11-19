@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +11,12 @@ export class MBrokerCService {
   private apiUrl = 'broker/command';
   private httpOptions: { headers: HttpHeaders };
   http = inject(HttpClient);
-  user = inject(UserService);
+  authService = inject(AuthService);
 
   constructor() {
     this.httpOptions = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.user.getToken()}`,
+        Authorization: `Bearer ${this.authService.getToken()}`,
         'Content-Type': 'application/json',
       }),
     };

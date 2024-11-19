@@ -22,6 +22,3 @@ button {
   width: 1.5rem;
   height: 1.5rem;
 }
-::ng-deep .p-divider.p-divider-horizontal {
-  margin: 1.25rem 0 0.75rem 0;
-}

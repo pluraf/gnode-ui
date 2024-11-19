@@ -7,8 +7,10 @@ import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitterModule } from 'primeng/splitter';
 import { DatetimeService } from './services/datetime.service';
-import { BackendService } from './services/backend.service';
 import { HttpClient } from '@angular/common/http';
+import { SettingsService } from './services/settings.service';
+import { ApiinfoService } from './services/apiinfo.service';
+import { ApiInfo } from './services/service';
 
 @Component({
   selector: 'app-root',
@@ -32,23 +34,34 @@ export class AppComponent implements OnInit {
   router: Router = inject(Router);
   dateTimeService = inject(DatetimeService);
   cdr = inject(ChangeDetectorRef);
-  backendService = inject(BackendService);
+  settingsService = inject(SettingsService);
   http = inject(HttpClient);
+  apiInfoService = inject(ApiinfoService);
 
   isVirtualMode: boolean = false;
+  isAuthentication: boolean = true;
+
+  apiInfo: ApiInfo | null = null;
 
   constructor() {}
 
   ngOnInit() {
     this.dateTimeService.currentDateTime$.subscribe((dateTime) => {
       this.currentDateTime = dateTime;
+      this.cdr.detectChanges();
     });
 
-    this.backendService.getApiInfo().subscribe((resp) => {
+    this.settingsService.loadSettingsData().subscribe((resp) => {
       if (resp) {
-        this.isVirtualMode = resp.mode === 'virtual';
+        this.isAuthentication = resp.authentication == false;
         this.updateMenuItems();
       }
+    });
+
+    this.apiInfoService.loadApiInfo().subscribe((apiInfo) => {
+      this.apiInfo = apiInfo;
+      this.isVirtualMode = apiInfo.mode === 'virtual';
+      this.updateMenuItems();
     });
   }
 
@@ -70,23 +83,31 @@ export class AppComponent implements OnInit {
         { label: 'G-Cloud', routerLink: '/settings/g-cloud' },
         { label: 'Time', routerLink: '/settings/g-time' },
         { label: 'Network', routerLink: '/settings/network-settings' },
+        { label: 'Authentication', routerLink: '/settings/authentication' },
       ],
       styleClass: 'gap-2',
     },
     { label: 'Status', routerLink: '/status', styleClass: 'gap-2' },
   ];
 
-  updateMenuItems() {
+  updateMenuItems(isUsersVisible: boolean = true) {
     const settingsMenu = this.items.find((item) => item.label === 'Settings');
+    const users = this.items.find((item) => item.label === 'Users');
     if (settingsMenu && settingsMenu.items) {
       settingsMenu.items.forEach((item) => {
-        if (item.label === 'G-Cloud') {
-          item.visible = !this.isVirtualMode;
-        }
-        if (item.label === 'Network') {
-          item.visible = !this.isVirtualMode;
+        if (
+          item.label === 'G-Cloud' ||
+          item.label === 'Network' ||
+          item.label === 'Time'
+        ) {
+          item.visible = false;
+        } else {
+          item.visible = true;
         }
       });
+    }
+    if (users) {
+      users.visible = !this.isAuthentication;
     }
   }
 }

@@ -6,7 +6,6 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { BackendService } from '../../../services/backend.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import {
   AuthType,
@@ -16,6 +15,7 @@ import {
 } from '../authbundle';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-authbundle-edit',
@@ -33,7 +33,7 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './authbundle-edit.component.css',
 })
 export class AuthbundleEditComponent {
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   messageService = inject(MessageService);
@@ -171,7 +171,7 @@ export class AuthbundleEditComponent {
     if (this.description) {
       formData.append('description', this.description);
     }
-    this.backendService.editAuthbundle(this.authbundleId, formData).subscribe(
+    this.apiService.editAuthbundle(this.authbundleId, formData).subscribe(
       (response) => {
         if (
           response.responses &&

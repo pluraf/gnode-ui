@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -7,10 +13,11 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 
-import { BackendService } from '../../services/backend.service';
 import { DatetimeService } from '../../services/datetime.service';
 import { UserService } from '../../services/user.service';
-import moment from 'moment';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-header',
@@ -25,44 +32,71 @@ export class HeaderComponent implements OnInit, OnDestroy {
   position: string = 'top-right';
   displayUsername: string | null = null;
   visibleTime: boolean = false;
-  apiVersion: any;
+  apiVersion: string = '';
   serialNumber: string = '';
   currentDateTime: string = '';
   timerSubscription: Subscription | null = null;
+  apimode: string = '';
+  showusername: boolean = false;
 
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
   datetimeService = inject(DatetimeService);
   router = inject(Router);
+  authService = inject(AuthService);
   userService = inject(UserService);
+  cdr = inject(ChangeDetectorRef);
+  settingsService = inject(SettingsService);
+
+  isAuthentication: boolean = true;
 
   constructor() {}
 
   ngOnInit(): void {
-    const username = this.userService.getUsername();
-    this.userInitial = username ? username.charAt(0).toUpperCase() : null;
-    this.displayUsername = username
-      ? username.charAt(0).toUpperCase() + username.slice(1)
-      : null;
-    this.getApiVersion();
+    this.userService.getUsername();
+
+    this.userService.users$.subscribe((users) => {
+      if (users && users.length > 0) {
+        const username = users[0]?.username;
+
+        if (username && typeof username === 'string') {
+          this.userInitial = username.charAt(0).toUpperCase();
+          this.displayUsername =
+            username.charAt(0).toUpperCase() + username.slice(1);
+        } else {
+          this.userInitial = null;
+          this.displayUsername = null;
+        }
+      }
+    });
+
+    this.settingsService.settings$.subscribe((settings) => {
+      if (settings?.authentication === false) {
+        this.isAuthentication = false;
+      } else {
+        this.isAuthentication = true;
+      }
+    });
+
+    this.getApiMode();
 
     this.timerSubscription = this.datetimeService.currentDateTime$.subscribe(
       (dateTime: string) => {
-        this.currentDateTime = moment(dateTime).format('MMM DD, YYYY hh:mm A');
+        this.currentDateTime = dateTime;
       },
     );
   }
-
   ngOnDestroy(): void {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
   }
 
-  getApiVersion(): void {
-    this.backendService.getApiVersion().subscribe({
+  getApiMode(): void {
+    this.apiService.getApiInfo().subscribe({
       next: (response) => {
-        this.apiVersion = response['api_version'];
+        this.apiVersion = response['version'];
         this.serialNumber = response['serial_number'];
+        this.apimode = response['mode'];
       },
     });
   }
@@ -73,7 +107,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onSignOut() {
-    this.userService.logout();
+    this.authService.logout();
     this.router.navigateByUrl('/login');
     this.visible = false;
   }

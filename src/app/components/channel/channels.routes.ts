@@ -10,7 +10,7 @@ export const CHANNELS_ROUTES: Routes = [
   {
     path: '',
     canActivate: [authGuard],
-    component: ChannelListComponent
+    component: ChannelListComponent,
   },
   {
     path: 'channel-create',

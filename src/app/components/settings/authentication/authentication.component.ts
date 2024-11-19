@@ -1,50 +1,49 @@
 import { Component, inject } from '@angular/core';
-import { CheckboxModule } from 'primeng/checkbox';
-import { SubheaderComponent } from '../../subheader/subheader.component';
-import { DividerModule } from 'primeng/divider';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { MessageService } from 'primeng/api';
+import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
-import { ChangeDetectorRef } from '@angular/core';
-import { SettingsService } from '../../../services/settings.service';
+import { MessageService } from 'primeng/api';
+import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ApiService } from '../../../services/api.service';
+import { SettingsService } from '../../../services/settings.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-mqtt-channels',
+  selector: 'app-authentication',
   standalone: true,
   imports: [
-    SubheaderComponent,
-    CheckboxModule,
-    DividerModule,
     FormsModule,
-    ButtonModule,
     ToastModule,
+    ButtonModule,
+    CheckboxModule,
+    SubheaderComponent,
   ],
   providers: [MessageService],
-  templateUrl: './mqtt-channels.component.html',
-  styleUrl: './mqtt-channels.component.css',
+  templateUrl: './authentication.component.html',
+  styleUrl: './authentication.component.css',
 })
-export class MqttChannelsComponent {
-  settingsService = inject(SettingsService);
+export class AuthenticationComponent {
   apiService = inject(ApiService);
   messageService = inject(MessageService);
+  settingsService = inject(SettingsService);
+  router = inject(Router);
 
   loading: boolean = false;
 
   settings = {
-    allow_anonymous: false,
+    isAuthentication: false,
   };
 
-  constructor(private cdr: ChangeDetectorRef) {
-    this.settingsService.loadSettingsData().subscribe((resp) => {
-      this.settings = resp;
+  constructor() {
+    this.settingsService.loadSettingsData().subscribe((response) => {
+      this.settings.isAuthentication = response.authentication;
     });
   }
 
   onSubmit() {
     const payload = {
-      allow_anonymous: this.settings.allow_anonymous,
+      authentication: this.settings.isAuthentication,
     };
 
     this.apiService.updateSettings(payload).subscribe(
@@ -54,7 +53,7 @@ export class MqttChannelsComponent {
       (error: any) => {
         this.handleMessage(
           'error',
-          error.status === 500 ? error.error : error.error.detail,
+          error.status === 500 ? error.error.detail : error.error,
           true,
         );
       },
@@ -67,7 +66,6 @@ export class MqttChannelsComponent {
     sticky: boolean,
   ) {
     this.messageService.add({ severity, detail });
-    this.cdr.markForCheck();
     if (severity === 'success') {
       this.loading = true;
       setTimeout(() => {

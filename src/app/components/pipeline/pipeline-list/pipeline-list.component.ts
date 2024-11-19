@@ -9,8 +9,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { BackendService } from '../../../services/backend.service';
 import { PipelineDeleteComponent } from '../pipeline-delete/pipeline-delete.component';
+import { ApiService } from '../../../services/api.service';
 
 export interface Pipeline {
   id: string;
@@ -37,7 +37,7 @@ export interface Pipeline {
   styleUrl: './pipeline-list.component.css',
 })
 export class PipelineListComponent implements OnInit {
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
 
   visibleDialog: boolean = false;
   pipelines: Pipeline[] = [];
@@ -78,7 +78,7 @@ export class PipelineListComponent implements OnInit {
   }
 
   loadPipelines() {
-    this.backendService.pipelinesList().subscribe((response) => {
+    this.apiService.pipelinesList().subscribe((response) => {
       if (response && Object.keys(response).length > 0) {
         this.pipelines = Object.entries(response).map((entry: any) => ({
           id: entry[0],
@@ -90,7 +90,7 @@ export class PipelineListComponent implements OnInit {
 
         // Fetch the status for each pipeline
         this.pipelines.forEach((pipeline: any) => {
-          this.backendService
+          this.apiService
             .getPipelineStatus(pipeline.id)
             .subscribe((statusResponse) => {
               pipeline.status = statusResponse.status;
@@ -113,7 +113,7 @@ export class PipelineListComponent implements OnInit {
 
   onDeletePipelines() {
     const pipelineIDs = this.selectedPipelines.map((pipeline) => pipeline.id);
-    this.backendService.pipelineDelete(this.pipeid, pipelineIDs).subscribe({
+    this.apiService.pipelineDelete(this.pipeid, pipelineIDs).subscribe({
       next: (response: { deleted: string[] }) => {
         const deletedPipelines = response.deleted || [];
         this.pipelines = this.pipelines.filter(

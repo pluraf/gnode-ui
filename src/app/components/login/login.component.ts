@@ -4,12 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { UserService } from '../../services/user.service';
-
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
+
+export interface LoginUser {
+  username: string;
+  password: string;
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -28,41 +34,40 @@ import { PasswordModule } from 'primeng/password';
 export class LoginComponent {
   errorMessage: string = '';
 
-  loginUser: any = {
+  loginUser: LoginUser = {
     username: 'admin',
-    password: 'admin',
+    password: '',
   };
 
   constructor(
     private router: Router,
-    private userService: UserService,
+    private authService: AuthService,
   ) {}
 
   http = inject(HttpClient);
+  apiService = inject(ApiService);
 
   onLogin() {
-    if (this.loginUser.username && this.loginUser.password) {
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
-      });
-      const body = new HttpParams()
-        .set('username', this.loginUser.username)
-        .set('password', this.loginUser.password);
-      this.http.post('api/auth/token/', body.toString(), { headers }).subscribe(
-        (res: any) => {
-          if (res.access_token) {
-            this.userService.login(res.access_token, this.loginUser.username);
-            this.router.navigateByUrl('/channels');
-          } else {
-            this.showErrorMessage('Invalid Username or Password.');
-          }
-        },
-        (error) => {
-          if (error.status === 401 || error.status === 400) {
-            this.showErrorMessage('Invalid Username or Password.');
-          }
-        },
-      );
+    if (this.loginUser) {
+      this.apiService
+        .getAuthToken(this.loginUser.username, this.loginUser.password)
+        .subscribe(
+          (res: any) => {
+            if (res.access_token) {
+              this.authService.storeToken(res.access_token);
+              this.router.navigateByUrl('/channels');
+            } else {
+              this.showErrorMessage(res.error);
+            }
+          },
+          (error) => {
+            if (error.error && error.error.detail) {
+              this.showErrorMessage(error.error.detail);
+            } else if (error.message) {
+              this.showErrorMessage(error.message);
+            }
+          },
+        );
     } else {
       this.showErrorMessage('Username and Password are required.');
     }
@@ -70,8 +75,5 @@ export class LoginComponent {
 
   showErrorMessage(message: string) {
     this.errorMessage = message;
-    /* setTimeout(() => {
-      this.errorMessage = '';
-    }, 6000); */
   }
 }

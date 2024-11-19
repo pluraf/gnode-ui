@@ -1,11 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { SubheaderComponent } from '../../subheader/subheader.component';
-import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
-import { BackendService } from '../../../services/backend.service';
+
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { CheckboxModule } from 'primeng/checkbox';
+
+import { SettingsService } from '../../../services/settings.service';
+import { ApiService } from '../../../services/api.service';
+import { SubheaderComponent } from '../../subheader/subheader.component';
 
 @Component({
   selector: 'app-g-cloud',
@@ -22,16 +25,16 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './g-cloud.component.css',
 })
 export class GCloudComponent {
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
   messageService = inject(MessageService);
+  settingsService = inject(SettingsService);
 
   loading: boolean = false;
 
   isGCloudEnabled = false;
 
-
   constructor() {
-    this.backendService.getSettings().subscribe((resp) => {
+    this.settingsService.loadSettingsData().subscribe((resp) => {
       this.isGCloudEnabled = resp.gcloud;
     });
   }
@@ -41,8 +44,7 @@ export class GCloudComponent {
       gcloud: this.isGCloudEnabled,
     };
 
-    this.backendService.updateSettings(payload).subscribe(resp => {
-    });
+    this.apiService.updateSettings(payload).subscribe((resp) => {});
   }
 
   handleMessage(

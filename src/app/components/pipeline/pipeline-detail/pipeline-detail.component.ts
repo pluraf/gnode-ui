@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { BackendService } from '../../../services/backend.service';
 import { PipelineDeleteComponent } from '../pipeline-delete/pipeline-delete.component';
 
 import { MenuItem } from 'primeng/api';
@@ -11,6 +10,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { interval, Subscription } from 'rxjs';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-pipeline-detail',
@@ -27,7 +27,7 @@ import { interval, Subscription } from 'rxjs';
   styleUrl: './pipeline-detail.component.css',
 })
 export class PipelineDetailComponent {
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
   route = inject(ActivatedRoute);
   router = inject(Router);
 
@@ -69,7 +69,7 @@ export class PipelineDetailComponent {
   }
 
   loadPipelineDetails(pipeid: string) {
-    this.backendService.pipelineGet(pipeid).subscribe((response: any) => {
+    this.apiService.pipelineGet(pipeid).subscribe((response: any) => {
       if (response) {
         this.pipelines = response;
         this.updatePipelineStatus();
@@ -78,7 +78,7 @@ export class PipelineDetailComponent {
   }
 
   updatePipelineStatus() {
-    this.backendService.getPipelineStatus(this.pipeid).subscribe({
+    this.apiService.getPipelineStatus(this.pipeid).subscribe({
       next: (statusResponse) => {
         this.pipelines.status = statusResponse.status;
         this.pipelines.count_in = statusResponse.count_in;
@@ -133,7 +133,7 @@ export class PipelineDetailComponent {
 
   onDeletePipelines() {
     const pipeids = [this.pipeid];
-    this.backendService.pipelineDelete(this.pipeid, pipeids).subscribe({
+    this.apiService.pipelineDelete(this.pipeid, pipeids).subscribe({
       next: (response: any) => {
         if (response.success || response.status === 'success') {
           this.details = [];
@@ -158,7 +158,7 @@ export class PipelineDetailComponent {
 
     this.isStarting = true;
 
-    this.backendService.startPipeline(this.pipeid).subscribe({
+    this.apiService.startPipeline(this.pipeid).subscribe({
       next: () => {
         this.startPolling();
       },
@@ -172,7 +172,7 @@ export class PipelineDetailComponent {
 
   OnStopSpinner() {
     this.isStopping = true;
-    this.backendService.stopPipeline(this.pipeid).subscribe({
+    this.apiService.stopPipeline(this.pipeid).subscribe({
       next: () => {
         this.startPolling();
       },

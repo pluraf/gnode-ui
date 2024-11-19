@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { SubheaderComponent } from '../../subheader/subheader.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-user-create',
@@ -42,6 +43,7 @@ export class UserCreateComponent {
 
   constructor(
     private router: Router,
+    private authService: AuthService,
     public userService: UserService,
   ) {}
 
@@ -51,33 +53,29 @@ export class UserCreateComponent {
       return;
     }
 
-    const token = this.userService.getToken();
+    const token = this.authService.getToken();
     if (token) {
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      });
+      this.userObj.token = token;
 
-      this.http.post('api/user/', this.userObj, { headers }).subscribe(
+      this.userService.createNewUsers(this.userObj).subscribe(
         (response: any) => {
           if (response?.responses?.[0]?.error) {
             this.showMessage(response.responses[0].error);
+          } else {
+            this.showMessage('User created successfully!');
+            setTimeout(() => {
+              this.router.navigateByUrl('/users');
+            }, 1000);
           }
-          this.showMessage('User created successfully!');
-          setTimeout(() => {
-            this.router.navigateByUrl('/users');
-          }, 1000);
         },
         (error) => {
-          console.error('Error creating user:', error);
-          if (error.status === 401) {
+          if (error.status === 401 || error.status === 500) {
             this.showErrorMessage('User name already exists.');
-          } else if (error.status === 500) {
-            this.showErrorMessage('User name already exists.');
+          } else {
+            this.showErrorMessage('An error occurred while creating the user.');
           }
         },
       );
-    } else {
-      this.showErrorMessage('Authorization token is required.');
     }
   }
 

@@ -7,9 +7,9 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { BackendService } from '../../../services/backend.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-pipeline-edit',
@@ -28,7 +28,7 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './pipeline-edit.component.css',
 })
 export class PipelineEditComponent {
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
   route: ActivatedRoute = inject(ActivatedRoute);
   router = inject(Router);
   messageService = inject(MessageService);
@@ -39,13 +39,13 @@ export class PipelineEditComponent {
 
   constructor() {
     this.pipeid = this.route.snapshot.params['pipeid'];
-    this.backendService.pipelineGet(this.pipeid).subscribe((resp) => {
+    this.apiService.pipelineGet(this.pipeid).subscribe((resp) => {
       this.pipelineJson = JSON.stringify(resp, null, 2);
     });
   }
 
   onUpdatePipeline() {
-    this.backendService.pipelineEdit(this.pipeid, this.pipelineJson).subscribe(
+    this.apiService.pipelineEdit(this.pipeid, this.pipelineJson).subscribe(
       () => {
         this.handleMessage('success', 'Pipeline edited successfully!', false);
       },

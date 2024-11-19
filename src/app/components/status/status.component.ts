@@ -7,7 +7,7 @@ import { TableModule } from 'primeng/table';
 import { DividerModule } from 'primeng/divider';
 
 import { SubheaderComponent } from '../subheader/subheader.component';
-import { BackendService } from '../../services/backend.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-status',
@@ -24,7 +24,7 @@ import { BackendService } from '../../services/backend.service';
   styleUrl: './status.component.css',
 })
 export class StatusComponent {
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
   networkDetails: any[] = [
     ['IP address', '-.-.-.-'],
     ['Netmask', '-.-.-.-'],
@@ -42,7 +42,7 @@ export class StatusComponent {
   }
 
   loadStatusDetails() {
-    this.backendService.getStatus().subscribe((response: any) => {
+    this.apiService.getStatus().subscribe((response: any) => {
       this.networkDetails = [
         ['IP Address', response.network['ipv4']],
         ['Netmask', response.network['netmask']],

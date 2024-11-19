@@ -12,21 +12,22 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const token = cookies.get('access_token');
 
-  const authReq = token
-    ? req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-    : req;
-
-  return next(authReq).pipe(
-    catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
-        cookies.delete('access_token');
-        router.navigate(['/login']);
-      }
-      return throwError(() => error);
-    }),
-  );
+  if (token) {
+    const authReq = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return next(authReq).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          cookies.delete('access_token');
+          router.navigate(['/login']);
+        }
+        return throwError(() => error);
+      }),
+    );
+  } else {
+    return next(req);
+  }
 };

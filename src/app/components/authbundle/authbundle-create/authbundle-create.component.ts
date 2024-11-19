@@ -14,7 +14,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageService } from 'primeng/api';
 
-import { BackendService } from '../../../services/backend.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import {
   AuthType,
@@ -23,6 +22,7 @@ import {
   ConnectorTypeLabel,
 } from '../authbundle';
 import { ToastModule } from 'primeng/toast';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-authbundle-create',
@@ -41,7 +41,7 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './authbundle-create.component.css',
 })
 export class AuthbundleCreateComponent {
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
   messageService = inject(MessageService);
 
   authbundleId = '';
@@ -200,7 +200,7 @@ export class AuthbundleCreateComponent {
     if (this.description) {
       formData.append('description', this.description);
     }
-    this.backendService.createAuthbundle(formData).subscribe(
+    this.apiService.createAuthbundle(formData).subscribe(
       (response) => {
         if (response && response.responses && response.responses.length > 0) {
           if (response.responses[0].hasOwnProperty('error')) {

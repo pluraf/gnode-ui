@@ -12,8 +12,8 @@ import { ButtonModule } from 'primeng/button';
 import { Authbundle } from '../authbundle';
 import { AuthbundleCreateComponent } from '../authbundle-create/authbundle-create.component';
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { BackendService } from '../../../services/backend.service';
 import { AuthbundleDeleteComponent } from '../authbundle-delete/authbundle-delete.component';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-authbundle-list',
@@ -66,7 +66,7 @@ export class AuthbundleListComponent implements OnInit {
     },
   ];
 
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
   router = inject(Router);
 
   constructor() {}
@@ -78,7 +78,7 @@ export class AuthbundleListComponent implements OnInit {
   }
 
   loadAuthbundles() {
-    this.backendService.listAuthbundles().subscribe((resp) => {
+    this.apiService.listAuthbundles().subscribe((resp) => {
       if (resp.length === 0) {
         this.showMessage = !this.showMessage;
       } else {
@@ -99,7 +99,7 @@ export class AuthbundleListComponent implements OnInit {
     const ids = this.selectedAuthbundle.map(
       (authbundle) => authbundle.authbundle_id,
     );
-    this.backendService.deleteAuthbundles(ids).subscribe({
+    this.apiService.deleteAuthbundles(ids).subscribe({
       next: (response: { deleted: any[] }) => {
         const deletedAuthbundles = response.deleted || [];
         this.authbundleList = this.authbundleList.filter(

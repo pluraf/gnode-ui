@@ -5,7 +5,7 @@ import {
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { MqttChannelsComponent } from './mqtt-channels.component';
-import { BackendService } from '../../../services/backend.service';
+import { ApiService } from '../../../services/api.service';
 
 describe('MqttChannelsComponent', () => {
   let component: MqttChannelsComponent;
@@ -15,7 +15,7 @@ describe('MqttChannelsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MqttChannelsComponent, HttpClientModule],
-      providers: [BackendService, provideHttpClientTesting()],
+      providers: [ApiService, provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MqttChannelsComponent);

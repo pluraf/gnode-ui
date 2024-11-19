@@ -6,7 +6,7 @@ import { TableModule } from 'primeng/table';
 
 import { AuthbundleDeleteComponent } from '../authbundle-delete/authbundle-delete.component';
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { BackendService } from '../../../services/backend.service';
+import { ApiService } from '../../../services/api.service';
 
 @Component({
   selector: 'app-authbundle-detail',
@@ -16,7 +16,7 @@ import { BackendService } from '../../../services/backend.service';
   styleUrl: './authbundle-detail.component.css',
 })
 export class AuthbundleDetailComponent {
-  backendService = inject(BackendService);
+  apiService = inject(ApiService);
   route = inject(ActivatedRoute);
   router = inject(Router);
 
@@ -54,19 +54,17 @@ export class AuthbundleDetailComponent {
   }
 
   loadAuthbundleDetails(authbundleId: string) {
-    this.backendService
-      .getAuthbundles(authbundleId)
-      .subscribe((response: any) => {
-        if (response) {
-          this.authbundle = response;
-          this.details = [
-            ['Type', this.authbundle.connector_type],
-            ['Authentication type', this.authbundle.auth_type],
-            ['Username', this.authbundle.username],
-            ['Description', this.authbundle.description],
-          ];
-        }
-      });
+    this.apiService.getAuthbundles(authbundleId).subscribe((response: any) => {
+      if (response) {
+        this.authbundle = response;
+        this.details = [
+          ['Type', this.authbundle.connector_type],
+          ['Authentication type', this.authbundle.auth_type],
+          ['Username', this.authbundle.username],
+          ['Description', this.authbundle.description],
+        ];
+      }
+    });
   }
 
   showDialog() {
@@ -75,7 +73,7 @@ export class AuthbundleDetailComponent {
 
   onDeleteAuthbundle() {
     const ids = [this.authbundleId];
-    this.backendService.deleteAuthbundles(ids).subscribe({
+    this.apiService.deleteAuthbundles(ids).subscribe({
       next: (response: any) => {
         if (response.success || response.status === 'success') {
           this.details = [];
