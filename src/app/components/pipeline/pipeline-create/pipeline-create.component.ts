@@ -57,7 +57,7 @@ export class PipelineCreateComponent implements OnInit {
     } catch (error) {
       pipelineData = this.pipelineJson;
     }
-    this.apiService.pipelineEdit(this.pipeid, pipelineData).subscribe(
+    this.apiService.pipelineCreate(this.pipeid, pipelineData).subscribe(
       () => {
         this.handleMessage('success', 'Pipeline edited successfully!', false);
       },
