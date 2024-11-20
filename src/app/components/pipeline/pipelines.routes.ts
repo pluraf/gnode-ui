@@ -7,7 +7,7 @@ import { PipelineDeleteComponent } from './pipeline-delete/pipeline-delete.compo
 import { PipelineListComponent } from './pipeline-list/pipeline-list.component';
 
 export const PIPELINES_ROUTES: Routes = [
-  { path: '', component: PipelineListComponent },
+  { path: '', component: PipelineListComponent, canActivate: [authGuard] },
   {
     path: 'pipeline-create',
     canActivate: [authGuard],

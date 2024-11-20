@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectorRef,
+  effect,
+} from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { MenuItem } from 'primeng/api';
@@ -28,7 +34,6 @@ import { ApiInfo } from './services/service';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  title = 'gnode-ui';
   currentDateTime: string = '';
 
   router: Router = inject(Router);
@@ -41,27 +46,32 @@ export class AppComponent implements OnInit {
   isVirtualMode: boolean = false;
   isAuthentication: boolean = true;
 
-  apiInfo: ApiInfo | null = null;
+  apiInfoSignal = this.apiInfoService.apiInfoData;
 
-  constructor() {}
-
-  ngOnInit() {
-    this.dateTimeService.currentDateTime$.subscribe((dateTime) => {
-      this.currentDateTime = dateTime;
-      this.cdr.detectChanges();
+  constructor() {
+    effect(() => {
+      const updatedDateTime = this.dateTimeService.settings().currentDateTime;
+      this.currentDateTime = updatedDateTime;
     });
 
+    effect(() => {
+      const apiInfo = this.apiInfoSignal();
+
+      if (apiInfo.mode) {
+        if (apiInfo.mode === 'virtual') {
+          this.isVirtualMode = true;
+          this.updateMenuItems();
+        }
+      }
+    });
+  }
+
+  ngOnInit() {
     this.settingsService.loadSettingsData().subscribe((resp) => {
       if (resp) {
         this.isAuthentication = resp.authentication == false;
         this.updateMenuItems();
       }
-    });
-
-    this.apiInfoService.loadApiInfo().subscribe((apiInfo) => {
-      this.apiInfo = apiInfo;
-      this.isVirtualMode = apiInfo.mode === 'virtual';
-      this.updateMenuItems();
     });
   }
 
@@ -90,7 +100,7 @@ export class AppComponent implements OnInit {
     { label: 'Status', routerLink: '/status', styleClass: 'gap-2' },
   ];
 
-  updateMenuItems(isUsersVisible: boolean = true) {
+  updateMenuItems() {
     const settingsMenu = this.items.find((item) => item.label === 'Settings');
     const users = this.items.find((item) => item.label === 'Users');
     if (settingsMenu && settingsMenu.items) {
@@ -100,9 +110,7 @@ export class AppComponent implements OnInit {
           item.label === 'Network' ||
           item.label === 'Time'
         ) {
-          item.visible = false;
-        } else {
-          item.visible = true;
+          item.visible = !this.isVirtualMode;
         }
       });
     }

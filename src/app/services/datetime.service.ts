@@ -1,16 +1,16 @@
 import {
-  ChangeDetectorRef,
+  computed,
+  effect,
   inject,
   Injectable,
   OnDestroy,
+  Signal,
+  signal,
 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import moment from 'moment-timezone';
 import { SettingsService } from './settings.service';
-import { Settings } from './service';
-import { ApiService } from './api.service';
+import { ApiinfoService } from './apiinfo.service';
 
-export interface Settings1 {
+export interface TimeSettings {
   gdate: string;
   gtime: string;
   timezone: string;
@@ -22,46 +22,91 @@ export interface Settings1 {
 })
 export class DatetimeService implements OnDestroy {
   settingsService = inject(SettingsService);
+  apiInfoService = inject(ApiinfoService);
 
   private timer: any;
-  private currentDateTimeSubject = new BehaviorSubject<string>('');
-  currentDateTime$ = this.currentDateTimeSubject.asObservable();
-
-  settingsItem: Settings | null = null;
-
-  settings: Settings1 = {
+  settingsTimeSignal = signal<TimeSettings>({
     gdate: '',
     gtime: '',
     timezone: '',
     currentDateTime: '',
-  };
+  });
 
-  constructor(private apiService: ApiService) {}
+  settingsFromSignal = this.settingsService.settingsdata;
+  apiInfoSignal = this.apiInfoService.apiInfoData;
 
-  ngOnInit(): void {
-    // Fetch settings if not already fetched
-    this.settingsService.loadSettingsData();
+  settings: Signal<TimeSettings> = computed(() => this.settingsTimeSignal());
 
-    // Subscribe to settings$
-    this.settingsService.settings$.subscribe((settings) => {
-      this.settingsItem = settings;
+  constructor() {
+    effect(
+      () => {
+        const settingsData = this.settingsService.settingsdata();
+        if (settingsData && settingsData.time?.iso8601) {
+          const isoDate = settingsData.time.iso8601;
+          const gdate = isoDate.slice(0, 10);
+          const dateObj = new Date(isoDate);
+          const formattedTime = new Intl.DateTimeFormat('en-EU', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          }).format(dateObj);
+
+          this.settingsTimeSignal.set({
+            gdate,
+            gtime: formattedTime,
+            timezone: settingsData.time.timezone,
+            currentDateTime: `${gdate} ${formattedTime}`,
+          });
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
+    effect(() => {
+      const apiInfo = this.apiInfoSignal();
+      if (apiInfo.mode) {
+        if (apiInfo.mode === 'physical') {
+          this.startClock();
+        }
+      }
     });
   }
 
   private startClock() {
     this.timer = setInterval(() => {
-      const currentMoment = moment(this.settings.currentDateTime).add(
-        1,
-        'second',
-      );
-      this.settings.currentDateTime = currentMoment.toISOString();
-      this.currentDateTimeSubject.next(this.settings.currentDateTime);
+      this.settingsTimeSignal.update((current) => {
+        let currentTime = new Date(current.currentDateTime);
+
+        if (isNaN(currentTime.getTime())) {
+          currentTime = new Date();
+        }
+        currentTime.setSeconds(currentTime.getSeconds() + 1);
+        return {
+          ...current,
+          currentDateTime: currentTime.toISOString(),
+          gtime: currentTime.toISOString().slice(11, 16),
+          gdate: currentTime.toISOString().slice(0, 10),
+        };
+      });
     }, 1000);
   }
 
   updateDateTime(newDateTime: string) {
-    this.settings.currentDateTime = newDateTime;
-    this.currentDateTimeSubject.next(newDateTime);
+    const dateObj = new Date(newDateTime);
+    const formattedTime = new Intl.DateTimeFormat('en-EU', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(dateObj);
+
+    const gdate = newDateTime.slice(0, 10);
+    const gtime = formattedTime;
+    this.settingsTimeSignal.set({
+      gdate,
+      gtime,
+      timezone: this.settingsTimeSignal().timezone,
+      currentDateTime: `${gdate} ${gtime}`,
+    });
   }
 
   ngOnDestroy(): void {

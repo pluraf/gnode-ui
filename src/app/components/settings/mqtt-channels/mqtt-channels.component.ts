@@ -36,17 +36,18 @@ export class MqttChannelsComponent {
     allow_anonymous: false,
   };
 
-  constructor(private cdr: ChangeDetectorRef) {
-    this.settingsService.loadSettingsData().subscribe((resp) => {
-      this.settings = resp;
-    });
-  }
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  settingsFromSignal = this.settingsService.settingsdata;
 
   onSubmit() {
     const payload = {
       allow_anonymous: this.settings.allow_anonymous,
     };
-
+    this.settingsFromSignal.set({
+      ...this.settingsFromSignal(),
+      authentication: this.settings.allow_anonymous,
+    });
     this.apiService.updateSettings(payload).subscribe(
       () => {
         this.handleMessage('success', 'Submitted successfully', false);

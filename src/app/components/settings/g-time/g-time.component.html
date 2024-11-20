@@ -33,16 +33,16 @@
           <div class="mb-2"><label for="manual-tz-name">Select time zone </label></div>
           <select id="manual-tz-name" [(ngModel)]="settings.timezone" (ngModelChange)="updateManualTimezone($event)"
                   class="text-color surface-overlay p-2 border-1 border-round w-15rem mb-2">
-                  <option *ngFor="let tz of tzNames" [value]="tz">{{ tz }}</option>
+                  <option >{{ this.settings.timezone }}</option>
           </select>
         </div><br>
 
         <div class="mb-2"><label for="manualDate">Set Date:</label></div>
-        <input id="manualDate" type="date" [(ngModel)]="settings.gdate" 
+        <input id="manualDate" type="date" [(ngModel)]="settings.gnodeDate" 
               class="text-color surface-overlay p-2 border-1 border-round w-15rem mb-4" (change)="setManualDateTime()">
 
         <div class="mb-2"><label for="manualTime">Set Time:</label></div>
-        <input id="manualTime" type="time" [(ngModel)]="settings.gtime" 
+        <input id="manualTime" type="time" [(ngModel)]="settings.gnodeTime" 
               class="text-color surface-overlay p-2 border-1 border-round w-15rem" (change)="setManualDateTime()">
       </div>
 

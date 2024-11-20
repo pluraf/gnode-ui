@@ -35,22 +35,22 @@ export class AuthenticationComponent {
     isAuthentication: false,
   };
 
-  constructor() {
-    this.settingsService.loadSettingsData().subscribe((response) => {
-      this.settings.isAuthentication = response.authentication;
-    });
-  }
+  constructor() {}
+  settingsFromSignal = this.settingsService.settingsdata;
 
   onSubmit() {
     const payload = {
       authentication: this.settings.isAuthentication,
     };
-
+    this.settingsFromSignal.set({
+      ...this.settingsFromSignal(),
+      authentication: this.settings.isAuthentication,
+    });
     this.apiService.updateSettings(payload).subscribe(
       () => {
         this.handleMessage('success', 'Submitted successfully', false);
       },
-      (error: any) => {
+      (error) => {
         this.handleMessage(
           'error',
           error.status === 500 ? error.error.detail : error.error,

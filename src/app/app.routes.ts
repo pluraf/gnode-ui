@@ -2,8 +2,6 @@ import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { StatusComponent } from './components/status/status.component';
 import { LoginComponent } from './components/login/login.component';
-import { usersRouteGuard } from './guards/users-route.guard';
-import { SettingsRouteGuard } from './guards/settings-route.guard';
 
 export const routes: Routes = [
   {
@@ -14,7 +12,6 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [SettingsRouteGuard],
   },
   {
     path: 'users',
@@ -22,7 +19,7 @@ export const routes: Routes = [
       import('./components/user/user-list/user-list.component').then(
         (c) => c.UserListComponent,
       ),
-    canActivate: [usersRouteGuard],
+    canActivate: [authGuard],
   },
   {
     path: 'user-create',
@@ -30,7 +27,7 @@ export const routes: Routes = [
       import('./components/user/user-create/user-create.component').then(
         (c) => c.UserCreateComponent,
       ),
-    canActivate: [usersRouteGuard],
+    canActivate: [authGuard],
   },
   {
     path: 'user-delete',
@@ -38,7 +35,7 @@ export const routes: Routes = [
       import('./components/user/user-delete/user-delete.component').then(
         (c) => c.UserDeleteComponent,
       ),
-    canActivate: [usersRouteGuard],
+    canActivate: [authGuard],
   },
   {
     path: 'channels',

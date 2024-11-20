@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { CookieOptions, CookieService } from 'ngx-cookie-service';
 import { ApiService } from './api.service';
-import { SettingsService } from './settings.service';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -10,9 +9,9 @@ import { Router } from '@angular/router';
 export class AuthService {
   apiService = inject(ApiService);
   cookies = inject(CookieService);
-  settingsService = inject(SettingsService);
   router = inject(Router);
 
+  private tokenExpirationTimer: any;
   token: string = '';
   private cookieOptions: CookieOptions = {
     secure: window.location.protocol === 'https:',
@@ -30,13 +29,13 @@ export class AuthService {
   }
 
   logout(): void {
-    this.clearAuthCookies();
-    this.token = '';
-  }
-
-  private clearAuthCookies(): void {
     this.cookies.delete('access_token', '/');
-    this.cookies.delete('settingsData', '/');
+    this.token = '';
+    this.router.navigateByUrl('/login');
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
   }
 
   getToken(): string {
@@ -44,21 +43,29 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.token && this.isTokenValid();
+    const { isValid } = this.isTokenValid();
+    return isValid;
   }
 
-  isTokenValid() {
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
+  }
+
+  isTokenValid(): { isValid: boolean; expiry: number } {
+    if (!this.token) return { isValid: false, expiry: 0 };
     try {
       if (this.token) {
         const payload = JSON.parse(atob(this.token.split('.')[1]));
         if (payload.exp) {
           const expiry = payload.exp * 1000;
-          return Date.now() < expiry;
+          return { isValid: Date.now() < expiry, expiry };
         }
       }
     } catch (error) {
       console.error('Invalid token', error);
     }
-    return false;
+    return { isValid: false, expiry: 0 };
   }
 }

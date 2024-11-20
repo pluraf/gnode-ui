@@ -7,7 +7,7 @@ import { AuthbundleEditComponent } from './authbundle-edit/authbundle-edit.compo
 import { AuthbundleDeleteComponent } from './authbundle-delete/authbundle-delete.component';
 
 export const AUTHBUNDLES_ROUTES: Routes = [
-  { path: '', component: AuthbundleListComponent },
+  { path: '', component: AuthbundleListComponent, canActivate: [authGuard] },
   {
     path: 'authbundle-create',
     canActivate: [authGuard],

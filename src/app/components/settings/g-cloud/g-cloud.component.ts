@@ -30,27 +30,60 @@ export class GCloudComponent {
   settingsService = inject(SettingsService);
 
   loading: boolean = false;
-
   isGCloudEnabled = false;
+  settingsFromSignal = this.settingsService.settingsdata;
 
-  constructor() {
-    this.settingsService.loadSettingsData().subscribe((resp) => {
-      this.isGCloudEnabled = resp.gcloud;
+  constructor() {}
+
+  ngOnInit() {
+    this.apiService.getSettings().subscribe((response) => {
+      this.isGCloudEnabled = response.gcloud === true;
     });
   }
 
   onSubmit() {
+    if (!this.isGCloudEnabled) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Are you sure?',
+        detail: 'Disabling G-Node Cloud Client may affect your service.',
+        sticky: true,
+        life: 10000,
+        key: 'confirmation',
+        closable: false,
+      });
+    } else {
+      this.executeDisable();
+    }
+  }
+
+  executeDisable() {
     const payload = {
       gcloud: this.isGCloudEnabled,
     };
-
-    this.apiService.updateSettings(payload).subscribe((resp) => {});
+    this.settingsFromSignal.set({
+      ...this.settingsFromSignal(),
+      authentication: this.isGCloudEnabled,
+    });
+    this.apiService.updateSettings(payload).subscribe(
+      (resp) => {
+        this.handleMessage('success', 'Submitted successfully', false);
+      },
+      (error) => {
+        this.handleMessage(
+          'error',
+          error.status === 500 ? error.error.detail : error.error,
+          true,
+        );
+      },
+    );
   }
 
   handleMessage(
-    severity: 'success' | 'error',
+    severity: 'success' | 'error' | 'warn',
     detail: string,
     sticky: boolean,
+    summary?: string,
   ) {
     if (severity === 'success') {
       this.messageService.add({ severity, detail });
@@ -60,6 +93,13 @@ export class GCloudComponent {
       }, 3000);
     } else if (severity === 'error') {
       this.messageService.add({ severity, detail, sticky: true });
+    } else if (severity === 'warn') {
+      this.messageService.add({
+        severity,
+        summary: summary || 'Warning!',
+        detail,
+        sticky,
+      });
     }
   }
 

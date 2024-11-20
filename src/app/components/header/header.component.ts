@@ -1,10 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  OnDestroy,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -44,12 +38,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   router = inject(Router);
   authService = inject(AuthService);
   userService = inject(UserService);
-  cdr = inject(ChangeDetectorRef);
   settingsService = inject(SettingsService);
 
   isAuthentication: boolean = true;
 
-  constructor() {}
+  constructor() {
+    effect(() => {
+      const dateTime = this.datetimeService.settings().currentDateTime;
+      const gnodeDate = dateTime.slice(0, 10);
+      const gnodeTime = dateTime.slice(11, 16);
+      this.currentDateTime = gnodeDate + ' ' + gnodeTime;
+    });
+  }
 
   ngOnInit(): void {
     this.userService.getUsername();
@@ -78,12 +78,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
 
     this.getApiMode();
-
-    this.timerSubscription = this.datetimeService.currentDateTime$.subscribe(
-      (dateTime: string) => {
-        this.currentDateTime = dateTime;
-      },
-    );
   }
   ngOnDestroy(): void {
     if (this.timerSubscription) {
