@@ -2,7 +2,7 @@
 
 <app-pipeline-delete  [visible]="visibleDialog" [pipelines]="selectedPipelines" (deleteConfirmed)="onDeletePipelines()" (cancel)="visibleDialog = false"></app-pipeline-delete >
 <div *ngIf="showMessage" class="showMessage flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
-  <div class="text-center">No pipelines available. To create one, click the plus sign in the top-right corner or use the <a routerLink="/pipeline-create" class="text-green-700">Create Pipeline</a> link or go back to the <a routerLink="/pipelines">pipeline</a></div>
+  <div class="text-center">No pipelines available. To create one, click the plus sign in the top-right corner or use the <a routerLink="/pipelines/pipeline-create" class="text-green-700">Create Pipeline</a> link.</div>
 </div>
 
 <div *ngIf="!showMessage" class="main-content">
@@ -13,7 +13,7 @@
         <th >Pipeline ID</th>
         <th >Connector In</th>
         <th >Connector Out</th>
-        <th >Status</th>   
+        <th >Status</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" class="pipeline" let-pipeline>
