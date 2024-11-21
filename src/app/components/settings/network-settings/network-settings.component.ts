@@ -149,10 +149,6 @@ export class NetworkSettingsComponent {
     });
   }
 
-  onChangeWifiEnabled(event: any) {
-    console.log(event);
-  }
-
   onChangeSSID(event: any) {
     this.selWifiSecurity = this.allWifi[this.selSSID]['security'];
     this.selWifiSignal = this.allWifi[this.selSSID]['signal'];
