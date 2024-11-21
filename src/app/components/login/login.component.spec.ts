@@ -14,7 +14,7 @@ import { LoginComponent } from './login.component';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
-fdescribe('LoginComponent', () => {
+describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let httpMock: HttpTestingController;
@@ -132,4 +132,16 @@ fdescribe('LoginComponent', () => {
 
     expect(component.errorMessage).toBe('Invalid token');
   }));
+  it('should call the API service to get the auth token with valid credentials', () => {
+    component.loginUser.username = 'validUser';
+    component.loginUser.password = 'validPassword';
+    const spyApiCall = spyOn(
+      component.apiService,
+      'getAuthToken',
+    ).and.returnValue(of({ access_token: 'mock_token' }));
+
+    component.onLogin();
+
+    expect(spyApiCall).toHaveBeenCalledWith('validUser', 'validPassword');
+  });
 });

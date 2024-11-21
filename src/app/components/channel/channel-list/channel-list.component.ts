@@ -78,6 +78,7 @@ export class ChannelListComponent {
         );
 
         if (clientResponse) {
+          console.log('clientResponse.length', clientResponse);
           const clientData = clientResponse.data;
           const disabled = clientResponse.verbose;
 
@@ -90,8 +91,8 @@ export class ChannelListComponent {
             this.totalRecords = this.channelList.length;
           }
         }
-        if (clientResponse.length === 0) {
-          this.showMessage = !this.showMessage;
+        if (clientResponse.data.totalCount === 0) {
+          this.showMessage = true;
         }
       },
     });

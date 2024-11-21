@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { of, throwError } from 'rxjs';
 
-fdescribe('ChannelCreateComponent', () => {
+describe('ChannelCreateComponent', () => {
   let component: ChannelCreateComponent;
   let fixture: ComponentFixture<ChannelCreateComponent>;
   let mockBrokerService: jasmine.SpyObj<MBrokerCService>;
