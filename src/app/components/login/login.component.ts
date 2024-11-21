@@ -35,42 +35,45 @@ export class LoginComponent {
   errorMessage: string = '';
 
   loginUser: LoginUser = {
-    username: 'admin',
+    username: '',
     password: '',
   };
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-  ) {}
+  router = inject(Router);
+  authService = inject(AuthService);
+
+  constructor() {}
 
   http = inject(HttpClient);
   apiService = inject(ApiService);
 
   onLogin() {
-    if (this.loginUser) {
-      this.apiService
-        .getAuthToken(this.loginUser.username, this.loginUser.password)
-        .subscribe(
-          (res: any) => {
-            if (res.access_token) {
-              this.authService.storeToken(res.access_token);
-              this.router.navigateByUrl('/channels');
-            } else {
-              this.showErrorMessage(res.error);
-            }
-          },
-          (error) => {
-            if (error.error && error.error.detail) {
-              this.showErrorMessage(error.error.detail);
-            } else if (error.message) {
-              this.showErrorMessage(error.message);
-            }
-          },
-        );
-    } else {
-      this.showErrorMessage('Username and Password are required.');
+    if (!this.loginUser.username || !this.loginUser.password) {
+      this.showErrorMessage('Username and password are required.');
+      return;
     }
+
+    this.apiService
+      .getAuthToken(this.loginUser.username, this.loginUser.password)
+      .subscribe(
+        (res: any) => {
+          if (res.access_token) {
+            this.authService.storeToken(res.access_token);
+            this.router.navigateByUrl('/channels');
+          } else {
+            this.showErrorMessage('Invalid token');
+          }
+        },
+        (error) => {
+          if (error.error && error.error.detail) {
+            this.showErrorMessage(error.error.detail);
+          } else if (error.message) {
+            this.showErrorMessage(error.message);
+          } else {
+            this.showErrorMessage('An unknown error occurred.');
+          }
+        },
+      );
   }
 
   showErrorMessage(message: string) {
