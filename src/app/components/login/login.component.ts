@@ -33,6 +33,7 @@ export interface LoginUser {
 })
 export class LoginComponent {
   errorMessage: string = '';
+  from: string;
 
   loginUser: LoginUser = {
     username: '',
@@ -42,7 +43,16 @@ export class LoginComponent {
   router = inject(Router);
   authService = inject(AuthService);
 
-  constructor() {}
+  constructor() {
+    this.from = "/channels";
+    const nav = this.router.getCurrentNavigation();
+    if(nav){
+      const state = nav.extras.state;
+      if(state){
+        this.from = state['from'] || this.from;
+      }
+    }
+  }
 
   http = inject(HttpClient);
   apiService = inject(ApiService);
@@ -59,7 +69,7 @@ export class LoginComponent {
         (res: any) => {
           if (res.access_token) {
             this.authService.storeToken(res.access_token);
-            this.router.navigateByUrl('/channels');
+            this.router.navigate([this.from]);
           } else {
             this.showErrorMessage('Invalid token');
           }
