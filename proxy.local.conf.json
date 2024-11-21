@@ -1,0 +1,18 @@
+{
+  "/api": {
+    "target": "https://gnode-1.iotplan.io",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/broker": {
+    "target": "https://gnode-1.iotplan.io",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/m2e": {
+    "target": "https://gnode-1.iotplan.io",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

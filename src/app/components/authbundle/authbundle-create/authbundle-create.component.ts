@@ -211,8 +211,15 @@ export class AuthbundleCreateComponent {
         }
       },
       (error: any) => {
-        const errorDetail = error.error?.detail;
-        this.handleMessage('error', errorDetail, true);
+        const errorMessage =
+          error?.message ||
+          (typeof error?.error === 'string' && error.error) ||
+          (error?.status &&
+            error?.statusText &&
+            `${error.status}: ${error.statusText}`) ||
+          (error?.status && `Error Code: ${error.status}`) ||
+          'An unknown error occurred';
+        this.handleMessage('error', errorMessage, true);
       },
     );
   }

@@ -79,6 +79,7 @@ export class AuthbundleListComponent implements OnInit {
 
   loadAuthbundles() {
     this.apiService.listAuthbundles().subscribe((resp) => {
+      console.log(resp);
       if (resp.length === 0) {
         this.showMessage = !this.showMessage;
       } else {

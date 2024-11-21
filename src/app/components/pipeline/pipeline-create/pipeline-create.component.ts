@@ -62,7 +62,16 @@ export class PipelineCreateComponent implements OnInit {
         this.handleMessage('success', 'Pipeline edited successfully!', false);
       },
       (error) => {
-        const errorMessage = error?.error.split('\n').pop();
+        console.log('Error:', error);
+        const errorMessage =
+          error?.message ||
+          (typeof error?.error === 'string' && error.error) ||
+          (error?.status &&
+            error?.statusText &&
+            `${error.status}: ${error.statusText}`) ||
+          (error?.status && `Error Code: ${error.status}`) ||
+          'An unknown error occurred';
+
         this.handleMessage('error', errorMessage, true);
       },
     );
