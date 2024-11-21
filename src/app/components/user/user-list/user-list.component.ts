@@ -32,7 +32,7 @@ export class UserListComponent {
 
   menubarItems: MenuItem[] = [
     {
-      routerLink: ['user-create'],
+      routerLink: ['/user-create'],
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',

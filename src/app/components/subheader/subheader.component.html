@@ -1,6 +1,6 @@
 <div class="subheader-container flex flex-row align-items-center border-1 border-top-none border-300 h-3rem" >
   <div class="flex flex-row align-items-center">
-    <i *ngIf="showBackArrow" class="pi pi-arrow-left back-arrow" (click)="goBack()"></i>
+    <i *ngIf="backRoute" class="pi pi-arrow-left back-arrow" (click)="goBack()"></i>
     <p class="ml-2 text-lg"><strong>{{ selectedMenuName }}</strong></p>
   </div>
   @if(items.length){

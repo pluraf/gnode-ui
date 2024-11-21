@@ -27,8 +27,6 @@ export class SubheaderComponent {
   @Input() selectedMenuName: string = '';
   @Input() actions: MenuItem[] = [];
   @Input() items: MenuItem[] = [];
-  @Input() showBackArrow: boolean = false;
-  @Input() useExplicitNavigation: boolean = false;
   @Input() backRoute: string = '';
 
   constructor(
@@ -37,7 +35,7 @@ export class SubheaderComponent {
   ) {}
 
   goBack() {
-    if (this.useExplicitNavigation && this.backRoute) {
+    if (this.backRoute) {
       this.router.navigate([this.backRoute]);
     } else {
       this.location.back();

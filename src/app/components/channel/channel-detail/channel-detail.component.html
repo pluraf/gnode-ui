@@ -1,4 +1,4 @@
-<app-subheader selectedMenuName="Channel ID: {{chanid}}" [actions]="menubarItems" [showBackArrow]="true"  [useExplicitNavigation]="true" backRoute="/channels" (deleteChannelEvent)="onDeleteChannel()"></app-subheader>
+<app-subheader selectedMenuName="Channel ID: {{chanid}}" [actions]="menubarItems" backRoute="/channels" (deleteChannelEvent)="onDeleteChannel()"></app-subheader>
 <app-channel-delete  [visible]="visibleDialog" [channels]="[{'id': chanid}]" (deleteConfirmed)="onDeleteChannel()" (cancel)="visibleDialog = false"></app-channel-delete>
 <div class="main-content">
 <p-table [value]="details" [tableStyle]="{ 'min-width': '10rem' }">
