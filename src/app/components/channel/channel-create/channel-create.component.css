@@ -1,6 +1,3 @@
-#channelID {
-  width: 29rem;
-}
 .p-fluid .p-field {
   margin-bottom: 1.5rem;
 }
@@ -37,13 +34,14 @@ select {
   padding: 0em;
   margin: 0em;
   overflow: hidden;
-  width: 35em;
+  width: 30rem;
   height: 15em;
 }
 
 .input_field {
-  padding: 10px;
-  width: 35em;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 30rem;
 }
 
 :host {
