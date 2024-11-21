@@ -5,8 +5,7 @@
         <div class="p-col-12 p-md-6">
             <div class="p-fluid">
                 <div class="p-field">
-                    <label for="channelID"></label>
-                    <input pInputText id="channelID" name="chanid" [(ngModel)]="chanid" placeholder="Channel ID" class="input_field border-1 border-round"/>
+                    <input id="channelID" name="chanid" [(ngModel)]="chanid" placeholder="Channel ID" class="input_field border-1 border-round"/>
                     <small>Permanent identifier for your channel.</small>
                 </div>
                 <div class="p-field">
@@ -15,23 +14,23 @@
                     <div class="card mt-4">
                         <div class="flex flex-column gap-1">
                             <label for="authOptions">Authentication type</label>
-                            <select [(ngModel)]="selectedOption" id="authOptions" class="border-1 border-round ">
+                            <select [(ngModel)]="selectedOption" (ngModelChange)="onChangeAuthenticationType($event)" id="authOptions" class="input_field border-1 border-round ">
                                 <option *ngFor="let option of authOptions" [value]="option.value">{{ option.label }}</option>
                             </select>
                         </div>
                         <div class="mt-4">
                             <div class="p-field flex flex-column gap-1">
                               <label for="clientid">MQTT Client ID</label>
-                              <input  name="clientid" id="clientid" [(ngModel)]="clientid" class="input_field border-1 border-round"/>
+                              <input name="clientid" id="clientid" [(ngModel)]="clientid" class="input_field border-1 border-round"/>
                             </div>
                             <div class="p-field flex flex-column gap-1">
                               <label for="username">Username</label>
                               <input  name="username" id="username" [(ngModel)]="username" class="input_field border-1 border-round" />
                             </div>
                         </div>
-                        <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'password'" >
+                        <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'password'">
                               <label for="password">Password</label>
-                              <input name="password" type="password" id="password" [(ngModel)]="password" class="input_field border-1 border-round"/>
+                              <p-password [(ngModel)]="password" name="password" class="input_field" [toggleMask]="true" [feedback]="false"/>
                         </div>
                         <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'jwt_es256'">
                             <label for="key">JWT Key</label><textarea [(ngModel)]="password" id="key" aria-invalid="false" name="jwtKey" cols="62" rows="6" class="pubKeyFormat"></textarea>

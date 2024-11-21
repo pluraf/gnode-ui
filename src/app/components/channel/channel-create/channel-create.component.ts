@@ -65,6 +65,10 @@ export class ChannelCreateComponent implements OnInit {
     this.selectedCategory = this.categories[0];
   }
 
+  onChangeAuthenticationType(even: any) {
+    this.password = "";
+  }
+
   onSubmit() {
     const selectedOptionObj = this.authOptions.find(
       (option) => option.value === this.selectedOption,
