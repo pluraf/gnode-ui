@@ -6,12 +6,13 @@ import { LoginComponent } from './components/login/login.component';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'channels',
     pathMatch: 'full',
   },
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'users',
@@ -51,7 +52,6 @@ export const routes: Routes = [
         (r) => r.PIPELINES_ROUTES,
       ),
   },
-
   {
     path: 'authbundles',
     loadChildren: () =>

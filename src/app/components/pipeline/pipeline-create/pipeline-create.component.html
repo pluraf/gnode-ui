@@ -1,10 +1,10 @@
 <app-subheader
   selectedMenuName="Create pipeline"
-  [showBackArrow]="true"
+  backRoute="/pipelines"
 ></app-subheader>
 <div class="main-content-body">
   <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
-  
+
   <div class="p-col-12 p-md-6">
     <div class="p-fluid">
       <div class="p-field flex flex-column gap-1">

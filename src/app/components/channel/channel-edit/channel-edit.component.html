@@ -1,8 +1,8 @@
- <app-subheader selectedMenuName="Edit channel" [showBackArrow]="true" [useExplicitNavigation]="true" [backRoute]="'channels/channel/' + chanid"></app-subheader>
+ <app-subheader selectedMenuName="Edit channel" [backRoute]="'channels/channel/' + chanid"></app-subheader>
 
 <div class="main-content-body">
   <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
-     <div class="p-grid"> 
+     <div class="p-grid">
       <h4>Channel ID: {{ chanid }}</h4>
       <div class="p-fluid">
               <span><strong>Authentication</strong></span>
@@ -12,7 +12,7 @@
                   <select [(ngModel)]="selectedOption" id="authOptions" class="border-1 border-round ">
                       <option *ngFor="let option of authOptions" [value]="option.value">{{ option.label }}</option>
                   </select>
-              </div>   
+              </div>
               <div class="mt-4">
                   <div class="p-field flex flex-column gap-1">
                       <label for="clientid">MQTT Client ID</label>
@@ -31,7 +31,7 @@
                       <label for="key">JWT Key</label>
                       <textarea [(ngModel)]="jwtKey" id="key" aria-invalid="false" cols="62" rows="6" class="pubKeyFormat"></textarea>
                 </div>
-      </div>     
+      </div>
         <div class="p-field">
           <span><strong>Channel State</strong></span>
           <div class="card flex mt-3">

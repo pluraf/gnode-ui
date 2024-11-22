@@ -29,7 +29,7 @@ export const authGuard: CanActivateFn = (
         state.url === '/settings/g-time' ||
         state.url === '/settings/network-settings'
       ) {
-        router.navigateByUrl('/channels');
+        router.navigate(['/channels']);
         return of(false);
       }
     } else if (settingsSignal.authentication === false) {
@@ -39,13 +39,18 @@ export const authGuard: CanActivateFn = (
         state.url === '/user-create' ||
         state.url === '/user-delete'
       ) {
-        router.navigateByUrl('/channels');
+        router.navigate(['/channels']);
         return of(false);
       }
     }
     return of(true);
   }
 
-  router.navigate(['/login']);
-  return of(false);
+  if (state.url === "/login") {
+    return of(true);
+  } else {
+    history.replaceState(null, "", "/login") // Give user a chance to go back
+    router.navigate(['/login'], {'state': {'from': state.url}});
+    return of(false);
+  }
 };

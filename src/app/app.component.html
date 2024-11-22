@@ -1,14 +1,8 @@
-@if (router.url == "/login") {
-  <router-outlet></router-outlet>
-} @else {
+@if (router.url != "/login") {
+  <app-header [currentDateTime]="currentDateTime"></app-header>
 
-<app-header [currentDateTime]="currentDateTime"></app-header>
-
-<p-sidebar [visible]="true" [modal]="false" [showCloseIcon]="false" [transitionOptions]="'0s'" [style]="{'padding-top': '40px'}" styleClass="no-border">
-  <p-panelMenu  [model]="items" [multiple]="true" />
-</p-sidebar>
-<div style="margin-left: 210px; margin-top: 56px;">
-<router-outlet></router-outlet>
-</div>
-
+  <p-sidebar [visible]="true" [modal]="false" [showCloseIcon]="false" [transitionOptions]="'0s'" [style]="{'padding-top': '40px'}" styleClass="no-border">
+    <p-panelMenu  [model]="items" [multiple]="true" />
+  </p-sidebar>
 }
+<div style="margin-left: {{margin_left}}; margin-top: 56px;"><router-outlet></router-outlet></div>

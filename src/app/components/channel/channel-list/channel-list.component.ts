@@ -78,7 +78,6 @@ export class ChannelListComponent {
         );
 
         if (clientResponse) {
-          console.log('clientResponse.length', clientResponse);
           const clientData = clientResponse.data;
           const disabled = clientResponse.verbose;
 

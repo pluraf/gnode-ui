@@ -5,7 +5,7 @@ import {
   ChangeDetectorRef,
   effect,
 } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
+import { RouterOutlet, Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
@@ -35,8 +35,10 @@ import { ApiInfo } from './services/service';
 })
 export class AppComponent implements OnInit {
   currentDateTime: string = '';
+  margin_left: string;
 
   router: Router = inject(Router);
+  route: ActivatedRoute = inject(ActivatedRoute);
   dateTimeService = inject(DatetimeService);
   cdr = inject(ChangeDetectorRef);
   settingsService = inject(SettingsService);
@@ -49,6 +51,8 @@ export class AppComponent implements OnInit {
   apiInfoSignal = this.apiInfoService.apiInfoData;
 
   constructor() {
+    this.margin_left = window.location.pathname == "/login" ? "0px" : "210px";
+
     effect(() => {
       const updatedDateTime = this.dateTimeService.settings().currentDateTime;
       this.currentDateTime = updatedDateTime;
@@ -71,6 +75,12 @@ export class AppComponent implements OnInit {
       if (resp) {
         this.isAuthentication = resp.authentication == false;
         this.updateMenuItems();
+      }
+    });
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.margin_left = event.urlAfterRedirects == "/login" ? "0px" : "210px";
       }
     });
   }

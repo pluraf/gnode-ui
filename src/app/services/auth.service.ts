@@ -16,6 +16,7 @@ export class AuthService {
   private cookieOptions: CookieOptions = {
     secure: window.location.protocol === 'https:',
     sameSite: 'Lax',
+    path: '/',
   };
 
   isVirtualMode: string = '';
