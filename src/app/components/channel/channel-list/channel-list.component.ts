@@ -9,7 +9,7 @@ import { MenuItem } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
-import { Channel, PageEvent } from '../channel';
+import { Channel } from '../channel';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { ChannelDeleteComponent } from '../channel-delete/channel-delete.component';
