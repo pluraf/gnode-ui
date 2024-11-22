@@ -3,7 +3,7 @@ import { ChannelDeleteComponent } from './channel-delete.component';
 import { By } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
-fdescribe('ChannelDeleteComponent', () => {
+describe('ChannelDeleteComponent', () => {
   let component: ChannelDeleteComponent;
   let fixture: ComponentFixture<ChannelDeleteComponent>;
   beforeEach(async () => {
