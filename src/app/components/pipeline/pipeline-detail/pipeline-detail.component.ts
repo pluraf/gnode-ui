@@ -27,6 +27,7 @@ import { ApiService } from '../../../services/api.service';
   styleUrl: './pipeline-detail.component.css',
 })
 export class PipelineDetailComponent {
+  [x: string]: any;
   apiService = inject(ApiService);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -103,14 +104,20 @@ export class PipelineDetailComponent {
   }
 
   updateDetails() {
+    const lastReceivedTimestamp = this.pipelines.last_in;
+    const iso8601Received = new Date(lastReceivedTimestamp * 1000);
+
+    const lastSentTimestamp = this.pipelines.last_out;
+    const iso8601Sent = new Date(lastSentTimestamp * 1000);
+
     this.details = [
       ['Connector In', this.pipelines.connector_in.type],
       ['Connector Out', this.pipelines.connector_out.type],
       ['Pipeline Status', this.pipelines.status],
       ['Messages received', this.pipelines.count_in],
-      ['Last message received timestamp', this.pipelines.last_in],
+      ['Last message received timestamp', iso8601Received],
       ['Messages sent', this.pipelines.count_out],
-      ['Last message sent timestamp', this.pipelines.last_out],
+      ['Last message sent timestamp', iso8601Sent],
     ];
 
     if (

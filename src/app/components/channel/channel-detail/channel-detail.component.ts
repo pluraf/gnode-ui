@@ -61,6 +61,9 @@ export class ChannelDetailComponent {
       .loadChannelDetails(this.chanid)
       .subscribe((response: any) => {
         this.channel = response.responses[0].data.channel;
+        const timestamp = this.channel.msg_timestamp;
+        const iso8601 = new Date(timestamp * 1000);
+
         this.details = [
           ['Enabled', !this.channel.disabled],
           ['Last seen', 'date'],
@@ -68,7 +71,7 @@ export class ChannelDetailComponent {
           ['Username', this.channel.username],
           ['MQTT Client ID', this.channel.clientid],
           ['Messages received', this.channel.msg_received],
-          ['Last message timestamp', this.channel.msg_timestamp],
+          ['Last message timestamp', iso8601],
         ];
         if (this.channel.authtype && this.channel.authtype.startsWith('jwt')) {
           this.details.push([
