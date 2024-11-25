@@ -17,10 +17,11 @@ import { SettingsService } from '../../services/settings.service';
   selector: 'app-header',
   standalone: true,
   imports: [MenubarModule, DialogModule, ButtonModule, CommonModule],
+  providers: [SettingsService, ApiService, DatetimeService],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit {
   userInitial: string | null = null;
   visible: boolean = false;
   position: string = 'top-right';
@@ -28,8 +29,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   visibleTime: boolean = false;
   apiVersion: string = '';
   serialNumber: string = '';
-  currentDateTime: string = '';
-  timerSubscription: Subscription | null = null;
   apimode: string = '';
   showusername: boolean = false;
 
@@ -41,14 +40,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   settingsService = inject(SettingsService);
 
   isAuthentication: boolean = true;
+  settingsinfo = this.settingsService.settingsdata();
 
   constructor() {
     effect(() => {
-      const dateTime = this.datetimeService.settings().currentDateTime;
-      const gnodeDate = dateTime.slice(0, 10);
-      const gnodeTime = dateTime.slice(11, 16);
-      this.currentDateTime = gnodeDate + ' ' + gnodeTime;
+      const authentication = this.settingsService.settingsdata().authentication;
+      if (authentication === false) {
+        this.isAuthentication = false;
+      } else {
+        this.isAuthentication = true;
+      }
     });
+
+    let initialtime = this.datetimeService.timeSettings().formattedDateTime;
+    console.log('initialtime', initialtime);
   }
 
   ngOnInit(): void {
@@ -69,20 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.settingsService.settings$.subscribe((settings) => {
-      if (settings?.authentication === false) {
-        this.isAuthentication = false;
-      } else {
-        this.isAuthentication = true;
-      }
-    });
-
     this.getApiMode();
-  }
-  ngOnDestroy(): void {
-    if (this.timerSubscription) {
-      this.timerSubscription.unsubscribe();
-    }
   }
 
   getApiMode(): void {

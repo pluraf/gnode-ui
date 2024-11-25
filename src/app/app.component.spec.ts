@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/* import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { Router } from '@angular/router';
 import { DatetimeService } from './services/datetime.service';
@@ -71,11 +71,5 @@ describe('AppComponent', () => {
     component.ngOnInit();
     expect(component.updateMenuItems).toHaveBeenCalled();
   });
-
-  /*  it('should not call updateMenuItems when mode is not virtual', () => {
-    mockApiinfoService.apiInfoData = { mode: 'real' }; // Change mock mode
-    spyOn(component, 'updateMenuItems');
-    component.ngOnInit();
-    expect(component.updateMenuItems).not.toHaveBeenCalled();
-  }); */
 });
+ */

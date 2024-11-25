@@ -12,7 +12,6 @@ import { DividerModule } from 'primeng/divider';
 import { TableModule } from 'primeng/table';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../../../services/api.service';
 import { SettingsService } from '../../../services/settings.service';
 
@@ -95,58 +94,57 @@ export class NetworkSettingsComponent {
   }
 
   load() {
-    this.settingsService.loadSettingsData().subscribe((resp) => {
-      this.wifiEnabled = resp.network_settings.wifi_state === 'enabled';
-      this.ethernet.isEnabled =
-        resp.network_settings.ethernet_state === 'enabled';
-      if (!this.wifiEnabled) {
-        this.ipv4SettingsCurrent = {
-          address: '',
-          netmask: '',
-          gateway: '',
-          dns: '',
-        };
-      }
-      this.allSSID = resp.network_settings.available_wifi.map(
-        (wifi: any) => wifi.ssid,
-      );
-      this.allWifi = resp.network_settings.available_wifi.reduce(
-        (acc: any, wifi: any) => {
-          acc[wifi.ssid] = wifi;
-          return acc;
-        },
-        {},
-      );
+    const networkData = this.settingsService.settingsdata();
+    this.wifiEnabled = networkData.network_settings.wifi_state === 'enabled';
+    this.ethernet.isEnabled =
+      networkData.network_settings.ethernet_state === 'enabled';
+    if (!this.wifiEnabled) {
+      this.ipv4SettingsCurrent = {
+        address: '',
+        netmask: '',
+        gateway: '',
+        dns: '',
+      };
+    }
+    this.allSSID = networkData.network_settings.available_wifi.map(
+      (wifi: any) => wifi.ssid,
+    );
+    this.allWifi = networkData.network_settings.available_wifi.reduce(
+      (acc: any, wifi: any) => {
+        acc[wifi.ssid] = wifi;
+        return acc;
+      },
+      {},
+    );
 
-      this.ethernet.isConnected = false;
-      this.allActive = resp.network_settings.active_connections.reduce(
-        (acc: any, conn: any) => {
-          acc[conn.name] = conn;
-          if (conn.type == 'wifi') {
-            this.ipv4_method = conn.ipv4_method;
-            this.wifiActiveSSID = conn.name;
-            this.wifiConnectionStatus = 'connected';
-            this.selSSID = this.wifiActiveSSID;
-            this.selWifiSecurity = this.allWifi[this.selSSID]['security'];
-            this.selWifiSignal = this.allWifi[this.selSSID]['signal'];
-            this.selWifiRate = this.allWifi[this.selSSID]['rate'];
-            this.ipv4SettingsCurrent = Object.assign({}, conn.ipv4_settings);
-            this.ipv4_settings = conn.ipv4_settings;
-          } else if (conn.type == 'ethernet') {
-            this.ethernet.isConnected = true;
-            this.ethernet.ipv4Method = conn.ipv4_method;
-            this.ethernet.ipv4SettingsCurrent = Object.assign(
-              {},
-              conn.ipv4_settings,
-            );
-            this.ethernet.ipv4Settings = conn.ipv4_settings;
-          }
-          return acc;
-        },
-        {},
-      );
-      this.isLoaded = true;
-    });
+    this.ethernet.isConnected = false;
+    this.allActive = networkData.network_settings.active_connections.reduce(
+      (acc: any, conn: any) => {
+        acc[conn.name] = conn;
+        if (conn.type == 'wifi') {
+          this.ipv4_method = conn.ipv4_method;
+          this.wifiActiveSSID = conn.name;
+          this.wifiConnectionStatus = 'connected';
+          this.selSSID = this.wifiActiveSSID;
+          this.selWifiSecurity = this.allWifi[this.selSSID]['security'];
+          this.selWifiSignal = this.allWifi[this.selSSID]['signal'];
+          this.selWifiRate = this.allWifi[this.selSSID]['rate'];
+          this.ipv4SettingsCurrent = Object.assign({}, conn.ipv4_settings);
+          this.ipv4_settings = conn.ipv4_settings;
+        } else if (conn.type == 'ethernet') {
+          this.ethernet.isConnected = true;
+          this.ethernet.ipv4Method = conn.ipv4_method;
+          this.ethernet.ipv4SettingsCurrent = Object.assign(
+            {},
+            conn.ipv4_settings,
+          );
+          this.ethernet.ipv4Settings = conn.ipv4_settings;
+        }
+        return acc;
+      },
+      {},
+    );
+    this.isLoaded = true;
   }
 
   onChangeSSID(event: any) {

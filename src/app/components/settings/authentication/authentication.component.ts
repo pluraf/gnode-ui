@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
     CheckboxModule,
     SubheaderComponent,
   ],
-  providers: [MessageService],
+  providers: [MessageService, Router, SettingsService],
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css',
 })
@@ -40,12 +40,14 @@ export class AuthenticationComponent {
 
   onSubmit() {
     const payload = {
-      authentication: this.settings.isAuthentication,
+      authentication: this.settingsFromSignal().authentication,
     };
+
     this.settingsFromSignal.set({
       ...this.settingsFromSignal(),
-      authentication: this.settings.isAuthentication,
+      authentication: this.settingsFromSignal().authentication,
     });
+
     this.apiService.updateSettings(payload).subscribe(
       () => {
         this.handleMessage('success', 'Submitted successfully', false);

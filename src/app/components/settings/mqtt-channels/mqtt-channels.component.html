@@ -4,7 +4,7 @@
   <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
     <div class="field col-12 w-full mt-1">
       <div>
-        <p-checkbox [(ngModel)]="settings.allow_anonymous" [binary]="true" inputId="auto_id"/>
+        <p-checkbox [(ngModel)]="allow_anonymous" [binary]="true" inputId="auto_id"/>
         <label for="auto_id" class="pl-2">Enable public access</label>
       </div>
       <small class="text-color-secondary inline-block pt-1">MQTT clients are able to connect without authentication</small><br>

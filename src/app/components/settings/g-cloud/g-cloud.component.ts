@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ButtonModule } from 'primeng/button';
@@ -31,13 +31,11 @@ export class GCloudComponent {
 
   loading: boolean = false;
   isGCloudEnabled = false;
-  settingsFromSignal = this.settingsService.settingsdata;
+  gcloudFormValue: boolean = false;
 
-  constructor() {}
-
-  ngOnInit() {
-    this.apiService.getSettings().subscribe((response) => {
-      this.isGCloudEnabled = response.gcloud === true;
+  constructor() {
+    effect(() => {
+      this.isGCloudEnabled = this.settingsService.settingsdata().gcloud;
     });
   }
 
@@ -61,9 +59,9 @@ export class GCloudComponent {
     const payload = {
       gcloud: this.isGCloudEnabled,
     };
-    this.settingsFromSignal.set({
-      ...this.settingsFromSignal(),
-      authentication: this.isGCloudEnabled,
+    this.settingsService.settingsdata.set({
+      ...this.settingsService.settingsdata(),
+      gcloud: this.isGCloudEnabled,
     });
     this.apiService.updateSettings(payload).subscribe(
       (resp) => {

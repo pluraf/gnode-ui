@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { DividerModule } from 'primeng/divider';
@@ -31,22 +31,22 @@ export class MqttChannelsComponent {
   messageService = inject(MessageService);
 
   loading: boolean = false;
+  allow_anonymous: boolean = false;
 
-  settings = {
-    allow_anonymous: false,
-  };
-
-  constructor(private cdr: ChangeDetectorRef) {}
-
-  settingsFromSignal = this.settingsService.settingsdata;
+  constructor(private cdr: ChangeDetectorRef) {
+    effect(() => {
+      this.allow_anonymous =
+        this.settingsService.settingsdata().allow_anonymous;
+    });
+  }
 
   onSubmit() {
     const payload = {
-      allow_anonymous: this.settings.allow_anonymous,
+      allow_anonymous: this.allow_anonymous,
     };
-    this.settingsFromSignal.set({
-      ...this.settingsFromSignal(),
-      authentication: this.settings.allow_anonymous,
+    this.settingsService.settingsdata.set({
+      ...this.settingsService.settingsdata(),
+      allow_anonymous: this.allow_anonymous,
     });
     this.apiService.updateSettings(payload).subscribe(
       () => {

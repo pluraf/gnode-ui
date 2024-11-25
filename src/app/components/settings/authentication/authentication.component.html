@@ -5,7 +5,7 @@
   <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
     <div class="field col-12 w-full mt-1">
       <div>
-        <p-checkbox [(ngModel)]="settings.isAuthentication" [binary]="true" inputId="auth_id"/>
+        <p-checkbox [(ngModel)]="settingsFromSignal().authentication" [binary]="true" inputId="auth_id"/>
         <label for="auth_id" class="pl-2">Authentication Required</label>
       </div>
       

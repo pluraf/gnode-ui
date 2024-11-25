@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, effect } from '@angular/core';
+/* import { Component, inject, OnInit, OnDestroy, effect } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ToastModule } from 'primeng/toast';
@@ -52,7 +52,7 @@ export class GTimeComponent implements OnInit, OnDestroy {
     currentDateTime: '',
   };
 
-  timeSettingsSignal = this.dateTimeService.settings;
+  timeSettingsSignal = this.dateTimeService.timeSettings;
 
   constructor() {
     effect(() => {
@@ -64,26 +64,24 @@ export class GTimeComponent implements OnInit, OnDestroy {
         this.settings.timezone = timeSettings.timezone;
       }
     });
-  }
-
-  ngOnInit() {
     this.loadInitialDateTime();
   }
 
-  loadInitialDateTime() {
-    this.settingsService.loadSettingsData().subscribe((resp) => {
-      const isoDate = resp.time.iso8601;
+  ngOnInit() {}
 
-      const gdate = isoDate.slice(0, 10);
+  loadInitialDateTime() {
+    effect(() => {
+      const time = this.settingsService.settingsdata().time;
+      const gdate = time.iso8601.slice(0, 10);
       const gtime = new Intl.DateTimeFormat('en-EU', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
-      }).format(new Date(isoDate));
+      }).format(new Date(time.iso8601));
 
       this.settings.gnodeDate = gdate;
       this.settings.gnodeTime = gtime;
-      this.settings.timezone = resp.time.timezone;
+      this.settings.timezone = time.timezone;
       this.settings.currentDateTime = `${gdate} ${gtime}`;
       this.dateTimeService.updateDateTime(`${gdate} ${gtime}`);
 
@@ -152,7 +150,6 @@ export class GTimeComponent implements OnInit, OnDestroy {
     const payload = {
       gnode_time: gnodeTime,
     };
-
     this.apiService.updateSettings(payload).subscribe(
       () => {
         this.handleMessage('success', 'Submitted successfully', false);
@@ -192,3 +189,4 @@ export class GTimeComponent implements OnInit, OnDestroy {
     clearInterval(this.timer);
   }
 }
+ */

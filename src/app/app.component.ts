@@ -5,18 +5,23 @@ import {
   ChangeDetectorRef,
   effect,
 } from '@angular/core';
-import { RouterOutlet, Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import {
+  RouterOutlet,
+  Router,
+  ActivatedRoute,
+  NavigationEnd,
+} from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitterModule } from 'primeng/splitter';
-import { DatetimeService } from './services/datetime.service';
 import { HttpClient } from '@angular/common/http';
 import { SettingsService } from './services/settings.service';
 import { ApiinfoService } from './services/apiinfo.service';
 import { ApiInfo } from './services/service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -29,34 +34,29 @@ import { ApiInfo } from './services/service';
     DividerModule,
     SidebarModule,
   ],
-  providers: [Router],
+  providers: [Router, SettingsService, AuthService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  currentDateTime: string = '';
   margin_left: string;
 
   router: Router = inject(Router);
   route: ActivatedRoute = inject(ActivatedRoute);
-  dateTimeService = inject(DatetimeService);
   cdr = inject(ChangeDetectorRef);
   settingsService = inject(SettingsService);
   http = inject(HttpClient);
   apiInfoService = inject(ApiinfoService);
+  authService = inject(AuthService);
 
   isVirtualMode: boolean = false;
   isAuthentication: boolean = true;
 
   apiInfoSignal = this.apiInfoService.apiInfoData;
+  settingInfo = this.settingsService.settingsdata;
 
   constructor() {
-    this.margin_left = window.location.pathname == "/login" ? "0px" : "210px";
-
-    effect(() => {
-      const updatedDateTime = this.dateTimeService.settings().currentDateTime;
-      this.currentDateTime = updatedDateTime;
-    });
+    this.margin_left = window.location.pathname == '/login' ? '0px' : '210px';
 
     effect(() => {
       const apiInfo = this.apiInfoSignal();
@@ -68,21 +68,25 @@ export class AppComponent implements OnInit {
         }
       }
     });
+
+    effect(() => {
+      const authentication = this.settingInfo().authentication;
+      this.isAuthentication = authentication;
+      this.updateMenuItems();
+    });
   }
 
   ngOnInit() {
-    this.settingsService.loadSettingsData().subscribe((resp) => {
-      if (resp) {
-        this.isAuthentication = resp.authentication == false;
-        this.updateMenuItems();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.margin_left =
+          event.urlAfterRedirects == '/login' ? '0px' : '210px';
       }
     });
 
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.margin_left = event.urlAfterRedirects == "/login" ? "0px" : "210px";
-      }
-    });
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+    }
   }
 
   items: MenuItem[] = [
@@ -112,7 +116,7 @@ export class AppComponent implements OnInit {
 
   updateMenuItems() {
     const settingsMenu = this.items.find((item) => item.label === 'Settings');
-    const users = this.items.find((item) => item.label === 'Users');
+    const usersMenu = this.items.find((item) => item.label === 'Users');
     if (settingsMenu && settingsMenu.items) {
       settingsMenu.items.forEach((item) => {
         if (
@@ -124,8 +128,8 @@ export class AppComponent implements OnInit {
         }
       });
     }
-    if (users) {
-      users.visible = !this.isAuthentication;
+    if (usersMenu) {
+      usersMenu.visible = this.isAuthentication;
     }
   }
 }

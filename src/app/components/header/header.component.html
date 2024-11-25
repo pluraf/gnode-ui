@@ -1,6 +1,6 @@
 <div class=" menuitem flex flex-row-reverse align-items-center ml-auto">
      <a *ngIf="isAuthentication" (click)="showDialog('top-right')"><i class="text-white user-icon">{{ userInitial }}</i></a>
-     <p  class="text-white text-sm mr-2">{{currentDateTime}}</p> 
+     <p  class="text-white text-sm mr-2 date-display">{{ datetimeService.timeSettings().formattedDateTime}}</p> 
      <p class="text-white text-sm mr-3">SN: {{serialNumber}}</p>
      <p class="text-white text-sm mr-3">V: {{apiVersion}}</p>
 </div>

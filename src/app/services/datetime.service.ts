@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   computed,
   effect,
   inject,
@@ -6,6 +7,7 @@ import {
   OnDestroy,
   Signal,
   signal,
+  NgZone,
 } from '@angular/core';
 import { SettingsService } from './settings.service';
 import { ApiinfoService } from './apiinfo.service';
@@ -14,7 +16,7 @@ export interface TimeSettings {
   gdate: string;
   gtime: string;
   timezone: string;
-  currentDateTime: string;
+  formattedDateTime?: string;
 }
 
 @Injectable({
@@ -24,90 +26,141 @@ export class DatetimeService implements OnDestroy {
   settingsService = inject(SettingsService);
   apiInfoService = inject(ApiinfoService);
 
-  private timer: any;
-  settingsTimeSignal = signal<TimeSettings>({
+  timer: any;
+  timeSettingSignal = signal<TimeSettings>({
     gdate: '',
     gtime: '',
     timezone: '',
-    currentDateTime: '',
+    formattedDateTime: '',
   });
 
-  settingsFromSignal = this.settingsService.settingsdata;
-  apiInfoSignal = this.apiInfoService.apiInfoData;
-
-  settings: Signal<TimeSettings> = computed(() => this.settingsTimeSignal());
+  timeSettings: Signal<TimeSettings> = computed(() => this.timeSettingSignal());
 
   constructor() {
     effect(
       () => {
-        const settingsData = this.settingsService.settingsdata();
-        if (settingsData && settingsData.time?.iso8601) {
-          const isoDate = settingsData.time.iso8601;
-          const gdate = isoDate.slice(0, 10);
-          const dateObj = new Date(isoDate);
-          const formattedTime = new Intl.DateTimeFormat('en-EU', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-          }).format(dateObj);
+        const timeData = this.settingsService.settingsdata().time;
+        let formattedTime = '';
 
-          this.settingsTimeSignal.set({
-            gdate,
-            gtime: formattedTime,
-            timezone: settingsData.time.timezone,
-            currentDateTime: `${gdate} ${formattedTime}`,
-          });
+        if (timeData?.iso8601) {
+          const { date, time } = this.parseIso8601(timeData.iso8601);
+          formattedTime = this.format12HourTime(time);
         }
+
+        const gdate = timeData?.iso8601
+          ? new Date(timeData.iso8601).toISOString().slice(0, 10)
+          : '';
+
+        let formattedDateTime =
+          gdate && formattedTime ? `${gdate} ${formattedTime}` : '';
+        this.timeSettingSignal.set({
+          gdate,
+          gtime: formattedTime,
+          timezone: timeData?.timezone || 'UTC',
+          formattedDateTime,
+        });
+        this.timer = setInterval(() => {
+          this.startClock();
+        }, 1000);
       },
       { allowSignalWrites: true },
     );
-
-    effect(() => {
-      const apiInfo = this.apiInfoSignal();
-      if (apiInfo.mode) {
-        if (apiInfo.mode === 'physical') {
-          this.startClock();
-        }
-      }
-    });
   }
 
+  private parseIso8601(isoString: string): { date: string; time: string } {
+    const [datePart, timePart] = isoString.split('T');
+    const timeWithoutZ = timePart.replace('Z', '');
+    return { date: datePart, time: timeWithoutZ };
+  }
+
+  private format12HourTime(time: string): string {
+    const [hourStr, minute, second] = time.split(':');
+    let hour = parseInt(hourStr, 10);
+    const period = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12 || 12;
+
+    return `${hour}:${minute}:${second} ${period}`;
+  }
+
+  updateDateTime(newDateTime: string, newTimeZone?: string) {
+    const timezone = newTimeZone || this.timeSettingSignal().timezone;
+    const { date, time } = this.parseIso8601(newDateTime);
+    const formattedTime = this.format12HourTime(time);
+    const gdate = date;
+    const formattedDateTime = `${gdate} ${formattedTime}`;
+
+    // Update the signal state
+    this.timeSettingSignal.set({
+      gdate,
+      gtime: formattedTime,
+      timezone,
+      formattedDateTime,
+    });
+
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+    this.timer = setInterval(() => {
+      this.startClock();
+    }, 1000);
+  }
+
+  //Starts the clock to update the time every second.
   private startClock() {
     this.timer = setInterval(() => {
-      this.settingsTimeSignal.update((current) => {
-        let currentTime = new Date(current.currentDateTime);
+      const current = this.timeSettingSignal();
+      const currentDateTime = current.formattedDateTime
+        ? new Date(current.formattedDateTime)
+        : new Date();
 
-        if (isNaN(currentTime.getTime())) {
-          currentTime = new Date();
-        }
-        currentTime.setSeconds(currentTime.getSeconds() + 1);
-        return {
-          ...current,
-          currentDateTime: currentTime.toISOString(),
-          gtime: currentTime.toISOString().slice(11, 16),
-          gdate: currentTime.toISOString().slice(0, 10),
-        };
+      currentDateTime.setSeconds(currentDateTime.getSeconds() + 1);
+      const updatedGdate = currentDateTime.toISOString().slice(0, 10);
+
+      // const formattedTime = this.format12HourTime(currentDateTime);
+
+      let hours = currentDateTime.getHours();
+      const minutes = String(currentDateTime.getMinutes()).padStart(2, '0');
+      const seconds = String(currentDateTime.getSeconds()).padStart(2, '0');
+
+      const period = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      const updatedGtime = `${hours}:${minutes}:${seconds} ${period}`;
+
+      const formattedDateTime = `${updatedGdate} ${updatedGtime}`;
+
+      // Update the signal with the new values
+      this.timeSettingSignal.set({
+        ...current,
+        gtime: updatedGtime,
+        gdate: updatedGdate,
+        formattedDateTime,
       });
     }, 1000);
   }
 
-  updateDateTime(newDateTime: string) {
-    const dateObj = new Date(newDateTime);
-    const formattedTime = new Intl.DateTimeFormat('en-EU', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    }).format(dateObj);
+  /*   startClock() {
+    const timeData = this.settingsService.settingsdata().time;
 
-    const gdate = newDateTime.slice(0, 10);
-    const gtime = formattedTime;
-    this.settingsTimeSignal.set({
-      gdate,
-      gtime,
-      timezone: this.settingsTimeSignal().timezone,
-      currentDateTime: `${gdate} ${gtime}`,
-    });
-  }
+    if (timeData?.iso8601) {
+      const { date, time } = this.parseIso8601(timeData.iso8601);
+      const formattedTime = this.format12HourTime(time);
+
+      const gdate = timeData?.iso8601
+        ? new Date(timeData.iso8601).toISOString().slice(0, 10)
+        : '';
+
+      const updatedFormattedDateTime =
+        gdate && formattedTime ? `${gdate} ${formattedTime}` : '';
+
+      // Update only the parts of the signal that change
+      this.timeSettingSignal.set({
+        gdate,
+        gtime: formattedTime,
+        timezone: timeData?.timezone || 'UTC',
+        formattedDateTime: updatedFormattedDateTime,
+      });
+    }
+  } */
 
   ngOnDestroy(): void {
     if (this.timer) {
