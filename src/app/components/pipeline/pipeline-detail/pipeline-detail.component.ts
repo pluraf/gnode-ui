@@ -106,18 +106,23 @@ export class PipelineDetailComponent {
   updateDetails() {
     const lastReceivedTimestamp = this.pipelines.last_in;
     const iso8601Received = new Date(lastReceivedTimestamp * 1000);
-
+    let recivedTimestamp = iso8601Received
+      .toString()
+      .slice(0, iso8601Received.toString().indexOf('GMT'));
     const lastSentTimestamp = this.pipelines.last_out;
     const iso8601Sent = new Date(lastSentTimestamp * 1000);
+    let sentTimestamp = iso8601Sent
+      .toString()
+      .slice(0, iso8601Sent.toString().indexOf('GMT'));
 
     this.details = [
       ['Connector In', this.pipelines.connector_in.type],
       ['Connector Out', this.pipelines.connector_out.type],
       ['Pipeline Status', this.pipelines.status],
       ['Messages received', this.pipelines.count_in],
-      ['Last message received timestamp', iso8601Received],
+      ['Last message received timestamp', recivedTimestamp],
       ['Messages sent', this.pipelines.count_out],
-      ['Last message sent timestamp', iso8601Sent],
+      ['Last message sent timestamp', sentTimestamp],
     ];
 
     if (
