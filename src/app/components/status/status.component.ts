@@ -44,7 +44,7 @@ export class StatusComponent {
   loadStatusDetails() {
     this.apiService.getStatus().subscribe((response: any) => {
       this.networkDetails = [
-        ['IP Address', response.network['ipv4']],
+        ['IP Address', response.network['address']],
         ['Netmask', response.network['netmask']],
         ['Gateway', response.network['gateway']],
         ['DNS', response.network['dns']],
