@@ -44,13 +44,17 @@ export class LoginComponent {
   authService = inject(AuthService);
 
   constructor() {
-    this.from = "/channels";
+    this.from = '/channels';
     const nav = this.router.getCurrentNavigation();
-    if(nav){
+    if (nav) {
       const state = nav.extras.state;
-      if(state){
+      if (state) {
         this.from = state['from'] || this.from;
       }
+    }
+
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate([this.from]);
     }
   }
 

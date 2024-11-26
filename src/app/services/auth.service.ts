@@ -27,12 +27,13 @@ export class AuthService {
   storeToken(token: string): void {
     this.cookies.set('access_token', token, this.cookieOptions);
     this.token = token;
+    this.router.navigate(['/channels']);
   }
 
   logout(): void {
     this.cookies.delete('access_token', '/');
     this.token = '';
-    this.router.navigateByUrl('/login');
+    this.router.navigate(['/login']);
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
     }
@@ -46,6 +47,18 @@ export class AuthService {
   isLoggedIn(): boolean {
     const { isValid } = this.isTokenValid();
     return isValid;
+  }
+
+  getLoggedinUser() {
+    const token = this.getToken();
+    if (token) {
+      const payload = token.split('.')[1];
+      const decodedPayload = window.atob(payload);
+      const parsePayload = JSON.parse(decodedPayload);
+      return parsePayload;
+    } else {
+      return null;
+    }
   }
 
   autoLogout(expirationDuration: number) {

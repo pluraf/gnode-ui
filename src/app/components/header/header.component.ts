@@ -1,14 +1,11 @@
 import { Component, inject, OnInit, OnDestroy, effect } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-
 import { MenubarModule } from 'primeng/menubar';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 
 import { DatetimeService } from '../../services/datetime.service';
-import { UserService } from '../../services/user.service';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { SettingsService } from '../../services/settings.service';
@@ -22,21 +19,18 @@ import { SettingsService } from '../../services/settings.service';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
-  userInitial: string | null = null;
   visible: boolean = false;
   position: string = 'top-right';
   displayUsername: string | null = null;
-  visibleTime: boolean = false;
+  userInitial: string | null = null;
   apiVersion: string = '';
   serialNumber: string = '';
   apimode: string = '';
-  showusername: boolean = false;
 
   apiService = inject(ApiService);
   datetimeService = inject(DatetimeService);
   router = inject(Router);
   authService = inject(AuthService);
-  userService = inject(UserService);
   settingsService = inject(SettingsService);
 
   isAuthentication: boolean = true;
@@ -51,28 +45,14 @@ export class HeaderComponent implements OnInit {
         this.isAuthentication = true;
       }
     });
-
-    let initialtime = this.datetimeService.timeSettings().formattedDateTime;
-    console.log('initialtime', initialtime);
   }
 
   ngOnInit(): void {
-    this.userService.getUsername();
-
-    this.userService.users$.subscribe((users) => {
-      if (users && users.length > 0) {
-        const username = users[0]?.username;
-
-        if (username && typeof username === 'string') {
-          this.userInitial = username.charAt(0).toUpperCase();
-          this.displayUsername =
-            username.charAt(0).toUpperCase() + username.slice(1);
-        } else {
-          this.userInitial = null;
-          this.displayUsername = null;
-        }
-      }
-    });
+    const userInfo = this.authService.getLoggedinUser();
+    if (userInfo) {
+      this.userInitial = userInfo.sub.slice(0, 1).toUpperCase();
+      this.displayUsername = userInfo.sub;
+    }
 
     this.getApiMode();
   }
