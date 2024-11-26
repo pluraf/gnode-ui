@@ -59,9 +59,7 @@ export class DatetimeService implements OnDestroy {
           timezone: timeData?.timezone || 'UTC',
           formattedDateTime,
         });
-        this.timer = setInterval(() => {
-          this.startClock();
-        }, 1000);
+        this.startClock();
       },
       { allowSignalWrites: true },
     );
@@ -107,21 +105,22 @@ export class DatetimeService implements OnDestroy {
 
   //Starts the clock to update the time every second.
   private startClock() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
     this.timer = setInterval(() => {
       const current = this.timeSettingSignal();
-      const currentDateTime = current.formattedDateTime
-        ? new Date(current.formattedDateTime)
-        : new Date();
+      if (!current.formattedDateTime) {
+        return;
+      }
 
+      const currentDateTime = new Date(current.formattedDateTime);
       currentDateTime.setSeconds(currentDateTime.getSeconds() + 1);
       const updatedGdate = currentDateTime.toISOString().slice(0, 10);
-
-      // const formattedTime = this.format12HourTime(currentDateTime);
 
       let hours = currentDateTime.getHours();
       const minutes = String(currentDateTime.getMinutes()).padStart(2, '0');
       const seconds = String(currentDateTime.getSeconds()).padStart(2, '0');
-
       const period = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12 || 12;
       const updatedGtime = `${hours}:${minutes}:${seconds} ${period}`;
@@ -137,30 +136,6 @@ export class DatetimeService implements OnDestroy {
       });
     }, 1000);
   }
-
-  /*   startClock() {
-    const timeData = this.settingsService.settingsdata().time;
-
-    if (timeData?.iso8601) {
-      const { date, time } = this.parseIso8601(timeData.iso8601);
-      const formattedTime = this.format12HourTime(time);
-
-      const gdate = timeData?.iso8601
-        ? new Date(timeData.iso8601).toISOString().slice(0, 10)
-        : '';
-
-      const updatedFormattedDateTime =
-        gdate && formattedTime ? `${gdate} ${formattedTime}` : '';
-
-      // Update only the parts of the signal that change
-      this.timeSettingSignal.set({
-        gdate,
-        gtime: formattedTime,
-        timezone: timeData?.timezone || 'UTC',
-        formattedDateTime: updatedFormattedDateTime,
-      });
-    }
-  } */
 
   ngOnDestroy(): void {
     if (this.timer) {
