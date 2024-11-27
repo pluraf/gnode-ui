@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
@@ -13,6 +13,7 @@ import { Channel } from '../channel';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { ChannelDeleteComponent } from '../channel-delete/channel-delete.component';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-channel-list',
@@ -28,18 +29,19 @@ import { ChannelDeleteComponent } from '../channel-delete/channel-delete.compone
     ChannelDeleteComponent,
     DialogModule,
     ButtonModule,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './channel-list.component.html',
   styleUrl: './channel-list.component.css',
 })
 export class ChannelListComponent {
-  value!: string;
   visibleDialog: boolean = false;
   channelList: Channel[] = [];
   selectedChannels: Channel[] = [];
   showMessage: boolean = false;
-
   totalRecords!: number;
+  loading: boolean = false;
 
   menubarItems: MenuItem[] = [
     {
@@ -65,6 +67,7 @@ export class ChannelListComponent {
   ];
 
   brokerService = inject(MBrokerCService);
+  messageService = inject(MessageService);
 
   constructor() {
     this.loadChannels();
@@ -112,7 +115,7 @@ export class ChannelListComponent {
 
   showDialog() {
     if (this.selectedChannels.length === 0) {
-      alert('No channels selected');
+      this.handleMessage('warn', 'No channels selected', true);
       return;
     }
     this.visibleDialog = true;
@@ -127,7 +130,7 @@ export class ChannelListComponent {
         );
 
         if (deleteResponse) {
-          const deletedChannels = deleteResponse.deleted || [];
+          const deletedChannels = deleteResponse.deleted;
           this.channelList = this.channelList.filter(
             (channel) => !deletedChannels.includes(channel.id),
           );
@@ -136,6 +139,16 @@ export class ChannelListComponent {
 
         this.visibleDialog = false;
       },
+    });
+  }
+
+  handleMessage(type: 'warn', message: string, sticky: boolean) {
+    const displaySeverity = 'Warning';
+    this.messageService.add({
+      severity: type,
+      summary: displaySeverity,
+      detail: message,
+      sticky,
     });
   }
 }
