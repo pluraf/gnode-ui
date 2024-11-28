@@ -115,21 +115,22 @@ export class AppComponent implements OnInit {
   ];
 
   updateMenuItems() {
-    const settingsMenu = this.items.find((item) => item.label === 'Settings');
-    const usersMenu = this.items.find((item) => item.label === 'Users');
-    if (settingsMenu && settingsMenu.items) {
-      settingsMenu.items.forEach((item) => {
-        if (
-          item.label === 'G-Cloud' ||
-          item.label === 'Network' ||
-          item.label === 'Time'
-        ) {
-          item.visible = !this.isVirtualMode;
-        }
-      });
-    }
-    if (usersMenu) {
-      usersMenu.visible = this.isAuthentication;
-    }
+    const updatedItems = this.items.map((item) => {
+      if (item.label === 'Users') {
+        item.visible = this.isAuthentication;
+      } else if (item.label === 'Settings' && item.items) {
+        item.items.forEach((subItem) => {
+          if (
+            subItem.label === 'G-Cloud' ||
+            subItem.label === 'Network' ||
+            subItem.label === 'Time'
+          ) {
+            subItem.visible = !this.isVirtualMode;
+          }
+        });
+      }
+      return item;
+    });
+    this.items = updatedItems;
   }
 }
