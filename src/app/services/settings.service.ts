@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Settings } from './service';
 import { ApiService } from './api.service';
 
@@ -13,7 +14,6 @@ export class SettingsService {
       timestamp: 0,
       iso8601: '',
       timezone: '',
-      formattedDateTime: '',
     },
     network_settings: undefined,
     authentication: false,
@@ -30,7 +30,7 @@ export class SettingsService {
       .pipe(
         tap((response: Settings) => {
           this.settingsdata.set(response);
-        }),
+        })
       )
       .subscribe();
   }

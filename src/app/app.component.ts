@@ -34,7 +34,7 @@ import { AuthService } from './services/auth.service';
     DividerModule,
     SidebarModule,
   ],
-  providers: [Router, SettingsService, AuthService],
+  providers: [Router, AuthService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -104,9 +104,9 @@ export class AppComponent implements OnInit {
       label: 'Settings',
       items: [
         { label: 'Channels', routerLink: '/settings' },
-        { label: 'G-Cloud', routerLink: '/settings/g-cloud' },
-        { label: 'Time', routerLink: '/settings/g-time' },
-        { label: 'Network', routerLink: '/settings/network-settings' },
+        { label: 'G-Cloud', routerLink: '/settings/gcloud' },
+        { label: 'Time', routerLink: '/settings/gtime' },
+        { label: 'Network', routerLink: '/settings/network' },
         { label: 'Authentication', routerLink: '/settings/authentication' },
       ],
       styleClass: 'gap-2',

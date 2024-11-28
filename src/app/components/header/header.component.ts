@@ -4,6 +4,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { DateTime } from 'luxon';
 
 import { DatetimeService } from '../../services/datetime.service';
 import { ApiService } from '../../services/api.service';
@@ -14,7 +15,7 @@ import { SettingsService } from '../../services/settings.service';
   selector: 'app-header',
   standalone: true,
   imports: [MenubarModule, DialogModule, ButtonModule, CommonModule],
-  providers: [SettingsService, ApiService, DatetimeService],
+  providers: [ApiService, DatetimeService],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -76,5 +77,16 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
     this.router.navigateByUrl('/login');
     this.visible = false;
+  }
+
+  displayDateTime() {
+    const dateTime = this.datetimeService.timeSettingSignal();
+    if (dateTime.getFullYear() !== 1970) {
+      return DateTime.fromJSDate(
+        dateTime, {zone: this.settingsService.settingsdata().time.timezone}
+      )
+      .toFormat('yyyy-MM-dd HH:mm');
+    }
+    return "";
   }
 }

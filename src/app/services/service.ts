@@ -10,7 +10,6 @@ export interface Settings {
     timestamp: number;
     iso8601: string;
     timezone: string;
-    formattedDateTime?: string;
   };
   network_settings: any;
   authentication: boolean;

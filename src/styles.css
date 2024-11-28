@@ -104,3 +104,8 @@ textarea {
 .p-dropdown-label {
   overflow: visible;
 }
+
+
+.p-inputtext {
+  padding: 8px;
+}

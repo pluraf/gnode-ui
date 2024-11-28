@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
     CheckboxModule,
     SubheaderComponent,
   ],
-  providers: [MessageService, Router, SettingsService],
+  providers: [MessageService, Router],
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css',
 })

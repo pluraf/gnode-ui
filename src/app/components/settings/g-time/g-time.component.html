@@ -1,53 +1,52 @@
 <app-subheader selectedMenuName="Time"></app-subheader>
 
-<div class="main-content-body" [style]="{'margin-top': '120px'}"> 
+<div class="main-content-body" [style]="{'margin-top': '120px'}">
   <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
     <!-- Setting time automatically-->
-      <div class="field col-12 w-full">
-        <div>
-          <div class="mb-2">
-            <p-checkbox [(ngModel)]="settings.autoSetTime" [binary]="true" (change)="toggleAutoSync()" inputId="autoSetTime"/>
-            <label for="autoSetTime" class="pl-2">Set date and time automatically</label><br>
-          </div>
+    <div class="field col-12 w-full">
+      <div>
+        <div class="mb-4 pl-2">
+          <p-checkbox [(ngModel)]="settings.autoSetTime" [binary]="true" (change)="toggleAutoSync()" inputId="autoSetTime"/>
+          <label for="autoSetTime" class="pl-2">Set date and time automatically</label><br>
         </div>
+      </div>
 
-        <div *ngIf="settings.autoSetTime" class="field col-12 mt-2">
-          <div class="mb-2"><label for="ntpServer" class="mr-2">Set NTP server</label></div>
-          <input id="ntpServer" type="url" [(ngModel)]="ntpServer" 
-                class="text-color surface-overlay p-2 border-1 border-round w-15rem"  
-                placeholder="time.google.com" required/>
-        </div>
+      <div *ngIf="settings.autoSetTime" class="field col-12 mt-2">
+        <div class="mb-1"><label for="ntpServer" class="mr-2">NTP server</label></div>
+        <p-dropdown
+          [options]="ntpServers"
+          [(ngModel)]="ntpServer"
+          placeholder="Select a City"
+          [editable]="true"
+          styleClass="text-color surface-overlay border-1 border-round p-0 w-15rem"
+        />
+        <div><small>Select an option from the list or enter your own variant</small></div>
+      </div>
 
-        <div *ngIf="settings.autoSetTime" class="field col-12">
-          <div class="mb-2"><label for="auto-tz-name">Select time zone </label></div>
-          <select id="auto-tz-name" [ngModel]="selectedAutoTz" (ngModelChange)="updateAutoTimezone($event)"
+      <div class="field col-12">
+        <div class="mb-1"><label for="auto-tz-name">Time zone </label></div>
+          <select id="auto-tz-name" [ngModel]="selectedAutoTz"
                   class="text-color surface-overlay p-2 border-1 border-round w-15rem">
             <option *ngFor="let tz of tzNames" [value]="tz">{{ tz }}</option>
           </select>
-        </div>
       </div>
 
       <!-- Setting time manually -->
-      <div *ngIf="!settings.autoSetTime" class="field col-12 w-full mt-1">
-        <div>
-          <div class="mb-2"><label for="manual-tz-name">Select time zone </label></div>
-          <select id="manual-tz-name" [(ngModel)]="settings.timezone" (ngModelChange)="updateManualTimezone($event)"
-                  class="text-color surface-overlay p-2 border-1 border-round w-15rem mb-2">
-                  <option >{{ this.settings.timezone }}</option>
-          </select>
-        </div><br>
+      <div *ngIf="!settings.autoSetTime">
+        <div class="field col-12">
+          <div class="mb-1"><label for="manualDate">Set Date:</label></div>
+          <input id="manualDate" type="date" [(ngModel)]="settings.gnodeDate"
+                class="text-color surface-overlay p-2 border-1 border-round w-15rem">
+        </div>
 
-        <div class="mb-2"><label for="manualDate">Set Date:</label></div>
-        <input id="manualDate" type="date" [(ngModel)]="settings.gnodeDate" 
-              class="text-color surface-overlay p-2 border-1 border-round w-15rem mb-4" (change)="setManualDateTime()">
-
-        <div class="mb-2"><label for="manualTime">Set Time:</label></div>
-        <input id="manualTime" type="time" [(ngModel)]="settings.gnodeTime" 
-              class="text-color surface-overlay p-2 border-1 border-round w-15rem" (change)="setManualDateTime()">
+        <div class="field col-12">
+          <div class="mb-1"><label for="manualTime">Set Time:</label></div>
+          <input id="manualTime" type="time" [(ngModel)]="settings.gnodeTime"
+                class="text-color surface-overlay p-2 border-1 border-round w-15rem">
+        </div>
       </div>
-
-      <small class="text-color-secondary inline-block p-2">Gnode Date/Time: {{ settings.currentDateTime }}</small>
       <div class="field col-12 mt-4">
         <button pButton (click)="onSubmit()" class="button" [disabled]="loading">Submit</button>
-      </div> 
-</div> 
+      </div>
+    </div>
+</div>

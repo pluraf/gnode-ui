@@ -153,5 +153,11 @@ export class ApiService {
     return this.http.post('api/user/', userObj, { headers });
   }
 
+  ///////////////////////////////// TimeZones ////////////////////////////
+
+  getTimeZones(): Observable<any> {
+    return this.http.get('api/timezones')
+  }
+
   ///////////////////////////////// Next ////////////////////////////
 }
