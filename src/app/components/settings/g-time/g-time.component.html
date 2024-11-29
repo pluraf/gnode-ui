@@ -25,7 +25,7 @@
 
       <div class="field col-12">
         <div class="mb-1"><label for="auto-tz-name">Time zone </label></div>
-          <select id="auto-tz-name" [ngModel]="selectedAutoTz"
+          <select id="auto-tz-name" [(ngModel)]="settings.timezone"
                   class="text-color surface-overlay p-2 border-1 border-round w-15rem">
             <option *ngFor="let tz of tzNames" [value]="tz">{{ tz }}</option>
           </select>

@@ -14,6 +14,7 @@ export class SettingsService {
       timestamp: 0,
       iso8601: '',
       timezone: '',
+      auto: false
     },
     network_settings: undefined,
     authentication: false,

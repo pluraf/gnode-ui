@@ -1,10 +1,11 @@
-import { Component, inject, OnInit, OnDestroy, effect } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, effect, signal } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
+import { DateTime } from 'luxon';
 import { DatetimeService } from '../../../services/datetime.service';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -44,7 +45,6 @@ export class GTimeComponent implements OnInit, OnDestroy {
     "time.google.com",
     "time.cloudflare.com"
   ]
-  selectedAutoTz: string = 'Europe/Stockholm';
   selectedManualTz: string = '';
   loading: boolean = false;
   ntpServer: string = '';
@@ -61,6 +61,16 @@ export class GTimeComponent implements OnInit, OnDestroy {
     this.apiService.getTimeZones().subscribe((resp) => {
       this.tzNames = resp;
     });
+    effect(() => {
+      const serverDateTime = this.settingsService.settingsdata().time;
+      this.settings.autoSetTime = serverDateTime.auto;
+      this.settings.timezone = serverDateTime.timezone;
+      const dt = DateTime.fromJSDate(
+        new Date(serverDateTime.iso8601), {zone: serverDateTime.timezone}
+      );
+      this.settings.gnodeDate = dt.toFormat('yyyy-MM-dd');
+      this.settings.gnodeTime = dt.toFormat('HH:mm');
+    });
   }
 
   ngOnInit() {}
@@ -75,7 +85,7 @@ export class GTimeComponent implements OnInit, OnDestroy {
   onSubmit() {
     const gnodeTime: any = {
       automatic: this.settings.autoSetTime,
-      timezone: this.selectedAutoTz,
+      timezone: this.settings.timezone
     };
 
     if (this.settings.autoSetTime) {

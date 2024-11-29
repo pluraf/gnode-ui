@@ -10,6 +10,7 @@ export interface Settings {
     timestamp: number;
     iso8601: string;
     timezone: string;
+    auto: boolean;
   };
   network_settings: any;
   authentication: boolean;
