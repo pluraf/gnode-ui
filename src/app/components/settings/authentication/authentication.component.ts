@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -6,8 +6,10 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ApiService } from '../../../services/api.service';
+import { AuthService } from '../../../services/auth.service';
 import { SettingsService } from '../../../services/settings.service';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-authentication',
@@ -19,47 +21,45 @@ import { Router } from '@angular/router';
     CheckboxModule,
     SubheaderComponent,
   ],
-  providers: [MessageService, Router],
+  providers: [MessageService],
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css',
 })
 export class AuthenticationComponent {
   apiService = inject(ApiService);
-  messageService = inject(MessageService);
+  authService = inject(AuthService);
   settingsService = inject(SettingsService);
+  messageService = inject(MessageService);
   router = inject(Router);
-
-  loading: boolean = false;
 
   settings = {
     isAuthentication: false,
   };
 
-  constructor() {}
-  settingsFromSignal = this.settingsService.settingsdata;
+  constructor() {
+    effect(() => {
+      this.settings.isAuthentication = this.settingsService.settingsdata().authentication;
+    });
+  }
 
   onSubmit() {
+    if (this.settings.isAuthentication == this.settingsService.settingsdata().authentication) {
+      return;
+    }
+
     const payload = {
-      authentication: this.settingsFromSignal().authentication,
+      authentication: this.settings.isAuthentication,
     };
 
-    this.settingsFromSignal.set({
-      ...this.settingsFromSignal(),
-      authentication: this.settingsFromSignal().authentication,
+    this.apiService.updateSettings(payload).subscribe({
+      next: (v) => {
+        if (!this.settings.isAuthentication) {
+          this.settingsService.load();
+        }
+        this.authService.logout();
+      },
+      error: (error) => this.handleMessage('error', error.error.detail, true)
     });
-
-    this.apiService.updateSettings(payload).subscribe(
-      () => {
-        this.handleMessage('success', 'Submitted successfully', false);
-      },
-      (error) => {
-        this.handleMessage(
-          'error',
-          error.status === 500 ? error.error.detail : error.error,
-          true,
-        );
-      },
-    );
   }
 
   handleMessage(
@@ -69,7 +69,6 @@ export class AuthenticationComponent {
   ) {
     this.messageService.add({ severity, detail });
     if (severity === 'success') {
-      this.loading = true;
       setTimeout(() => {
         this.clear();
       }, 3000);
@@ -80,6 +79,5 @@ export class AuthenticationComponent {
 
   clear() {
     this.messageService.clear();
-    this.loading = false;
   }
 }

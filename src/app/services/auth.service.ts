@@ -1,17 +1,21 @@
 import { inject, Injectable } from '@angular/core';
 import { CookieOptions, CookieService } from 'ngx-cookie-service';
-import { ApiService } from './api.service';
 import { Router } from '@angular/router';
+
+import { ApiService } from './api.service';
+import { InfoService } from './info.service';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   apiService = inject(ApiService);
+  infoService = inject(InfoService);
   cookies = inject(CookieService);
   router = inject(Router);
 
-  private tokenExpirationTimer: any;
+  private tokenExpirationTimer: any = null;
   token: string = '';
   private cookieOptions: CookieOptions = {
     secure: window.location.protocol === 'https:',
@@ -24,25 +28,31 @@ export class AuthService {
   constructor() {
     this.token = this.cookies.get('access_token');
   }
+
   storeToken(token: string): void {
     this.cookies.set('access_token', token, this.cookieOptions);
     this.token = token;
-    this.router.navigate(['/channels']);
   }
 
   logout(): void {
+    this.infoService.dropCache();
     this.cookies.delete('access_token', '/');
     this.token = '';
-    this.router.navigate(['/login']);
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
     }
     this.tokenExpirationTimer = null;
+    if (this.infoService.infoData().anonymous) {
+      this.router.navigate(['/']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   getToken(): string {
     return this.token;
   }
+
 
   isLoggedIn(): boolean {
     const { isValid } = this.isTokenValid();

@@ -1,8 +1,9 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, Signal } from '@angular/core';
 import { tap } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { Settings } from './service';
 import { ApiService } from './api.service';
+import { InfoService } from './info.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,11 +22,13 @@ export class SettingsService {
     gcloud: false,
   });
 
-  constructor(private apiService: ApiService) {
-    this.loadSettingsDataFromsignal();
+  constructor(private apiService: ApiService, private authService: AuthService) {
+    if (authService.isLoggedIn()) {
+      this.load();
+    }
   }
 
-  loadSettingsDataFromsignal() {
+  load(callback?: () => void) {
     return this.apiService
       .getSettings()
       .pipe(
@@ -33,10 +36,8 @@ export class SettingsService {
           this.settingsdata.set(response);
         })
       )
-      .subscribe();
-  }
-
-  getSettings(): Settings {
-    return this.settingsdata();
+      .subscribe({
+        next: () => { if (callback) callback() }
+      });
   }
 }

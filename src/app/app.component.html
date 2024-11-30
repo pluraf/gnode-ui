@@ -1,8 +1,13 @@
 @if (router.url != "/login") {
-  <app-header></app-header>
+  @if (isInfoLoaded) {
+    <app-header></app-header>
 
-  <p-sidebar [visible]="true" [modal]="false" [showCloseIcon]="false" [transitionOptions]="'0s'" [style]="{'padding-top': '40px'}" styleClass="no-border">
-    <p-panelMenu  [model]="items" [multiple]="true" />
-  </p-sidebar>
+    <p-sidebar [visible]="true" [modal]="false" [showCloseIcon]="false" [transitionOptions]="'0s'" [style]="{'padding-top': '40px'}" styleClass="no-border">
+      <p-panelMenu  [model]="items" [multiple]="true" />
+    </p-sidebar>
+  }
 }
-<div style="margin-left: {{margin_left}}; margin-top: 56px;"><router-outlet></router-outlet></div>
+
+@if (isInfoLoaded || router.url == "/login") {
+  <div style="margin-left: {{margin_left}}; margin-top: 56px;"><router-outlet></router-outlet></div>
+}

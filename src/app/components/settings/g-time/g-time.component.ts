@@ -102,6 +102,9 @@ export class GTimeComponent implements OnInit, OnDestroy {
     this.apiService.updateSettings(payload).subscribe(
       () => {
         this.handleMessage('success', 'Submitted successfully', false);
+        setTimeout(() => {
+          this.settingsService.load();
+        }, 3000);
       },
       (error: any) => {
         const errorMsg = error.error.detail;
@@ -119,7 +122,6 @@ export class GTimeComponent implements OnInit, OnDestroy {
       this.messageService.add({ severity, detail });
       this.loading = false;
       setTimeout(() => {
-        this.settingsService.loadSettingsDataFromsignal();
         this.clear();
       }, 3000);
     } else if (severity === 'error') {

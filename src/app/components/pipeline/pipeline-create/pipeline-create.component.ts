@@ -62,7 +62,6 @@ export class PipelineCreateComponent implements OnInit {
         this.handleMessage('success', 'Pipeline edited successfully!', false);
       },
       (error) => {
-        console.log('Error:', error);
         const errorMessage =
           error?.message ||
           (typeof error?.error === 'string' && error.error) ||

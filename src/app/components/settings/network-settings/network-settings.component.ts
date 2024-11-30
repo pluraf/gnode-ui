@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -90,7 +90,7 @@ export class NetworkSettingsComponent {
 
   constructor() {
     this.ethernet = new Ehternet();
-    this.load();
+    effect(() => this.load());
   }
 
   load() {
@@ -154,7 +154,7 @@ export class NetworkSettingsComponent {
   }
 
   onRescan() {
-    this.load();
+    this.settingsService.load();
   }
 
   onConnectWifi() {
@@ -167,7 +167,7 @@ export class NetworkSettingsComponent {
         },
       })
       .subscribe((resp) => {
-        this.load();
+        this.settingsService.load();
       });
   }
 
@@ -183,7 +183,7 @@ export class NetworkSettingsComponent {
         this.ipv4_settings;
     }
     this.apiService.updateSettings(network_settings).subscribe((resp) => {
-      this.load();
+      this.settingsService.load();
     });
   }
 
@@ -193,7 +193,7 @@ export class NetworkSettingsComponent {
         network_settings: { wifi_state: 'enabled' },
       })
       .subscribe((resp) => {
-        this.load();
+        this.settingsService.load();
       });
   }
 
@@ -203,7 +203,7 @@ export class NetworkSettingsComponent {
         network_settings: { wifi_state: 'disabled' },
       })
       .subscribe((resp) => {
-        this.load();
+        this.settingsService.load();
       });
   }
 
@@ -219,7 +219,7 @@ export class NetworkSettingsComponent {
         this.ethernet.ipv4Settings;
     }
     this.apiService.updateSettings(network_settings).subscribe((resp) => {
-      this.load();
+      this.settingsService.load();
     });
   }
 

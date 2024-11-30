@@ -1,16 +1,18 @@
 import { inject } from '@angular/core';
-import { HttpInterceptorFn } from '@angular/common/http';
-import { CookieService } from 'ngx-cookie-service';
-import { Router } from '@angular/router';
+import { HttpInterceptorFn, HttpEventType } from '@angular/common/http';
 import { HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+
+import { AuthService } from '../services/auth.service';
+
+
+let requestCount = 0;
+
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const cookies = inject(CookieService);
-  const router = inject(Router);
-
-  const token = cookies.get('access_token');
+  const authService = inject(AuthService);
+  const token = authService.getToken();
 
   if (token) {
     const authReq = req.clone({
@@ -20,9 +22,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     });
     return next(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          cookies.delete('access_token');
-          router.navigate(['/login']);
+        requestCount++;
+        if (error.status === 401 && requestCount < 2) {
+          // Commented on purpose
+          //authService.logout();
         }
         return throwError(() => error);
       }),

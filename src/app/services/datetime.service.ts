@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { SettingsService } from './settings.service';
-import { ApiinfoService } from './apiinfo.service';
+import { InfoService } from './info.service';
 
 
 @Injectable({
@@ -15,7 +15,7 @@ import { ApiinfoService } from './apiinfo.service';
 })
 export class DatetimeService implements OnDestroy {
   settingsService = inject(SettingsService);
-  apiInfoService = inject(ApiinfoService);
+  apiInfoService = inject(InfoService);
 
   timer: any;
   timeSettingSignal = signal<Date>(new Date(0));

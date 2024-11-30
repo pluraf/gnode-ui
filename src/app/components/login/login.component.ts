@@ -10,6 +10,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { InfoService } from '../../services/info.service';
+import { SettingsService } from '../../services/settings.service';
 
 export interface LoginUser {
   username: string;
@@ -42,6 +44,8 @@ export class LoginComponent {
 
   router = inject(Router);
   authService = inject(AuthService);
+  infoService = inject(InfoService);
+  settingsService = inject(SettingsService);
 
   constructor() {
     this.from = '/channels';
@@ -53,7 +57,7 @@ export class LoginComponent {
       }
     }
 
-    if (this.authService.isLoggedIn()) {
+    if (this.authService.isLoggedIn() || this.infoService.infoData().anonymous) {
       this.router.navigate([this.from]);
     }
   }
@@ -74,8 +78,9 @@ export class LoginComponent {
           if (res.access_token) {
             this.authService.storeToken(res.access_token);
             this.router.navigate([this.from]);
+            this.settingsService.load();
           } else {
-            this.showErrorMessage('Invalid token');
+            this.showErrorMessage('Unauthorized.');
           }
         },
         (error) => {

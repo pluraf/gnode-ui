@@ -2,14 +2,13 @@ import {
   Component,
   inject,
   OnInit,
-  ChangeDetectorRef,
   effect,
 } from '@angular/core';
 import {
   RouterOutlet,
   Router,
   ActivatedRoute,
-  NavigationEnd,
+  NavigationEnd, NavigationStart, NavigationError,
 } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { MenuItem } from 'primeng/api';
@@ -18,9 +17,7 @@ import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitterModule } from 'primeng/splitter';
 import { HttpClient } from '@angular/common/http';
-import { SettingsService } from './services/settings.service';
-import { ApiinfoService } from './services/apiinfo.service';
-import { ApiInfo } from './services/service';
+import { InfoService } from './services/info.service';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -34,45 +31,35 @@ import { AuthService } from './services/auth.service';
     DividerModule,
     SidebarModule,
   ],
-  providers: [Router, AuthService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  margin_left: string;
-
   router: Router = inject(Router);
   route: ActivatedRoute = inject(ActivatedRoute);
-  cdr = inject(ChangeDetectorRef);
-  settingsService = inject(SettingsService);
   http = inject(HttpClient);
-  apiInfoService = inject(ApiinfoService);
   authService = inject(AuthService);
+  infoService = inject(InfoService);
 
+  margin_left: string;
   isVirtualMode: boolean = false;
   isAuthentication: boolean = true;
-
-  apiInfoSignal = this.apiInfoService.apiInfoData;
-  settingInfo = this.settingsService.settingsdata;
+  isInfoLoaded: boolean = false;
 
   constructor() {
     this.margin_left = window.location.pathname == '/login' ? '0px' : '210px';
 
     effect(() => {
-      const apiInfo = this.apiInfoSignal();
+      const gnodeInfo = this.infoService.infoData();
 
-      if (apiInfo.mode) {
-        if (apiInfo.mode === 'virtual') {
-          this.isVirtualMode = true;
-          this.updateMenuItems();
-        }
+      if (gnodeInfo.mode) {
+        this.isInfoLoaded = true;
+        this.isVirtualMode = gnodeInfo.mode == 'virtual';
+        this.isAuthentication = ! gnodeInfo.anonymous;
+        this.updateMenuItems();
+      } else {
+        this.isInfoLoaded = false;
       }
-    });
-
-    effect(() => {
-      const authentication = this.settingInfo().authentication;
-      this.isAuthentication = authentication;
-      this.updateMenuItems();
     });
   }
 
@@ -83,10 +70,6 @@ export class AppComponent implements OnInit {
           event.urlAfterRedirects == '/login' ? '0px' : '210px';
       }
     });
-
-    if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']);
-    }
   }
 
   items: MenuItem[] = [
