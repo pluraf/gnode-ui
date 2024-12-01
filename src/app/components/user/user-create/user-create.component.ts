@@ -63,9 +63,6 @@ export class UserCreateComponent {
             this.showMessage(response.responses[0].error);
           } else {
             this.showMessage('User created successfully!');
-            setTimeout(() => {
-              this.router.navigateByUrl('/users');
-            }, 1000);
           }
         },
         (error) => {

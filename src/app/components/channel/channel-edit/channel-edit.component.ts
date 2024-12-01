@@ -135,6 +135,5 @@ export class ChannelEditComponent implements OnInit {
 
   clear() {
     this.messageService.clear();
-    this.router.navigateByUrl(`channels/channel/${this.chanid}`);
   }
 }

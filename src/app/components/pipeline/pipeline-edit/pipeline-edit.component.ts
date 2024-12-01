@@ -5,11 +5,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-
-import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+
+import { NoteService } from '../../../services/note.service';
 import { ApiService } from '../../../services/api.service';
+import { SubheaderComponent } from '../../subheader/subheader.component';
+
 
 @Component({
   selector: 'app-pipeline-edit',
@@ -23,7 +25,7 @@ import { ApiService } from '../../../services/api.service';
     RouterModule,
     ToastModule,
   ],
-  providers: [MessageService],
+  providers: [ MessageService, NoteService ],
   templateUrl: './pipeline-edit.component.html',
   styleUrl: './pipeline-edit.component.css',
 })
@@ -32,10 +34,10 @@ export class PipelineEditComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   router = inject(Router);
   messageService = inject(MessageService);
+  noteService = inject(NoteService);
 
   pipeid = '';
   pipelineJson: string = '';
-  loading: boolean = false;
 
   constructor() {
     this.pipeid = this.route.snapshot.params['pipeid'];
@@ -47,33 +49,15 @@ export class PipelineEditComponent {
   onUpdatePipeline() {
     this.apiService.pipelineEdit(this.pipeid, this.pipelineJson).subscribe(
       () => {
-        this.handleMessage('success', 'Pipeline edited successfully!', false);
+        this.noteService.handleMessage(
+          this.messageService, 'success', 'Pipeline edited successfully!');
       },
       (error) => {
         const errorMessage = error?.error.split('\n').pop();
-        this.handleMessage('error', errorMessage, true);
+        this.noteService.handleMessage(
+          this.messageService, 'error', errorMessage
+        );
       },
     );
-  }
-
-  handleMessage(
-    severity: 'success' | 'error',
-    detail: string,
-    sticky: boolean,
-  ) {
-    if (severity === 'success') {
-      this.messageService.add({ severity, detail });
-      this.loading = true;
-      setTimeout(() => {
-        this.clear();
-      }, 3000);
-    } else if (severity === 'error') {
-      this.messageService.add({ severity, detail, sticky: true });
-    }
-  }
-
-  clear() {
-    this.messageService.clear();
-    this.router.navigateByUrl(`pipelines/pipeline-detail/${this.pipeid}`);
   }
 }

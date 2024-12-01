@@ -3,7 +3,7 @@
   backRoute="/pipelines"
 ></app-subheader>
 <div class="main-content-body">
-  <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
+  <p-toast position="top-right" [baseZIndex]="5000"/>
 
   <div class="p-col-12 p-md-6">
     <div class="p-fluid">
@@ -29,7 +29,7 @@
         ></textarea>
       </div>
       <div class="p-field mt-3">
-        <button pButton (click)="onCreatePipeline()" [disabled]="loading">Submit</button>
+        <button pButton (click)="onCreatePipeline()">Submit</button>
       </div>
     </div>
   </div>

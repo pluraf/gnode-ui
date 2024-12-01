@@ -211,8 +211,5 @@ export class AuthbundleEditComponent {
 
   clear() {
     this.messageService.clear();
-    this.router.navigateByUrl(
-      `authbundles/authbundle-detail/${this.authbundleId}`,
-    );
   }
 }

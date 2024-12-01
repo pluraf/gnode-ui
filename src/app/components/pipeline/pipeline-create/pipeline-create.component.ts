@@ -4,15 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { SubheaderComponent } from '../../subheader/subheader.component';
-
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+
 import { ApiService } from '../../../services/api.service';
+import { NoteService } from '../../../services/note.service';
+import { SubheaderComponent } from '../../subheader/subheader.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-pipeline-create',
@@ -27,7 +28,7 @@ import { ApiService } from '../../../services/api.service';
     TooltipModule,
     ToastModule,
   ],
-  providers: [MessageService],
+  providers: [ MessageService, NoteService ],
   templateUrl: './pipeline-create.component.html',
   styleUrl: './pipeline-create.component.css',
 })
@@ -35,11 +36,11 @@ export class PipelineCreateComponent implements OnInit {
   apiService = inject(ApiService);
   route: ActivatedRoute = inject(ActivatedRoute);
   http = inject(HttpClient);
+  noteService = inject(NoteService);
   messageService = inject(MessageService);
 
   pipeid = '';
   pipelineJson: string = '';
-  loading: boolean = false;
   pipelineConfig: any = {};
 
   constructor(private router: Router) {}
@@ -59,7 +60,9 @@ export class PipelineCreateComponent implements OnInit {
     }
     this.apiService.pipelineCreate(this.pipeid, pipelineData).subscribe(
       () => {
-        this.handleMessage('success', 'Pipeline edited successfully!', false);
+        this.noteService.handleMessage(
+          this.messageService, 'success', 'Pipeline edited successfully!'
+        );
       },
       (error) => {
         const errorMessage =
@@ -71,30 +74,11 @@ export class PipelineCreateComponent implements OnInit {
           (error?.status && `Error Code: ${error.status}`) ||
           'An unknown error occurred';
 
-        this.handleMessage('error', errorMessage, true);
+        this.noteService.handleMessage(
+          this.messageService, 'error', errorMessage
+        );
       },
     );
-  }
-
-  handleMessage(
-    severity: 'success' | 'error',
-    detail: string,
-    sticky: boolean,
-  ) {
-    if (severity === 'success') {
-      this.messageService.add({ severity, detail });
-      this.loading = true;
-      setTimeout(() => {
-        this.clear();
-      }, 3000);
-    } else if (severity === 'error') {
-      this.messageService.add({ severity, detail, sticky: true });
-    }
-  }
-
-  clear() {
-    this.messageService.clear();
-    this.router.navigateByUrl('/pipelines');
   }
 
   onGenerateConfig() {

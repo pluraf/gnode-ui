@@ -242,6 +242,5 @@ export class AuthbundleCreateComponent {
 
   clear() {
     this.messageService.clear();
-    this.router.navigateByUrl('/authbundles');
   }
 }
