@@ -1,6 +1,6 @@
  <app-subheader selectedMenuName="Edit channel" [backRoute]="'channels/channel/' + chanid"></app-subheader>
 
-<div class="main-content-body">
+<div *ngIf="dataLoaded" class="main-content-body">
   <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
      <div class="p-grid">
       <h4>Channel ID: {{ chanid }}</h4>

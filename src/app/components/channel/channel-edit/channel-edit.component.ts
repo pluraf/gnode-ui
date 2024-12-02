@@ -47,6 +47,8 @@ export class ChannelEditComponent implements OnInit {
     private messageService: MessageService,
   ) {}
 
+  dataLoaded = false;
+
   selectedCategory: any = null;
 
   categories: any[] = [
@@ -68,6 +70,7 @@ export class ChannelEditComponent implements OnInit {
       this.brokerService
         .loadChannelDetails(this.chanid)
         .subscribe((response: any) => {
+          this.dataLoaded = true;
           const channel = response.responses[0].data.channel;
 
           this.clientid = channel.clientid || '';
