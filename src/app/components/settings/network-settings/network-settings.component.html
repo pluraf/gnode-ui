@@ -6,13 +6,16 @@
       <div class="field col flex-grow-0 mr-7">
         <div class="field col-12 mt-2">
           Status:
+          <strong>
           @if (isLoaded) {
+
             @if (wifiEnabled) {
               {{wifiActiveSSID}} | {{wifiConnectionStatus}}
             } @else {
-              Disabled
+              disabled
             }
           }
+          </strong>
         </div>
         <div class="field col-12 mt-2 mb-2">
           <button pButton (click)="onEnableWifi()">Enable</button>
@@ -91,6 +94,7 @@
       <div class="field col flex-grow-0">
         <div class="field col-12 mt-2">
           Status:
+          <strong>
           @if (isLoaded) {
             @if (ethernet.isEnabled) {
               enabled
@@ -103,6 +107,7 @@
               | disconnected
             }
           }
+        </strong>
         </div>
         <div class="field col-12 mt-2">
           <div class="mb-2">IPv4 Method</div>
