@@ -62,10 +62,13 @@ export class ChannelDetailComponent {
       .subscribe((response: any) => {
         this.channel = response.responses[0].data.channel;
         const timestamp = this.channel.msg_timestamp;
-        const iso8601 = new Date(timestamp * 1000);
-        let recivedTimestamp = iso8601
-          .toString()
-          .slice(0, iso8601.toString().indexOf('GMT'));
+        let recivedTimestamp = "-";
+        if (timestamp != 0) {
+          const iso8601 = new Date(timestamp * 1000);
+          recivedTimestamp = iso8601
+            .toString()
+            .slice(0, iso8601.toString().indexOf('GMT'));
+        }
 
         this.details = [
           ['Enabled', !this.channel.disabled],
