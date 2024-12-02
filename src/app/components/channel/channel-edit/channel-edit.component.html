@@ -5,8 +5,6 @@
      <div class="p-grid">
       <h4>Channel ID: {{ chanid }}</h4>
       <div class="p-fluid">
-              <span><strong>Authentication</strong></span>
-              <small>Specify the public key that will be used to authenticate this channel. You can leave the key empty, but channels will not be able to connect to gnode without a key.</small>
               <div class="flex flex-column gap-1 mt-4">
                   <label for="authOptions">Authentication type</label>
                   <select [(ngModel)]="selectedOption" id="authOptions" class="border-1 border-round ">
