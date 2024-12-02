@@ -1,12 +1,15 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
+import { CardModule } from 'primeng/card';
 
-import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MBrokerCService } from '../../../services/mbrokerc.service';
+import { SettingsService } from '../../../services/settings.service';
+import { InfoService } from '../../../services/info.service';
+import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ChannelDeleteComponent } from '../channel-delete/channel-delete.component';
 
 @Component({
@@ -16,6 +19,7 @@ import { ChannelDeleteComponent } from '../channel-delete/channel-delete.compone
     CommonModule,
     SubheaderComponent,
     TableModule,
+    CardModule,
     RouterModule,
     ChannelDeleteComponent,
   ],
@@ -25,12 +29,19 @@ import { ChannelDeleteComponent } from '../channel-delete/channel-delete.compone
 export class ChannelDetailComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   brokerService = inject(MBrokerCService);
+  settingsService = inject(SettingsService);
+  infoService = inject(InfoService);
   router = inject(Router);
   chanid = '';
-  channel: any;
   details: any;
+  connDetails: string[][] = [];
   visibleDialog: boolean = false;
   menubarItems: MenuItem[] = [];
+
+  exampleHost = "";
+  channel: any = {
+    username: ""
+  };
 
   constructor() {
     this.chanid = this.route.snapshot.params['chanid'];
@@ -79,12 +90,34 @@ export class ChannelDetailComponent {
           ['Messages received', this.channel.msg_received],
           ['Last message timestamp', recivedTimestamp],
         ];
-        if (this.channel.authtype && this.channel.authtype.startsWith('jwt')) {
-          this.details.push([
-            'JWT key',
-            this.channel.jwtkey.replace(/(.{64})/g, '$1\n'),
-          ]);
+      });
+
+      effect(() => {
+        const gnode_hostname = `gnode-${this.infoService.infoData().serial_number}`;
+        const settings = this.settingsService.settingsdata();
+        const network_settings = settings.network_settings;
+
+        this.connDetails = [
+          ["TCP Port", "1883", "No encryption"],
+          ["TLS TCP Port", "8883", "Encrypted"],
+          ["Host name", `${gnode_hostname}.local`, "Local Network"],
+        ];
+
+        if (network_settings) {
+          for (const conn of network_settings.active_connections) {
+            if (conn.type == 'wifi') {
+              this.connDetails.push(["Host IP",conn.ipv4_settings.address, "WiFi"]);
+              this.exampleHost = conn.ipv4_settings.address;
+            } else if (conn.type == 'ethernet') {
+              this.connDetails.push(["Host IP",conn.ipv4_settings.address, "Ethernet"]);
+              this.exampleHost = conn.ipv4_settings.address;
+            }
+          }
         }
+
+        this.connDetails.push(
+          ["G-Cloud Host", `${gnode_hostname}.iotplan.io`, settings.gcloud ? "Enabled" : "Disabled"]
+        );
       });
   }
 

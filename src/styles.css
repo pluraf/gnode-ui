@@ -109,3 +109,8 @@ textarea {
 .p-inputtext {
   padding: 8px;
 }
+
+
+.p-card .p-card-content {
+  padding: 0.2rem;
+}

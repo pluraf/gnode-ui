@@ -44,11 +44,11 @@ select {
 .pubKeyFormat {
   box-sizing: content-box;
   resize: both;
-  padding: 2rem;
+  padding: 0.5rem;
   margin: 0;
   overflow: hidden;
-  width: 35em;
-  height: 15em;
+  width: 40em;
+  height: 8em;
 }
 
 ::ng-deep .p-toast .p-toast-message {
