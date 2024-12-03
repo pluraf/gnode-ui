@@ -55,13 +55,10 @@ describe('SubheaderComponent', () => {
     expect(component.selectedMenuName).toBe('');
     expect(component.actions).toEqual([]);
     expect(component.items).toEqual([]);
-    expect(component.showBackArrow).toBeFalse();
-    expect(component.useExplicitNavigation).toBeFalse();
     expect(component.backRoute).toBe('');
   });
 
   it('should call location.back() when useExplicitNavigation is false', () => {
-    component.useExplicitNavigation = false;
     component.goBack();
 
     expect(locationMock.back).toHaveBeenCalled();
@@ -69,7 +66,6 @@ describe('SubheaderComponent', () => {
   });
 
   it('should call router.navigate() when useExplicitNavigation is true and backRoute is provided', () => {
-    component.useExplicitNavigation = true;
     component.backRoute = '/some-back-route';
 
     component.goBack();
@@ -79,7 +75,6 @@ describe('SubheaderComponent', () => {
   });
 
   it('should call location.back() when useExplicitNavigation is true but backRoute is not provided', () => {
-    component.useExplicitNavigation = true;
     component.backRoute = '';
 
     component.goBack();
@@ -92,8 +87,6 @@ describe('SubheaderComponent', () => {
     component.selectedMenuName = 'Menu 1';
     component.actions = [{ label: 'Action 1' }];
     component.items = [{ label: 'Item 1' }];
-    component.showBackArrow = true;
-    component.useExplicitNavigation = true;
     component.backRoute = '/new-back-route';
 
     fixture.detectChanges();
@@ -101,8 +94,6 @@ describe('SubheaderComponent', () => {
     expect(component.selectedMenuName).toBe('Menu 1');
     expect(component.actions).toEqual([{ label: 'Action 1' }]);
     expect(component.items).toEqual([{ label: 'Item 1' }]);
-    expect(component.showBackArrow).toBeTrue();
-    expect(component.useExplicitNavigation).toBeTrue();
     expect(component.backRoute).toBe('/new-back-route');
   });
 });

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,6 +12,7 @@ import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { NoteService } from '../../../services/note.service';
 
 @Component({
   selector: 'app-channel-edit',
@@ -26,7 +27,7 @@ import { MessageService } from 'primeng/api';
     SubheaderComponent,
     ToastModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, NoteService],
   templateUrl: './channel-edit.component.html',
   styleUrl: './channel-edit.component.css',
 })
@@ -38,22 +39,23 @@ export class ChannelEditComponent implements OnInit {
   password = '';
   authtype = '';
   jwtKey = '';
-  loading: boolean = false;
+  enabled: boolean = false;
+
+  noteService = inject(NoteService);
 
   constructor(
     private brokerService: MBrokerCService,
     private route: ActivatedRoute,
-    private router: Router,
     private messageService: MessageService,
   ) {}
 
   dataLoaded = false;
 
-  selectedCategory: any = null;
+  selectedChannelState: any = null;
 
-  categories: any[] = [
-    { name: 'Enabled', key: 'A' },
-    { name: 'Disabled', key: 'B' },
+  channelStates: any[] = [
+    { name: 'Enabled', key: 'Allow' },
+    { name: 'Disabled', key: 'Block' },
   ];
 
   selectedOption: string = 'jwt';
@@ -73,8 +75,8 @@ export class ChannelEditComponent implements OnInit {
           this.dataLoaded = true;
           const channel = response.responses[0].data.channel;
 
-          this.clientid = channel.clientid || '';
-          this.username = channel.username || '';
+          this.clientid = channel.clientid;
+          this.username = channel.username;
           this.password = '';
           this.selectedOption =
             channel.authtype.toLowerCase() === 'jwt_es256' ? 'jwt' : 'password';
@@ -82,14 +84,24 @@ export class ChannelEditComponent implements OnInit {
           if (this.selectedOption === 'jwt' && channel.jwtkey) {
             this.jwtKey = channel.jwtkey.replace(/(.{64})/g, '$1\n');
           }
+          this.enabled = channel.disabled;
+
+          if (this.enabled === false) {
+            this.selectedChannelState = this.channelStates.find(
+              (category) => category.key === 'Block',
+            );
+          } else {
+            this.selectedChannelState = this.channelStates.find(
+              (category) => category.key === 'Allow',
+            );
+          }
         });
     });
-    this.selectedCategory = this.categories[0];
   }
 
   onUpdate() {
-    const communicationStatus =
-      this.selectedCategory.key === 'A' ? 'Enabled' : 'Disabled';
+    const channelState =
+      this.selectedChannelState.key === 'Allow' ? 'Enabled' : 'Disabled';
     const selectedOptionObj = this.authOptions.find(
       (option) => option.value === this.selectedOption,
     );
@@ -97,7 +109,7 @@ export class ChannelEditComponent implements OnInit {
 
     const updateData: any = {
       chanid: this.chanid,
-      communicationStatus: communicationStatus,
+      communicationStatus: channelState,
       authtype: this.authtype,
       clientid: this.clientid || undefined,
       username: this.username || undefined,
@@ -106,37 +118,25 @@ export class ChannelEditComponent implements OnInit {
         this.selectedOption === 'jwt'
           ? this.jwtKey.replace(/\n/g, '')
           : undefined,
+      enabled: this.enabled,
     };
-
     this.brokerService.updateChannel(updateData).subscribe((response) => {
       if (response.responses && response.responses[0]) {
         const resp = response.responses[0];
         if (resp.hasOwnProperty('error') && resp.error) {
-          this.handleMessage('error', resp.error, true);
+          this.noteService.handleMessage(
+            this.messageService,
+            'error',
+            resp.error,
+          );
         } else {
-          this.handleMessage('success', 'Channel edited successfully', false);
+          this.noteService.handleMessage(
+            this.messageService,
+            'success',
+            'Channel edited successfully!',
+          );
         }
       }
     });
-  }
-
-  handleMessage(
-    severity: 'success' | 'error',
-    detail: string,
-    sticky: boolean,
-  ) {
-    if (severity === 'success') {
-      this.messageService.add({ severity, detail });
-      this.loading = true;
-      setTimeout(() => {
-        this.clear();
-      }, 3000);
-    } else if (severity === 'error') {
-      this.messageService.add({ severity, detail, sticky: true });
-    }
-  }
-
-  clear() {
-    this.messageService.clear();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -14,6 +14,9 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { ChannelDeleteComponent } from '../channel-delete/channel-delete.component';
 import { ToastModule } from 'primeng/toast';
+import { NoteService } from '../../../services/note.service';
+import { forkJoin, map } from 'rxjs';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-channel-list',
@@ -30,8 +33,9 @@ import { ToastModule } from 'primeng/toast';
     DialogModule,
     ButtonModule,
     ToastModule,
+    ProgressSpinnerModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, NoteService],
   templateUrl: './channel-list.component.html',
   styleUrl: './channel-list.component.css',
 })
@@ -42,6 +46,10 @@ export class ChannelListComponent {
   showMessage: boolean = false;
   totalRecords!: number;
   loading: boolean = false;
+  chanid: string = '';
+  showLoading: boolean = false;
+
+  changeDetector = inject(ChangeDetectorRef);
 
   menubarItems: MenuItem[] = [
     {
@@ -68,12 +76,16 @@ export class ChannelListComponent {
 
   brokerService = inject(MBrokerCService);
   messageService = inject(MessageService);
+  noteService = inject(NoteService);
 
-  constructor() {
+  constructor() {}
+
+  ngOnInit() {
     this.loadChannels();
   }
 
   loadChannels() {
+    this.showLoading = true;
     this.brokerService.loadChannelList().subscribe({
       next: (response: { responses: any[] }) => {
         const clientResponse = response.responses.find(
@@ -82,15 +94,48 @@ export class ChannelListComponent {
 
         if (clientResponse) {
           const clientData = clientResponse.data;
-          const disabled = clientResponse.verbose;
 
           if (clientData?.channels) {
-            this.channelList = clientData.channels.map((channid: string) => ({
-              id: channid,
-              communication: disabled ? 'Blocked' : 'Allowed',
-              lastseen: this.formatDate(new Date()),
+            this.channelList = clientData.channels.map((chanid: string) => ({
+              id: chanid,
+              communication: '',
+              lastseen: '',
             }));
             this.totalRecords = this.channelList.length;
+
+            // Creating an array of observables for channel details
+            const channelDetailsObservables = this.channelList.map((channel) =>
+              this.brokerService.loadChannelDetails(channel.id).pipe(
+                map((response: any) => {
+                  const channelData = response.responses[0]?.data?.channel;
+                  const timestamp = channelData.msg_timestamp;
+                  let lastseen = '-';
+                  if (timestamp != 0) {
+                    const iso8601 = new Date(timestamp * 1000);
+                    lastseen = iso8601
+                      .toString()
+                      .slice(0, iso8601.toString().indexOf('GMT'));
+                  }
+                  channel.lastseen = lastseen;
+                  channel.communication = channelData.disabled
+                    ? 'Allowed'
+                    : 'Blocked';
+                  return channel;
+                }),
+              ),
+            );
+
+            // Using forkJoin to wait for all channel details to load concurrently
+            forkJoin(channelDetailsObservables).subscribe({
+              next: (updatedChannels) => {
+                this.channelList = updatedChannels;
+                this.showLoading = false;
+              },
+              error: (err) => {
+                console.error('Error loading channel details:', err);
+                this.showLoading = false;
+              },
+            });
           }
         }
         if (clientResponse.data.totalCount === 0) {
@@ -100,22 +145,13 @@ export class ChannelListComponent {
     });
   }
 
-  formatDate(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = {
-      month: 'numeric',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true,
-    };
-    return date.toLocaleString('en-EU', options);
-  }
-
   showDialog() {
     if (this.selectedChannels.length === 0) {
-      this.handleMessage('warn', 'No channels selected', true);
+      this.noteService.handleMessage(
+        this.messageService,
+        'warn',
+        'No channels selected.',
+      );
       return;
     }
     this.visibleDialog = true;
@@ -139,16 +175,6 @@ export class ChannelListComponent {
 
         this.visibleDialog = false;
       },
-    });
-  }
-
-  handleMessage(type: 'warn', message: string, sticky: boolean) {
-    const displaySeverity = 'Warning';
-    this.messageService.add({
-      severity: type,
-      summary: displaySeverity,
-      detail: message,
-      sticky,
     });
   }
 }

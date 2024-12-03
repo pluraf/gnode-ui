@@ -3,9 +3,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { StatusComponent } from './components/status/status.component';
 import { LoginComponent } from './components/login/login.component';
 
-import { ChannelListComponent } from './components/channel/channel-list/channel-list.component';
-import { AuthenticationComponent } from './components/settings/authentication/authentication.component';
-
 export const routes: Routes = [
   {
     path: '',
@@ -14,61 +11,60 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     component: LoginComponent,
   },
   {
     path: 'users',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('./components/user/user-list/user-list.component').then(
         (r) => r.UserListComponent,
-      )
-
+      ),
   },
   {
     path: 'user-create',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('./components/user/user-create/user-create.component').then(
         (r) => r.UserCreateComponent,
-      )
+      ),
   },
   {
     path: 'user-delete',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('./components/user/user-delete/user-delete.component').then(
         (r) => r.UserDeleteComponent,
-      )
+      ),
   },
   {
     path: 'channels',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./components/channel/channels.routes').then(
         (r) => r.CHANNELS_ROUTES,
-      )
+      ),
   },
   {
     path: 'pipelines',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./components/pipeline/pipelines.routes').then(
         (r) => r.PIPELINES_ROUTES,
-      )
+      ),
   },
   {
     path: 'authbundles',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./components/authbundle/authbundles.routes').then(
         (r) => r.AUTHBUNDLES_ROUTES,
-      )
+      ),
   },
   {
     path: 'settings',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./components/settings/settings.routes').then(
         (r) => r.SETTINGS_ROUTES,
@@ -76,7 +72,7 @@ export const routes: Routes = [
   },
   {
     path: 'status',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     component: StatusComponent,
-  }
+  },
 ];

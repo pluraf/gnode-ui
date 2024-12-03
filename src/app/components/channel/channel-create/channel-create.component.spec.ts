@@ -92,9 +92,4 @@ describe('ChannelCreateComponent', () => {
       }),
     );
   });
-
-  it('should navigate to /channels after clearing messages', () => {
-    component.clear();
-    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/channels');
-  });
 });

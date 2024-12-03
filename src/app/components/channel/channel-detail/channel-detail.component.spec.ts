@@ -1,69 +1,3 @@
-/* import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ChannelDetailComponent } from './channel-detail.component';
-import { ActivatedRoute, provideRouter } from '@angular/router';
-import { MBrokerCService } from '../../../services/mbrokerc.service';
-import {
-  HttpClient,
-  HttpHandler,
-  provideHttpClient,
-} from '@angular/common/http';
-
-let component: ChannelDetailComponent;
-let fixture: ComponentFixture<ChannelDetailComponent>;
-
-const mockActivatedRoute = {
-  snapshot: {
-    params: { chanid: '123' },
-  },
-};
-
-fdescribe('ChannelDetailComponent', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [ChannelDetailComponent],
-      providers: [
-        provideRouter([]),
-        MBrokerCService,
-        HttpClient,
-        provideHttpClient,
-        HttpHandler,
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
-      ],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(ChannelDetailComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('should create ChannelDetailComponent', () => {
-    expect(component).toBeTruthy();
-  });
-  it('should set chanid from the route parameters', () => {
-    expect(component.chanid).toBe('123');
-  });
-
-  it('should initialize menubarItems correctly', () => {
-    const editItem = component.menubarItems[0];
-    expect(editItem.routerLink).toEqual(['/channels/channel-edit', '123']);
-    expect(editItem.tooltipOptions?.tooltipLabel).toBe('Edit channel');
-    expect(editItem.iconClass).toBe('pi pi-pencil m-1');
-
-    const deleteItem = component.menubarItems[1];
-    expect(deleteItem.tooltipOptions?.tooltipLabel).toBe('Delete channel');
-    expect(deleteItem.iconClass).toBe('pi pi-trash m-1');
-    expect(deleteItem.command).toBeDefined();
-
-    if (deleteItem.command) {
-      const spy = spyOn(component, 'showDialog');
-      deleteItem.command({} as any);
-      expect(spy).toHaveBeenCalled();
-    } else {
-      fail('Delete item command is undefined');
-    }
-  });
-});
- */
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChannelDetailComponent } from './channel-detail.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -71,7 +5,7 @@ import { of } from 'rxjs';
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
-fdescribe('ChannelDetailComponent', () => {
+describe('ChannelDetailComponent', () => {
   let component: ChannelDetailComponent;
   let fixture: ComponentFixture<ChannelDetailComponent>;
   let mockActivatedRoute: any;
@@ -162,7 +96,6 @@ fdescribe('ChannelDetailComponent', () => {
 
     expect(component.details).toEqual([
       ['Enabled', true],
-      ['Last seen', 'date'],
       ['Authentication type', 'jwt'],
       ['Username', 'testUser'],
       ['MQTT Client ID', 'client123'],

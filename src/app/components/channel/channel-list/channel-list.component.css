@@ -21,3 +21,15 @@
     top: 4rem;
   }
 }
+.custom-warning-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  display: inline-block;
+  line-height: 1 !important;
+}
+:host {
+  ::ng-deep .p-progress-spinner-circle {
+    stroke: #006666 !important;
+  }
+}

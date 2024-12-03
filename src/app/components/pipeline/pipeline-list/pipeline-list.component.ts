@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { PipelineDeleteComponent } from '../pipeline-delete/pipeline-delete.component';
 import { ApiService } from '../../../services/api.service';
+import { NoteService } from '../../../services/note.service';
 
 export interface Pipeline {
   id: string;
@@ -33,11 +34,14 @@ export interface Pipeline {
     ButtonModule,
     CommonModule,
   ],
+  providers: [MessageService, NoteService],
   templateUrl: './pipeline-list.component.html',
   styleUrl: './pipeline-list.component.css',
 })
 export class PipelineListComponent implements OnInit {
   apiService = inject(ApiService);
+  noteService = inject(NoteService);
+  messageService = inject(MessageService);
 
   visibleDialog: boolean = false;
   pipelines: Pipeline[] = [];
@@ -105,7 +109,11 @@ export class PipelineListComponent implements OnInit {
 
   showDialog() {
     if (this.selectedPipelines.length === 0) {
-      alert('No pipeline selected');
+      this.noteService.handleMessage(
+        this.messageService,
+        'warn',
+        'No channels selected.',
+      );
       return;
     }
     this.visibleDialog = true;

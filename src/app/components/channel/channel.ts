@@ -2,6 +2,7 @@ export interface Channel {
   id: string;
   communication: string;
   lastseen?: string;
+  isLoading?: boolean;
 }
 
 export interface PageEvent {

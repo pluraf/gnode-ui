@@ -13,6 +13,7 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ChannelData } from '../channel';
+import { NoteService } from '../../../services/note.service';
 
 @Component({
   selector: 'app-channel-create',
@@ -28,7 +29,7 @@ import { ChannelData } from '../channel';
     SubheaderComponent,
     ToastModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, NoteService],
   templateUrl: './channel-create.component.html',
   styleUrl: './channel-create.component.css',
 })
@@ -36,6 +37,7 @@ export class ChannelCreateComponent implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   brokerService = inject(MBrokerCService);
   messageService = inject(MessageService);
+  noteService = inject(NoteService);
 
   value!: string;
   selectedCategory: any = null;
@@ -76,7 +78,7 @@ export class ChannelCreateComponent implements OnInit {
     );
     this.authtype = selectedOptionObj ? selectedOptionObj.value : '';
 
-    const disabled = this.selectedCategory.name === 'Allow';
+    const disabled = this.selectedCategory?.name === 'Disabled';
 
     const payload: Partial<ChannelData> = {
       chanid: this.chanid,
@@ -87,23 +89,13 @@ export class ChannelCreateComponent implements OnInit {
       clientid: this.clientid || undefined,
     };
 
-    // Validation: Check for blank fields in the payload
-    const emptyFields = Object.entries(payload).filter(
-      ([key, value]) => value === undefined || value === '',
-    );
-    if (emptyFields.length > 0) {
-      const missingFields = emptyFields.map(([key]) => key).join(', ');
-      this.handleMessage(
-        'error',
-        `The following fields are missing or empty: ${missingFields}`,
-        true,
-      );
-      return;
-    }
-
     this.brokerService.createChannel(payload).subscribe(
       (response: any) => {
-        this.handleMessage('success', 'Channel created successfully', false);
+        this.noteService.handleMessage(
+          this.messageService,
+          'success',
+          'Channel created successfully!',
+        );
       },
       (error: any) => {
         const errorMessage =
@@ -114,21 +106,12 @@ export class ChannelCreateComponent implements OnInit {
             `${error.status}: ${error.statusText}`) ||
           (error?.status && `Error Code: ${error.status}`) ||
           'An unknown error occurred';
-        this.handleMessage('error', errorMessage, true);
+        this.noteService.handleMessage(
+          this.messageService,
+          'error',
+          errorMessage,
+        );
       },
     );
-  }
-
-  handleMessage(type: 'success' | 'error', message: string, sticky: boolean) {
-    this.messageService.add({
-      severity: type,
-      summary: type,
-      detail: message,
-      sticky,
-    });
-  }
-  clear() {
-    this.messageService.clear();
-    this.router.navigateByUrl('/channels');
   }
 }

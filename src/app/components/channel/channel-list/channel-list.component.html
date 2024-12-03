@@ -4,32 +4,43 @@
   <div class="text-center">
 No channels are available. To create one, click the plus sign in the top-right corner or use the <a routerLink="/channels/channel-create" class="text-green-700">Create Channel</a> link.</div>
 </div>
-<div *ngIf="!showMessage" class="main-content-body">
-    <p-toast position="top-right" class="mt-6"  (onClose)="loading = false"  [baseZIndex]="5000"/>
-     <p-table [value]="channelList" selectionMode="multiple" [(selection)]="selectedChannels" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
+<div *ngIf="showLoading" class="loading-container flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
+  <div class="text-center">
+    <p-progressSpinner styleClass="w-3rem h-3rem" strokeWidth="6" fill="var(--surface-ground)" animationDuration="1s"></p-progressSpinner>
+    <p>Loading...</p>
+  </div>
+</div>
+
+<div *ngIf="!showMessage && !showLoading" class="main-content-body">
+  <p-toast position="top-right" class="mt-6" (onClose)="loading = false" [baseZIndex]="5000"/>
+
+  <!-- Display the table after data is loaded -->
+  <p-table [value]="channelList" selectionMode="multiple" [(selection)]="selectedChannels" dataKey="id" 
+           [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
-        <th >Channel ID</th>
-        <th >Communication</th>
-        <th >Last Seen</th>
+        <th>Channel ID</th>
+        <th>Communication</th>
+        <th>Last Seen</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" class="channel" let-channel>
+    <ng-template pTemplate="body" let-channel>
       <tr>
-        <td ><p-tableCheckbox name="checkbox" [value]="channel" /></td>
-        <td ><a routerLink="/channels/channel/{{channel.id}}">{{ channel.id }}</a></td>
-        <td class="communicationBox" >
-          @if(channel.communication === 'Allowed'){
-              <svg class="comm-svg-icon" viewBox="0 0 24 24" fill="green" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-              </svg>
-          }@else if(channel.communication === 'Blocked'){
-              <svg class="comm-svg-icon" viewBox="0 0 24 24" fill="gray" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-              </svg>
-          }
-          {{ channel.communication }}
+        <td><p-tableCheckbox name="checkbox" [value]="channel" /></td>
+        <td><a routerLink="/channels/channel/{{channel.id}}">{{ channel.id }}</a></td>
+        <td class="communicationBox">
+          <ng-container *ngIf="channel.communication === 'Allowed'">
+            <svg class="comm-svg-icon" viewBox="0 0 24 24" fill="green" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            </svg>{{ channel.communication }}
+          </ng-container>
+          <ng-container *ngIf="channel.communication === 'Blocked'">
+            <svg class="custom-warning-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" fill="red"></path>
+            </svg>
+            {{ channel.communication }}
+          </ng-container>
         </td>
         <td>{{ channel.lastseen }}</td>
       </tr>

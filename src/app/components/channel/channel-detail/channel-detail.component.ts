@@ -82,8 +82,7 @@ export class ChannelDetailComponent {
         }
 
         this.details = [
-          ['Enabled', !this.channel.disabled],
-          ['Last seen', 'date'],
+          ['Enabled', this.channel.disabled],
           ['Authentication type', this.channel.authtype],
           ['Username', this.channel.username],
           ['MQTT Client ID', this.channel.clientid],

@@ -1,7 +1,7 @@
  <app-subheader selectedMenuName="Edit channel" [backRoute]="'channels/channel/' + chanid"></app-subheader>
 
 <div *ngIf="dataLoaded" class="main-content-body">
-  <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
+  <p-toast position="top-right" [baseZIndex]="5000"/>
      <div class="p-grid">
       <h4>Channel ID: {{ chanid }}</h4>
       <div class="p-fluid">
@@ -34,14 +34,14 @@
           <span><strong>Channel State</strong></span>
           <div class="card flex mt-3">
             <div class="flex flex-column gap-1">
-              <div *ngFor="let category of categories" class="field-checkbox">
-                <p-radioButton [inputId]="category.key" name="category" [value]="category" [(ngModel)]="selectedCategory"/>
+              <div *ngFor="let category of channelStates" class="field-checkbox">
+                <p-radioButton [inputId]="category.key" name="category" [value]="category" [(ngModel)]="selectedChannelState"/>
                 <label [for]="category.key" class="ml-2">{{ category.name }}</label>
               </div>
             </div>
           </div>
         </div>
-        <button pButton (click)="onUpdate()" [disabled]="loading">Update</button>
+        <button pButton (click)="onUpdate()">Update</button>
       </div>
 
   </div>
