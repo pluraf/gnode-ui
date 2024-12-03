@@ -1,75 +1,110 @@
-/* import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { Router } from '@angular/router';
-import { DatetimeService } from './services/datetime.service';
-import { ChangeDetectorRef } from '@angular/core';
-import { SettingsService } from './services/settings.service';
-import { HttpClient } from '@angular/common/http';
-import { ApiinfoService } from './services/apiinfo.service';
-import { of } from 'rxjs';
+import {
+  Router,
+  NavigationEnd,
+  NavigationStart,
+  provideRouter,
+  RouterModule,
+  ActivatedRoute,
+  RouterState,
+} from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Observable, of } from 'rxjs';
+import { InfoService } from './services/info.service';
 
-// Mock services
-class MockRouter {}
-class MockDatetimeService {
-  settings() {
-    return { currentDateTime: '2024-11-21T10:00:00Z' }; // Mock datetime
+class MockRouter {
+  events: Observable<NavigationStart | NavigationEnd | Event> = of(
+    new NavigationStart(1, '/channels'),
+  );
+
+  simulateNavigationEnd(url: string) {
+    this.events = of(new NavigationEnd(1, url, url));
+  }
+
+  simulateNavigationStart(url: string) {
+    this.events = of(new NavigationStart(1, url));
   }
 }
-class MockSettingsService {
-  loadSettingsData() {
-    return of({ authentication: false }); // Mock authentication setting
+
+class MockInfoService {
+  infoData() {
+    return { mode: 'virtual', anonymous: false as boolean | null };
   }
 }
 
-class MockChangeDetectorRef {}
-
-describe('AppComponent', () => {
+fdescribe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let mockRouter: MockRouter;
-  let mockDatetimeService: MockDatetimeService;
-  let mockSettingsService: MockSettingsService;
-  let mockChangeDetectorRef: MockChangeDetectorRef;
+  let mockInfoService: MockInfoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AppComponent],
+      imports: [AppComponent, HttpClientTestingModule],
       providers: [
+        provideRouter([]),
         { provide: Router, useClass: MockRouter },
-        { provide: DatetimeService, useClass: MockDatetimeService },
-        { provide: SettingsService, useClass: MockSettingsService },
-        { provide: ChangeDetectorRef, useClass: MockChangeDetectorRef },
-        { provide: HttpClient, useValue: {} },
+        { provide: InfoService, useClass: MockInfoService },
       ],
     });
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    mockRouter = TestBed.inject(Router);
-    mockDatetimeService = TestBed.inject(DatetimeService);
-    mockSettingsService = TestBed.inject(SettingsService);
-    mockChangeDetectorRef = TestBed.inject(ChangeDetectorRef);
+    mockRouter = TestBed.inject(Router) as unknown as MockRouter;
+    mockInfoService = TestBed.inject(InfoService);
+
+    spyOn(mockInfoService, 'infoData').and.returnValue({
+      mode: 'virtual',
+      anonymous: false,
+    });
   });
 
-  it('should set currentDateTime from DatetimeService', () => {
+  it('should create the app component', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should set margin_left to 0px when route is "/login"', () => {
+    window.history.pushState({}, '', '/login');
     component.ngOnInit();
-    expect(component.currentDateTime).toBe('2024-11-21T10:00:00Z');
+    expect(component.margin_left).toBe('0px');
   });
 
-  it('should set isVirtualMode to true based on ApiinfoService mode', () => {
+  it('should set margin_left to 210px when route is not "/login"', () => {
+    window.history.pushState({}, '', '/channels');
+    component.ngOnInit();
+    expect(component.margin_left).toBe('210px');
+  });
+
+  it('should update isVirtualMode and isAuthentication based on InfoService data', () => {
     component.ngOnInit();
     expect(component.isVirtualMode).toBeTrue();
+    expect(component.isAuthentication).toBeTrue();
   });
 
-  it('should set isAuthentication to false based on SettingsService response', () => {
-    component.ngOnInit();
-    expect(component.isAuthentication).toBeFalse(); // As per mock settings
-  });
+  it('should update the menu items based on authentication and virtual mode', () => {
+    spyOn(component, 'updateMenuItems').and.callThrough();
 
-  it('should call updateMenuItems when isVirtualMode is true', () => {
-    spyOn(component, 'updateMenuItems');
     component.ngOnInit();
     expect(component.updateMenuItems).toHaveBeenCalled();
+
+    component.isVirtualMode = true;
+    component.isAuthentication = false;
+    component.updateMenuItems();
+
+    expect(component.items[2].visible).toBe(false);
+
+    const settingsMenu = component.items[3]?.items;
+    expect(settingsMenu?.[1]?.visible).toBe(false);
+    expect(settingsMenu?.[3]?.visible).toBe(false);
+  });
+
+  it('should subscribe to router events and update margin_left when route changes', () => {
+    spyOn(component, 'ngOnInit').and.callThrough();
+
+    mockRouter.simulateNavigationEnd('/status');
+    fixture.detectChanges();
+
+    expect(component.margin_left).toBe('210px');
   });
 });
- */

@@ -5,7 +5,7 @@ import { HttpBackend, HttpClient, HttpHandler } from '@angular/common/http';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
-fdescribe('ChannelEditComponent', () => {
+describe('ChannelEditComponent', () => {
   let component: ChannelEditComponent;
   let fixture: ComponentFixture<ChannelEditComponent>;
   let brokerService: MBrokerCService;
