@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ApiInfo, Settings } from './service';
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -13,9 +14,9 @@ export class ApiService {
   // Settings API
   private settingsUrl = 'api/settings/';
   // Pipeline API
-  private pipelineConfigUrl = 'm2e/pipeline/config/';
-  private pipelineControlUrl = 'm2e/pipeline/control/';
-  private pipelineStatusUrl = 'm2e/pipeline/status/';
+  private pipelineConfigUrl = 'api/pipeline/config/';
+  private pipelineControlUrl = 'api/pipeline/control/';
+  private pipelineStatusUrl = 'api/pipeline/status/';
   // Version API
   private apiVersionUrl = '/api/version';
   // Status API
