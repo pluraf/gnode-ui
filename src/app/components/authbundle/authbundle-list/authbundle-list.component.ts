@@ -14,6 +14,7 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
 import { AuthbundleDeleteComponent } from '../authbundle-delete/authbundle-delete.component';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-authbundle-list',
@@ -29,6 +30,7 @@ import { NoteService } from '../../../services/note.service';
     AuthbundleDeleteComponent,
     DialogModule,
     ButtonModule,
+    ToastModule,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './authbundle-list.component.html',
@@ -37,6 +39,8 @@ import { NoteService } from '../../../services/note.service';
 export class AuthbundleListComponent implements OnInit {
   noteService = inject(NoteService);
   messageService = inject(MessageService);
+  apiService = inject(ApiService);
+  router = inject(Router);
 
   visibleDialog: boolean = false;
   authbundleList: Authbundle[] = [];
@@ -68,9 +72,6 @@ export class AuthbundleListComponent implements OnInit {
       },
     },
   ];
-
-  apiService = inject(ApiService);
-  router = inject(Router);
 
   constructor() {}
 

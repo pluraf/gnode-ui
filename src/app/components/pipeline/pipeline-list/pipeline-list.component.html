@@ -6,6 +6,7 @@
 </div>
 
 <div *ngIf="!showMessage" class="main-content">
+  <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
   <p-table [value]="pipelines" selectionMode="multiple" [(selection)]="selectedPipelines" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30]" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>

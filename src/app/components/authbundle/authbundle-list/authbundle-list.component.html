@@ -9,22 +9,22 @@
         </div>
         <div *ngIf="!showMessage" class="main-content">
             <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
-                <p-table [value]="authbundleList" selectionMode="multiple" [(selection)]="selectedAuthbundle" dataKey="authbundle_id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
-                            <th >Authbundle ID</th>
-                            <th >Type</th>
-                            <th >Description</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-authbundle>
-                        <tr>
-                            <td ><p-tableCheckbox name="checkbox" [value]="authbundle" /></td>
-                            <td ><a routerLink="/authbundles/authbundle-detail/{{authbundle.authbundle_id}}">{{ authbundle.authbundle_id }}</a></td>
-                              <td>{{authbundle.connector_type}}</td>
-                              <td>{{authbundle.description}}</td>
-                        </tr>
-                    </ng-template>
-                </p-table>
+            <p-table [value]="authbundleList" selectionMode="multiple" [(selection)]="selectedAuthbundle" dataKey="authbundle_id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
+                        <th>Authbundle ID</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-authbundle>
+                    <tr>
+                        <td><p-tableCheckbox name="checkbox" [value]="authbundle" /></td>
+                        <td><a routerLink="/authbundles/authbundle-detail/{{authbundle.authbundle_id}}">{{ authbundle.authbundle_id }}</a></td>
+                        <td>{{authbundle.connector_type}}</td>
+                        <td>{{authbundle.description}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>

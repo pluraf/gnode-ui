@@ -9,7 +9,7 @@ import { ApiService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
 import { SettingsService } from '../../../services/settings.service';
 import { Router } from '@angular/router';
-
+import { NoteService } from '../../../services/note.service';
 
 @Component({
   selector: 'app-authentication',
@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
     CheckboxModule,
     SubheaderComponent,
   ],
-  providers: [MessageService],
+  providers: [MessageService, NoteService],
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css',
 })
@@ -31,6 +31,7 @@ export class AuthenticationComponent {
   settingsService = inject(SettingsService);
   messageService = inject(MessageService);
   router = inject(Router);
+  noteService = inject(NoteService);
 
   settings = {
     isAuthentication: false,
@@ -38,12 +39,16 @@ export class AuthenticationComponent {
 
   constructor() {
     effect(() => {
-      this.settings.isAuthentication = this.settingsService.settingsdata().authentication;
+      this.settings.isAuthentication =
+        this.settingsService.settingsdata().authentication;
     });
   }
 
   onSubmit() {
-    if (this.settings.isAuthentication == this.settingsService.settingsdata().authentication) {
+    if (
+      this.settings.isAuthentication ==
+      this.settingsService.settingsdata().authentication
+    ) {
       return;
     }
 
@@ -58,26 +63,12 @@ export class AuthenticationComponent {
         }
         this.authService.logout();
       },
-      error: (error) => this.handleMessage('error', error.error.detail, true)
+      error: (error) =>
+        this.noteService.handleMessage(
+          this.messageService,
+          'error',
+          error.error.detail,
+        ),
     });
-  }
-
-  handleMessage(
-    severity: 'success' | 'error',
-    detail: string,
-    sticky: boolean,
-  ) {
-    this.messageService.add({ severity, detail });
-    if (severity === 'success') {
-      setTimeout(() => {
-        this.clear();
-      }, 3000);
-    } else if (severity === 'error') {
-      this.messageService.add({ severity, detail, sticky: true });
-    }
-  }
-
-  clear() {
-    this.messageService.clear();
   }
 }

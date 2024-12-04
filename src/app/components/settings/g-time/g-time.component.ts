@@ -1,4 +1,11 @@
-import { Component, inject, OnInit, OnDestroy, effect, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  effect,
+  signal,
+} from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ToastModule } from 'primeng/toast';
@@ -13,6 +20,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../services/api.service';
 import { SettingsService } from '../../../services/settings.service';
+import { NoteService } from '../../../services/note.service';
 
 @Component({
   selector: 'app-g-time',
@@ -24,12 +32,11 @@ import { SettingsService } from '../../../services/settings.service';
     CheckboxModule,
     CommonModule,
     FormsModule,
-    SubheaderComponent,
     CalendarModule,
     ToastModule,
-    DropdownModule
+    DropdownModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, NoteService],
   templateUrl: './g-time.component.html',
   styleUrl: './g-time.component.css',
 })
@@ -38,15 +45,11 @@ export class GTimeComponent implements OnInit, OnDestroy {
   settingsService = inject(SettingsService);
   dateTimeService = inject(DatetimeService);
   messageService = inject(MessageService);
+  noteService = inject(NoteService);
 
   tzNames = [];
-  ntpServers = [
-    "pool.ntp.org",
-    "time.google.com",
-    "time.cloudflare.com"
-  ]
+  ntpServers = ['pool.ntp.org', 'time.google.com', 'time.cloudflare.com'];
   selectedManualTz: string = '';
-  loading: boolean = false;
   ntpServer: string = '';
   timer: any;
 
@@ -65,9 +68,9 @@ export class GTimeComponent implements OnInit, OnDestroy {
       const serverDateTime = this.settingsService.settingsdata().time;
       this.settings.autoSetTime = serverDateTime.auto;
       this.settings.timezone = serverDateTime.timezone;
-      const dt = DateTime.fromJSDate(
-        new Date(serverDateTime.iso8601), {zone: serverDateTime.timezone}
-      );
+      const dt = DateTime.fromJSDate(new Date(serverDateTime.iso8601), {
+        zone: serverDateTime.timezone,
+      });
       this.settings.gnodeDate = dt.toFormat('yyyy-MM-dd');
       this.settings.gnodeTime = dt.toFormat('HH:mm');
     });
@@ -85,7 +88,7 @@ export class GTimeComponent implements OnInit, OnDestroy {
   onSubmit() {
     const gnodeTime: any = {
       automatic: this.settings.autoSetTime,
-      timezone: this.settings.timezone
+      timezone: this.settings.timezone,
     };
 
     if (this.settings.autoSetTime) {
@@ -101,37 +104,20 @@ export class GTimeComponent implements OnInit, OnDestroy {
 
     this.apiService.updateSettings(payload).subscribe(
       () => {
-        this.handleMessage('success', 'Submitted successfully', false);
+        this.noteService.handleMessage(
+          this.messageService,
+          'success',
+          'Submitted successfully!',
+        );
         setTimeout(() => {
           this.settingsService.load();
         }, 3000);
       },
       (error: any) => {
         const errorMsg = error.error.detail;
-        this.handleMessage('error', errorMsg, true);
-      }
+        this.noteService.handleMessage(this.messageService, 'error', errorMsg);
+      },
     );
-  }
-
-  handleMessage(
-    severity: 'success' | 'error',
-    detail: string,
-    sticky: boolean,
-  ) {
-    if (severity === 'success') {
-      this.messageService.add({ severity, detail });
-      this.loading = false;
-      setTimeout(() => {
-        this.clear();
-      }, 3000);
-    } else if (severity === 'error') {
-      this.messageService.add({ severity, detail, sticky: true });
-    }
-  }
-
-  clear() {
-    this.messageService.clear();
-    this.loading = false;
   }
 
   ngOnDestroy() {

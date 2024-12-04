@@ -20,3 +20,8 @@
   position: absolute;
   margin-right: 140px;
 }
+:host {
+  ::ng-deep .p-toast-top-right {
+    top: 4rem;
+  }
+}

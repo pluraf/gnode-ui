@@ -9,6 +9,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { SettingsService } from '../../../services/settings.service';
 import { ApiService } from '../../../services/api.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
+import { NoteService } from '../../../services/note.service';
 
 @Component({
   selector: 'app-g-cloud',
@@ -20,7 +21,7 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
     ButtonModule,
     ToastModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, NoteService],
   templateUrl: './g-cloud.component.html',
   styleUrl: './g-cloud.component.css',
 })
@@ -28,8 +29,8 @@ export class GCloudComponent {
   apiService = inject(ApiService);
   messageService = inject(MessageService);
   settingsService = inject(SettingsService);
+  noteService = inject(NoteService);
 
-  loading: boolean = false;
   isGCloudEnabled = false;
   gcloudFormValue: boolean = false;
 
@@ -65,44 +66,24 @@ export class GCloudComponent {
     });
     this.apiService.updateSettings(payload).subscribe(
       (resp) => {
-        this.handleMessage('success', 'Submitted successfully', false);
+        if (resp.error) {
+          this.noteService.handleMessage(
+            this.messageService,
+            'error',
+            resp.error,
+          );
+        } else {
+          this.noteService.handleMessage(
+            this.messageService,
+            'success',
+            'Submitted successfully',
+          );
+        }
       },
       (error) => {
-        this.handleMessage(
-          'error',
-          error.status === 500 ? error.error.detail : error.error,
-          true,
-        );
+        let erroeMsg = error.status === 500 ? error.error.detail : error.error;
+        this.noteService.handleMessage(this.messageService, 'error', erroeMsg);
       },
     );
-  }
-
-  handleMessage(
-    severity: 'success' | 'error' | 'warn',
-    detail: string,
-    sticky: boolean,
-    summary?: string,
-  ) {
-    if (severity === 'success') {
-      this.messageService.add({ severity, detail });
-      this.loading = true;
-      setTimeout(() => {
-        this.clear();
-      }, 3000);
-    } else if (severity === 'error') {
-      this.messageService.add({ severity, detail, sticky: true });
-    } else if (severity === 'warn') {
-      this.messageService.add({
-        severity,
-        summary: summary || 'Warning!',
-        detail,
-        sticky,
-      });
-    }
-  }
-
-  clear() {
-    this.messageService.clear();
-    this.loading = false;
   }
 }

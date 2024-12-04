@@ -2,21 +2,21 @@ import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { forkJoin, map } from 'rxjs';
 
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { MenuItem, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ToastModule } from 'primeng/toast';
 
 import { Channel } from '../channel';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { ChannelDeleteComponent } from '../channel-delete/channel-delete.component';
-import { ToastModule } from 'primeng/toast';
 import { NoteService } from '../../../services/note.service';
-import { forkJoin, map } from 'rxjs';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-channel-list',
@@ -45,7 +45,6 @@ export class ChannelListComponent {
   selectedChannels: Channel[] = [];
   showMessage: boolean = false;
   totalRecords!: number;
-  loading: boolean = false;
   chanid: string = '';
   showLoading: boolean = false;
 

@@ -12,6 +12,7 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
 import { PipelineDeleteComponent } from '../pipeline-delete/pipeline-delete.component';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
+import { ToastModule } from 'primeng/toast';
 
 export interface Pipeline {
   id: string;
@@ -33,6 +34,7 @@ export interface Pipeline {
     DialogModule,
     ButtonModule,
     CommonModule,
+    ToastModule,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './pipeline-list.component.html',
@@ -112,7 +114,7 @@ export class PipelineListComponent implements OnInit {
       this.noteService.handleMessage(
         this.messageService,
         'warn',
-        'No channels selected.',
+        'No pipelines selected.',
       );
       return;
     }

@@ -1,13 +1,7 @@
 <app-subheader selectedMenuName="Create User" backRoute="/users" > </app-subheader>
 <div class="main-content-body">
+  <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
   <h3 class="field col-12">Create new user</h3>
-  @if(errorMessage){
-    <div class="erroralert flex flex-row "> <i class="pi pi-exclamation-circle mr-3"style="color: red; font-size:18px" ></i>
-      {{ errorMessage }}
-    </div>
-    }@if(successMessage){
-      <div class="alert flex flex-row mt-3" style="color: green; font-size:18px" >  {{ successMessage }} </div>
-      }
   <div class="field col-12">
     <div class="mb-2"><label for="username">Username</label></div>
     <input id="username" type="text" pInputText [(ngModel)]="userObj.username" class="text-base p-2 w-20rem"/>

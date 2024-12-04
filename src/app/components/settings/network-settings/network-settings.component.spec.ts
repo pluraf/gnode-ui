@@ -6,7 +6,6 @@ import {
 } from '@angular/common/http/testing';
 
 import { NetworkSettingsComponent } from './network-settings.component';
-import { BackendService } from '../../../services/backend.service';
 
 describe('NetworkSettingsComponent', () => {
   let component: NetworkSettingsComponent;
@@ -16,7 +15,7 @@ describe('NetworkSettingsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NetworkSettingsComponent, HttpClientModule],
-      providers: [provideHttpClientTesting(), BackendService],
+      providers: [provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NetworkSettingsComponent);
