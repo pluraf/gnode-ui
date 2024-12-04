@@ -1,7 +1,7 @@
 <app-subheader selectedMenuName="MQTT Channels"></app-subheader>
 
 <div class="main-content-body" [style]="{'margin-top': '120px'}">
-  <p-toast position="top-right" (onClick)="clear()" (onClose)="loading = false"  [baseZIndex]="5000"/>
+  <p-toast position="top-right" [baseZIndex]="5000"/>
     <div class="field col-12 w-full mt-1">
       <div>
         <p-checkbox [(ngModel)]="allow_anonymous" [binary]="true" inputId="auto_id"/>
@@ -10,6 +10,6 @@
       <small class="text-color-secondary inline-block pt-1">MQTT clients are able to connect without authentication</small><br>
     </div>
     <div class="field col-12 mt-4">
-        <button pButton (click)="onSubmit()" class="button" [disabled]="loading">Submit</button>
+        <button pButton (click)="onSubmit()" class="button">Submit</button>
       </div>
 </div>    

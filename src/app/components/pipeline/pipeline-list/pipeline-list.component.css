@@ -1,31 +1,8 @@
-.alert {
-  padding: 10px;
-  background-color: rgb(129, 231, 142);
-  color: black;
-  margin-bottom: 100px;
-  margin-right: auto;
-  margin-left: auto;
-  width: 400px;
-  height: 40px;
-  align-items: center;
-  border-radius: 4px;
-  font-size: 14px;
-}
-::ng-deep .p-toast {
-  width: 18rem;
-  height: 5rem;
-}
-::ng-deep .p-toast .p-toast-message.p-toast-message-info {
-  border: none;
-}
-:ng-deep
-  .p-toast
-  .p-toast-message
-  .p-toast-message-content
-  .p-toast-icon-close-icon {
-  width: 1rem;
-  height: 1rem;
-}
 .small-icon {
   font-size: 10px;
+}
+:host {
+  ::ng-deep .p-toast-top-right {
+    top: 4rem;
+  }
 }

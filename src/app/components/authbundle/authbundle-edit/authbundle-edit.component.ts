@@ -1,21 +1,17 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-
-import { SubheaderComponent } from '../../subheader/subheader.component';
-import {
-  AuthType,
-  AuthTypeLabel,
-  ConnectorType,
-  ConnectorTypeLabel,
-} from '../authbundle';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+
+import { SubheaderComponent } from '../../subheader/subheader.component';
+import { AuthType, AuthTypeLabel, ConnectorType } from '../authbundle';
 import { ApiService } from '../../../services/api.service';
+import { NoteService } from '../../../services/note.service';
 
 @Component({
   selector: 'app-authbundle-edit',
@@ -28,15 +24,15 @@ import { ApiService } from '../../../services/api.service';
     FormsModule,
     ToastModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, NoteService],
   templateUrl: './authbundle-edit.component.html',
   styleUrl: './authbundle-edit.component.css',
 })
 export class AuthbundleEditComponent {
   apiService = inject(ApiService);
   route = inject(ActivatedRoute);
-  router = inject(Router);
   messageService = inject(MessageService);
+  noteService = inject(NoteService);
 
   authbundleId = '';
   username = '';
@@ -52,7 +48,6 @@ export class AuthbundleEditComponent {
   selServiceType: any;
   selAuthOption: string;
   keyFile: File | null = null;
-  loading: boolean = false;
 
   @ViewChild('keyFile') keyFileInput!: ElementRef;
 
@@ -177,39 +172,27 @@ export class AuthbundleEditComponent {
           response.responses &&
           response.responses[0].hasOwnProperty('error')
         ) {
-          this.handleMessage('error', response.responses[0].error, true)!;
+          this.noteService.handleMessage(
+            this.messageService,
+            'error',
+            response.responses[0].error,
+          )!;
         } else {
-          this.handleMessage(
+          this.noteService.handleMessage(
+            this.messageService,
             'success',
-            'Authbundle edited successfully',
-            false,
+            'Authbundle edited successfully!',
           );
         }
       },
       (error: any) => {
         const errorDetail = error.error?.detail;
-        this.handleMessage('error', errorDetail, true);
+        this.noteService.handleMessage(
+          this.messageService,
+          'error',
+          errorDetail,
+        );
       },
     );
-  }
-
-  handleMessage(
-    severity: 'success' | 'error',
-    detail: string,
-    sticky: boolean,
-  ) {
-    if (severity === 'success') {
-      this.messageService.add({ severity, detail });
-      this.loading = true;
-      setTimeout(() => {
-        this.clear();
-      }, 3000);
-    } else if (severity === 'error') {
-      this.messageService.add({ severity, detail, sticky: true });
-    }
-  }
-
-  clear() {
-    this.messageService.clear();
   }
 }

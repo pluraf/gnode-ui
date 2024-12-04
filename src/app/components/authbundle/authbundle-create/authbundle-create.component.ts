@@ -1,10 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  ViewChild,
-  ElementRef,
-} from '@angular/core';
+import { Component, inject, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import {
@@ -21,8 +16,8 @@ import {
   ConnectorType,
   ConnectorTypeLabel,
 } from '../authbundle';
-import { ToastModule } from 'primeng/toast';
 import { ApiService } from '../../../services/api.service';
+import { NoteService } from '../../../services/note.service';
 
 @Component({
   selector: 'app-authbundle-create',
@@ -36,13 +31,14 @@ import { ApiService } from '../../../services/api.service';
     SubheaderComponent,
     ToastModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, NoteService],
   templateUrl: './authbundle-create.component.html',
   styleUrl: './authbundle-create.component.css',
 })
 export class AuthbundleCreateComponent {
   apiService = inject(ApiService);
   messageService = inject(MessageService);
+  noteService = inject(NoteService);
 
   authbundleId = '';
   username = '';
@@ -50,10 +46,8 @@ export class AuthbundleCreateComponent {
   description = '';
   autoId = true;
   usermessage: string = '';
-  loading: boolean = false;
 
   authOptions: { [key: string]: string } = {};
-
   ConnectorTypes: { [key: string]: string } = {};
 
   selServiceType: any;
@@ -204,10 +198,18 @@ export class AuthbundleCreateComponent {
       (response) => {
         if (response && response.responses && response.responses.length > 0) {
           if (response.responses[0].hasOwnProperty('error')) {
-            this.handleMessage('error', response.responses[0].error, true);
+            this.noteService.handleMessage(
+              this.messageService,
+              'error',
+              response.responses[0].error,
+            );
           }
         } else {
-          this.handleMessage('success', 'Submitted successfully', false);
+          this.noteService.handleMessage(
+            this.messageService,
+            'success',
+            'Authbundle submitted successfully!',
+          );
         }
       },
       (error: any) => {
@@ -219,28 +221,12 @@ export class AuthbundleCreateComponent {
             `${error.status}: ${error.statusText}`) ||
           (error?.status && `Error Code: ${error.status}`) ||
           'An unknown error occurred';
-        this.handleMessage('error', errorMessage, true);
+        this.noteService.handleMessage(
+          this.messageService,
+          'error',
+          errorMessage,
+        );
       },
     );
-  }
-
-  handleMessage(
-    severity: 'success' | 'error',
-    detail: string,
-    sticky: boolean,
-  ) {
-    if (severity === 'success') {
-      this.messageService.add({ severity, detail });
-      this.loading = true;
-      setTimeout(() => {
-        this.clear();
-      }, 3000);
-    } else if (severity === 'error') {
-      this.messageService.add({ severity, detail, sticky: true });
-    }
-  }
-
-  clear() {
-    this.messageService.clear();
   }
 }

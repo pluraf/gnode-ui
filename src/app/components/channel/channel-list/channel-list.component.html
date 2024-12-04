@@ -12,7 +12,7 @@ No channels are available. To create one, click the plus sign in the top-right c
 </div>
 
 <div *ngIf="!showMessage && !showLoading" class="main-content-body">
-  <p-toast position="top-right" class="mt-6" (onClose)="loading = false" [baseZIndex]="5000"/>
+  <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
 
   <!-- Display the table after data is loaded -->
   <p-table [value]="channelList" selectionMode="multiple" [(selection)]="selectedChannels" dataKey="id" 

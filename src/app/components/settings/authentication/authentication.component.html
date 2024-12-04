@@ -1,7 +1,7 @@
 <app-subheader selectedMenuName="Authentication"></app-subheader>
 
 <div class="main-content-body" [style]="{'margin-top': '120px'}">
-  <p-toast position="top-right" (onClick)="clear()" [baseZIndex]="5000"/>
+  <p-toast position="top-right" [baseZIndex]="5000"/>
     <div class="field col-12 w-full mt-1">
       <div>
         <p-checkbox [(ngModel)]="settings.isAuthentication" [binary]="true" inputId="auth_id"/>

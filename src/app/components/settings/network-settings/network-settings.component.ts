@@ -222,21 +222,6 @@ export class NetworkSettingsComponent {
       this.settingsService.load();
     });
   }
-
-  handleMessage(severity: 'success' | 'error', detail: string) {
-    if (severity === 'success') {
-      this.messageService.add({ severity, detail });
-      setTimeout(() => {
-        this.clear();
-      }, 3000);
-    } else if (severity === 'error') {
-      this.messageService.add({ severity, detail, sticky: true });
-    }
-  }
-
-  clear() {
-    this.messageService.clear();
-  }
 }
 
 class Ehternet {

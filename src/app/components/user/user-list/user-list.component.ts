@@ -1,14 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-
-import { SubheaderComponent } from '../../subheader/subheader.component';
-import { UserService } from '../../../services/user.service';
-
-import { PageEvent } from '../../channel/channel';
+import { MenuItem, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
+
+import { SubheaderComponent } from '../../subheader/subheader.component';
 import { UserDeleteComponent } from '../user-delete/user-delete.component';
 import { ApiService } from '../../../services/api.service';
+import { NoteService } from '../../../services/note.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-user-list',
@@ -18,12 +17,16 @@ import { ApiService } from '../../../services/api.service';
     TableModule,
     PaginatorModule,
     UserDeleteComponent,
+    ToastModule,
   ],
+  providers: [MessageService, NoteService],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css',
 })
 export class UserListComponent {
   apiService = inject(ApiService);
+  messageService = inject(MessageService);
+  noteService = inject(NoteService);
 
   visibleDialog: boolean = false;
   selectedUsers: any[] = [];
@@ -66,7 +69,11 @@ export class UserListComponent {
 
   showDialog() {
     if (this.selectedUsers.length === 0) {
-      alert('No users selected');
+      this.noteService.handleMessage(
+        this.messageService,
+        'warn',
+        'No users selected.',
+      );
       return;
     }
     this.visibleDialog = true;

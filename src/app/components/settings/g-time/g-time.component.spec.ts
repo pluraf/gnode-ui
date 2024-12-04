@@ -6,7 +6,6 @@ import {
 } from '@angular/common/http/testing';
 
 import { GTimeComponent } from './g-time.component';
-import { BackendService } from '../../../services/backend.service';
 
 describe('GTimeComponent', () => {
   let component: GTimeComponent;
@@ -16,7 +15,7 @@ describe('GTimeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GTimeComponent, HttpClientModule],
-      providers: [BackendService, provideHttpClientTesting()],
+      providers: [provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(GTimeComponent);

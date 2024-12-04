@@ -6,9 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { ChangeDetectorRef } from '@angular/core';
 import { SettingsService } from '../../../services/settings.service';
 import { ApiService } from '../../../services/api.service';
+import { NoteService } from '../../../services/note.service';
 
 @Component({
   selector: 'app-mqtt-channels',
@@ -21,7 +21,7 @@ import { ApiService } from '../../../services/api.service';
     ButtonModule,
     ToastModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, NoteService],
   templateUrl: './mqtt-channels.component.html',
   styleUrl: './mqtt-channels.component.css',
 })
@@ -29,11 +29,11 @@ export class MqttChannelsComponent {
   settingsService = inject(SettingsService);
   apiService = inject(ApiService);
   messageService = inject(MessageService);
+  noteService = inject(NoteService);
 
-  loading: boolean = false;
   allow_anonymous: boolean = false;
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor() {
     effect(() => {
       this.allow_anonymous =
         this.settingsService.settingsdata().allow_anonymous;
@@ -50,37 +50,16 @@ export class MqttChannelsComponent {
     });
     this.apiService.updateSettings(payload).subscribe(
       () => {
-        this.handleMessage('success', 'Submitted successfully', false);
-      },
-      (error: any) => {
-        this.handleMessage(
-          'error',
-          error.status === 500 ? error.error : error.error.detail,
-          true,
+        this.noteService.handleMessage(
+          this.messageService,
+          'success',
+          'Submitted successfully!',
         );
       },
+      (error: any) => {
+        let errorMsg = error.status === 500 ? error.error : error.error.detail;
+        this.noteService.handleMessage(this.messageService, 'error', errorMsg);
+      },
     );
-  }
-
-  handleMessage(
-    severity: 'success' | 'error',
-    detail: string,
-    sticky: boolean,
-  ) {
-    this.messageService.add({ severity, detail });
-    this.cdr.markForCheck();
-    if (severity === 'success') {
-      this.loading = true;
-      setTimeout(() => {
-        this.clear();
-      }, 3000);
-    } else if (severity === 'error') {
-      this.messageService.add({ severity, detail, sticky: true });
-    }
-  }
-
-  clear() {
-    this.messageService.clear();
-    this.loading = false;
   }
 }

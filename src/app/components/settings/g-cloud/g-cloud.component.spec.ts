@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GCloudComponent } from './g-cloud.component';
-import { BackendService } from '../../../services/backend.service';
 import {
   HttpTestingController,
   provideHttpClientTesting,
@@ -16,7 +15,7 @@ describe('GCloudComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GCloudComponent, HttpClientModule],
-      providers: [BackendService, provideHttpClientTesting()],
+      providers: [provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(GCloudComponent);

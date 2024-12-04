@@ -40,7 +40,6 @@ export class ChannelCreateComponent implements OnInit {
   noteService = inject(NoteService);
 
   value!: string;
-  selectedCategory: any = null;
   communication: string = 'Allow';
   chanid: string = '';
   clientid: string = '';
@@ -50,9 +49,11 @@ export class ChannelCreateComponent implements OnInit {
   jwtKey: string = '';
   loading: boolean = false;
 
-  categories: { name: string; key: string }[] = [
-    { name: 'Enabled', key: 'A' },
-    { name: 'Disabled', key: 'B' },
+  selectedChannelState: { name: string; key: string } | null = null;
+
+  channelStates: { name: string; key: string }[] = [
+    { name: 'Enabled', key: 'Allow' },
+    { name: 'Disabled', key: 'Block' },
   ];
 
   selectedOption: string = 'jwt_es256';
@@ -64,9 +65,7 @@ export class ChannelCreateComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
-    this.selectedCategory = this.categories[0];
-  }
+  ngOnInit() {}
 
   onChangeAuthenticationType(event: any) {
     this.password = '';
@@ -78,24 +77,30 @@ export class ChannelCreateComponent implements OnInit {
     );
     this.authtype = selectedOptionObj ? selectedOptionObj.value : '';
 
-    const disabled = this.selectedCategory?.name === 'Disabled';
-
     const payload: Partial<ChannelData> = {
       chanid: this.chanid,
       authtype: this.authtype,
       password: this.password,
-      disabled: disabled,
+      disabled: this.selectedChannelState?.key === 'Allow',
       username: this.username || undefined,
       clientid: this.clientid || undefined,
     };
 
     this.brokerService.createChannel(payload).subscribe(
       (response: any) => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'success',
-          'Channel created successfully!',
-        );
+        if (response.responses[0].error) {
+          this.noteService.handleMessage(
+            this.messageService,
+            'error',
+            response.responses[0].error,
+          );
+        } else {
+          this.noteService.handleMessage(
+            this.messageService,
+            'success',
+            'Channel created successfully!',
+          );
+        }
       },
       (error: any) => {
         const errorMessage =

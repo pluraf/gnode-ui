@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ChannelListComponent } from './channel-list/channel-list.component';
-import { MBrokerCService } from '../../services/mbrokerc.service';
 import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
+import { ChannelListComponent } from './channel-list.component';
+import { MBrokerCService } from '../../../services/mbrokerc.service';
 
 describe('ChannelListComponent', () => {
   let component: ChannelListComponent;

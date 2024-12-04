@@ -12,6 +12,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { AuthService } from '../../../services/auth.service';
+import { MessageService } from 'primeng/api';
+import { NoteService } from '../../../services/note.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-user-create',
@@ -25,31 +28,34 @@ import { AuthService } from '../../../services/auth.service';
     ReactiveFormsModule,
     FormsModule,
     SubheaderComponent,
+    ToastModule,
   ],
+  providers: [MessageService, NoteService],
   templateUrl: './user-create.component.html',
   styleUrl: './user-create.component.css',
 })
 export class UserCreateComponent {
+  http = inject(HttpClient);
+  authService = inject(AuthService);
+  userService = inject(UserService);
+  messageService = inject(MessageService);
+  noteService = inject(NoteService);
+
   userObj: any = {
     username: '',
     password: '',
     is_admin: false,
   };
 
-  errorMessage: string = '';
-  successMessage: string = '';
-
-  http = inject(HttpClient);
-
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    public userService: UserService,
-  ) {}
+  constructor() {}
 
   onCreateUser() {
     if (!this.userObj.username || !this.userObj.password) {
-      this.showErrorMessage('Username and Password are required.');
+      this.noteService.handleMessage(
+        this.messageService,
+        'warn',
+        'Username and Password are required.',
+      );
       return;
     }
 
@@ -60,26 +66,33 @@ export class UserCreateComponent {
       this.userService.createNewUsers(this.userObj).subscribe(
         (response: any) => {
           if (response?.responses?.[0]?.error) {
-            this.showMessage(response.responses[0].error);
+            this.noteService.handleMessage(
+              this.messageService,
+              'error',
+              response.responses[0].error,
+            );
           } else {
-            this.showMessage('User created successfully!');
+            this.noteService.handleMessage(
+              this.messageService,
+              'success',
+              'User created successfully!',
+            );
           }
         },
         (error) => {
-          if (error.status === 401 || error.status === 500) {
-            this.showErrorMessage('User name already exists.');
-          } else {
-            this.showErrorMessage('An error occurred while creating the user.');
+          if (
+            error.status === 400 ||
+            error.status === 401 ||
+            error.status === 500
+          ) {
+            this.noteService.handleMessage(
+              this.messageService,
+              'error',
+              'User name already exists.',
+            );
           }
         },
       );
     }
-  }
-
-  showMessage(message: string) {
-    this.successMessage = message;
-  }
-  showErrorMessage(message: string) {
-    this.errorMessage = message;
   }
 }

@@ -16,3 +16,8 @@
   line-height: 1 !important;
   vertical-align: middle;
 }
+:host {
+  ::ng-deep .p-toast-top-right {
+    top: 4rem;
+  }
+}

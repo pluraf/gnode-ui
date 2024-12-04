@@ -5,15 +5,16 @@ import { Router, RouterModule } from '@angular/router';
 
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
 import { Authbundle } from '../authbundle';
-import { AuthbundleCreateComponent } from '../authbundle-create/authbundle-create.component';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { AuthbundleDeleteComponent } from '../authbundle-delete/authbundle-delete.component';
 import { ApiService } from '../../../services/api.service';
+import { NoteService } from '../../../services/note.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-authbundle-list',
@@ -23,18 +24,24 @@ import { ApiService } from '../../../services/api.service';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    AuthbundleCreateComponent,
     SubheaderComponent,
     TableModule,
     PaginatorModule,
     AuthbundleDeleteComponent,
     DialogModule,
     ButtonModule,
+    ToastModule,
   ],
+  providers: [MessageService, NoteService],
   templateUrl: './authbundle-list.component.html',
   styleUrl: './authbundle-list.component.css',
 })
 export class AuthbundleListComponent implements OnInit {
+  noteService = inject(NoteService);
+  messageService = inject(MessageService);
+  apiService = inject(ApiService);
+  router = inject(Router);
+
   visibleDialog: boolean = false;
   authbundleList: Authbundle[] = [];
   selectedAuthbundle: Authbundle[] = [];
@@ -66,9 +73,6 @@ export class AuthbundleListComponent implements OnInit {
     },
   ];
 
-  apiService = inject(ApiService);
-  router = inject(Router);
-
   constructor() {}
 
   ngOnInit(): void {
@@ -89,7 +93,11 @@ export class AuthbundleListComponent implements OnInit {
 
   showDialog() {
     if (this.selectedAuthbundle.length === 0) {
-      alert('No authbundles selected');
+      this.noteService.handleMessage(
+        this.messageService,
+        'warn',
+        'No channels selected.',
+      );
       return;
     }
     this.visibleDialog = true;
