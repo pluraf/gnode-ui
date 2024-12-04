@@ -8,6 +8,7 @@
             </div>
         </div>
         <div *ngIf="!showMessage" class="main-content">
+            <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
                 <p-table [value]="authbundleList" selectionMode="multiple" [(selection)]="selectedAuthbundle" dataKey="authbundle_id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
