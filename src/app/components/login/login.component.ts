@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -12,6 +12,10 @@ import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { InfoService } from '../../services/info.service';
 import { SettingsService } from '../../services/settings.service';
+import { MessageService } from 'primeng/api';
+import { NoteService } from '../../services/note.service';
+import { ToastModule } from 'primeng/toast';
+import { EncryptionService } from '../../services/encryption.service';
 
 export interface LoginUser {
   username: string;
@@ -29,23 +33,29 @@ export interface LoginUser {
     InputTextModule,
     PasswordModule,
     CardModule,
+    ToastModule,
   ],
+  providers: [MessageService, NoteService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  errorMessage: string = '';
+  router = inject(Router);
+  authService = inject(AuthService);
+  infoService = inject(InfoService);
+  settingsService = inject(SettingsService);
+  messageService = inject(MessageService);
+  noteService = inject(NoteService);
+  http = inject(HttpClient);
+  apiService = inject(ApiService);
+  encryptionService = inject(EncryptionService);
+
   from: string;
 
   loginUser: LoginUser = {
     username: '',
     password: '',
   };
-
-  router = inject(Router);
-  authService = inject(AuthService);
-  infoService = inject(InfoService);
-  settingsService = inject(SettingsService);
 
   constructor() {
     this.from = '/channels';
@@ -57,19 +67,37 @@ export class LoginComponent {
       }
     }
 
-    if (this.authService.isLoggedIn() || this.infoService.infoData().anonymous) {
+    if (
+      this.authService.isLoggedIn() ||
+      this.infoService.infoData().anonymous
+    ) {
       this.router.navigate([this.from]);
     }
   }
 
-  http = inject(HttpClient);
-  apiService = inject(ApiService);
-
-  onLogin() {
+  async onLogin() {
     if (!this.loginUser.username || !this.loginUser.password) {
-      this.showErrorMessage('Username and password are required.');
+      this.noteService.handleMessage(
+        this.messageService,
+        'error',
+        'Username and password are required.',
+      );
       return;
     }
+
+    ///////// encrypting user credential //////////
+    const encryptedUsername = await this.encryptionService.encrypt(
+      this.loginUser.username,
+    );
+    const encryptedPassword = await this.encryptionService.encrypt(
+      this.loginUser.password,
+    );
+
+    const encryptedUserDetails = {
+      encryptedUsername: '',
+      encryptedPassword: '',
+    };
+    //////////////////////////////////////////////
 
     this.apiService
       .getAuthToken(this.loginUser.username, this.loginUser.password)
@@ -80,22 +108,28 @@ export class LoginComponent {
             this.router.navigate([this.from]);
             this.settingsService.load();
           } else {
-            this.showErrorMessage('Unauthorized.');
+            this.noteService.handleMessage(
+              this.messageService,
+              'error',
+              res.error,
+            );
           }
         },
         (error) => {
           if (error.error && error.error.detail) {
-            this.showErrorMessage(error.error.detail);
+            this.noteService.handleMessage(
+              this.messageService,
+              'error',
+              error.error.detail,
+            );
           } else if (error.message) {
-            this.showErrorMessage(error.message);
-          } else {
-            this.showErrorMessage('An unknown error occurred.');
+            this.noteService.handleMessage(
+              this.messageService,
+              'error',
+              error.message,
+            );
           }
         },
       );
-  }
-
-  showErrorMessage(message: string) {
-    this.errorMessage = message;
   }
 }
