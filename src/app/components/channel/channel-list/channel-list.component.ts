@@ -2,7 +2,8 @@ import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { forkJoin, map } from 'rxjs';
+
+import { DateTime } from 'luxon';
 
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
@@ -12,11 +13,14 @@ import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { Channel } from '../channel';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MBrokerCService } from '../../../services/mbrokerc.service';
 import { ChannelDeleteComponent } from '../channel-delete/channel-delete.component';
 import { NoteService } from '../../../services/note.service';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
   selector: 'app-channel-list',
@@ -34,6 +38,7 @@ import { NoteService } from '../../../services/note.service';
     ButtonModule,
     ToastModule,
     ProgressSpinnerModule,
+    FontAwesomeModule,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './channel-list.component.html',
@@ -76,6 +81,7 @@ export class ChannelListComponent {
   brokerService = inject(MBrokerCService);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
+  settingsService = inject(SettingsService);
 
   constructor() {}
 
@@ -87,55 +93,31 @@ export class ChannelListComponent {
     this.showLoading = true;
     this.brokerService.loadChannelList().subscribe({
       next: (response: { responses: any[] }) => {
+        this.showLoading = false;
         const clientResponse = response.responses.find(
           (r: { command: string }) => r.command === 'listChannels',
         );
 
         if (clientResponse) {
           const clientData = clientResponse.data;
-
           if (clientData?.channels) {
-            this.channelList = clientData.channels.map((chanid: string) => ({
-              id: chanid,
-              communication: '',
-              lastseen: '',
-            }));
-            this.totalRecords = this.channelList.length;
-
-            // Creating an array of observables for channel details
-            const channelDetailsObservables = this.channelList.map((channel) =>
-              this.brokerService.loadChannelDetails(channel.id).pipe(
-                map((response: any) => {
-                  const channelData = response.responses[0]?.data?.channel;
-                  const timestamp = channelData.msg_timestamp;
-                  let lastseen = '-';
-                  if (timestamp != 0) {
-                    const iso8601 = new Date(timestamp * 1000);
-                    lastseen = iso8601
-                      .toString()
-                      .slice(0, iso8601.toString().indexOf('GMT'));
-                  }
-                  channel.lastseen = lastseen;
-                  channel.communication = channelData.disabled
-                    ? 'Allowed'
-                    : 'Blocked';
-                  return channel;
-                }),
-              ),
-            );
-
-            // Using forkJoin to wait for all channel details to load concurrently
-            forkJoin(channelDetailsObservables).subscribe({
-              next: (updatedChannels) => {
-                this.channelList = updatedChannels;
-                this.showLoading = false;
-              },
-              error: (err) => {
-                console.error('Error loading channel details:', err);
-                this.showLoading = false;
-              },
+            this.channelList = clientData.channels.map((channel : any) => {
+              let obj = {id: "", lastseen: "", communication: false};
+              if (channel.msg_received === 0) {
+                obj.lastseen = "never";
+              } else {
+                obj.lastseen = DateTime.fromJSDate(
+                  new Date(channel.msg_received),
+                  {zone: this.settingsService.settingsdata().time.timezone}
+                )
+                .toFormat('yyyy-MM-dd HH:mm');
+              }
+              obj.id = channel.chanid;
+              obj.communication = !channel.disabled;
+              return obj;
             });
-          }
+          };
+          this.totalRecords = this.channelList.length;
         }
         if (clientResponse.data.totalCount === 0) {
           this.showMessage = true;

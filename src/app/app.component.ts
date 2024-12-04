@@ -10,15 +10,22 @@ import {
   ActivatedRoute,
   NavigationEnd, NavigationStart, NavigationError,
 } from '@angular/router';
-import { HeaderComponent } from './components/header/header.component';
+import { HttpClient } from '@angular/common/http';
+
 import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitterModule } from 'primeng/splitter';
-import { HttpClient } from '@angular/common/http';
+
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
+import { faBan } from '@fortawesome/free-solid-svg-icons';
+
+import { HeaderComponent } from './components/header/header.component';
 import { InfoService } from './services/info.service';
 import { AuthService } from './services/auth.service';
+
 
 @Component({
   selector: 'app-root',
@@ -30,6 +37,7 @@ import { AuthService } from './services/auth.service';
     SplitterModule,
     DividerModule,
     SidebarModule,
+    FontAwesomeModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -40,6 +48,7 @@ export class AppComponent implements OnInit {
   http = inject(HttpClient);
   authService = inject(AuthService);
   infoService = inject(InfoService);
+  faLibrary = inject(FaIconLibrary);
 
   margin_left: string;
   isVirtualMode: boolean = false;
@@ -48,6 +57,7 @@ export class AppComponent implements OnInit {
 
   constructor() {
     this.margin_left = window.location.pathname == '/login' ? '0px' : '210px';
+    this.faLibrary.addIcons(faComment, faBan);
 
     effect(() => {
       const gnodeInfo = this.infoService.infoData();

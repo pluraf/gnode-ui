@@ -15,34 +15,31 @@ No channels are available. To create one, click the plus sign in the top-right c
   <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
 
   <!-- Display the table after data is loaded -->
-  <p-table [value]="channelList" selectionMode="multiple" [(selection)]="selectedChannels" dataKey="id" 
+  <p-table [value]="channelList" selectionMode="multiple" [(selection)]="selectedChannels" dataKey="id"
            [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
         <th>Channel ID</th>
-        <th>Communication</th>
         <th>Last Seen</th>
+        <th>State</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-channel>
       <tr>
         <td><p-tableCheckbox name="checkbox" [value]="channel" /></td>
         <td><a routerLink="/channels/channel/{{channel.id}}">{{ channel.id }}</a></td>
+        <td>{{ channel.lastseen }}</td>
         <td class="communicationBox">
-          <ng-container *ngIf="channel.communication === 'Allowed'">
-            <svg class="comm-svg-icon" viewBox="0 0 24 24" fill="green" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-            </svg>{{ channel.communication }}
+          <ng-container *ngIf="channel.communication">
+            <fa-icon [icon]="['far', 'comment']"></fa-icon>
+            <i class="fab fa-github" style="font-size: 24px;"></i>
           </ng-container>
-          <ng-container *ngIf="channel.communication === 'Blocked'">
-            <svg class="custom-warning-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" fill="red"></path>
-            </svg>
+          <ng-container *ngIf="!channel.communication">
+            <fa-icon [icon]="['fas', 'ban']"></fa-icon>
             {{ channel.communication }}
           </ng-container>
         </td>
-        <td>{{ channel.lastseen }}</td>
       </tr>
     </ng-template>
   </p-table>
