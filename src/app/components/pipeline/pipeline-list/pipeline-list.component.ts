@@ -2,6 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
+import { catchError, forkJoin, Observable, of } from 'rxjs';
+
 import { MenuItem, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
@@ -122,17 +124,25 @@ export class PipelineListComponent implements OnInit {
   }
 
   onDeletePipelines() {
-    const pipelineIDs = this.selectedPipelines.map((pipeline) => pipeline.id);
-    this.apiService.pipelineDelete(this.pipeid, pipelineIDs).subscribe({
-      next: (response: { deleted: string[] }) => {
-        const deletedPipelines = response.deleted || [];
-        this.pipelines = this.pipelines.filter(
-          (pipeline) => !deletedPipelines.includes(pipeline.id),
-        );
+    let observables: Observable<any>[] = [];
+    this.selectedPipelines.map((pipeline) => {
+      observables.push(this.apiService.pipelineDelete(pipeline.id).pipe(
+        catchError(err => (of(true)))
+      ))
+    });
 
-        this.totalRecords = this.pipelines.length;
+    forkJoin(observables).subscribe({
+      next: (response: any) => {
         this.visibleDialog = false;
+        this.selectedPipelines = [];
+        this.loadPipelines();
       },
+      error: (response: any) => {
+        this.visibleDialog = false;
+        this.selectedPipelines = [];
+        this.loadPipelines();
+      }
     });
   }
+
 }

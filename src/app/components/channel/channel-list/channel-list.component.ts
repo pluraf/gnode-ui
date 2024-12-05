@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { forkJoin, Observable } from 'rxjs';
+import { catchError, forkJoin, Observable, of } from 'rxjs';
 import { DateTime } from 'luxon';
 
 import { TableModule } from 'primeng/table';
@@ -135,16 +135,20 @@ export class ChannelListComponent {
   onDeleteChannel() {
     let observables: Observable<any>[] = [];
     this.selectedChannels.map((channel) => {
-      observables.push(this.apiService.channelDelete(channel.id));
+      observables.push(this.apiService.channelDelete(channel.id).pipe(
+        catchError(err => (of(true)))
+      ))
     });
 
     forkJoin(observables).subscribe({
       next: (response: any) => {
         this.visibleDialog = false;
+        this.selectedChannels = [];
         this.loadChannels();
       },
       error: (response: any) => {
         this.visibleDialog = false;
+        this.selectedChannels = [];
         this.loadChannels();
       }
     });

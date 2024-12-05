@@ -34,10 +34,8 @@ export class ApiService {
     return this.http.get(this.authbundleUrl);
   }
 
-  deleteAuthbundles(authbundleIds: string[]): Observable<any> {
-    return this.http.delete(this.authbundleUrl, {
-      body: authbundleIds,
-    });
+  deleteAuthbundle(authbundleId: string): Observable<any> {
+    return this.http.delete(this.authbundleUrl + authbundleId);
   }
 
   getAuthbundles(authbundleId: string): Observable<any> {
@@ -102,10 +100,8 @@ export class ApiService {
     return this.http.post(this.pipelineConfigUrl + pipeid, pipedata);
   }
 
-  pipelineDelete(pipeid: string, pipeids: string[]): Observable<any> {
-    return this.http.delete(this.pipelineConfigUrl + pipeid, {
-      body: pipeids,
-    });
+  pipelineDelete(pipeid: string): Observable<any> {
+    return this.http.delete(this.pipelineConfigUrl + pipeid);
   }
 
   getPipelineStatus(pipeid: string): Observable<any> {
@@ -167,15 +163,12 @@ export class ApiService {
     return this.http.get('api/user/');
   }
 
-  deleteUsers(userIds: string[]): Observable<any> {
-    return this.http.delete('api/user/', {
-      body: userIds,
-    });
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete('api/user/' + userId);
   }
 
-  createUsers(userObj: any): Observable<any> {
-    const headers = new HttpHeaders();
-    return this.http.post('api/user/', userObj, { headers });
+  createUser(userObj: any): Observable<any> {
+    return this.http.post('api/user/', userObj);
   }
 
   ///////////////////////////////// TimeZones ////////////////////////////

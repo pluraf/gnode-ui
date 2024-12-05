@@ -3,6 +3,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
+import { forkJoin, catchError, of, Observable } from 'rxjs';
+
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { MenuItem, MessageService } from 'primeng/api';
@@ -104,19 +106,24 @@ export class AuthbundleListComponent implements OnInit {
   }
 
   onDeleteAuthbundle() {
-    const ids = this.selectedAuthbundle.map(
-      (authbundle) => authbundle.authbundle_id,
-    );
-    this.apiService.deleteAuthbundles(ids).subscribe({
-      next: (response: { deleted: any[] }) => {
-        const deletedAuthbundles = response.deleted || [];
-        this.authbundleList = this.authbundleList.filter(
-          (authbundle) =>
-            !deletedAuthbundles.includes(authbundle.authbundle_id),
-        );
-        this.totalRecords = this.authbundleList.length;
+    let observables: Observable<any>[] = [];
+    this.selectedAuthbundle.map((authbundle) => {
+      observables.push(this.apiService.deleteAuthbundle(authbundle.authbundle_id).pipe(
+        catchError(err => (of(true)))
+      ))
+    });
+
+    forkJoin(observables).subscribe({
+      next: (response: any) => {
         this.visibleDialog = false;
+        this.selectedAuthbundle = [];
+        this.loadAuthbundles();
       },
+      error: (response: any) => {
+        this.visibleDialog = false;
+        this.selectedAuthbundle = [];
+        this.loadAuthbundles();
+      }
     });
   }
 }

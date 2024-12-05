@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { UserService } from '../../../services/user.service';
+import { ApiService } from '../../../services/api.service';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -37,7 +37,7 @@ import { ToastModule } from 'primeng/toast';
 export class UserCreateComponent {
   http = inject(HttpClient);
   authService = inject(AuthService);
-  userService = inject(UserService);
+  apiService = inject(ApiService);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
 
@@ -63,8 +63,8 @@ export class UserCreateComponent {
     if (token) {
       this.userObj.token = token;
 
-      this.userService.createNewUsers(this.userObj).subscribe(
-        (response: any) => {
+      this.apiService.createUser(this.userObj).subscribe({
+        next: (response: any) => {
           if (response?.responses?.[0]?.error) {
             this.noteService.handleMessage(
               this.messageService,
@@ -79,7 +79,7 @@ export class UserCreateComponent {
             );
           }
         },
-        (error) => {
+        error: (error: any) => {
           if (
             error.status === 400 ||
             error.status === 401 ||
@@ -91,8 +91,8 @@ export class UserCreateComponent {
               'User name already exists.',
             );
           }
-        },
-      );
+        }
+      });
     }
   }
 }

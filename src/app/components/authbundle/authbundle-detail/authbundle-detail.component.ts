@@ -72,8 +72,7 @@ export class AuthbundleDetailComponent {
   }
 
   onDeleteAuthbundle() {
-    const ids = [this.authbundleId];
-    this.apiService.deleteAuthbundles(ids).subscribe({
+    this.apiService.deleteAuthbundle(this.authbundleId).subscribe({
       next: (response: any) => {
         if (response.success || response.status === 'success') {
           this.details = [];

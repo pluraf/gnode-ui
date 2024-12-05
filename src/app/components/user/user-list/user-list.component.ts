@@ -3,6 +3,8 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 
+import { catchError, forkJoin, Observable, of } from 'rxjs';
+
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { UserDeleteComponent } from '../user-delete/user-delete.component';
 import { ApiService } from '../../../services/api.service';
@@ -57,10 +59,10 @@ export class UserListComponent {
   ];
 
   constructor() {
-    this.fetchUsers();
+    this.loadUsers();
   }
 
-  fetchUsers() {
+  loadUsers() {
     this.apiService.getUsers().subscribe((res: any) => {
       this.users = res;
       this.totalRecords = this.users.length;
@@ -80,18 +82,24 @@ export class UserListComponent {
   }
 
   onDeleteUser() {
-    const userIds: any[] = this.selectedUsers.map((user) => user.id);
+    let observables: Observable<any>[] = [];
+    this.selectedUsers.map((user) => {
+      observables.push(this.apiService.deleteUser(user.id).pipe(
+        catchError(err => (of(true)))
+      ));
+    });
 
-    this.apiService.deleteUsers(userIds).subscribe({
-      next: (resp: any) => {
-        const deleted = resp.deleted;
-        this.users = this.users.filter((user) => !deleted.includes(user.id));
+    forkJoin(observables).subscribe({
+      next: (response: any) => {
         this.visibleDialog = false;
         this.selectedUsers = [];
+        this.loadUsers();
       },
-      error: (err) => {
-        console.error('Error deleting users:', err);
-      },
+      error: (response: any) => {
+        this.visibleDialog = false;
+        this.selectedUsers = [];
+        this.loadUsers();
+      }
     });
   }
 }
