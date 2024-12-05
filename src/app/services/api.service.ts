@@ -84,7 +84,7 @@ export class ApiService {
 
   /////////////////////////// Pipelines ///////////////////////////
 
-  pipelinesList(): Observable<any> {
+  pipelineList(): Observable<any> {
     return this.http.get(this.pipelineConfigUrl);
   }
 
@@ -104,8 +104,12 @@ export class ApiService {
     return this.http.delete(this.pipelineConfigUrl + pipeid);
   }
 
-  getPipelineStatus(pipeid: string): Observable<any> {
+  pipelineStatusGet(pipeid: string): Observable<any> {
     return this.http.get(this.pipelineStatusUrl + pipeid);
+  }
+
+  pipelineStatusList(): Observable<any> {
+    return this.http.get(this.pipelineStatusUrl);
   }
 
   startPipeline(pipeid: string): Observable<any> {

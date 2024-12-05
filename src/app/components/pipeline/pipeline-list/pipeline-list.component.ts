@@ -86,24 +86,19 @@ export class PipelineListComponent implements OnInit {
   }
 
   loadPipelines() {
-    this.apiService.pipelinesList().subscribe((response) => {
-      if (response && Object.keys(response).length > 0) {
-        this.pipelines = Object.entries(response).map((entry: any) => ({
-          id: entry[0],
-          connector_in: entry[1].connector_in.type,
-          connector_out: entry[1].connector_out.type,
-          status: '',
-          error: '',
-        }));
-
-        // Fetch the status for each pipeline
-        this.pipelines.forEach((pipeline: any) => {
-          this.apiService
-            .getPipelineStatus(pipeline.id)
-            .subscribe((statusResponse) => {
-              pipeline.status = statusResponse.status;
-              pipeline.error = statusResponse.error;
-            });
+    this.apiService.pipelineList().subscribe((pipelinesConfig) => {
+      if (pipelinesConfig && Object.keys(pipelinesConfig).length > 0) {
+        console.log(this.pipelines);
+        this.apiService.pipelineStatusList().subscribe((pipelinesStatus) => {
+          if (pipelinesStatus && Object.keys(pipelinesStatus).length > 0) {
+            this.pipelines = Object.entries(pipelinesConfig).map((entry: any) => ({
+              id: entry[0],
+              connector_in: entry[1].connector_in.type,
+              connector_out: entry[1].connector_out.type,
+              status: pipelinesStatus[entry[0]].status,
+              error: '',
+            }));
+          }
         });
       } else {
         this.showMessage = true;
