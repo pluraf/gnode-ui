@@ -6,7 +6,7 @@ import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
 
-import { MBrokerCService } from '../../../services/mbrokerc.service';
+import { ApiService } from '../../../services/api.service';
 import { SettingsService } from '../../../services/settings.service';
 import { InfoService } from '../../../services/info.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
@@ -28,7 +28,7 @@ import { ChannelDeleteComponent } from '../channel-delete/channel-delete.compone
 })
 export class ChannelDetailComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
-  brokerService = inject(MBrokerCService);
+  apiService = inject(ApiService);
   settingsService = inject(SettingsService);
   infoService = inject(InfoService);
   router = inject(Router);
@@ -68,10 +68,8 @@ export class ChannelDetailComponent {
       },
     ];
 
-    this.brokerService
-      .loadChannelDetails(this.chanid)
-      .subscribe((response: any) => {
-        this.channel = response.responses[0].data.channel;
+    this.apiService.channelGet(this.chanid).subscribe((response: any) => {
+        this.channel = response;
         const timestamp = this.channel.msg_timestamp;
         let recivedTimestamp = "-";
         if (timestamp != 0) {
@@ -82,7 +80,7 @@ export class ChannelDetailComponent {
         }
 
         this.details = [
-          ['Enabled', this.channel.disabled],
+          ['State', this.channel.disabled ? "Disabled" : "Enabled"],
           ['Authentication type', this.channel.authtype],
           ['Username', this.channel.username],
           ['MQTT Client ID', this.channel.clientid],
@@ -125,7 +123,7 @@ export class ChannelDetailComponent {
   }
 
   onDeleteChannel() {
-    this.brokerService.deleteChannels([this.chanid]).subscribe({
+    this.apiService.channelDelete(this.chanid).subscribe({
       next: (response: any) => {
         if (response.success || response.status === 'success') {
           this.details = [];

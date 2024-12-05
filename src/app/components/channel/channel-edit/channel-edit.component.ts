@@ -7,12 +7,14 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { RippleModule } from 'primeng/ripple';
-
-import { MBrokerCService } from '../../../services/mbrokerc.service';
-import { SubheaderComponent } from '../../subheader/subheader.component';
+import { InputSwitchModule } from 'primeng/inputswitch';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+
+import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
+import { SubheaderComponent } from '../../subheader/subheader.component';
+
 
 @Component({
   selector: 'app-channel-edit',
@@ -26,6 +28,7 @@ import { NoteService } from '../../../services/note.service';
     RadioButtonModule,
     SubheaderComponent,
     ToastModule,
+    InputSwitchModule,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './channel-edit.component.html',
@@ -39,24 +42,17 @@ export class ChannelEditComponent implements OnInit {
   password = '';
   authtype = '';
   jwtKey = '';
-  enabled: boolean = false;
+  enabled: boolean = true;
 
   noteService = inject(NoteService);
 
   constructor(
-    private brokerService: MBrokerCService,
+    private apiService: ApiService,
     private route: ActivatedRoute,
     private messageService: MessageService,
   ) {}
 
   dataLoaded = false;
-
-  selectedChannelState: any = null;
-
-  channelStates: any[] = [
-    { name: 'Enabled', key: 'Allow' },
-    { name: 'Disabled', key: 'Block' },
-  ];
 
   selectedOption: string = 'jwt';
 
@@ -69,11 +65,9 @@ export class ChannelEditComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.chanid = params.get('chanid') || '';
 
-      this.brokerService
-        .loadChannelDetails(this.chanid)
-        .subscribe((response: any) => {
+      this.apiService.channelGet(this.chanid).subscribe((response: any) => {
           this.dataLoaded = true;
-          const channel = response.responses[0].data.channel;
+          const channel = response;
 
           this.clientid = channel.clientid;
           this.username = channel.username;
@@ -84,24 +78,12 @@ export class ChannelEditComponent implements OnInit {
           if (this.selectedOption === 'jwt' && channel.jwtkey) {
             this.jwtKey = channel.jwtkey.replace(/(.{64})/g, '$1\n');
           }
-          this.enabled = channel.disabled;
-
-          if (this.enabled === false) {
-            this.selectedChannelState = this.channelStates.find(
-              (category) => category.key === 'Block',
-            );
-          } else {
-            this.selectedChannelState = this.channelStates.find(
-              (category) => category.key === 'Allow',
-            );
-          }
+          this.enabled = !channel.disabled;
         });
     });
   }
 
   onUpdate() {
-    const channelState =
-      this.selectedChannelState.key === 'Allow' ? 'Enabled' : 'Disabled';
     const selectedOptionObj = this.authOptions.find(
       (option) => option.value === this.selectedOption,
     );
@@ -109,33 +91,30 @@ export class ChannelEditComponent implements OnInit {
 
     const updateData: any = {
       chanid: this.chanid,
-      communicationStatus: channelState,
       authtype: this.authtype,
       clientid: this.clientid || undefined,
       username: this.username || undefined,
-      password: this.selectedOption === 'password' ? this.password : undefined,
+      password: this.selectedOption === 'password' && this.password ? this.password : undefined,
       jwtkey:
-        this.selectedOption === 'jwt'
+        this.selectedOption === 'jwt' && this.jwtKey
           ? this.jwtKey.replace(/\n/g, '')
           : undefined,
-      enabled: this.enabled,
+      disabled: !this.enabled,
     };
-    this.brokerService.updateChannel(updateData).subscribe((response) => {
-      if (response.responses && response.responses[0]) {
-        const resp = response.responses[0];
-        if (resp.hasOwnProperty('error') && resp.error) {
-          this.noteService.handleMessage(
-            this.messageService,
-            'error',
-            resp.error,
-          );
-        } else {
-          this.noteService.handleMessage(
-            this.messageService,
-            'success',
-            'Channel edited successfully!',
-          );
-        }
+    this.apiService.channelUpdate(this.chanid, updateData).subscribe({
+      next: (response) => {
+        this.noteService.handleMessage(
+          this.messageService,
+          'success',
+          'Channel edited successfully!',
+        );
+      },
+      error: (response) => {
+        this.noteService.handleMessage(
+          this.messageService,
+          'error',
+          response.error,
+        );
       }
     });
   }

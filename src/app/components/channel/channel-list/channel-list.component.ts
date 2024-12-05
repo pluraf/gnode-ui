@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+import { forkJoin, Observable } from 'rxjs';
 import { DateTime } from 'luxon';
 
 import { TableModule } from 'primeng/table';
@@ -17,7 +18,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { Channel } from '../channel';
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { MBrokerCService } from '../../../services/mbrokerc.service';
+import { ApiService } from '../../../services/api.service';
 import { ChannelDeleteComponent } from '../channel-delete/channel-delete.component';
 import { NoteService } from '../../../services/note.service';
 import { SettingsService } from '../../../services/settings.service';
@@ -78,7 +79,7 @@ export class ChannelListComponent {
     },
   ];
 
-  brokerService = inject(MBrokerCService);
+  apiService = inject(ApiService);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
   settingsService = inject(SettingsService);
@@ -91,35 +92,28 @@ export class ChannelListComponent {
 
   loadChannels() {
     this.showLoading = true;
-    this.brokerService.loadChannelList().subscribe({
-      next: (response: { responses: any[] }) => {
+    this.apiService.channelList().subscribe({
+      next: (response: any) => {
         this.showLoading = false;
-        const clientResponse = response.responses.find(
-          (r: { command: string }) => r.command === 'listChannels',
-        );
-
-        if (clientResponse) {
-          const clientData = clientResponse.data;
-          if (clientData?.channels) {
-            this.channelList = clientData.channels.map((channel : any) => {
-              let obj = {id: "", lastseen: "", communication: false};
-              if (channel.msg_received === 0) {
-                obj.lastseen = "never";
-              } else {
-                obj.lastseen = DateTime.fromJSDate(
-                  new Date(channel.msg_received),
-                  {zone: this.settingsService.settingsdata().time.timezone}
-                )
-                .toFormat('yyyy-MM-dd HH:mm');
-              }
-              obj.id = channel.chanid;
-              obj.communication = !channel.disabled;
-              return obj;
-            });
-          };
-          this.totalRecords = this.channelList.length;
-        }
-        if (clientResponse.data.totalCount === 0) {
+        const clientResponse = response;
+        const channels = clientResponse;
+        this.channelList = channels.map((channel : any) => {
+          let obj = {id: "", lastseen: "", communication: false};
+          if (channel.msg_received === 0) {
+            obj.lastseen = "never";
+          } else {
+            obj.lastseen = DateTime.fromJSDate(
+              new Date(channel.msg_received),
+              {zone: this.settingsService.settingsdata().time.timezone}
+            )
+            .toFormat('yyyy-MM-dd HH:mm');
+          }
+          obj.id = channel.chanid;
+          obj.communication = !channel.disabled;
+          return obj;
+        });
+        this.totalRecords = this.channelList.length;
+        if (this.totalRecords === 0) {
           this.showMessage = true;
         }
       },
@@ -139,23 +133,20 @@ export class ChannelListComponent {
   }
 
   onDeleteChannel() {
-    const channelId = this.selectedChannels.map((channel) => channel.id);
-    this.brokerService.deleteChannels(channelId).subscribe({
-      next: (response: { responses: any[] }) => {
-        const deleteResponse = response.responses.find(
-          (r: { command: string }) => r.command === 'deleteChannels',
-        );
+    let observables: Observable<any>[] = [];
+    this.selectedChannels.map((channel) => {
+      observables.push(this.apiService.channelDelete(channel.id));
+    });
 
-        if (deleteResponse) {
-          const deletedChannels = deleteResponse.deleted;
-          this.channelList = this.channelList.filter(
-            (channel) => !deletedChannels.includes(channel.id),
-          );
-          this.totalRecords = this.channelList.length;
-        }
-
+    forkJoin(observables).subscribe({
+      next: (response: any) => {
         this.visibleDialog = false;
+        this.loadChannels();
       },
+      error: (response: any) => {
+        this.visibleDialog = false;
+        this.loadChannels();
+      }
     });
   }
 }

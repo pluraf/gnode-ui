@@ -17,6 +17,8 @@ export class ApiService {
   private pipelineConfigUrl = 'api/pipeline/config/';
   private pipelineControlUrl = 'api/pipeline/control/';
   private pipelineStatusUrl = 'api/pipeline/status/';
+  // Channel API
+  private channelUrl = 'api/channel/';
   // Version API
   private apiVersionUrl = '/api/version';
   // Status API
@@ -58,6 +60,28 @@ export class ApiService {
 
   updateSettings(settings: object): Observable<any> {
     return this.http.put(this.settingsUrl, settings);
+  }
+
+  /////////////////////////// Channels ///////////////////////////
+
+  channelList(): Observable<any> {
+    return this.http.get(this.channelUrl);
+  }
+
+  channelGet(chanid: string) {
+    return this.http.get(this.channelUrl + chanid);
+  }
+
+  channelUpdate(chanid: string, chandata: object): Observable<any> {
+    return this.http.put(this.channelUrl + chanid, chandata);
+  }
+
+  channelCreate(chanid: string, chandata: object): Observable<any> {
+    return this.http.post(this.channelUrl + chanid, chandata);
+  }
+
+  channelDelete(chanid: string): Observable<any> {
+    return this.http.delete(this.channelUrl + chanid);
   }
 
   /////////////////////////// Pipelines ///////////////////////////

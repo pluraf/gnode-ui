@@ -32,12 +32,9 @@
       </div>
         <div class="p-field">
           <span><strong>Channel State</strong></span>
-          <div class="card flex mt-3">
+          <div class="card flex mt-3 mb-6">
             <div class="flex flex-column gap-1">
-              <div *ngFor="let category of channelStates" class="field-checkbox">
-                <p-radioButton [inputId]="category.key" name="category" [value]="category" [(ngModel)]="selectedChannelState"/>
-                <label [for]="category.key" class="ml-2">{{ category.name }}</label>
-              </div>
+              <p-inputSwitch [(ngModel)]="enabled" />
             </div>
           </div>
         </div>

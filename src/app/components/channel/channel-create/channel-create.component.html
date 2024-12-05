@@ -40,10 +40,7 @@
                     <span><strong>Channel state</strong></span>
                     <div class="card flex mt-3 ">
                         <div class="flex flex-column gap-1">
-                            <div *ngFor="let channelState of channelStates" class="field-checkbox">
-                                <p-radioButton [inputId]="channelState.key" name="channelState" [value]="channelState" [(ngModel)]="selectedChannelState" />
-                                <label [for]="channelState.key" class="ml-2">{{ channelState.name }}</label>
-                            </div>
+                            <p-inputSwitch [(ngModel)]="enabled" />
                         </div>
                     </div>
                 </div>

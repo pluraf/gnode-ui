@@ -7,13 +7,15 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RadioButtonModule } from 'primeng/radiobutton';
-
-import { MBrokerCService } from '../../../services/mbrokerc.service';
-import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { InputSwitchModule } from 'primeng/inputswitch';
+
+import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ChannelData } from '../channel';
 import { NoteService } from '../../../services/note.service';
+import { ApiService } from '../../../services/api.service';
+
 
 @Component({
   selector: 'app-channel-create',
@@ -28,6 +30,7 @@ import { NoteService } from '../../../services/note.service';
     RouterModule,
     SubheaderComponent,
     ToastModule,
+    InputSwitchModule,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './channel-create.component.html',
@@ -35,7 +38,7 @@ import { NoteService } from '../../../services/note.service';
 })
 export class ChannelCreateComponent implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
-  brokerService = inject(MBrokerCService);
+  apiService = inject(ApiService);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
 
@@ -47,14 +50,8 @@ export class ChannelCreateComponent implements OnInit {
   password: string = '';
   authtype: string = '';
   jwtKey: string = '';
+  enabled = true;
   loading: boolean = false;
-
-  selectedChannelState: { name: string; key: string } | null = null;
-
-  channelStates: { name: string; key: string }[] = [
-    { name: 'Enabled', key: 'Allow' },
-    { name: 'Disabled', key: 'Block' },
-  ];
 
   selectedOption: string = 'jwt_es256';
 
@@ -78,45 +75,28 @@ export class ChannelCreateComponent implements OnInit {
     this.authtype = selectedOptionObj ? selectedOptionObj.value : '';
 
     const payload: Partial<ChannelData> = {
-      chanid: this.chanid,
       authtype: this.authtype,
       password: this.password,
-      disabled: this.selectedChannelState?.key === 'Allow',
+      disabled: !this.enabled,
       username: this.username || undefined,
       clientid: this.clientid || undefined,
     };
 
-    this.brokerService.createChannel(payload).subscribe(
-      (response: any) => {
-        if (response.responses[0].error) {
-          this.noteService.handleMessage(
-            this.messageService,
-            'error',
-            response.responses[0].error,
-          );
-        } else {
-          this.noteService.handleMessage(
-            this.messageService,
-            'success',
-            'Channel created successfully!',
-          );
-        }
-      },
-      (error: any) => {
-        const errorMessage =
-          error?.message ||
-          (typeof error?.error === 'string' && error.error) ||
-          (error?.status &&
-            error?.statusText &&
-            `${error.status}: ${error.statusText}`) ||
-          (error?.status && `Error Code: ${error.status}`) ||
-          'An unknown error occurred';
+    this.apiService.channelCreate(this.chanid, payload).subscribe({
+       next: (response: any) => {
+        this.noteService.handleMessage(
+          this.messageService,
+          'success',
+          'Channel created successfully!'
+        );
+       },
+       error: (response: any) => {
         this.noteService.handleMessage(
           this.messageService,
           'error',
-          errorMessage,
+           response.error ?? response.statusText
         );
-      },
-    );
+      }
+    });
   }
 }
