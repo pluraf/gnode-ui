@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ApiInfo, Settings } from './service';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -161,6 +160,15 @@ export class ApiService {
     return this.http.post('api/auth/token/', body.toString(), { headers });
   }
 
+  //Modify to send the encrypted data
+  /*   getAuthToken(userDetail: any): Observable<any> {
+    const body = JSON.stringify({ userDetail });
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.post('api/auth/token/', body, { headers });
+  } */
+
   //////////////////////////////// Users ///////////////////
 
   getUsers(): Observable<any> {
@@ -178,7 +186,7 @@ export class ApiService {
   ///////////////////////////////// TimeZones ////////////////////////////
 
   getTimeZones(): Observable<any> {
-    return this.http.get('api/timezones')
+    return this.http.get('api/timezones');
   }
 
   ///////////////////////////////// Next ////////////////////////////

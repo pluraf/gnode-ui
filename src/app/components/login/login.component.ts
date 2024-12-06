@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -93,10 +93,7 @@ export class LoginComponent {
       this.loginUser.password,
     );
 
-    const encryptedUserDetails = {
-      encryptedUsername: '',
-      encryptedPassword: '',
-    };
+    const encryptedUserDetails = encryptedUsername + encryptedPassword;
     //////////////////////////////////////////////
 
     this.apiService
