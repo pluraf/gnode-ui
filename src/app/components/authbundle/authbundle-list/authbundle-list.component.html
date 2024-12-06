@@ -1,6 +1,5 @@
         <app-subheader selectedMenuName="Authentication bundles" [actions]="menubarItems" (deleteAuthBundleEvent)="onDeleteAuthbundle()"></app-subheader>
-        <app-authbundle-delete [visible]="visibleDialog" [authbundles]="selectedAuthbundle" (deleteConfirmed)="onDeleteAuthbundle()" (cancel)="visibleDialog = false"></app-authbundle-delete>
-
+        <app-delete [visible]="visibleDialog" [items]="selectedAuthbundle" [itemLabel]="'authbundle'" [idField]="'authbundle_id'" (deleteConfirmed)="onDeleteAuthbundle()" (cancel)="visibleDialog = false"></app-delete>
         <div *ngIf="showMessage" class="showMessage flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
             <div class="text-center">
                 No authbundles available. To create one, click the plus sign in the top-right corner or use the 

@@ -1,5 +1,7 @@
 <app-subheader selectedMenuName="Channel ID: {{chanid}}" [actions]="menubarItems" backRoute="/channels" (deleteChannelEvent)="onDeleteChannel()"></app-subheader>
-<app-channel-delete  [visible]="visibleDialog" [channels]="[{'id': chanid}]" (deleteConfirmed)="onDeleteChannel()" (cancel)="visibleDialog = false"></app-channel-delete>
+<app-delete [visible]="visibleDialog" [items]="[{'id': chanid}]" [itemLabel]="'channel'" [idField]="'id'"
+(deleteConfirmed)="onDeleteChannel()" (cancel)="visibleDialog = false"></app-delete>
+
 <div class="main-content">
   <div class="grid align-content-start m-0">
     <div class="field col flex-grow-0 mr-6">

@@ -10,7 +10,7 @@ import { ApiService } from '../../../services/api.service';
 import { SettingsService } from '../../../services/settings.service';
 import { InfoService } from '../../../services/info.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { ChannelDeleteComponent } from '../channel-delete/channel-delete.component';
+import { DeleteComponent } from '../../shared/delete/delete.component';
 
 @Component({
   selector: 'app-device-detail',
@@ -21,7 +21,7 @@ import { ChannelDeleteComponent } from '../channel-delete/channel-delete.compone
     TableModule,
     CardModule,
     RouterModule,
-    ChannelDeleteComponent,
+    DeleteComponent,
   ],
   templateUrl: './channel-detail.component.html',
   styleUrl: './channel-detail.component.css',
@@ -37,10 +37,11 @@ export class ChannelDetailComponent {
   connDetails: string[][] = [];
   visibleDialog: boolean = false;
   menubarItems: MenuItem[] = [];
+  selectedChannel: any = { id: this.chanid };
 
-  exampleHost = "";
+  exampleHost = '';
   channel: any = {
-    username: ""
+    username: '',
   };
 
   constructor() {
@@ -69,53 +70,63 @@ export class ChannelDetailComponent {
     ];
 
     this.apiService.channelGet(this.chanid).subscribe((response: any) => {
-        this.channel = response;
-        const timestamp = this.channel.msg_timestamp;
-        let recivedTimestamp = "-";
-        if (timestamp != 0) {
-          const iso8601 = new Date(timestamp * 1000);
-          recivedTimestamp = iso8601
-            .toString()
-            .slice(0, iso8601.toString().indexOf('GMT'));
-        }
+      this.channel = response;
+      const timestamp = this.channel.msg_timestamp;
+      let recivedTimestamp = '-';
+      if (timestamp != 0) {
+        const iso8601 = new Date(timestamp * 1000);
+        recivedTimestamp = iso8601
+          .toString()
+          .slice(0, iso8601.toString().indexOf('GMT'));
+      }
 
-        this.details = [
-          ['State', this.channel.disabled ? "Disabled" : "Enabled"],
-          ['Authentication type', this.channel.authtype],
-          ['Username', this.channel.username],
-          ['MQTT Client ID', this.channel.clientid],
-          ['Messages received', this.channel.msg_received],
-          ['Last message timestamp', recivedTimestamp],
-        ];
-      });
+      this.details = [
+        ['State', this.channel.disabled ? 'Disabled' : 'Enabled'],
+        ['Authentication type', this.channel.authtype],
+        ['Username', this.channel.username],
+        ['MQTT Client ID', this.channel.clientid],
+        ['Messages received', this.channel.msg_received],
+        ['Last message timestamp', recivedTimestamp],
+      ];
+    });
 
-      effect(() => {
-        const gnode_hostname = `gnode-${this.infoService.infoData().serial_number}`;
-        const settings = this.settingsService.settingsdata();
-        const network_settings = settings.network_settings;
+    effect(() => {
+      const gnode_hostname = `gnode-${this.infoService.infoData().serial_number}`;
+      const settings = this.settingsService.settingsdata();
+      const network_settings = settings.network_settings;
 
-        this.connDetails = [
-          ["TCP Port", "1883", "No encryption"],
-          ["TLS TCP Port", "8883", "Encrypted"],
-          ["Host name", `${gnode_hostname}.local`, "Local Network"],
-        ];
+      this.connDetails = [
+        ['TCP Port', '1883', 'No encryption'],
+        ['TLS TCP Port', '8883', 'Encrypted'],
+        ['Host name', `${gnode_hostname}.local`, 'Local Network'],
+      ];
 
-        if (network_settings) {
-          for (const conn of network_settings.active_connections) {
-            if (conn.type == 'wifi') {
-              this.connDetails.push(["Host IP",conn.ipv4_settings.address, "WiFi"]);
-              this.exampleHost = conn.ipv4_settings.address;
-            } else if (conn.type == 'ethernet') {
-              this.connDetails.push(["Host IP",conn.ipv4_settings.address, "Ethernet"]);
-              this.exampleHost = conn.ipv4_settings.address;
-            }
+      if (network_settings) {
+        for (const conn of network_settings.active_connections) {
+          if (conn.type == 'wifi') {
+            this.connDetails.push([
+              'Host IP',
+              conn.ipv4_settings.address,
+              'WiFi',
+            ]);
+            this.exampleHost = conn.ipv4_settings.address;
+          } else if (conn.type == 'ethernet') {
+            this.connDetails.push([
+              'Host IP',
+              conn.ipv4_settings.address,
+              'Ethernet',
+            ]);
+            this.exampleHost = conn.ipv4_settings.address;
           }
         }
+      }
 
-        this.connDetails.push(
-          ["G-Cloud Host", `${gnode_hostname}.iotplan.io`, settings.gcloud ? "Enabled" : "Disabled"]
-        );
-      });
+      this.connDetails.push([
+        'G-Cloud Host',
+        `${gnode_hostname}.iotplan.io`,
+        settings.gcloud ? 'Enabled' : 'Disabled',
+      ]);
+    });
   }
 
   showDialog() {

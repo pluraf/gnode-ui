@@ -4,14 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 
-import { AuthbundleDeleteComponent } from '../authbundle-delete/authbundle-delete.component';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ApiService } from '../../../services/api.service';
+import { DeleteComponent } from '../../shared/delete/delete.component';
 
 @Component({
   selector: 'app-authbundle-detail',
   standalone: true,
-  imports: [TableModule, AuthbundleDeleteComponent, SubheaderComponent],
+  imports: [TableModule, SubheaderComponent, DeleteComponent],
   templateUrl: './authbundle-detail.component.html',
   styleUrl: './authbundle-detail.component.css',
 })

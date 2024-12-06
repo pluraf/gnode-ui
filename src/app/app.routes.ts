@@ -19,7 +19,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     loadComponent: () =>
       import('./components/user/user-list/user-list.component').then(
-        (r) => r.UserListComponent,
+        (c) => c.UserListComponent,
       ),
   },
   {
@@ -27,15 +27,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     loadComponent: () =>
       import('./components/user/user-create/user-create.component').then(
-        (r) => r.UserCreateComponent,
-      ),
-  },
-  {
-    path: 'user-delete',
-    canActivate: [AuthGuard],
-    loadComponent: () =>
-      import('./components/user/user-delete/user-delete.component').then(
-        (r) => r.UserDeleteComponent,
+        (c) => c.UserCreateComponent,
       ),
   },
   {

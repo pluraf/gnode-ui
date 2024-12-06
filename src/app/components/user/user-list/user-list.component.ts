@@ -2,14 +2,14 @@ import { Component, inject } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
+import { ToastModule } from 'primeng/toast';
 
 import { catchError, forkJoin, Observable, of } from 'rxjs';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { UserDeleteComponent } from '../user-delete/user-delete.component';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
-import { ToastModule } from 'primeng/toast';
+import { DeleteComponent } from '../../shared/delete/delete.component';
 
 @Component({
   selector: 'app-user-list',
@@ -18,7 +18,7 @@ import { ToastModule } from 'primeng/toast';
     SubheaderComponent,
     TableModule,
     PaginatorModule,
-    UserDeleteComponent,
+    DeleteComponent,
     ToastModule,
   ],
   providers: [MessageService, NoteService],
@@ -84,9 +84,9 @@ export class UserListComponent {
   onDeleteUser() {
     let observables: Observable<any>[] = [];
     this.selectedUsers.map((user) => {
-      observables.push(this.apiService.deleteUser(user.id).pipe(
-        catchError(err => (of(true)))
-      ));
+      observables.push(
+        this.apiService.deleteUser(user.id).pipe(catchError((err) => of(true))),
+      );
     });
 
     forkJoin(observables).subscribe({
@@ -99,7 +99,7 @@ export class UserListComponent {
         this.visibleDialog = false;
         this.selectedUsers = [];
         this.loadUsers();
-      }
+      },
     });
   }
 }

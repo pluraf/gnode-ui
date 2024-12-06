@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { PipelineDeleteComponent } from '../pipeline-delete/pipeline-delete.component';
 
 import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -11,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { interval, Subscription } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
+import { DeleteComponent } from '../../shared/delete/delete.component';
 
 @Component({
   selector: 'app-pipeline-detail',
@@ -18,7 +18,7 @@ import { ApiService } from '../../../services/api.service';
   imports: [
     SubheaderComponent,
     TableModule,
-    PipelineDeleteComponent,
+    DeleteComponent,
     ButtonModule,
     CommonModule,
     TooltipModule,

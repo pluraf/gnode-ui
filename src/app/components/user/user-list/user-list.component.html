@@ -1,5 +1,6 @@
 <app-subheader selectedMenuName="Users" [actions]="menubarItems"></app-subheader>
-<app-user-delete  [visible]="visibleDialog" [users]="selectedUsers" (deleteConfirmed)="onDeleteUser()" (cancel)="visibleDialog = false"></app-user-delete>
+<app-delete  [visible]="visibleDialog" [items]="selectedUsers" [itemLabel]="'user'" [idField]="'username'"(deleteConfirmed)="onDeleteUser()" (cancel)="visibleDialog = false"></app-delete>
+
 <div class="main-content">
     <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
         <p-table [value]="users" selectionMode="multiple" [(selection)]="selectedUsers" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 30]">

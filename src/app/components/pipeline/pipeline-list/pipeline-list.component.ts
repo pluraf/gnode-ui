@@ -9,12 +9,12 @@ import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { PipelineDeleteComponent } from '../pipeline-delete/pipeline-delete.component';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
-import { ToastModule } from 'primeng/toast';
+import { DeleteComponent } from '../../shared/delete/delete.component';
 
 export interface Pipeline {
   id: string;
@@ -32,7 +32,7 @@ export interface Pipeline {
     TableModule,
     RouterModule,
     PaginatorModule,
-    PipelineDeleteComponent,
+    DeleteComponent,
     DialogModule,
     ButtonModule,
     CommonModule,
@@ -126,9 +126,11 @@ export class PipelineListComponent implements OnInit {
   onDeletePipelines() {
     let observables: Observable<any>[] = [];
     this.selectedPipelines.map((pipeline) => {
-      observables.push(this.apiService.pipelineDelete(pipeline.id).pipe(
-        catchError(err => (of(true)))
-      ))
+      observables.push(
+        this.apiService
+          .pipelineDelete(pipeline.id)
+          .pipe(catchError((err) => of(true))),
+      );
     });
 
     forkJoin(observables).subscribe({
@@ -141,8 +143,7 @@ export class PipelineListComponent implements OnInit {
         this.visibleDialog = false;
         this.selectedPipelines = [];
         this.loadPipelines();
-      }
+      },
     });
   }
-
 }
