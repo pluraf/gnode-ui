@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -47,7 +46,6 @@ export class LoginComponent {
   settingsService = inject(SettingsService);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
-  http = inject(HttpClient);
   apiService = inject(ApiService);
   encryptionService = inject(EncryptionService);
 
