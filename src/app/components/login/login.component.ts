@@ -2,19 +2,20 @@ import { Component, inject } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { InfoService } from '../../services/info.service';
 import { SettingsService } from '../../services/settings.service';
-import { MessageService } from 'primeng/api';
 import { NoteService } from '../../services/note.service';
-import { ToastModule } from 'primeng/toast';
 import { EncryptionService } from '../../services/encryption.service';
 
 export interface LoginUser {
@@ -51,6 +52,7 @@ export class LoginComponent {
   encryptionService = inject(EncryptionService);
 
   from: string;
+  errorMessage = '';
 
   loginUser: LoginUser = {
     username: '',
@@ -113,19 +115,18 @@ export class LoginComponent {
           }
         },
         (error) => {
-          if (error.error && error.error.detail) {
-            this.noteService.handleMessage(
-              this.messageService,
-              'error',
-              error.error.detail,
-            );
+          if (error.status >= 400 && error.status < 500) {
+            this.errorMessage = error.error?.detail?.msg || error.message;
+          } else if (error.status >= 500) {
+            this.errorMessage = error.error?.detail?.msg || error.message;
           } else if (error.message) {
-            this.noteService.handleMessage(
-              this.messageService,
-              'error',
-              error.message,
-            );
+            this.errorMessage = error.message;
           }
+          this.noteService.handleMessage(
+            this.messageService,
+            'error',
+            this.errorMessage,
+          );
         },
       );
   }

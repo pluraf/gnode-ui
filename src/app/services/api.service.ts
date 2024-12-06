@@ -162,11 +162,10 @@ export class ApiService {
 
   //Modify to send the encrypted data
   /*   getAuthToken(userDetail: any): Observable<any> {
-    const body = JSON.stringify({ userDetail });
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.post('api/auth/token/', body, { headers });
+    return this.http.post('api/auth/token/', userDetail, { headers });
   } */
 
   //////////////////////////////// Users ///////////////////
