@@ -50,7 +50,6 @@ export class LoginComponent {
   encryptionService = inject(EncryptionService);
 
   from: string;
-  errorMessage = '';
 
   loginUser: LoginUser = {
     username: '',
@@ -113,17 +112,11 @@ export class LoginComponent {
           }
         },
         (error) => {
-          if (error.status >= 400 && error.status < 500) {
-            this.errorMessage = error.error?.detail?.msg || error.message;
-          } else if (error.status >= 500) {
-            this.errorMessage = error.error?.detail?.msg || error.message;
-          } else if (error.message) {
-            this.errorMessage = error.message;
-          }
+          const errorMessage = error.error?.detail || error.message;
           this.noteService.handleMessage(
             this.messageService,
             'error',
-            this.errorMessage,
+            errorMessage,
           );
         },
       );
