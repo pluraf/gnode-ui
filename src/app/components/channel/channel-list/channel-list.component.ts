@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -54,8 +54,6 @@ export class ChannelListComponent {
   chanid: string = '';
   showLoading: boolean = false;
 
-  changeDetector = inject(ChangeDetectorRef);
-
   menubarItems: MenuItem[] = [
     {
       routerLink: '/channels/channel-create',
@@ -97,16 +95,14 @@ export class ChannelListComponent {
         this.showLoading = false;
         const clientResponse = response;
         const channels = clientResponse;
-        this.channelList = channels.map((channel : any) => {
-          let obj = {id: "", lastseen: "", communication: false};
+        this.channelList = channels.map((channel: any) => {
+          let obj = { id: '', lastseen: '', communication: false };
           if (channel.msg_received === 0) {
-            obj.lastseen = "never";
+            obj.lastseen = 'never';
           } else {
-            obj.lastseen = DateTime.fromJSDate(
-              new Date(channel.msg_received),
-              {zone: this.settingsService.settingsdata().time.timezone}
-            )
-            .toFormat('yyyy-MM-dd HH:mm');
+            obj.lastseen = DateTime.fromJSDate(new Date(channel.msg_received), {
+              zone: this.settingsService.settingsdata().time.timezone,
+            }).toFormat('yyyy-MM-dd HH:mm');
           }
           obj.id = channel.chanid;
           obj.communication = !channel.disabled;
@@ -135,9 +131,11 @@ export class ChannelListComponent {
   onDeleteChannel() {
     let observables: Observable<any>[] = [];
     this.selectedChannels.map((channel) => {
-      observables.push(this.apiService.channelDelete(channel.id).pipe(
-        catchError(err => (of(true)))
-      ))
+      observables.push(
+        this.apiService
+          .channelDelete(channel.id)
+          .pipe(catchError((err) => of(true))),
+      );
     });
 
     forkJoin(observables).subscribe({
@@ -150,7 +148,7 @@ export class ChannelListComponent {
         this.visibleDialog = false;
         this.selectedChannels = [];
         this.loadChannels();
-      }
+      },
     });
   }
 }
