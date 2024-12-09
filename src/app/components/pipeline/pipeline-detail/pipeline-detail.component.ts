@@ -79,7 +79,7 @@ export class PipelineDetailComponent {
   }
 
   updatePipelineStatus() {
-    this.apiService.getPipelineStatus(this.pipeid).subscribe({
+    this.apiService.pipelineStatusGet(this.pipeid).subscribe({
       next: (statusResponse) => {
         this.pipelines.status = statusResponse.status;
         this.pipelines.count_in = statusResponse.count_in;

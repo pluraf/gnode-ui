@@ -3,11 +3,6 @@
     <h1 class=" flex flex-row justify-content-center mt-3 mb-auto">Log in</h1>
     <p class="descText flex flex-row justify-content-center mt-2">Enter your login details</p>
   </div>
-  @if(errorMessage){
-    <div class="alert flex flex-row "> <i class="pi pi-exclamation-circle mr-3"style="color: red; font-size:18px" ></i> 
-      {{ errorMessage }}
-    </div>  
-    }
    <div class="flex flex-column justify-content-center mb-2">
     <form>
        <div class="card flex flex-row justify-content-center">
@@ -26,4 +21,5 @@
       </div>
     </form>
   </div>
+  <p-toast position="top-right" [baseZIndex]="5000"/>
 </div>

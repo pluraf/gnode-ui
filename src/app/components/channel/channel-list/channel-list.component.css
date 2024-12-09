@@ -1,13 +1,3 @@
-.communicationBox {
-  display: flex;
-  align-items: center;
-}
-.comm-svg-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
-  fill: green;
-}
 .pi.pi-plus {
   font-size: 24px;
   margin-right: 8px;
@@ -20,13 +10,6 @@
   ::ng-deep .p-toast-top-right {
     top: 4rem;
   }
-}
-.custom-warning-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
-  display: inline-block;
-  line-height: 1 !important;
 }
 :host {
   ::ng-deep .p-progress-spinner-circle {

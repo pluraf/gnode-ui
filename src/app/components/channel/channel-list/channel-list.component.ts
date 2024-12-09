@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -53,8 +53,6 @@ export class ChannelListComponent {
   totalRecords!: number;
   chanid: string = '';
   showLoading: boolean = false;
-
-  changeDetector = inject(ChangeDetectorRef);
 
   menubarItems: MenuItem[] = [
     {

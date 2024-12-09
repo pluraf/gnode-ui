@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ApiInfo, Settings } from './service';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -84,7 +83,7 @@ export class ApiService {
 
   /////////////////////////// Pipelines ///////////////////////////
 
-  pipelinesList(): Observable<any> {
+  pipelineList(): Observable<any> {
     return this.http.get(this.pipelineConfigUrl);
   }
 
@@ -104,8 +103,12 @@ export class ApiService {
     return this.http.delete(this.pipelineConfigUrl + pipeid);
   }
 
-  getPipelineStatus(pipeid: string): Observable<any> {
+  pipelineStatusGet(pipeid: string): Observable<any> {
     return this.http.get(this.pipelineStatusUrl + pipeid);
+  }
+
+  pipelineStatusList(): Observable<any> {
+    return this.http.get(this.pipelineStatusUrl);
   }
 
   startPipeline(pipeid: string): Observable<any> {
@@ -157,6 +160,14 @@ export class ApiService {
     return this.http.post('api/auth/token/', body.toString(), { headers });
   }
 
+  //Modify to send the encrypted data
+  /*   getAuthToken(userDetail: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.post('api/auth/token/', userDetail, { headers });
+  } */
+
   //////////////////////////////// Users ///////////////////
 
   getUsers(): Observable<any> {
@@ -174,7 +185,7 @@ export class ApiService {
   ///////////////////////////////// TimeZones ////////////////////////////
 
   getTimeZones(): Observable<any> {
-    return this.http.get('api/timezones')
+    return this.http.get('api/timezones');
   }
 
   ///////////////////////////////// Next ////////////////////////////
