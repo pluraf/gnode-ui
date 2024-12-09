@@ -2,9 +2,10 @@
 
 <div class="main-content-body" [style]="{'margin-top': '120px'}">
   <p-toast position="top-right" [baseZIndex]="5000"/>
+  <p-confirmDialog />
   <div class="field col-12 w-full mt-2">
     <div>
-      <p-checkbox [(ngModel)]="isGCloudEnabled" [binary]="true" inputId="gcloud_id"/>
+      <p-checkbox [(ngModel)]="isGCloudEnabled" [binary]="true" inputId="gcloud_id" (onChange)="onCheckboxChange()"/>
       <label for="gcloud_id" class="pl-2">Enable G-Node Cloud Client</label>
     </div>
   </div>
