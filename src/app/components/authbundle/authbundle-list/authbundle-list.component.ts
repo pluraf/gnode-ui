@@ -13,10 +13,10 @@ import { ButtonModule } from 'primeng/button';
 
 import { Authbundle } from '../authbundle';
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { AuthbundleDeleteComponent } from '../authbundle-delete/authbundle-delete.component';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
 import { ToastModule } from 'primeng/toast';
+import { DeleteComponent } from '../../shared/delete/delete.component';
 
 @Component({
   selector: 'app-authbundle-list',
@@ -29,10 +29,10 @@ import { ToastModule } from 'primeng/toast';
     SubheaderComponent,
     TableModule,
     PaginatorModule,
-    AuthbundleDeleteComponent,
     DialogModule,
     ButtonModule,
     ToastModule,
+    DeleteComponent,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './authbundle-list.component.html',
@@ -108,9 +108,11 @@ export class AuthbundleListComponent implements OnInit {
   onDeleteAuthbundle() {
     let observables: Observable<any>[] = [];
     this.selectedAuthbundle.map((authbundle) => {
-      observables.push(this.apiService.deleteAuthbundle(authbundle.authbundle_id).pipe(
-        catchError(err => (of(true)))
-      ))
+      observables.push(
+        this.apiService
+          .deleteAuthbundle(authbundle.authbundle_id)
+          .pipe(catchError((err) => of(true))),
+      );
     });
 
     forkJoin(observables).subscribe({
@@ -123,7 +125,7 @@ export class AuthbundleListComponent implements OnInit {
         this.visibleDialog = false;
         this.selectedAuthbundle = [];
         this.loadAuthbundles();
-      }
+      },
     });
   }
 }

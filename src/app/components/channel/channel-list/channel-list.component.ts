@@ -19,9 +19,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Channel } from '../channel';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ApiService } from '../../../services/api.service';
-import { ChannelDeleteComponent } from '../channel-delete/channel-delete.component';
 import { NoteService } from '../../../services/note.service';
 import { SettingsService } from '../../../services/settings.service';
+import { DeleteComponent } from '../../shared/delete/delete.component';
 
 @Component({
   selector: 'app-channel-list',
@@ -34,12 +34,12 @@ import { SettingsService } from '../../../services/settings.service';
     SubheaderComponent,
     TableModule,
     PaginatorModule,
-    ChannelDeleteComponent,
     DialogModule,
     ButtonModule,
     ToastModule,
     ProgressSpinnerModule,
     FontAwesomeModule,
+    DeleteComponent,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './channel-list.component.html',

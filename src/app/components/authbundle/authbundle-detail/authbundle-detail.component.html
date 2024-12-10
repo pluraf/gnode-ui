@@ -1,5 +1,5 @@
 <app-subheader selectedMenuName="Authbundle ID: {{authbundleId}}" [actions]="menubarItems" backRoute="/authbundles" (deleteChannelEvent)="onDeleteAuthbundle()"></app-subheader>
-<app-authbundle-delete  [visible]="visibleDialog" [authbundles]="[{'authbundle_id': authbundleId}]" (deleteConfirmed)="onDeleteAuthbundle()" (cancel)="visibleDialog = false"></app-authbundle-delete >
+<app-delete [visible]="visibleDialog" [items]="[{'authbundle_id': authbundleId}]" [itemLabel]="'authbundle'" [idField]="'authbundle_id'" (deleteConfirmed)="onDeleteAuthbundle()" (cancel)="visibleDialog = false"></app-delete>
 <div class="main-content">
     <p-table [value]="details" [tableStyle]="{ 'min-width': '10rem' }">
         <ng-template pTemplate="body"  let-detail>
