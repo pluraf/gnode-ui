@@ -19,7 +19,10 @@ export class SettingsService {
     },
     network_settings: undefined,
     authentication: false,
-    gcloud: false,
+    gcloud: {
+      https: null,
+      ssh: null,
+    },
   });
 
   constructor(private apiService: ApiService, private authService: AuthService) {

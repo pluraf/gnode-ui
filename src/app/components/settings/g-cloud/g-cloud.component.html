@@ -5,9 +5,16 @@
   <p-confirmDialog />
   <div class="field col-12 w-full mt-2">
     <div>
-      <p-checkbox [(ngModel)]="isGCloudEnabled" [binary]="true" inputId="gcloud_id" (onChange)="onCheckboxChange()"/>
-      <label for="gcloud_id" class="pl-2">Enable G-Node Cloud Client</label>
+      <p-checkbox [(ngModel)]="isHTTPSEnabled" [binary]="true" inputId="gcloud_https" (onChange)="onCheckboxChange()"/>
+      <label for="gcloud_https" class="pl-2">Enable G-Node API Forwarding</label>
     </div>
+  </div>
+  <div class="field col-12 w-full mt-2">
+    <div>
+      <p-checkbox [(ngModel)]="isSSHEnabled" [binary]="true" inputId="gcloud_ssh"/>
+      <label for="gcloud_ssh" class="pl-2">Enable G-Node Secure Shell Forwarding</label>
+    </div>
+    <div *ngIf="settingsService.settingsdata().gcloud.ssh" class="mt-2 ml-5">To connect, run the following command: <strong>ssh -p {{settingsService.settingsdata().gcloud.ssh}} gnode&#64;gcloud.iotplan.io</strong></div>
   </div>
   <div class="field col-12 mt-4">
     <button pButton (click)="onSubmit()" class="button">Submit</button>

@@ -1,4 +1,5 @@
 import { Component, effect, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ButtonModule } from 'primeng/button';
@@ -19,6 +20,7 @@ import { NoteService } from '../../../services/note.service';
     SubheaderComponent,
     CheckboxModule,
     FormsModule,
+    CommonModule,
     ButtonModule,
     ToastModule,
     ConfirmDialogModule,
@@ -34,12 +36,14 @@ export class GCloudComponent {
   noteService = inject(NoteService);
   confirmationService = inject(ConfirmationService);
 
-  isGCloudEnabled = true;
+  isHTTPSEnabled = false;
+  isSSHEnabled = false;
   gcloudFormValue: boolean = false;
 
   constructor() {
     effect(() => {
-      this.isGCloudEnabled = this.settingsService.settingsdata().gcloud;
+      this.isHTTPSEnabled = this.settingsService.settingsdata().gcloud.https !== null;
+      this.isSSHEnabled = this.settingsService.settingsdata().gcloud.ssh !== null;
     });
   }
 
@@ -48,19 +52,18 @@ export class GCloudComponent {
   }
 
   onCheckboxChange() {
-    if (!this.isGCloudEnabled) {
+    if (!this.isHTTPSEnabled) {
       this.handleGCloudMessage(
         'warn',
-        'Disabling G-Node Cloud Client may affect your service.',
+        'Disabling G-Node API Forwarding will result in losing access to the G-Node via G-Cloud!',
       );
     }
   }
 
   onSubmit() {
-    if (!this.isGCloudEnabled) {
+    if (!this.isHTTPSEnabled && this.settingsService.settingsdata().gcloud.https) {
       this.confirmationService.confirm({
-        message:
-          'Are you sure that you want to proceed? Disabling G-Node Cloud Client may affect your service.',
+        message: 'Are you sure you want to proceed? You will no longer be able to connect to your G-Node via iotplan.io!',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         acceptIcon: 'none',
@@ -68,10 +71,6 @@ export class GCloudComponent {
         rejectButtonStyleClass: 'p-button-text',
         accept: () => {
           this.updateGcloudStatus();
-          this.handleGCloudMessage(
-            'success',
-            'You have successfully disabled G-Node Cloud Client.',
-          );
         },
       });
     } else {
@@ -81,27 +80,26 @@ export class GCloudComponent {
 
   updateGcloudStatus() {
     const payload = {
-      gcloud: this.isGCloudEnabled,
+      gcloud: {
+        https: this.isHTTPSEnabled,
+        ssh: this.isSSHEnabled,
+      }
     };
-    this.settingsService.settingsdata.set({
-      ...this.settingsService.settingsdata(),
-      gcloud: this.isGCloudEnabled,
+    this.apiService.updateSettings(payload).subscribe({
+      next: (resp) => {
+        this.settingsService.load();
+        this.noteService.handleMessage(
+          this.messageService,
+          'success',
+          'Submitted successfully',
+        );},
+      error: (error) => {
+        this.noteService.handleMessage(
+          this.messageService,
+          'error',
+          error.error.detail,
+        )
+      }
     });
-    this.apiService.updateSettings(payload).subscribe(
-      (resp) => {
-        if (resp.error) {
-          this.handleGCloudMessage('error', resp.error);
-        } else {
-          this.handleGCloudMessage(
-            'success',
-            'G-Node cloud client status submitted successfully!',
-          );
-        }
-      },
-      (error) => {
-        let erroeMsg = error.status === 500 ? error.error.detail : error.error;
-        this.handleGCloudMessage('error', erroeMsg);
-      },
-    );
   }
 }

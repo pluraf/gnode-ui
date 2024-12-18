@@ -15,5 +15,8 @@ export interface Settings {
   };
   network_settings: any;
   authentication: boolean;
-  gcloud: boolean;
+  gcloud: {
+    https: number | null;
+    ssh: number | null;
+  };
 }

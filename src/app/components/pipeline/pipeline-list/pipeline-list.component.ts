@@ -88,7 +88,6 @@ export class PipelineListComponent implements OnInit {
   loadPipelines() {
     this.apiService.pipelineList().subscribe((pipelinesConfig) => {
       if (pipelinesConfig && Object.keys(pipelinesConfig).length > 0) {
-        console.log(this.pipelines);
         this.apiService.pipelineStatusList().subscribe((pipelinesStatus) => {
           if (pipelinesStatus && Object.keys(pipelinesStatus).length > 0) {
             this.pipelines = Object.entries(pipelinesConfig).map((entry: any) => ({
