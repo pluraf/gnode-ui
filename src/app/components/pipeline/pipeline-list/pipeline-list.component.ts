@@ -90,13 +90,15 @@ export class PipelineListComponent implements OnInit {
       if (pipelinesConfig && Object.keys(pipelinesConfig).length > 0) {
         this.apiService.pipelineStatusList().subscribe((pipelinesStatus) => {
           if (pipelinesStatus && Object.keys(pipelinesStatus).length > 0) {
-            this.pipelines = Object.entries(pipelinesConfig).map((entry: any) => ({
-              id: entry[0],
-              connector_in: entry[1].connector_in.type,
-              connector_out: entry[1].connector_out.type,
-              status: pipelinesStatus[entry[0]].status,
-              error: '',
-            }));
+            this.pipelines = Object.entries(pipelinesConfig).map(
+              (entry: any) => ({
+                id: entry[0],
+                connector_in: entry[1].connector_in.type,
+                connector_out: entry[1].connector_out.type,
+                status: pipelinesStatus[entry[0]].status,
+                error: '',
+              }),
+            );
           }
         });
       } else {
@@ -129,11 +131,6 @@ export class PipelineListComponent implements OnInit {
 
     forkJoin(observables).subscribe({
       next: (response: any) => {
-        this.visibleDialog = false;
-        this.selectedPipelines = [];
-        this.loadPipelines();
-      },
-      error: (response: any) => {
         this.visibleDialog = false;
         this.selectedPipelines = [];
         this.loadPipelines();

@@ -12,7 +12,6 @@ import { NoteService } from '../../../services/note.service';
 import { ApiService } from '../../../services/api.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 
-
 @Component({
   selector: 'app-pipeline-edit',
   standalone: true,
@@ -25,14 +24,13 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
     RouterModule,
     ToastModule,
   ],
-  providers: [ MessageService, NoteService ],
+  providers: [MessageService, NoteService],
   templateUrl: './pipeline-edit.component.html',
   styleUrl: './pipeline-edit.component.css',
 })
 export class PipelineEditComponent {
   apiService = inject(ApiService);
   route: ActivatedRoute = inject(ActivatedRoute);
-  router = inject(Router);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
 
@@ -50,12 +48,17 @@ export class PipelineEditComponent {
     this.apiService.pipelineEdit(this.pipeid, this.pipelineJson).subscribe(
       () => {
         this.noteService.handleMessage(
-          this.messageService, 'success', 'Pipeline edited successfully!');
+          this.messageService,
+          'success',
+          'Pipeline edited successfully!',
+        );
       },
       (error) => {
         const errorMessage = error?.error.split('\n').pop();
         this.noteService.handleMessage(
-          this.messageService, 'error', errorMessage
+          this.messageService,
+          'error',
+          errorMessage,
         );
       },
     );
