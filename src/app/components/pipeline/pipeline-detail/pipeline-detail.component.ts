@@ -27,13 +27,12 @@ import { DeleteComponent } from '../../shared/delete/delete.component';
   styleUrl: './pipeline-detail.component.css',
 })
 export class PipelineDetailComponent {
-  [x: string]: any;
   apiService = inject(ApiService);
   route = inject(ActivatedRoute);
   router = inject(Router);
 
   pipeid: string = '';
-  pipelines: any;
+  pipelines: any = {};
   details: any;
   visibleDialog: boolean = false;
   menubarItems: MenuItem[] = [];
@@ -72,15 +71,20 @@ export class PipelineDetailComponent {
   loadPipelineDetails(pipeid: string) {
     this.apiService.pipelineGet(pipeid).subscribe((response: any) => {
       if (response) {
-        this.pipelines = response;
+        this.pipelines = response || {};
         this.updatePipelineStatus();
       }
     });
   }
 
   updatePipelineStatus() {
+    if (!this.pipelines) {
+      console.error('Pipelines not initialized.');
+      return;
+    }
     this.apiService.pipelineStatusGet(this.pipeid).subscribe({
       next: (statusResponse) => {
+        this.pipelines = this.pipelines || {};
         this.pipelines.status = statusResponse.status;
         this.pipelines.count_in = statusResponse.count_in;
         this.pipelines.last_in = statusResponse.last_in;
