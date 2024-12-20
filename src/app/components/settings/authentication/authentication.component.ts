@@ -40,14 +40,14 @@ export class AuthenticationComponent {
   constructor() {
     effect(() => {
       this.settings.isAuthentication =
-        this.settingsService.settingsdata().authentication;
+        this.settingsService.settingsdata().api_authentication;
     });
   }
 
   onSubmit() {
     if (
       this.settings.isAuthentication ==
-      this.settingsService.settingsdata().authentication
+      this.settingsService.settingsdata().api_authentication
     ) {
       return;
     }

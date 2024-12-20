@@ -18,7 +18,7 @@ export class SettingsService {
       auto: false
     },
     network_settings: undefined,
-    authentication: false,
+    api_authentication: false,
     gcloud: {
       https: null,
       ssh: null,

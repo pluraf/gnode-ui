@@ -14,7 +14,7 @@ export interface Settings {
     auto: boolean;
   };
   network_settings: any;
-  authentication: boolean;
+  api_authentication: boolean;
   gcloud: {
     https: number | null;
     ssh: number | null;
