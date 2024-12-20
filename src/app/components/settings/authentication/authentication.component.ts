@@ -53,7 +53,7 @@ export class AuthenticationComponent {
     }
 
     const payload = {
-      authentication: this.settings.isAuthentication,
+      api_authentication: this.settings.isAuthentication,
     };
 
     this.apiService.updateSettings(payload).subscribe({
