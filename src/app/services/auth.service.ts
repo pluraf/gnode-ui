@@ -53,10 +53,8 @@ export class AuthService {
     return this.token;
   }
 
-
   isLoggedIn(): boolean {
-    const { isValid } = this.isTokenValid();
-    return isValid;
+    return this.isTokenValid();
   }
 
   getLoggedinUser() {
@@ -77,19 +75,14 @@ export class AuthService {
     }, expirationDuration);
   }
 
-  isTokenValid(): { isValid: boolean; expiry: number } {
-    if (!this.token) return { isValid: false, expiry: 0 };
+  isTokenValid(): boolean {
+    if (!this.token) return false;
     try {
-      if (this.token) {
         const payload = JSON.parse(atob(this.token.split('.')[1]));
-        if (payload.exp) {
-          const expiry = payload.exp * 1000;
-          return { isValid: Date.now() < expiry, expiry };
-        }
-      }
+        return true;
     } catch (error) {
       console.error('Invalid token', error);
+      return false;
     }
-    return { isValid: false, expiry: 0 };
   }
 }
