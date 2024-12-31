@@ -7,9 +7,6 @@ import { catchError, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 
-let requestCount = 0;
-
-
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.getToken();
@@ -22,10 +19,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     });
     return next(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
-        requestCount++;
-        if (error.status === 401 && requestCount < 2) {
-          // Commented on purpose
-          //authService.logout();
+        if (error.status === 401) {
+          authService.logout();
         }
         return throwError(() => error);
       }),
