@@ -58,11 +58,13 @@ export class AuthbundleDetailComponent {
       if (response) {
         this.authbundle = response;
         this.details = [
-          ['Type', this.authbundle.connector_type],
-          ['Authentication type', this.authbundle.auth_type],
-          ['Username', this.authbundle.username],
-          ['Description', this.authbundle.description],
+          ['Type', this.authbundle.auth_type],
+          ['Authentication type', this.authbundle.service_type],
         ];
+        if (this.authbundle.username !== null) {
+          this.details.push(['Username', this.authbundle.username]);
+        }
+        this.details.push(['Description', this.authbundle.description]);
       }
     });
   }

@@ -96,6 +96,8 @@ export class AuthbundleCreateComponent {
   getPasswordLabel(): string {
     if (this.selServiceType == ConnectorType.AWS) {
       return 'Secret access key';
+    } else if (this.selServiceType == ConnectorType.SLACK) {
+      return 'Webhook URL';
     }
     return 'Password';
   }
@@ -103,7 +105,8 @@ export class AuthbundleCreateComponent {
   showPassword(): boolean {
     return (
       this.selAuthOption === AuthType.PASSWORD ||
-      this.selAuthOption == AuthType.ACCESS_KEY
+      this.selAuthOption == AuthType.ACCESS_KEY ||
+      this.selAuthOption == AuthType.WEBHOOK
     );
   }
 
@@ -112,6 +115,7 @@ export class AuthbundleCreateComponent {
     this.ConnectorTypes[ConnectorType.AWS] = ConnectorTypeLabel.AWS;
     this.ConnectorTypes[ConnectorType.MQTT50] = ConnectorTypeLabel.MQTT50;
     this.ConnectorTypes[ConnectorType.MQTT311] = ConnectorTypeLabel.MQTT311;
+    this.ConnectorTypes[ConnectorType.SLACK] = ConnectorTypeLabel.SLACK;
 
     this.selServiceType = ConnectorType.GCP;
     this.onChangeConnectorType(this.selServiceType);
@@ -163,6 +167,9 @@ export class AuthbundleCreateComponent {
       this.authOptions[AuthType.JWT_ES256] = AuthTypeLabel.JWT_ES256;
       this.authOptions[AuthType.PASSWORD] = AuthTypeLabel.PASSWORD;
       this.selAuthOption = AuthType.JWT_ES256;
+    } else if (event == ConnectorType.SLACK) {
+      this.authOptions[AuthType.WEBHOOK] = AuthTypeLabel.WEBHOOK;
+      this.selAuthOption = AuthType.WEBHOOK;
     }
     this.cleanIrrelevantInputs();
   }
