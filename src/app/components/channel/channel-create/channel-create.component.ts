@@ -76,7 +76,7 @@ export class ChannelCreateComponent implements OnInit {
 
     const payload: Partial<ChannelData> = {
       authtype: this.authtype,
-      password: this.password,
+      secret: this.password,
       disabled: !this.enabled,
       username: this.username || undefined,
       clientid: this.clientid || undefined,

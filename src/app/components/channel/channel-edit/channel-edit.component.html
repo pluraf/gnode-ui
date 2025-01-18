@@ -25,7 +25,7 @@
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" [(ngModel)]="password" class="input_field border-1 border-round"/>
                 </div>
-                <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'jwt'">
+                <div class="p-field flex flex-column gap-1" *ngIf="selectedOption.startsWith('jwt')">
                       <label for="key">JWT Key</label>
                       <textarea [(ngModel)]="jwtKey" id="key" aria-invalid="false" cols="62" rows="6" class="pubKeyFormat"></textarea>
                 </div>

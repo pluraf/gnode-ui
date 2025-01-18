@@ -19,7 +19,7 @@ export interface ChannelData {
   roles: string[];
   username: string;
   clientid?: string;
-  password?: string;
+  secret?: string;
 }
 
 export interface CommandResponse {

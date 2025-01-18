@@ -14,6 +14,7 @@ import { MessageService } from 'primeng/api';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
+import { AuthType, AuthTypeLabel } from '../../authbundle/authbundle';
 
 
 @Component({
@@ -54,11 +55,11 @@ export class ChannelEditComponent implements OnInit {
 
   dataLoaded = false;
 
-  selectedOption: string = 'jwt';
+  selectedOption: string = AuthType.JWT_ES256;
 
   authOptions = [
-    { value: 'jwt', label: 'JWT_ES256' },
-    { value: 'password', label: 'Username & Password' },
+    { value: AuthType.JWT_ES256, label: AuthTypeLabel.JWT_ES256 },
+    { value: AuthType.PASSWORD, label: AuthTypeLabel.PASSWORD },
   ];
 
   ngOnInit() {
@@ -72,11 +73,10 @@ export class ChannelEditComponent implements OnInit {
           this.clientid = channel.clientid;
           this.username = channel.username;
           this.password = '';
-          this.selectedOption =
-            channel.authtype.toLowerCase() === 'jwt_es256' ? 'jwt' : 'password';
+          this.selectedOption = channel.authtype.toLowerCase();
 
-          if (this.selectedOption === 'jwt' && channel.jwtkey) {
-            this.jwtKey = channel.jwtkey.replace(/(.{64})/g, '$1\n');
+          if (this.selectedOption === AuthType.JWT_ES256) {
+            this.jwtKey = channel.jwtkey;  // .replace(/(.{64})/g, '$1\n');
           }
           this.enabled = !channel.disabled;
         });
@@ -84,23 +84,23 @@ export class ChannelEditComponent implements OnInit {
   }
 
   onUpdate() {
-    const selectedOptionObj = this.authOptions.find(
-      (option) => option.value === this.selectedOption,
-    );
-    this.authtype = selectedOptionObj ? selectedOptionObj.value : '';
+    this.authtype = this.selectedOption;
+    console.log(this.selectedOption);
 
     const updateData: any = {
       chanid: this.chanid,
       authtype: this.authtype,
       clientid: this.clientid || undefined,
       username: this.username || undefined,
-      password: this.selectedOption === 'password' && this.password ? this.password : undefined,
-      jwtkey:
-        this.selectedOption === 'jwt' && this.jwtKey
-          ? this.jwtKey.replace(/\n/g, '')
-          : undefined,
+      secret: undefined,
       disabled: !this.enabled,
     };
+    if (this.selectedOption === AuthType.PASSWORD) {
+      updateData["secret"] = this.password;
+    } else if (this.selectedOption === AuthType.JWT_ES256) {
+      updateData["secret"] = this.jwtKey;
+    }
+
     this.apiService.channelUpdate(this.chanid, updateData).subscribe({
       next: (response) => {
         this.noteService.handleMessage(
