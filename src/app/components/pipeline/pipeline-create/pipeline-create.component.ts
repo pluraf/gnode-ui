@@ -58,27 +58,19 @@ export class PipelineCreateComponent implements OnInit {
     } catch (error) {
       pipelineData = this.pipelineJson;
     }
-    this.apiService.pipelineCreate(this.pipeid, pipelineData).subscribe(
-      () => {
+    this.apiService.pipelineCreate(this.pipeid, pipelineData).subscribe({
+      next: (response) => {
         this.noteService.handleMessage(
           this.messageService, 'success', 'Pipeline edited successfully!'
         );
       },
-      (error) => {
-        const errorMessage =
-          error?.message ||
-          (typeof error?.error === 'string' && error.error) ||
-          (error?.status &&
-            error?.statusText &&
-            `${error.status}: ${error.statusText}`) ||
-          (error?.status && `Error Code: ${error.status}`) ||
-          'An unknown error occurred';
-
+      error: (response) => {
+        console.log(response);
         this.noteService.handleMessage(
-          this.messageService, 'error', errorMessage
+          this.messageService, 'error', response.error
         );
       },
-    );
+    });
   }
 
   onGenerateConfig() {
