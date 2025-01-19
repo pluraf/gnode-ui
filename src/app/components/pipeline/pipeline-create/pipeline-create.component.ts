@@ -61,7 +61,7 @@ export class PipelineCreateComponent implements OnInit {
     this.apiService.pipelineCreate(this.pipeid, pipelineData).subscribe({
       next: (response) => {
         this.noteService.handleMessage(
-          this.messageService, 'success', 'Pipeline edited successfully!'
+          this.messageService, 'success', 'Pipeline created successfully!'
         );
       },
       error: (response) => {
