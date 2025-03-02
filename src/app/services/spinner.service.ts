@@ -15,7 +15,6 @@ export class SpinnerService {
   }
 
   stop(){
-    console.log(Date.now() - this.startTimestamp);
     this.startTimestamp = 0;
     this.spinnerSignal.set(false);
   }

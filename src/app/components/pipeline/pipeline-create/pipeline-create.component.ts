@@ -65,7 +65,6 @@ export class PipelineCreateComponent implements OnInit {
         );
       },
       error: (response) => {
-        console.log(response);
         this.noteService.handleMessage(
           this.messageService, 'error', response.error
         );

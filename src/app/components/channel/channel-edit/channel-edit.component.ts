@@ -85,7 +85,6 @@ export class ChannelEditComponent implements OnInit {
 
   onUpdate() {
     this.authtype = this.selectedOption;
-    console.log(this.selectedOption);
 
     const updateData: any = {
       chanid: this.chanid,
