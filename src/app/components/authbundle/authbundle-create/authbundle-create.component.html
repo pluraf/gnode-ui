@@ -28,12 +28,12 @@
     </div>
     <div class="field col-12 mt-2">
       <div class="mb-2">
-        <label for="Connector-types">Service</label>
+        <label for="Connector-types">Service type</label>
       </div>
       <select
         id="Connector-types"
         [(ngModel)]="selServiceType"
-        (ngModelChange)="onChangeConnectorType($event)"
+        (ngModelChange)="onChangeConnectorType($event, keyFileInput)"
         class="text-color surface-overlay p-2 border-1 border-round w-12rem"
       >
         <option
@@ -51,7 +51,7 @@
       <select
         id="auth-options"
         [(ngModel)]="selAuthOption"
-        (ngModelChange)="onChangeAuthOption($event)"
+        (ngModelChange)="onChangeAuthOption($event, keyFileInput)"
         class="text-color surface-overlay p-2 border-1 border-round w-12rem"
       >
         <option *ngFor="let option of objectKeys(authOptions)" [value]="option">

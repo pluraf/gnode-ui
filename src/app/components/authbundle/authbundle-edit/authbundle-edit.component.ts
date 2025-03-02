@@ -9,7 +9,7 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { AuthType, AuthTypeLabel, ConnectorType } from '../authbundle';
+import { AuthType, AuthTypeLabel, ConnectorType, ConnectorTypeLabel, AuthbundleComponent } from '../authbundle';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
 
@@ -28,26 +28,11 @@ import { NoteService } from '../../../services/note.service';
   templateUrl: './authbundle-edit.component.html',
   styleUrl: './authbundle-edit.component.css',
 })
-export class AuthbundleEditComponent {
+export class AuthbundleEditComponent extends AuthbundleComponent {
   apiService = inject(ApiService);
   route = inject(ActivatedRoute);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
-
-  authbundleId = '';
-  username = '';
-  password = '';
-  description = '';
-  autoId = true;
-  usermessage: string = '';
-
-  authOptions: { [key: string]: string } = {};
-
-  ConnectorTypes: { [key: string]: string } = {};
-
-  selServiceType: any;
-  selAuthOption: string;
-  keyFile: File | null = null;
 
   @ViewChild('keyFile') keyFileInput!: ElementRef;
 
@@ -55,88 +40,20 @@ export class AuthbundleEditComponent {
     return Object.keys(obj);
   }
 
-  showUploadKey(): boolean {
-    return (
-      this.selServiceType == ConnectorType.GCP ||
-      this.selAuthOption == AuthType.JWT_ES256
-    );
-  }
-
-  showUsername(): boolean {
-    return (
-      this.selServiceType == ConnectorType.MQTT50 ||
-      this.selServiceType == ConnectorType.MQTT311
-    );
-  }
-
-  getUsernameMessage(): string {
-    if (this.selServiceType === ConnectorType.MQTT50) {
-      this.usermessage = 'Username can be empty for MQTT v5.0';
-    } else if (this.selServiceType === ConnectorType.MQTT311) {
-      this.usermessage = 'Username can be empty for MQTT v3.11';
-    }
-    return this.usermessage;
-  }
-
-  showPassword(): boolean {
-    return this.selAuthOption == AuthType.PASSWORD;
+  ngOnInit(){
+    this.route.paramMap.subscribe((params) => {
+      this.authbundleId = params.get('authbundleId') || '';
+      this.apiService.authbundleGet(this.authbundleId).subscribe((response: any) => {
+        this.selServiceType = response.service_type;
+        this.selAuthOption = response.auth_type;
+        this.description = response.description;
+        this.onChangeConnectorType(this.selServiceType, this.keyFileInput);
+      });
+    });
   }
 
   constructor() {
-    this.authbundleId = this.route.snapshot.params['authbundleId'];
-    this.selServiceType = ConnectorType.GCP;
-    this.selAuthOption = AuthType.SERVICE_KEY;
-
-    this.ConnectorTypes[ConnectorType.GCP] = 'Google Pubsub';
-    this.ConnectorTypes[ConnectorType.MQTT50] = 'MQTT v5.0';
-    this.ConnectorTypes[ConnectorType.MQTT311] = 'MQTT v3.11';
-
-    this.authOptions[AuthType.SERVICE_KEY] = AuthTypeLabel.SERVICE_KEY;
-  }
-  cleanIrrelevantInputs() {
-    if (this.selAuthOption == AuthType.PASSWORD) {
-      this.keyFile = null;
-      if (this.keyFileInput) {
-        this.keyFileInput.nativeElement.value = '';
-      }
-    } else if (
-      this.selAuthOption == AuthType.JWT_ES256 ||
-      this.selAuthOption == AuthType.SERVICE_KEY
-    ) {
-      this.password = '';
-    } else {
-      this.keyFile = null;
-      if (this.keyFileInput) {
-        this.keyFileInput.nativeElement.value = '';
-      }
-      this.username = '';
-      this.password = '';
-    }
-
-    if (this.selServiceType == ConnectorType.GCP) {
-      this.username = '';
-      this.password = '';
-    }
-  }
-
-  onChangeAuthOption(event: any) {
-    this.cleanIrrelevantInputs();
-  }
-
-  onChangeConnectorType(event: any) {
-    this.authOptions = {};
-    if (event === ConnectorType.GCP) {
-      this.authOptions[AuthType.SERVICE_KEY] = AuthTypeLabel.SERVICE_KEY;
-      this.selAuthOption = AuthType.SERVICE_KEY;
-    } else if (
-      event === ConnectorType.MQTT311 ||
-      event == ConnectorType.MQTT50
-    ) {
-      this.authOptions[AuthType.JWT_ES256] = AuthTypeLabel.JWT_ES256;
-      this.authOptions[AuthType.PASSWORD] = AuthTypeLabel.PASSWORD;
-      this.selAuthOption = AuthType.JWT_ES256;
-    }
-    this.cleanIrrelevantInputs();
+    super();
   }
 
   onChangeAutoId(event: any) {
@@ -149,7 +66,7 @@ export class AuthbundleEditComponent {
 
   onUpdate() {
     const formData = new FormData();
-    formData.append('connector_type', this.selServiceType);
+    formData.append('service_type', this.selServiceType);
     formData.append('auth_type', this.selAuthOption);
     if (!this.autoId) {
       formData.append('authbundle_id', this.authbundleId);
@@ -163,10 +80,8 @@ export class AuthbundleEditComponent {
     if (this.keyFile) {
       formData.append('keyfile', this.keyFile);
     }
-    if (this.description) {
-      formData.append('description', this.description);
-    }
-    this.apiService.editAuthbundle(this.authbundleId, formData).subscribe(
+    formData.append('description', this.description);
+    this.apiService.authbundleEdit(this.authbundleId, formData).subscribe(
       (response) => {
         if (
           response.responses &&

@@ -29,23 +29,23 @@ export class ApiService {
 
   /////////////////////////// Authbundles ///////////////////////////
 
-  listAuthbundles(): Observable<any> {
+  authbundleList(): Observable<any> {
     return this.http.get(this.authbundleUrl);
   }
 
-  deleteAuthbundle(authbundleId: string): Observable<any> {
+  authbundleDelete(authbundleId: string): Observable<any> {
     return this.http.delete(this.authbundleUrl + authbundleId, {observe: 'response'});
   }
 
-  getAuthbundles(authbundleId: string): Observable<any> {
+  authbundleGet(authbundleId: string): Observable<any> {
     return this.http.get(this.authbundleUrl + authbundleId);
   }
 
-  createAuthbundle(formData: object): Observable<any> {
+  authbundleCreate(formData: object): Observable<any> {
     return this.http.post(this.authbundleUrl, formData);
   }
 
-  editAuthbundle(authbundle_id: string, formData: FormData): Observable<any> {
+  authbundleEdit(authbundle_id: string, formData: FormData): Observable<any> {
     return this.http.put(this.authbundleUrl + authbundle_id, formData);
   }
 

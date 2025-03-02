@@ -54,7 +54,7 @@ export class AuthbundleDetailComponent {
   }
 
   loadAuthbundleDetails(authbundleId: string) {
-    this.apiService.getAuthbundles(authbundleId).subscribe((response: any) => {
+    this.apiService.authbundleGet(authbundleId).subscribe((response: any) => {
       if (response) {
         this.authbundle = response;
         this.details = [
@@ -74,7 +74,7 @@ export class AuthbundleDetailComponent {
   }
 
   onDeleteAuthbundle() {
-    this.apiService.deleteAuthbundle(this.authbundleId).subscribe({
+    this.apiService.authbundleDelete(this.authbundleId).subscribe({
       next: (response: any) => {
         if (response.success || response.status === 'success') {
           this.details = [];

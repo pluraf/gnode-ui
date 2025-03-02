@@ -84,7 +84,7 @@ export class AuthbundleListComponent implements OnInit {
   }
 
   loadAuthbundles() {
-    this.apiService.listAuthbundles().subscribe((resp) => {
+    this.apiService.authbundleList().subscribe((resp) => {
       if (resp.length === 0) {
         this.showMessage = !this.showMessage;
       } else {
@@ -110,7 +110,7 @@ export class AuthbundleListComponent implements OnInit {
     this.selectedAuthbundle.map((authbundle) => {
       observables.push(
         this.apiService
-          .deleteAuthbundle(authbundle.authbundle_id)
+          .authbundleDelete(authbundle.authbundle_id)
           .pipe(catchError((err) => of(true))),
       );
     });
