@@ -17,6 +17,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitterModule } from 'primeng/splitter';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
@@ -25,6 +26,7 @@ import { faBan } from '@fortawesome/free-solid-svg-icons';
 import { HeaderComponent } from './components/header/header.component';
 import { InfoService } from './services/info.service';
 import { AuthService } from './services/auth.service';
+import { SpinnerService } from './services/spinner.service';
 
 
 @Component({
@@ -37,6 +39,7 @@ import { AuthService } from './services/auth.service';
     SplitterModule,
     DividerModule,
     SidebarModule,
+    ProgressSpinnerModule,
     FontAwesomeModule,
   ],
   templateUrl: './app.component.html',
@@ -48,6 +51,7 @@ export class AppComponent implements OnInit {
   http = inject(HttpClient);
   authService = inject(AuthService);
   infoService = inject(InfoService);
+  spinnerService = inject(SpinnerService);
   faLibrary = inject(FaIconLibrary);
 
   margin_left: string;

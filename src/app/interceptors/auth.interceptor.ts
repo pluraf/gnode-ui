@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
-import { HttpInterceptorFn, HttpEventType } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 import { HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
 
@@ -23,7 +23,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           authService.logout();
         }
         return throwError(() => error);
-      }),
+      })
     );
   } else {
     return next(req);

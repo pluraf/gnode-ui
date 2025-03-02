@@ -1,8 +1,7 @@
-import { Injectable, signal, Signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
 import { Settings } from './service';
 import { ApiService } from './api.service';
-import { InfoService } from './info.service';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -26,9 +25,7 @@ export class SettingsService {
   });
 
   constructor(private apiService: ApiService, private authService: AuthService) {
-    if (authService.isLoggedIn()) {
-      this.load();
-    }
+    this.load()
   }
 
   load(callback?: () => void) {

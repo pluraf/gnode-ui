@@ -124,7 +124,7 @@ export class ChannelDetailComponent {
       this.connDetails.push([
         'G-Cloud Host',
         `${gnode_hostname}.iotplan.io`,
-        settings.gcloud ? 'Enabled' : 'Disabled',
+        settings.gcloud.https || settings.gcloud.ssh ? 'Enabled' : 'Disabled',
       ]);
     });
   }

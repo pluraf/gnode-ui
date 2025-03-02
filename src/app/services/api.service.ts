@@ -34,7 +34,7 @@ export class ApiService {
   }
 
   deleteAuthbundle(authbundleId: string): Observable<any> {
-    return this.http.delete(this.authbundleUrl + authbundleId);
+    return this.http.delete(this.authbundleUrl + authbundleId, {observe: 'response'});
   }
 
   getAuthbundles(authbundleId: string): Observable<any> {
@@ -78,7 +78,7 @@ export class ApiService {
   }
 
   channelDelete(chanid: string): Observable<any> {
-    return this.http.delete(this.channelUrl + chanid);
+    return this.http.delete(this.channelUrl + chanid, {observe: 'response'});
   }
 
   /////////////////////////// Pipelines ///////////////////////////
@@ -100,7 +100,7 @@ export class ApiService {
   }
 
   pipelineDelete(pipeid: string): Observable<any> {
-    return this.http.delete(this.pipelineConfigUrl + pipeid);
+    return this.http.delete(this.pipelineConfigUrl + pipeid, {observe: 'response'});
   }
 
   pipelineStatusGet(pipeid: string): Observable<any> {
@@ -175,7 +175,7 @@ export class ApiService {
   }
 
   deleteUser(userId: string): Observable<any> {
-    return this.http.delete('api/user/' + userId);
+    return this.http.delete('api/user/' + userId, {observe: 'response'});
   }
 
   createUser(userObj: any): Observable<any> {

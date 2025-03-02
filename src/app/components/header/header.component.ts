@@ -9,7 +9,6 @@ import { DateTime } from 'luxon';
 import { DatetimeService } from '../../services/datetime.service';
 import { InfoService } from '../../services/info.service';
 import { AuthService } from '../../services/auth.service';
-import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-header',
@@ -32,7 +31,6 @@ export class HeaderComponent implements OnInit {
   datetimeService = inject(DatetimeService);
   router = inject(Router);
   authService = inject(AuthService);
-  settingsService = inject(SettingsService);
 
   isAuthentication: boolean = true;
 
@@ -68,7 +66,7 @@ export class HeaderComponent implements OnInit {
     const dateTime = this.datetimeService.timeSettingSignal();
     if (dateTime.getFullYear() !== 1970) {
       return DateTime.fromJSDate(
-        dateTime, {zone: this.settingsService.settingsdata().time.timezone}
+        dateTime, {zone: this.datetimeService.timezone}
       )
       .toFormat('yyyy-MM-dd HH:mm');
     }

@@ -6,14 +6,8 @@
   <div class="text-center">
 No channels are available. To create one, click the plus sign in the top-right corner or use the <a routerLink="/channels/channel-create" class="text-green-700">Create Channel</a> link.</div>
 </div>
-<div *ngIf="showLoading" class="loading-container flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
-  <div class="text-center">
-    <p-progressSpinner styleClass="w-3rem h-3rem" strokeWidth="6" fill="var(--surface-ground)" animationDuration="1s"></p-progressSpinner>
-    <p>Loading...</p>
-  </div>
-</div>
 
-<div *ngIf="!showMessage && !showLoading" class="main-content-body">
+<div class="main-content-body">
   <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
 
   <!-- Display the table after data is loaded -->

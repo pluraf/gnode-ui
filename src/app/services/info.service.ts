@@ -16,6 +16,7 @@ export class InfoService {
     version: '',
     serial_number: '',
     anonymous: null,
+    time: null
   });
 
   private http: HttpClient;
@@ -40,7 +41,8 @@ export class InfoService {
               mode: response.mode,
               serial_number: response.serial_number,
               version: response.version,
-              anonymous: v.anonymous
+              anonymous: v.anonymous,
+              time: response.time
             }
           });
         }),
@@ -58,10 +60,10 @@ export class InfoService {
           mode: v.mode,
           serial_number: v.serial_number,
           version: v.version,
-          anonymous: true
+          anonymous: true,
+          time: v.time
         }
       });
-      //this.loadInfo();
     } else if (resp.status == 405) {
       this.infoData.update((v) => {v.anonymous = false; return v;});
     }
@@ -91,6 +93,7 @@ export class InfoService {
       version: '',
       serial_number: '',
       anonymous: null,
+      time: null
     });
   }
 }

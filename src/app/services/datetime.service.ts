@@ -6,7 +6,6 @@ import {
   OnDestroy,
   signal,
 } from '@angular/core';
-import { SettingsService } from './settings.service';
 import { InfoService } from './info.service';
 
 
@@ -14,16 +13,17 @@ import { InfoService } from './info.service';
   providedIn: 'root',
 })
 export class DatetimeService implements OnDestroy {
-  settingsService = inject(SettingsService);
-  apiInfoService = inject(InfoService);
+  infoService = inject(InfoService);
 
   timer: any;
   timeSettingSignal = signal<Date>(new Date(0));
+  timezone = '';
 
   constructor() {
     effect(
       () => {
-        const timeData = this.settingsService.settingsdata().time;
+        const timeData = this.infoService.infoData().time;
+        this.timezone = timeData.timezone;
         if (timeData.iso8601) {
           this.timeSettingSignal.set(new Date(timeData.iso8601));
         }

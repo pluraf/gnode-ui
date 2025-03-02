@@ -20,7 +20,7 @@ import { Channel } from '../channel';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
-import { SettingsService } from '../../../services/settings.service';
+import { DatetimeService } from '../../../services/datetime.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
 
 @Component({
@@ -52,7 +52,6 @@ export class ChannelListComponent {
   showMessage: boolean = false;
   totalRecords!: number;
   chanid: string = '';
-  showLoading: boolean = false;
 
   menubarItems: MenuItem[] = [
     {
@@ -80,7 +79,7 @@ export class ChannelListComponent {
   apiService = inject(ApiService);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
-  settingsService = inject(SettingsService);
+  datetimeService = inject(DatetimeService);
 
   constructor() {}
 
@@ -89,10 +88,8 @@ export class ChannelListComponent {
   }
 
   loadChannels() {
-    this.showLoading = true;
     this.apiService.channelList().subscribe({
       next: (response: any) => {
-        this.showLoading = false;
         const clientResponse = response;
         const channels = clientResponse;
         this.channelList = channels.map((channel: any) => {
@@ -101,7 +98,7 @@ export class ChannelListComponent {
             obj.lastseen = 'never';
           } else {
             obj.lastseen = DateTime.fromJSDate(new Date(channel.msg_received), {
-              zone: this.settingsService.settingsdata().time.timezone,
+              zone: this.datetimeService.timezone,
             }).toFormat('yyyy-MM-dd HH:mm');
           }
           obj.id = channel.chanid;

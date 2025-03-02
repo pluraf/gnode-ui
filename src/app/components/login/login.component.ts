@@ -13,7 +13,6 @@ import { ToastModule } from 'primeng/toast';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { InfoService } from '../../services/info.service';
-import { SettingsService } from '../../services/settings.service';
 import { NoteService } from '../../services/note.service';
 import { EncryptionService } from '../../services/encryption.service';
 
@@ -43,7 +42,6 @@ export class LoginComponent {
   router = inject(Router);
   authService = inject(AuthService);
   infoService = inject(InfoService);
-  settingsService = inject(SettingsService);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
   apiService = inject(ApiService);
@@ -102,7 +100,6 @@ export class LoginComponent {
           if (res.access_token) {
             this.authService.storeToken(res.access_token);
             this.router.navigate([this.from]);
-            this.settingsService.load();
           } else {
             this.noteService.handleMessage(
               this.messageService,

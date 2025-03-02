@@ -3,6 +3,7 @@ export interface ApiInfo {
   version: string;
   serial_number: string;
   anonymous: boolean | null;
+  time: any;
 }
 
 export interface Settings {
