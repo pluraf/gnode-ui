@@ -1,6 +1,7 @@
 export interface Channel {
   id: string;
-  communication: string;
+  type: string;
+  state: string;
   lastseen?: string;
   isLoading?: boolean;
 }

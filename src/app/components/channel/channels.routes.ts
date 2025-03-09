@@ -4,6 +4,7 @@ import { ChannelCreateComponent } from './channel-create/channel-create.componen
 import { ChannelDetailComponent } from './channel-detail/channel-detail.component';
 import { ChannelEditComponent } from './channel-edit/channel-edit.component';
 
+
 export const CHANNELS_ROUTES: Routes = [
   {
     path: '',

@@ -71,23 +71,7 @@ export class ChannelDetailComponent {
 
     this.apiService.channelGet(this.chanid).subscribe((response: any) => {
       this.channel = response;
-      const timestamp = this.channel.msg_timestamp;
-      let recivedTimestamp = '-';
-      if (timestamp != 0) {
-        const iso8601 = new Date(timestamp * 1000);
-        recivedTimestamp = iso8601
-          .toString()
-          .slice(0, iso8601.toString().indexOf('GMT'));
-      }
-
-      this.details = [
-        ['State', this.channel.disabled ? 'Disabled' : 'Enabled'],
-        ['Authentication type', this.channel.authtype],
-        ['Username', this.channel.username],
-        ['MQTT Client ID', this.channel.clientid],
-        ['Messages received', this.channel.msg_received],
-        ['Last message timestamp', recivedTimestamp],
-      ];
+      this.details = this.getDetails(this.channel);
     });
 
     effect(() => {
@@ -127,6 +111,27 @@ export class ChannelDetailComponent {
         settings.gcloud.https || settings.gcloud.ssh ? 'Enabled' : 'Disabled',
       ]);
     });
+  }
+
+  getDetails(channel: any): any {
+    const timestamp = this.channel.msg_timestamp;
+    let recivedTimestamp = '-';
+    if (timestamp != 0) {
+      const iso8601 = new Date(timestamp * 1000);
+      recivedTimestamp = iso8601
+        .toString()
+        .slice(0, iso8601.toString().indexOf('GMT'));
+    }
+    if (channel.type == "mqtt") {
+      return [
+        ['State', this.channel.disabled ? 'Disabled' : 'Enabled'],
+        ['Authentication type', this.channel.authtype],
+        ['Username', this.channel.username],
+        ['MQTT Client ID', this.channel.clientid],
+        ['Messages received', this.channel.msg_received],
+        ['Last message timestamp', recivedTimestamp],
+      ];
+    }
   }
 
   showDialog() {

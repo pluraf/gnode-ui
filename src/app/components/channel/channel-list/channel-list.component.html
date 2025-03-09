@@ -17,6 +17,7 @@ No channels are available. To create one, click the plus sign in the top-right c
       <tr>
         <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
         <th>Channel ID</th>
+        <th>Type</th>
         <th>Last Seen</th>
         <th>State</th>
       </tr>
@@ -25,13 +26,14 @@ No channels are available. To create one, click the plus sign in the top-right c
       <tr>
         <td><p-tableCheckbox name="checkbox" [value]="channel" /></td>
         <td><a routerLink="/channels/channel/{{channel.id}}">{{ channel.id }}</a></td>
+        <td>{{ channel.type }}</td>
         <td>{{ channel.lastseen }}</td>
         <td>
-          <ng-container *ngIf="channel.communication">
+          <ng-container *ngIf="channel.state == 'ENABLED'">
             <fa-icon [icon]="['far', 'comment']"></fa-icon>
             <i class="fab fa-github" style="font-size: 24px;"></i>
           </ng-container>
-          <ng-container *ngIf="!channel.communication">
+          <ng-container *ngIf="!(channel.state == 'ENABLED')">
             <fa-icon [icon]="['fas', 'ban']"></fa-icon>
           </ng-container>
         </td>
