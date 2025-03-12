@@ -71,7 +71,7 @@ export class ChannelDetailComponent {
 
     this.apiService.channelGet(this.chanid).subscribe((response: any) => {
       this.channel = response;
-      this.details = this.getDetails(this.channel);
+      this.details = this.getDetails();
     });
 
     effect(() => {
@@ -79,31 +79,7 @@ export class ChannelDetailComponent {
       const settings = this.settingsService.settingsdata();
       const network_settings = settings.network_settings;
 
-      this.connDetails = [
-        ['TCP Port', '1883', 'No encryption'],
-        ['TLS TCP Port', '8883', 'Encrypted'],
-        ['Host name', `${gnode_hostname}.local`, 'Local Network'],
-      ];
-
-      if (network_settings) {
-        for (const conn of network_settings.active_connections) {
-          if (conn.type == 'wifi') {
-            this.connDetails.push([
-              'Host IP',
-              conn.ipv4_settings.address,
-              'WiFi',
-            ]);
-            this.exampleHost = conn.ipv4_settings.address;
-          } else if (conn.type == 'ethernet') {
-            this.connDetails.push([
-              'Host IP',
-              conn.ipv4_settings.address,
-              'Ethernet',
-            ]);
-            this.exampleHost = conn.ipv4_settings.address;
-          }
-        }
-      }
+      this.connDetails = this.getConnDetails(gnode_hostname, network_settings);
 
       this.connDetails.push([
         'G-Cloud Host',
@@ -113,25 +89,67 @@ export class ChannelDetailComponent {
     });
   }
 
-  getDetails(channel: any): any {
-    const timestamp = this.channel.msg_timestamp;
+  getDetails(): any {
     let recivedTimestamp = '-';
-    if (timestamp != 0) {
-      const iso8601 = new Date(timestamp * 1000);
+    if (this.channel.msg_timestamp != 0) {
+      const iso8601 = new Date(this.channel.msg_timestamp * 1000);
       recivedTimestamp = iso8601
         .toString()
         .slice(0, iso8601.toString().indexOf('GMT'));
     }
-    if (channel.type == "mqtt") {
-      return [
-        ['State', this.channel.disabled ? 'Disabled' : 'Enabled'],
-        ['Authentication type', this.channel.authtype],
-        ['Username', this.channel.username],
-        ['MQTT Client ID', this.channel.clientid],
-        ['Messages received', this.channel.msg_received],
-        ['Last message timestamp', recivedTimestamp],
-      ];
+    let details: string[][] = [
+      ['State', this.channel.state],
+      ['Type', this.channel.type],
+      ['Authentication type', this.channel.authtype],
+    ];
+    if (this.channel.type == "mqtt") {
+      details.push(['Username', this.channel.username]);
+      details.push(['MQTT Client ID', this.channel.clientid]);
+      details.push(['Messages received', this.channel.msg_received]);
+      details.push(['Last message timestamp', recivedTimestamp]);
+    } else if (this.channel.type == "http") {
+      details.push(['Path', this.channel.path]);
+      details.push(['Messages received', this.channel.msg_received]);
+      details.push(['Last message timestamp', recivedTimestamp]);
     }
+    return details;
+  }
+
+  getConnDetails(gnode_hostname: any, network_settings: any): string[][] {
+    let details: string[][] = [];
+    if (this.channel.type == "mqtt") {
+      details.push(
+          ['TCP Port', '1883', 'No encryption'],
+          ['TLS TCP Port', '8883', 'Encrypted'],
+      );
+    } else if (this.channel.type == "http") {
+      details.push(
+          ['HTTP Port', '80', 'No encryption'],
+          ['HTTPS Port', '443', 'Encrypted']
+      );
+    }
+
+    details.push(['Host name', `${gnode_hostname}.local`, 'Local Network']);
+    if (network_settings) {
+      for (const conn of network_settings.active_connections) {
+        if (conn.type == 'wifi') {
+          this.connDetails.push([
+            'Host IP',
+            conn.ipv4_settings.address,
+            'WiFi',
+          ]);
+          this.exampleHost = conn.ipv4_settings.address;
+        } else if (conn.type == 'ethernet') {
+          this.connDetails.push([
+            'Host IP',
+            conn.ipv4_settings.address,
+            'Ethernet',
+          ]);
+          this.exampleHost = conn.ipv4_settings.address;
+        }
+      }
+    }
+    return details;
   }
 
   showDialog() {

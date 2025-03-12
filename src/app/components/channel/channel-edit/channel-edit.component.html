@@ -1,44 +1,65 @@
  <app-subheader selectedMenuName="Edit channel" [backRoute]="'channels/channel/' + chanid"></app-subheader>
 
-<div *ngIf="dataLoaded" class="main-content-body">
+<div class="main-content-body">
   <p-toast position="top-right" [baseZIndex]="5000"/>
      <div class="p-grid">
-      <h4>Channel ID: {{ chanid }}</h4>
       <div class="p-fluid">
-              <div class="flex flex-column gap-1 mt-4">
-                  <label for="authOptions">Authentication type</label>
-                  <select [(ngModel)]="selectedOption" id="authOptions" class="border-1 border-round ">
-                      <option *ngFor="let option of authOptions" [value]="option.value">{{ option.label }}</option>
-                  </select>
-              </div>
-              <div class="mt-4">
-                  <div class="p-field flex flex-column gap-1">
-                      <label for="clientid">MQTT Client ID</label>
-                      <input  name="clientid" id="clientid" [(ngModel)]="clientid" class="input_field border-1 border-round"/>
-                  </div>
-                  <div class="p-field flex flex-column gap-1">
-                      <label for="username">Username</label>
-                      <input  name="username" id="username" [(ngModel)]="username" class="input_field border-1 border-round" />
-                  </div>
-              </div>
-                <div class="p-field flex flex-column gap-1" *ngIf="selectedOption === 'password'" >
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" [(ngModel)]="password" class="input_field border-1 border-round"/>
-                </div>
-                <div class="p-field flex flex-column gap-1" *ngIf="selectedOption.startsWith('jwt')">
-                      <label for="key">JWT Key</label>
-                      <textarea [(ngModel)]="jwtKey" id="key" aria-invalid="false" cols="62" rows="6" class="pubKeyFormat"></textarea>
-                </div>
-      </div>
         <div class="p-field">
-          <span><strong>Channel State</strong></span>
-          <div class="card flex mt-3 mb-6">
+          <div class="card mt-4">
             <div class="flex flex-column gap-1">
-              <p-inputSwitch [(ngModel)]="enabled" />
+              <label for="channelId">Channel ID</label>
+              <input type="text" pInputText id="channelId" name="chanid" [(ngModel)]="chanid" class="input_field" disabled/>
+              <small>Permanent identifier of the channel.</small>
+            </div>
+            <div class="flex flex-column gap-1 mt-4">
+              <label for="channelType">Type</label>
+              <input type="text" pInputText [(ngModel)]="selectedTypeOption" name="channelType" id="channelType" class="input_field " disabled/>
+            </div>
+            <div class="flex flex-column gap-1 mt-4">
+              <label for="authOptions">Authentication type</label>
+              <select [(ngModel)]="selectedAuthOption" (ngModelChange)="onChangeAuthenticationType($event)" id="authOptions" class="input_field border-1 border-round ">
+                  <option *ngFor="let option of authOptions" [value]="option.value">{{ option.label }}</option>
+              </select>
+            </div>
+            <div *ngIf="selectedTypeOption == 'mqtt'" class="p-field flex flex-column gap-1 mt-4">
+              <label for="clientid">MQTT Client ID</label>
+              <input type="text" pInputText name="clientid" id="clientid" [(ngModel)]="clientid" class="input_field"/>
+            </div>
+            <div *ngIf="selectedTypeOption == 'mqtt'" class="p-field flex flex-column gap-1">
+              <label for="username">Username</label>
+              <input type="text" pInputText [(ngModel)]="username" name="username" id="username" class="input_field "/>
+            </div>
+            <div *ngIf="selectedAuthOption === 'password'" class="p-field flex flex-column gap-1 mt-4">
+              <label for="password">{{ getPasswordLabel() }}</label>
+              <p-password [(ngModel)]="password" name="password" class="input_field pt-0 pl-0" [toggleMask]="true" [feedback]="false"/>
+              <small>Keep blank, if you do not want to change the existing password.</small>
+            </div>
+            <div *ngIf="selectedAuthOption === 'token'" class="p-field flex flex-column gap-1 mt-4">
+              <label for="token">Token</label>
+              <div class="flex flex-row">
+                <input type="text" pInputText name="token" id="token" [(ngModel)]="token" class="input_field" />
+                <button pButton (click)="onGenerateToken()" class="ml-4 pl-0 pr-0 w-6rem">Generate</button>
+              </div>
+            </div>
+            <div *ngIf="selectedTypeOption == 'http'" class="p-field flex flex-column gap-1 mt-4">
+              <label for="queue_name">Queue Name</label>
+              <input type="text" pInputText name="queue_name" id="queue_name" [(ngModel)]="queue_name" class="input_field"/>
+            </div>
+            <div *ngIf="selectedAuthOption === 'jwt_es256'" class="p-field flex flex-column gap-1">
+                <label for="key">JWT Key</label><textarea [(ngModel)]="password" id="key" aria-invalid="false" name="jwtKey" cols="62" rows="6" class="pubKeyFormat"></textarea>
             </div>
           </div>
         </div>
-        <button pButton (click)="onUpdate()">Update</button>
-      </div>
-
-  </div>
+        <div class="p-field">
+            <span><strong>Channel state</strong></span>
+            <div class="card flex mt-3 ">
+                <div class="flex flex-column gap-1">
+                    <p-inputSwitch [(ngModel)]="enabled" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2">
+      <button pButton (click)="onUpdate()">Update</button>
+    </div>
+</div>

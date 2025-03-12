@@ -12,7 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { ChannelData } from '../channel';
+import { ChannelComponent } from '../../channel/channel';
 import { NoteService } from '../../../services/note.service';
 import { ApiService } from '../../../services/api.service';
 
@@ -34,53 +34,25 @@ import { ApiService } from '../../../services/api.service';
   ],
   providers: [MessageService, NoteService],
   templateUrl: './channel-create.component.html',
-  styleUrl: './channel-create.component.css',
+  styleUrl: '../channel.css',
 })
-export class ChannelCreateComponent implements OnInit {
+export class ChannelCreateComponent extends ChannelComponent implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   apiService = inject(ApiService);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
 
-  value!: string;
-  communication: string = 'Allow';
-  chanid: string = '';
-  clientid: string = '';
-  username: string = '';
-  password: string = '';
-  authtype: string = '';
-  jwtKey: string = '';
-  enabled = true;
-  loading: boolean = false;
+  constructor(private router: Router) {
+    super();
+  }
 
-  selectedOption: string = 'jwt_es256';
-
-  authOptions = [
-    { value: 'jwt_es256', label: 'JWT_ES256' },
-    { value: 'password', label: 'Username & Password' },
-  ];
-
-  constructor(private router: Router) {}
-
-  ngOnInit() {}
-
-  onChangeAuthenticationType(event: any) {
-    this.password = '';
+  ngOnInit() {
+    this.selectedAuthOption = this.authOptions[0].value;
+    this.selectedTypeOption = this.channelTypes[0].value;
   }
 
   onSubmit() {
-    const selectedOptionObj = this.authOptions.find(
-      (option) => option.value === this.selectedOption,
-    );
-    this.authtype = selectedOptionObj ? selectedOptionObj.value : '';
-
-    const payload: Partial<ChannelData> = {
-      authtype: this.authtype,
-      secret: this.password,
-      disabled: !this.enabled,
-      username: this.username || undefined,
-      clientid: this.clientid || undefined,
-    };
+    let payload = this.getSubmitPayload();
 
     this.apiService.channelCreate(this.chanid, payload).subscribe({
        next: (response: any) => {
@@ -91,10 +63,11 @@ export class ChannelCreateComponent implements OnInit {
         );
        },
        error: (response: any) => {
+        console.log(response);
         this.noteService.handleMessage(
           this.messageService,
           'error',
-           response.error ?? response.statusText
+           response.error.detail ?? response.statusText
         );
       }
     });

@@ -4,7 +4,7 @@
 
 small {
   display: block;
-  margin-top: 0.5rem;
+  margin-top: 0.2rem;
   color: black;
 }
 
@@ -30,8 +30,10 @@ button {
 }
 
 .input_field {
-  padding: 10px;
-  width: 35em;
+
+  width: 30rem;
+  font-size: 1rem;
+  color: #4b5563;
 }
 
 select {
@@ -44,11 +46,13 @@ select {
 .pubKeyFormat {
   box-sizing: content-box;
   resize: both;
-  padding: 0.5rem;
-  margin: 0;
+  padding: 0em;
+  margin: 0em;
   overflow: hidden;
-  width: 40em;
-  height: 8em;
+  width: 30rem;
+  height: 15em;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
 }
 
 ::ng-deep .p-toast .p-toast-message {

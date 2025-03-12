@@ -12,15 +12,17 @@ export interface PageEvent {
 }
 
 export interface ChannelData {
-  authtype: string;
   chanid: string;
-  disabled: boolean;
+  type: string;
+  authtype: string;
+  enabled: boolean;
   msg_received: number;
   msg_timestamp: number;
   roles: string[];
   username: string;
-  clientid?: string;
-  secret?: string;
+  clientid: string;
+  secret: string;
+  queue_name: string;
 }
 
 export interface CommandResponse {
@@ -37,4 +39,88 @@ export interface Responses {
 export interface Details {
   key: string;
   value: string | boolean;
+}
+
+
+export class ChannelComponent {
+  communication: string = 'Allow';
+  chanid: string = '';
+  clientid: string = '';
+  username: string = '';
+  password: string = '';
+  authtype: string = '';
+  jwtKey: string = '';
+  token: string = '';
+  queue_name: string = '';
+  enabled = true;
+
+  selectedAuthOption: string = '';
+  selectedTypeOption: string = ''
+
+  authOptions = [
+    { value: 'jwt_es256', label: 'JWT_ES256' },
+    { value: 'password', label: 'Username & Password' },
+  ];
+
+  channelTypes = [
+    { value: 'mqtt', label: 'MQTT' },
+    { value: 'http', label: 'HTTP' },
+  ];
+
+  getPasswordLabel() {
+    if (this.selectedTypeOption == 'mqtt') {
+      return "Password";
+    } else {
+      return "Token";
+    }
+  }
+
+  onChangeChannelType(type: string) {
+    if (type == 'mqtt') {
+      this.authOptions = [
+        { value: 'jwt_es256', label: 'JWT_ES256' },
+        { value: 'password', label: 'Username & Password' },
+      ];
+      this.selectedAuthOption = this.authOptions[0].value;
+    } else if (type == 'http') {
+      this.authOptions = [
+        { value: 'token', label: 'Token'}
+      ];
+      this.selectedAuthOption = this.authOptions[0].value;
+    }
+    this.password = '';
+  }
+
+  onChangeAuthenticationType(authType: string) {
+    this.password = '';
+  }
+
+  onGenerateToken() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+    let result = '';
+
+    for (let i = 0; i < 32; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters[randomIndex];
+    }
+    this.token = result;
+  }
+
+  getSubmitPayload() {
+    let payload: Partial<ChannelData> = {
+      type: this.selectedTypeOption,
+      authtype: this.selectedAuthOption,
+    }
+    if (this.selectedTypeOption == 'mqtt') {
+      payload.clientid = this.clientid || undefined;
+      payload.secret = this.password;
+      payload.enabled = this.enabled;
+      payload.username = this.username || undefined;
+    } else if (this.selectedTypeOption == 'http') {
+      payload.secret = this.token;
+      payload.enabled = this.enabled;
+      payload.queue_name = this.queue_name;
+    }
+    return payload;
+  }
 }
