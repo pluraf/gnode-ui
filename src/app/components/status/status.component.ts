@@ -43,12 +43,14 @@ export class StatusComponent {
 
   loadStatusDetails() {
     this.apiService.getStatus().subscribe((response: any) => {
-      this.networkDetails = [
-        ['IP Address', response.network['address']],
-        ['Netmask', response.network['netmask']],
-        ['Gateway', response.network['gateway']],
-        ['DNS', response.network['dns']],
-      ];
+      if (response.network) {
+        this.networkDetails = [
+          ['IP Address', response.network['address']],
+          ['Netmask', response.network['netmask']],
+          ['Gateway', response.network['gateway']],
+          ['DNS', response.network['dns']],
+        ];
+      }
       this.serviceDetails = [
         ['M2E-Bridge', response.service['m2eb']],
         ['M-Broker-C', response.service['mqbc']],
