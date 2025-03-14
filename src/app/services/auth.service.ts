@@ -23,8 +23,6 @@ export class AuthService {
     path: '/',
   };
 
-  isVirtualMode: string = '';
-
   constructor() {
     this.token = this.cookies.get('access_token');
   }

@@ -23,9 +23,11 @@ export class DatetimeService implements OnDestroy {
     effect(
       () => {
         const timeData = this.infoService.infoData().time;
-        this.timezone = timeData.timezone;
-        if (timeData.iso8601) {
-          this.timeSettingSignal.set(new Date(timeData.iso8601));
+        if(timeData){
+          this.timezone = timeData.timezone;
+          if (timeData.iso8601) {
+            this.timeSettingSignal.set(new Date(timeData.iso8601));
+          }
         }
       },
       { allowSignalWrites: true },
