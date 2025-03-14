@@ -50,7 +50,7 @@
       @if(channel.authtype === "token"){
         $&gt; curl -X POST http://{{ exampleHost }}/channel/http/{{ channel.id }} -H "Authorization: Bearer {{ channel.token }}" --data <i>message</i>
       } @else {
-        $&gt; curl -X POST http://{{ exampleHost }}/channel/http/{{ channel.id }} --data <i>&lt;message&gt;</i>
+        $&gt; curl -X POST http://{{ exampleHost }}/channel/http/{{ channel.id }} --data <i>message</i>
       }
     </p>
   </p-card>
