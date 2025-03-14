@@ -112,9 +112,9 @@ export class ChannelComponent {
       payload.secret = this.secret;
     }
     if (this.selectedTypeOption == 'mqtt') {
-      payload.clientid = this.clientid || undefined;
+      payload.clientid = this.clientid;
       payload.enabled = this.enabled;
-      payload.username = this.username || undefined;
+      payload.username = this.username;
     } else if (this.selectedTypeOption == 'http') {
       payload.enabled = this.enabled;
       payload.queue_name = this.queue_name;
