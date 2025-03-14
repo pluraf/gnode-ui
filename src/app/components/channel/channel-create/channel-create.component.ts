@@ -47,8 +47,8 @@ export class ChannelCreateComponent extends ChannelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.selectedAuthOption = this.authOptions[0].value;
     this.selectedTypeOption = this.channelTypes[0].value;
+    this.onChangeChannelType(this.selectedTypeOption);
   }
 
   onSubmit() {
@@ -63,11 +63,10 @@ export class ChannelCreateComponent extends ChannelComponent implements OnInit {
         );
        },
        error: (response: any) => {
-        console.log(response);
         this.noteService.handleMessage(
           this.messageService,
           'error',
-           response.error.detail ?? response.statusText
+           response.error?.detail ?? response.statusText
         );
       }
     });

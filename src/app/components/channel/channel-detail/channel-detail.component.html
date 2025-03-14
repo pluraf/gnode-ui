@@ -44,10 +44,14 @@
     </p>
   </p-card>
 
-  <p-card *ngIf="channel.type == 'http'" subheader="Try with CURL:" [style]="{'max-width': '50rem', 'box-shadow': 'none', 'border': '1px solid lightgray'}" styleClass="mt-5">
+  <p-card *ngIf="channel.type == 'http'" subheader="Try with CURL:" [style]="{'max-width': '65rem', 'box-shadow': 'none', 'border': '1px solid lightgray'}" styleClass="mt-5">
     <div class="mt-2">To upload:</div>
-    <p class="m-2 mb-4">
-      $&gt; curl -X POST http://{{ exampleHost }}/channel/http/{{ channel.queue_name }} -H "Authorization: Bearer <i>&lt;channel token&gt;</i>"
+    <p class="m-2 mb-4 pb-4" style="white-space: nowrap; overflow-x: auto;">
+      @if(channel.authtype === "token"){
+        $&gt; curl -X POST http://{{ exampleHost }}/channel/http/{{ channel.id }} -H "Authorization: Bearer {{ channel.token }}" --data <i>message</i>
+      } @else {
+        $&gt; curl -X POST http://{{ exampleHost }}/channel/http/{{ channel.id }} --data <i>&lt;message&gt;</i>
+      }
     </p>
   </p-card>
 

@@ -55,17 +55,19 @@ export class ChannelEditComponent extends ChannelComponent implements OnInit {
 
       this.apiService.channelGet(this.chanid).subscribe((response: any) => {
           const channel = response;
+          this.onChangeChannelType(channel.type);
 
-          this.clientid = channel.clientid;
-          this.username = channel.username;
-          this.password = '';
+          this.clientid = channel.clientid ?? "";
+          this.username = channel.username ?? "";
+          this.secret = channel.token ?? "";
           this.selectedAuthOption = channel.authtype.toLowerCase();
           this.selectedTypeOption = channel.type;
+          this.queue_name = channel.queue_name ?? "";
 
           if (this.selectedAuthOption === AuthType.JWT_ES256) {
-            this.jwtKey = channel.jwtkey;  // .replace(/(.{64})/g, '$1\n');
+            this.secret = channel.jwtkey;  // .replace(/(.{64})/g, '$1\n');
           }
-          this.enabled = channel.state === 'ENABLED';
+          this.enabled = channel.enabled;
         });
     });
   }
@@ -85,7 +87,7 @@ export class ChannelEditComponent extends ChannelComponent implements OnInit {
         this.noteService.handleMessage(
           this.messageService,
           'error',
-          response.error ?? response.statusText,
+          response.error?.detail ?? response.statusText,
         );
       }
     });

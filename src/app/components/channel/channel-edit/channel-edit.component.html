@@ -31,13 +31,13 @@
             </div>
             <div *ngIf="selectedAuthOption === 'password'" class="p-field flex flex-column gap-1 mt-4">
               <label for="password">{{ getPasswordLabel() }}</label>
-              <p-password [(ngModel)]="password" name="password" class="input_field pt-0 pl-0" [toggleMask]="true" [feedback]="false"/>
+              <p-password [(ngModel)]="secret" name="password" class="input_field pt-0 pl-0" [toggleMask]="true" [feedback]="false"/>
               <small>Keep blank, if you do not want to change the existing password.</small>
             </div>
             <div *ngIf="selectedAuthOption === 'token'" class="p-field flex flex-column gap-1 mt-4">
               <label for="token">Token</label>
               <div class="flex flex-row">
-                <input type="text" pInputText name="token" id="token" [(ngModel)]="token" class="input_field" />
+                <input type="text" pInputText name="token" id="token" [(ngModel)]="secret" class="input_field" />
                 <button pButton (click)="onGenerateToken()" class="ml-4 pl-0 pr-0 w-6rem">Generate</button>
               </div>
             </div>
@@ -46,7 +46,7 @@
               <input type="text" pInputText name="queue_name" id="queue_name" [(ngModel)]="queue_name" class="input_field"/>
             </div>
             <div *ngIf="selectedAuthOption === 'jwt_es256'" class="p-field flex flex-column gap-1">
-                <label for="key">JWT Key</label><textarea [(ngModel)]="password" id="key" aria-invalid="false" name="jwtKey" cols="62" rows="6" class="pubKeyFormat"></textarea>
+                <label for="key">JWT Key</label><textarea [(ngModel)]="secret" id="key" aria-invalid="false" name="jwtKey" cols="62" rows="6" class="pubKeyFormat"></textarea>
             </div>
           </div>
         </div>

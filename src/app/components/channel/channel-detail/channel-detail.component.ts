@@ -99,6 +99,7 @@ export class ChannelDetailComponent {
     }
     let details: string[][] = [
       ['State', this.channel.state],
+      ['Enabled', this.channel.enabled],
       ['Type', this.channel.type],
       ['Authentication type', this.channel.authtype],
     ];

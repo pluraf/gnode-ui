@@ -93,17 +93,17 @@ export class ChannelListComponent {
         const clientResponse = response;
         const channels = clientResponse;
         this.channelList = channels.map((channel: any) => {
-          let obj = { id: '', lastseen: '', state: '', type: '' };
-          if (channel.msg_received === 0) {
+          let obj = { id: '', lastseen: '', enabled: false, type: '' };
+          if (channel.msg_timestamp === 0) {
             obj.lastseen = 'never';
           } else {
-            obj.lastseen = DateTime.fromJSDate(new Date(channel.msg_received), {
+            obj.lastseen = DateTime.fromJSDate(new Date(channel.msg_timestamp * 1000), {
               zone: this.datetimeService.timezone,
             }).toFormat('yyyy-MM-dd HH:mm');
           }
           obj.id = channel.id;
           obj.type = channel.type;
-          obj.state = channel.state;
+          obj.enabled = channel.enabled;
           return obj;
         });
         this.totalRecords = this.channelList.length;

@@ -47,24 +47,19 @@ export class ChannelComponent {
   chanid: string = '';
   clientid: string = '';
   username: string = '';
-  password: string = '';
   authtype: string = '';
-  jwtKey: string = '';
-  token: string = '';
+  secret: string = '';
   queue_name: string = '';
   enabled = true;
 
   selectedAuthOption: string = '';
   selectedTypeOption: string = ''
 
-  authOptions = [
-    { value: 'jwt_es256', label: 'JWT_ES256' },
-    { value: 'password', label: 'Username & Password' },
-  ];
+  authOptions = [{value: '', label: ''}];
 
   channelTypes = [
-    { value: 'mqtt', label: 'MQTT' },
-    { value: 'http', label: 'HTTP' },
+    {value: 'mqtt', label: 'MQTT'},
+    {value: 'http', label: 'HTTP'}
   ];
 
   getPasswordLabel() {
@@ -80,19 +75,21 @@ export class ChannelComponent {
       this.authOptions = [
         { value: 'jwt_es256', label: 'JWT_ES256' },
         { value: 'password', label: 'Username & Password' },
+        { value: 'none', label: 'None'}
       ];
       this.selectedAuthOption = this.authOptions[0].value;
     } else if (type == 'http') {
       this.authOptions = [
-        { value: 'token', label: 'Token'}
+        { value: 'token', label: 'Token'},
+        { value: 'none', label: 'None'}
       ];
       this.selectedAuthOption = this.authOptions[0].value;
     }
-    this.password = '';
+    this.secret = '';
   }
 
   onChangeAuthenticationType(authType: string) {
-    this.password = '';
+    this.secret = '';
   }
 
   onGenerateToken() {
@@ -103,7 +100,7 @@ export class ChannelComponent {
         const randomIndex = Math.floor(Math.random() * characters.length);
         result += characters[randomIndex];
     }
-    this.token = result;
+    this.secret = result;
   }
 
   getSubmitPayload() {
@@ -111,13 +108,14 @@ export class ChannelComponent {
       type: this.selectedTypeOption,
       authtype: this.selectedAuthOption,
     }
+    if (this.secret.length > 0) {
+      payload.secret = this.secret;
+    }
     if (this.selectedTypeOption == 'mqtt') {
       payload.clientid = this.clientid || undefined;
-      payload.secret = this.password;
       payload.enabled = this.enabled;
       payload.username = this.username || undefined;
     } else if (this.selectedTypeOption == 'http') {
-      payload.secret = this.token;
       payload.enabled = this.enabled;
       payload.queue_name = this.queue_name;
     }
