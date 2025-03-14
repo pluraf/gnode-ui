@@ -34,6 +34,7 @@ export class ChannelDetailComponent {
   router = inject(Router);
   chanid = '';
   details: any;
+  virtual = false;
   connDetails: string[][] = [];
   visibleDialog: boolean = false;
   menubarItems: MenuItem[] = [];
@@ -69,6 +70,8 @@ export class ChannelDetailComponent {
       },
     ];
 
+    this.virtual = this.infoService.infoData().mode === "virtual";
+
     this.apiService.channelGet(this.chanid).subscribe((response: any) => {
       this.channel = response;
       this.details = this.getDetails();
@@ -81,11 +84,13 @@ export class ChannelDetailComponent {
 
       this.connDetails = this.getConnDetails(gnode_hostname, network_settings);
 
-      this.connDetails.push([
-        'G-Cloud Host',
-        `${gnode_hostname}.iotplan.io`,
-        settings.gcloud.https || settings.gcloud.ssh ? 'Enabled' : 'Disabled',
-      ]);
+      if (!this.virtual) {
+        this.connDetails.push([
+          'G-Cloud Host',
+          `${gnode_hostname}.iotplan.io`,
+          settings.gcloud.https || settings.gcloud.ssh ? 'Enabled' : 'Disabled',
+        ]);
+      }
     });
   }
 
@@ -130,25 +135,33 @@ export class ChannelDetailComponent {
       );
     }
 
-    details.push(['Host name', `${gnode_hostname}.local`, 'Local Network']);
-    if (network_settings) {
-      for (const conn of network_settings.active_connections) {
-        if (conn.type == 'wifi') {
-          this.connDetails.push([
-            'Host IP',
-            conn.ipv4_settings.address,
-            'WiFi',
-          ]);
-          this.exampleHost = conn.ipv4_settings.address;
-        } else if (conn.type == 'ethernet') {
-          this.connDetails.push([
-            'Host IP',
-            conn.ipv4_settings.address,
-            'Ethernet',
-          ]);
-          this.exampleHost = conn.ipv4_settings.address;
+    if (this.virtual) {
+      details.push(['Host name', `127.0.0.1`, 'Local Network']);
+    } else {
+      details.push(['Host name', `${gnode_hostname}.local`, 'Local Network']);
+    }
+    if (!this.virtual) {
+      if (network_settings && network_settings.hasOwnProperty("active_connections")) {
+        for (const conn of network_settings.active_connections) {
+          if (conn.type == 'wifi') {
+            this.connDetails.push([
+              'Host IP',
+              conn.ipv4_settings.address,
+              'WiFi',
+            ]);
+            this.exampleHost = conn.ipv4_settings.address;
+          } else if (conn.type == 'ethernet') {
+            this.connDetails.push([
+              'Host IP',
+              conn.ipv4_settings.address,
+              'Ethernet',
+            ]);
+            this.exampleHost = conn.ipv4_settings.address;
+          }
         }
       }
+    } else {
+      this.exampleHost = "127.0.0.1"
     }
     return details;
   }
