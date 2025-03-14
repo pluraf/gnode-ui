@@ -5,6 +5,7 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class SpinnerService {
+  spinnerTimeout = 150; // ms
   startTimestamp = 0;
   endTimestamp = 0;
   spinnerSignal = signal<boolean>(false);
@@ -20,9 +21,9 @@ export class SpinnerService {
   }
 
   private show() {
-    if (this.startTimestamp != 0 && Date.now() - this.startTimestamp > 100) {
+    if (this.startTimestamp != 0 && Date.now() - this.startTimestamp > this.spinnerTimeout) {
       this.spinnerSignal.set(true);
-      setTimeout(() => this.show(), 101);
+      setTimeout(() => this.show(), this.spinnerTimeout + 1);
     }
   }
 
