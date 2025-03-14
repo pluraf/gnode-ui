@@ -5,7 +5,7 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class SpinnerService {
-  spinnerTimeout = 150; // ms
+  spinnerTimeout = 120; // ms
   startTimestamp = 0;
   endTimestamp = 0;
   spinnerSignal = signal<boolean>(false);
