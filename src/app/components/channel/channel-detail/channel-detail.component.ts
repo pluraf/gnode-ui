@@ -115,6 +115,7 @@ export class ChannelDetailComponent {
       details.push(['Last message timestamp', recivedTimestamp]);
     } else if (this.channel.type == "http") {
       details.push(['Path', this.channel.path]);
+      details.push(['Queue', this.channel.queue_name]);
       details.push(['Messages received', this.channel.msg_received]);
       details.push(['Last message timestamp', recivedTimestamp]);
     }
