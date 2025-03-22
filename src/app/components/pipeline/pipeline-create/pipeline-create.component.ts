@@ -15,7 +15,7 @@ import { NoteService } from '../../../services/note.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MessageService } from 'primeng/api';
 
-import { OuterContainer } from '../assembler/assembler.component';
+import { PipelineComponent } from '../assembler/assembler.component';
 
 @Component({
   selector: 'app-pipeline-create',
@@ -29,7 +29,7 @@ import { OuterContainer } from '../assembler/assembler.component';
     CheckboxModule,
     TooltipModule,
     ToastModule,
-    OuterContainer,
+    PipelineComponent,
   ],
   providers: [ MessageService, NoteService ],
   templateUrl: './pipeline-create.component.html',

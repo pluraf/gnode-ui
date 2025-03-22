@@ -1,14 +1,58 @@
 import { Component, Inject, inject, effect, ViewContainerRef, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
-function addUnit(container: any, units: any, unit: any, index: number) {
-    unit.instance.originalIndex = units.length;
-    unit.instance.properties = ["a1"];
-    unit.instance.container = container;
-    unit.instance.units = units;
-    units.splice(index, 0, unit.instance);
-    units.forEach((u: any, i: number) => { u.index = i; });
+interface PipelineUnitProperty {
+  name: string;
+  type: string;
+  options?: string[];
+  value: string;
+}
+
+
+function addUnit(pipeline: any, index: number, properties: PipelineUnitProperty[]) {
+    const unit = pipeline.container.createComponent(
+        PipelineUnitComponent,
+        {
+            "index": index
+        }
+    );
+    unit.instance.properties = properties;
+    pipeline.units.splice(index, 0, unit.instance);
+    pipeline.units.forEach((u: any, i: number) => { u.index = i; });
+    unit.instance.pipeline = pipeline;
+}
+
+
+function getBasicProperties(): PipelineUnitProperty[] {
+    return [
+        {'name': 'type', 'type': 'select', 'options': ['generator', 'throttle', 'finder'], 'value': 'generator'}
+    ];
+}
+
+function getThrottleProperties(): PipelineUnitProperty[] {
+    return getBasicProperties().concat(
+        [
+            {'name': 'frequency', 'type': 'input', 'value': '0'}
+        ]
+    );
+}
+
+function getGeneratorProperties(): PipelineUnitProperty[] {
+    return getBasicProperties().concat(
+        [
+            {'name': 'payload', 'type': 'input', 'value': '0'}
+        ]
+    );
+}
+
+function getFinderProperties(): PipelineUnitProperty[] {
+    return getBasicProperties().concat(
+        [
+            {'name': 'substring', 'type': 'input', 'value': ''}
+        ]
+    );
 }
 
 
@@ -16,55 +60,61 @@ function addUnit(container: any, units: any, unit: any, index: number) {
     selector: 'pipeline-unit',
     templateUrl: './pipeline-unit.component.html',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, FormsModule],
   })
-  export class PipelineUnit {
-    @Input() properties: any[] = [];
-    @Input() container!: ViewContainerRef;
-    @Input() units!: any[];
+  export class PipelineUnitComponent {
+    @Input() pipeline!: any;
+    @Input()
+    set properties(value: PipelineUnitProperty[]) {
+      this.properties_ = value;
+      value.forEach((u: any, i: number) => {
+        console.log(u);
+      });
+    }
+    get properties(): any {
+      return this.properties_;
+    }
+
     index = 0;
-    originalIndex = 0;
+    private properties_!: PipelineUnitProperty[];
 
     constructor() {}
 
     addUnit() {
-        const unit = this.container.createComponent(
-            PipelineUnit,
-            {
-                "index": this.index + 1
-            }
-        );
-        addUnit(this.container, this.units, unit, this.index + 1);
+        addUnit(this.pipeline, this.index + 1, getBasicProperties());
     }
 
     removeUnit() {
-        this.container.remove(this.index);
-        this.units.splice(this.index, 1);
-        this.units.forEach((u: any, i: number) => { u.index = i; });
+        this.pipeline.container.remove(this.index);
+        this.pipeline.units.splice(this.index, 1);
+        this.pipeline.units.forEach((u: any, i: number) => { u.index = i; });
+    }
+
+    onChangeType(newType: string) {
+        if(newType === 'throttle') {
+            this.properties = getThrottleProperties();
+        }else if (newType === 'generator') {
+            this.properties = getGeneratorProperties();
+        }else if (newType === 'finder') {
+            this.properties = getFinderProperties();
+        }
     }
   }
 
   @Component({
-    selector: 'outer-container',
-    imports: [PipelineUnit],
+    selector: 'pipeline',
+    imports: [PipelineUnitComponent],
     standalone: true,
     template: `
       <p><button (click)="addUnit()">Add</button></p>
       <div #pipelineContainer></div>
     `,
   })
-  export class OuterContainer {
-    @ViewChild('pipelineContainer', { read: ViewContainerRef }) pipelineContainer!: ViewContainerRef;
+  export class PipelineComponent {
+    @ViewChild('pipelineContainer', { read: ViewContainerRef }) container!: ViewContainerRef;
     units: any[] = [];
 
-
     addUnit() {
-        const unit = this.pipelineContainer.createComponent(
-            PipelineUnit,
-            {
-                "index": 0
-            }
-        );
-        addUnit(this.pipelineContainer, this.units, unit, 0);
+        addUnit(this, 0, getBasicProperties());
     }
   }
