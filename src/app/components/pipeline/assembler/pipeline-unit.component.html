@@ -1,16 +1,25 @@
 <div style="border: solid; margin: 5px">
-<button (click)="addUnit()">Add</button>
-<button (click)="removeUnit()">Remove</button>
-<div *ngFor="let property of properties; index as i">
-  <div>
-    <label for="{{ property.name }}_{{ index }}">{{ property.name }}</label>
-    @if (property.type == 'input') {
-      <input type="text"  id="{{ property.name }}_{{ index }}" [(ngModel)]="property.value" class="input_field" />
-    } @else if (property.type == 'select') {
-      <select pInputText id="{{ property.name }}_{{ index }}" [(ngModel)]="property.value" (ngModelChange)="onChangeType($event)" class="input_field">
-        <option *ngFor="let opt of property.options" [value]="opt">{{ opt }}</option>
-      </select>
-    }
-  <div>
-</div>
+  @if(category === 'filtra') {
+  <button (click)="addUnit()">Add</button>
+  <button (click)="removeUnit()">Remove</button>
+  <select [(ngModel)]="optionalPropertySelected">
+    <ng-container *ngFor="let propertyName of optionalProperties">
+      <option>{{ propertyName }}</option>
+    </ng-container>
+  </select>
+  <button (click)="addProperty(optionalPropertySelected)">Add property</button>
+  }
+  <ng-container *ngFor="let property of properties; index as i">
+    <div *ngIf="!property.optional">
+      <label for="{{ property.name }}_{{ index }}">{{ property.name }}</label>
+      @if (property.view == 'input') {
+        <input type="text"  id="{{ property.name }}_{{ index }}" [(ngModel)]="property.value" class="input_field" />
+      } @else if (property.view == 'select') {
+        <select #selectRef pInputText id="{{ property.name }}_{{ index }}" [(ngModel)]="property.value" (ngModelChange)="onPropertyChange($event, selectRef)" class="input_field">
+          <option *ngFor="let opt of property.options" [value]="opt">{{ opt }}</option>
+        </select>
+      }
+    </div>
+  </ng-container>
+  <div #optionalUnitProperties></div>
 </div>

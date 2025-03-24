@@ -1,0 +1,13 @@
+<div>
+  <div>Connector IN</div>
+  <pipeline-unit [pipeline]="this" [properties]="connectorInProperties" category="connector" mode="in"></pipeline-unit>
+</div>
+<div>
+  <div>Filtras</div>
+  <p><button (click)="addUnit()">Add</button></p>
+  <div #pipelineFiltrasContainer></div>
+</div>
+<div>
+  <div>Connector OUT</div>
+  <pipeline-unit [pipeline]="this" [properties]="connectorInProperties" category="connector" mode="out"></pipeline-unit>
+</div>
