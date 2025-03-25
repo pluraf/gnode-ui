@@ -1,6 +1,8 @@
+<button (click)="serialize()">Dump</button>
+<button (click)="deserialize()">Load</button>
 <div>
   <div>Connector IN</div>
-  <pipeline-unit [pipeline]="this" [properties]="connectorInProperties" category="connector" mode="in"></pipeline-unit>
+  <pipeline-unit #connectorIn [pipeline]="this" category="connector" mode="in"></pipeline-unit>
 </div>
 <div>
   <div>Filtras</div>
@@ -9,5 +11,5 @@
 </div>
 <div>
   <div>Connector OUT</div>
-  <pipeline-unit [pipeline]="this" [properties]="connectorInProperties" category="connector" mode="out"></pipeline-unit>
+  <pipeline-unit #connectorOut [pipeline]="this" category="connector" mode="out"></pipeline-unit>
 </div>

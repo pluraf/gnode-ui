@@ -1,4 +1,4 @@
-import { Component, Inject, inject, effect, ViewContainerRef, Input, ViewChild } from '@angular/core';
+import { Component, Inject, inject, effect, ViewContainerRef, ElementRef, Input, ViewChild, ViewChildren, QueryList} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -13,7 +13,8 @@ interface PipelineUnitProperty {
 }
 
 
-function addUnit(pipeline: any, index: number) {
+function addUnit(pipeline: any, index?: number) {
+    index = index ?? pipeline.containerFiltras.length;
     const unit = pipeline.containerFiltras.createComponent(
         PipelineUnitComponent,
         {
@@ -24,6 +25,7 @@ function addUnit(pipeline: any, index: number) {
     pipeline.units.forEach((u: any, i: number) => { u.index = i; });
     unit.instance.pipeline = pipeline;
     unit.instance.category = 'filtra';
+    return unit.instance;
 }
 
 
@@ -59,7 +61,7 @@ function getCommonProperty(category: string, property: string): PipelineUnitProp
 function getThrottleProperties(): PipelineUnitProperty[] {
     return getMandatoryProperties('filtra', 'throttle').concat(
         [
-            {'name': 'rate', 'view': 'input', 'type': 'integer', 'optional': false, 'value': 1},
+            {'name': 'rate', 'view': 'input', 'type': 'float', 'optional': false, 'value': 1},
             getCommonProperty('filtra', 'goto_accepted')!,
             getCommonProperty('filtra', 'name')!,
             getCommonProperty('filtra', 'metadata')!,
@@ -85,7 +87,8 @@ function getFinderProperties(): PipelineUnitProperty[] {
 function getMqttProperties(): PipelineUnitProperty[] {
     return getMandatoryProperties('connector', 'mqtt').concat(
         [
-            {'name': 'topic', 'view': 'input', 'type': 'string', 'optional': false, 'value': ''},
+            {'name': 'topic', 'view': 'input', 'type': 'string', 'optional': true, 'value': ''},
+            {'name': 'topics', 'view': 'input', 'type': 'array', 'optional': true, 'value': ''},
             {'name': 'server', 'view': 'input', 'type': 'string', 'optional': false, 'value': ''}
         ]
     );
@@ -126,13 +129,17 @@ class Connector {
     imports: [CommonModule, FormsModule],
 })
 export class UnitPropertyComponent {
+    @Input() unit!: any;
     @Input() property!: any;
 
     index = 0;
-    unit!: any;
 
     removeProperty(){
-        this.unit.removeProperty(this.index);
+        this.unit.removeProperty(this.property.name);
+    }
+
+    onPropertyChange(newValue: any, element: HTMLSelectElement) {
+        this.unit.onPropertyChange(newValue, element);
     }
 }
 
@@ -141,39 +148,52 @@ export class UnitPropertyComponent {
     selector: 'pipeline-unit',
     templateUrl: './pipeline-unit.component.html',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, UnitPropertyComponent],
   })
   export class PipelineUnitComponent {
     @Input() pipeline!: any;
     @Input() category!: any;
     @Input() mode!: any;
-    @Input()
+
     set properties(value: PipelineUnitProperty[]) {
-      this.properties_ = value;
-      //value.forEach((u: any, i: number) => {
-      //});
+        this.properties_ = value;
+        this.usedProperties = this.properties_.filter(p => !p.optional);
+
+      this.optionalPropertyNames = this.properties.filter(p => p.optional).map(p => p.name);
+      this.optionalPropertySelected = this.optionalPropertyNames[0];
     }
-    get properties(): any {
+    get properties(): PipelineUnitProperty[] {
       return this.properties_;
     }
 
-    @ViewChild('optionalUnitProperties', { read: ViewContainerRef }) propertiesContainer!: ViewContainerRef;
+    @Input()
+    set type(value: string) {
+        this.type_ = value;
+        if (this.category === 'filtra') {
+            this.updateFiltraLayoutOnType(this.type_);
+        } else if (this.category === 'connector') {
+            this.updateConnectorLayoutOnType(this.type_);
+        }
+    }
+    get type(): string {
+        return this.type_;
 
-    type!: string;
+    }
+
     index = 0;
-    optionalPropertySelected = '';
-    optionalPropertyComponents: UnitPropertyComponent[] = [];
-    private properties_!: PipelineUnitProperty[];
-    optionalProperties: string[] = [];
 
+    usedProperties: PipelineUnitProperty[] = [];
+    optionalPropertySelected = '';
+    optionalPropertyNames: string[] = [];
+
+    private properties_!: PipelineUnitProperty[];
+    private type_!: string;
 
     constructor() {}
 
     ngOnInit() {
-        if (this.category === 'filtra') {
-            this.updateFiltraLayoutOnType('finder');
-        } else if (this.category === 'connector') {
-            this.updateConnectorLayoutOnType('mqtt');
+        if (this.type === undefined) {
+            this.type = this.category === 'filtra' ? 'finder' : 'mqtt';
         }
     }
 
@@ -183,23 +203,47 @@ export class UnitPropertyComponent {
                 return property;
             }
         }
+        return;
     }
 
-    addProperty(propertyName: string) {
-        const property = this.propertiesContainer.createComponent(UnitPropertyComponent);
-        property.instance.property = this.getProperty(propertyName);
-        property.instance.index = this.propertiesContainer.length - 1;
-        property.instance.unit = this;
-        this.optionalPropertyComponents.push(property.instance);
-        this.optionalProperties = this.optionalProperties.filter(p => p !== propertyName);
-        this.optionalPropertySelected = this.optionalProperties[0];
+    setProperty(propertyName: string, propertyValue: string | number) {
+        let prop = this.usedProperties.find(p => p.name === propertyName);
+        if (prop === undefined) {
+            prop = this.addProperty(propertyName);
+        }
+        if (prop !== undefined) {
+            prop.value = propertyValue;
+        }
     }
 
-    removeProperty(propertyIndex: any) {
-        this.propertiesContainer.remove(propertyIndex);
-        const pc = this.optionalPropertyComponents.splice(propertyIndex, 1)[0];
-        this.optionalPropertyComponents.forEach((op, ix) => { op.index = ix; });
-        this.optionalProperties.push(pc.property.name);
+    addProperty(propertyName: string): PipelineUnitProperty | undefined {
+        if (this.optionalPropertyNames.length > 0) {
+            const property = this.getProperty(propertyName);
+            if (property) {
+                this.usedProperties.push(property);
+                this.optionalPropertyNames = this.optionalPropertyNames.filter(p => p !== propertyName);
+                this.optionalPropertySelected = this.optionalPropertyNames[0];
+                return property;
+            }
+        }
+        return undefined;
+    }
+
+    removeProperty(propertyName: string) {
+        const ix = this.usedProperties.findIndex(p => p.name === propertyName);
+        if (ix >= 0) {
+            this.usedProperties.splice(ix, 1);
+            this.optionalPropertyNames.push(propertyName);
+            if (this.optionalPropertySelected === undefined) {
+                this.optionalPropertySelected = this.optionalPropertyNames[0];
+            }
+        }
+
+        //this.propertiesContainer.remove(propertyIndex);
+        //const pc = this.optionalPropertyComponents.splice(propertyIndex, 1)[0];
+        //this.optionalPropertyComponents.forEach((op, ix) => { op.index = ix; });
+
+
     }
 
     addUnit() {
@@ -218,12 +262,9 @@ export class UnitPropertyComponent {
         }else if (newType === 'finder') {
             this.properties = getFinderProperties();
         }
-        for (const property of this.properties) {
-            if (property.optional) {
-                this.optionalProperties.push(property.name);
-            }
-        }
-        this.optionalPropertySelected = this.optionalProperties[0];
+
+        this.optionalPropertyNames = this.properties.filter(p => p.optional).map(p => p.name);
+        this.optionalPropertySelected = this.optionalPropertyNames[0];
     }
 
     updateConnectorLayoutOnType(newType: string) {
@@ -236,20 +277,19 @@ export class UnitPropertyComponent {
         }
     }
 
-    updateFiltra(propertyId: string , value: any) {
+    updateFiltra(propertyId: string, value: any) {
         if (propertyId.startsWith('type')) {
             this.updateFiltraLayoutOnType(value);
         }
     }
 
-    updateConnector(propertyId:any , value: any) {
+    updateConnector(propertyId:any, value: any) {
         if (propertyId.startsWith('type')) {
             this.updateConnectorLayoutOnType(value);
         }
     }
 
     onPropertyChange(newValue: any, element: HTMLSelectElement) {
-        console.log(this);
         if(this.category === 'filtra') {
             this.updateFiltra(element.id, newValue);
         } else {
@@ -265,15 +305,87 @@ export class UnitPropertyComponent {
     templateUrl: './assembler.component.html',
   })
   export class PipelineComponent {
-    @ViewChild('pipelineConnectorInContainer', { read: ViewContainerRef }) connectorInContainer!: ViewContainerRef;
+    @ViewChild('connectorIn') connectorIn!: PipelineUnitComponent;
     @ViewChild('pipelineFiltrasContainer', { read: ViewContainerRef }) containerFiltras!: ViewContainerRef;
-    @ViewChild('pipelineConnectorOutContainer', { read: ViewContainerRef }) connectorOutContainer!: ViewContainerRef;
+    @ViewChild('connectorOut') connectorOut!: PipelineUnitComponent;
     units: any[] = [];
+
+    // @ViewChildren(PipelineUnitComponent) children!: QueryList<PipelineUnitComponent>;
 
     connectorInProperties = getMandatoryProperties('connector', 'mqtt');
     connectorOutProperties = getMandatoryProperties('connector', 'mqtt');
 
     addUnit() {
         addUnit(this, 0);
+    }
+
+    clearUnits() {
+        this.containerFiltras.clear();
+        this.units = [];
+    }
+
+    serialize() {
+        const pipeline: any = {};
+        const connectorIn: any = {};
+        const connectorOut: any = {};
+        const filtras: any[] = [];
+
+        this.connectorIn.usedProperties.forEach(p => {
+            connectorIn[p.name] = p.value;
+        });
+
+        this.connectorOut.usedProperties.forEach(p => {
+            connectorOut[p.name] = p.value;
+        });
+
+        this.units.forEach(u => {
+            const filtra: any = {};
+            u.usedProperties.forEach((p: PipelineUnitProperty) => {
+                filtra[p.name] = p.value;
+            });
+            filtras.push(filtra);
+        });
+
+        pipeline.connector_in = connectorIn;
+        pipeline.filtras = filtras;
+        pipeline.connector_out = connectorOut;
+
+        console.log(JSON.stringify(pipeline));
+    }
+
+    deserialize() {
+        const s = '{"connector_in":{"type":"mqtt","server":"ff","topic":"#"},"filtras":[{"type":"throttle","rate":"1.6","goto_accepted":"12"}],"connector_out":{"type":"mqtt","server":""}}';
+        const js = JSON.parse(s);
+
+        this.connectorIn.updateConnector("type", js.connector_in.type);
+        for (const [name, value] of Object.entries(js.connector_in)) {
+            if (name !== 'type') {
+                if (typeof value === 'string' || typeof value === 'number') {
+                    this.connectorIn.setProperty(name, value);
+                }
+            }
+        }
+
+        this.connectorOut.updateConnector("type", js.connector_out.type);
+        for (const [name, value] of Object.entries(js.connector_out)) {
+            if (name !== 'type') {
+                if (typeof value === 'string' || typeof value === 'number') {
+                    this.connectorOut.setProperty(name, value);
+                }
+            }
+        }
+
+        this.clearUnits();
+        for (const filtra of js.filtras) {
+            const unit = addUnit(this);
+            unit.type = filtra.type;
+            for (const [name, value] of Object.entries(filtra)) {
+                if (name !== 'type') {
+                    if (typeof value === 'string' || typeof value === 'number') {
+                        unit.setProperty(name, value);
+                    }
+                }
+            }
+        }
     }
   }
