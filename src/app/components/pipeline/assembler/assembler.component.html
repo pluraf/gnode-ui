@@ -1,13 +1,14 @@
 <div>
-  <div>Connector IN</div>
+  <div style="margin-bottom: 6px;">Connector IN</div>
   <pipeline-unit #connectorIn [pipeline]="this" category="connector" mode="in"></pipeline-unit>
 </div>
 <div>
-  <div>Filtras</div>
-  <p><button (click)="addUnit()">Add</button></p>
+  <div>
+    <p-button (click)="addUnit()" label="Add Filtra" severity="secondary" styleClass="pl-2 pr-2 pt-1 pb-1 mb-3" size="small" [outlined]="true"/>
+  </div>
   <div #pipelineFiltrasContainer></div>
 </div>
 <div>
-  <div>Connector OUT</div>
+  <div style="margin-bottom: 6px;">Connector OUT</div>
   <pipeline-unit #connectorOut [pipeline]="this" category="connector" mode="out"></pipeline-unit>
 </div>

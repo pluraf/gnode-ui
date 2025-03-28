@@ -13,3 +13,17 @@
   display: flex;
   justify-content: center;
 }
+
+::ng-deep .p-toast .p-toast-message {
+  margin-top: 3rem !important;
+  border: 1px solid;
+}
+
+::ng-deep
+  .p-toast
+  .p-toast-message
+  .p-toast-message-content
+  .p-icon:not(.p-toast-icon-close-icon) {
+  width: 1.5rem;
+  height: 1.5rem;
+}

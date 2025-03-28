@@ -2,6 +2,10 @@ import { Component, Inject, inject, effect, ViewContainerRef, ElementRef, Input,
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+
 import { ApiService } from '../../../services/api.service';
 
 
@@ -18,6 +22,7 @@ class PipelineUnitProperty {
   options?: string[] = [];
   required: boolean | OptionalObject = true;
   value: string = '';
+  private optional_: boolean | undefined = undefined;
 
   constructor(name: string, v: {[key: string]: any}) {
     this.name = name;
@@ -38,22 +43,33 @@ class PipelineUnitProperty {
     return this.value;
   }
 
-  isOptional(unit: PipelineUnitComponent): boolean {
-    if (typeof this.required === 'boolean') {
-      return !this.required;
-    } else {
-      return unit[this.required.key as keyof PipelineUnitComponent] !== this.required.value;
+  isOptional(unit?: PipelineUnitComponent): boolean {
+    if (this.optional_ === undefined) {
+      if (typeof this.required === 'boolean') {
+        this.optional_ = !this.required;
+      } else if (unit) {
+        this.optional_ = unit[this.required.key as keyof PipelineUnitComponent] !== this.required.value;
+      } else {
+        this.optional_ = true;
+      }
     }
+    return this.optional_;
   }
-
 }
 
 
 @Component({
   selector: 'unit-property',
   templateUrl: './unit-property.component.html',
+  styleUrl: './pipeline-assembler.css',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    InputTextModule,
+    DropdownModule
+  ],
 })
 export class UnitPropertyComponent {
   @Input() unit!: any;
@@ -70,6 +86,7 @@ export class UnitPropertyComponent {
 @Component({
   selector: 'pipeline-unit',
   templateUrl: './pipeline-unit.component.html',
+  styleUrl: './pipeline-assembler.css',
   standalone: true,
   imports: [CommonModule, FormsModule, UnitPropertyComponent],
 })
@@ -186,7 +203,10 @@ export class PipelineUnitComponent {
 
 @Component({
   selector: 'pipeline-assembler',
-  imports: [PipelineUnitComponent],
+  imports: [
+    PipelineUnitComponent,
+    ButtonModule
+  ],
   standalone: true,
   templateUrl: './assembler.component.html',
 })

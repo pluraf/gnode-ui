@@ -1,19 +1,21 @@
-<div style="border: solid; margin: 5px">
-  @if(category === 'filtra') {
-    <button (click)="addUnit()">Add</button>
-    <button (click)="removeUnit()">Remove</button>
-  }
+<div class="pipeline-unit">
+  <div class="mb-2">
+    @if(category === 'filtra') {
+      <button (click)="addUnit()">Add</button>
+      <button (click)="removeUnit()" style="margin-right: 1rem">Remove</button>
+    }
 
-  <select pInputText [(ngModel)]="type" (ngModelChange)="onTypeChange($event)" class="input_field">
-    <option *ngFor="let opt of getTypes()" [value]="opt">{{ opt }}</option>
-  </select>
+    <select [(ngModel)]="type" (ngModelChange)="onTypeChange($event)" class="input_field">
+      <option *ngFor="let opt of getTypes()" [value]="opt">{{ opt }}</option>
+    </select>
 
-  <select [(ngModel)]="optionalPropertySelected">
-    <ng-container *ngFor="let propertyName of optionalPropertyNames">
-      <option>{{ propertyName }}</option>
-    </ng-container>
-  </select>
-  <button (click)="addProperty(optionalPropertySelected)">Add property</button>
+    <select [(ngModel)]="optionalPropertySelected">
+      <ng-container *ngFor="let propertyName of optionalPropertyNames">
+        <option>{{ propertyName }}</option>
+      </ng-container>
+    </select>
+    <button (click)="addProperty(optionalPropertySelected)" style="margin-left:0.2rem">Add property</button>
+  </div>
 
   <ng-container *ngFor="let property of usedProperties; index as i">
     <div>

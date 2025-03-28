@@ -1,0 +1,23 @@
+.property-label {
+    width: 10rem;
+}
+
+.input_field {
+    margin-right: 1rem;
+}
+
+.pipeline-unit {
+    max-width: 45rem;
+    min-width: 40rem;
+    padding: 6px 20px 15px 10px;
+    margin-bottom: 1rem;
+    border: 2px solid rgb(149, 145, 145);
+    border-radius: 8px;
+}
+
+button {
+    box-shadow: none;
+    border: 1px solid gray;
+    border-radius: 4px;
+    padding: 2px 10px 2px 10px;
+}
