@@ -5,13 +5,47 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../services/api.service';
 
 
-interface PipelineUnitProperty {
-  name: string;
-  view: string;
-  type: string;
-  options?: string[];
-  optional: boolean;
-  value: string | number;
+interface OptionalObject {
+  key: string;
+  value: any;
+}
+
+
+class PipelineUnitProperty {
+  name: string = '';
+  view: string = '';
+  type: string = '';
+  options?: string[] = [];
+  required: boolean | OptionalObject = true;
+  value: string = '';
+
+  constructor(name: string, v: {[key: string]: any}) {
+    this.name = name;
+    this.view = v['options'] ? 'select' : 'input';
+    this.type = v['type'];
+    this.options = v['options'];
+    this.required = v["required"];
+    this.value = v['default'];
+  }
+
+  public getValue(): any {
+    if (this.type === 'integer') {
+      return parseInt(this.value);
+    }
+    if (this.type === 'float') {
+      return parseFloat(this.value);
+    }
+    return this.value;
+  }
+
+  isOptional(unit: PipelineUnitComponent): boolean {
+    if (typeof this.required === 'boolean') {
+      return !this.required;
+    } else {
+      return unit[this.required.key as keyof PipelineUnitComponent] !== this.required.value;
+    }
+  }
+
 }
 
 
@@ -46,9 +80,9 @@ export class PipelineUnitComponent {
 
   set properties(value: PipelineUnitProperty[]) {
     this.properties_ = value;
-    this.usedProperties = this.properties_.filter(p => !p.optional);
+    this.usedProperties = this.properties_.filter(p => !p.isOptional(this));
 
-    this.optionalPropertyNames = this.properties.filter(p => p.optional).map(p => p.name);
+    this.optionalPropertyNames = this.properties.filter(p => p.isOptional(this)).map(p => p.name);
     this.optionalPropertySelected = this.optionalPropertyNames[0];
   }
   get properties(): PipelineUnitProperty[] {
@@ -76,7 +110,7 @@ export class PipelineUnitComponent {
 
   ngOnInit() {
     if (this.type === undefined) {
-      this.type = this.category === 'filtra' ? 'nop' : 'mqtt';
+      //this.type = this.category === 'filtra' ? 'nop' : 'mqtt';
     }
   }
 
@@ -99,7 +133,11 @@ export class PipelineUnitComponent {
       prop = this.addProperty(propertyName);
     }
     if (prop !== undefined) {
-      prop.value = propertyValue;
+      if (typeof propertyValue  === 'number') {
+        prop.value = propertyValue.toString();
+      } else {
+        prop.value = propertyValue;
+      }
     }
   }
 
@@ -147,44 +185,43 @@ export class PipelineUnitComponent {
 }
 
 @Component({
-  selector: 'pipeline',
+  selector: 'pipeline-assembler',
   imports: [PipelineUnitComponent],
   standalone: true,
   templateUrl: './assembler.component.html',
 })
-export class PipelineComponent {
+export class PipelineAssemblerComponent {
   @ViewChild('connectorIn') connectorIn!: PipelineUnitComponent;
   @ViewChild('pipelineFiltrasContainer', { read: ViewContainerRef }) containerFiltras!: ViewContainerRef;
   @ViewChild('connectorOut') connectorOut!: PipelineUnitComponent;
   units: any[] = [];
 
   private schema_: { [key: string]: any } = {};
+  private serialized_: string | undefined = undefined;
 
   // @ViewChildren(PipelineUnitComponent) children!: QueryList<PipelineUnitComponent>;
 
-  constructor(apiService: ApiService) {
-    apiService.pipelineSchema().subscribe((response: any) => {
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit() {
+    this.apiService.pipelineSchema().subscribe((response: any) => {
       this.schema_ = response;
-      this.connectorIn.reloadProperties();
-      this.connectorOut.reloadProperties();
-      this.units.forEach(u => u.reloadProperties());
+      if (this.serialized_ === undefined) {
+        this.connectorIn.reloadProperties();
+        this.connectorOut.reloadProperties();
+        this.units.forEach(u => u.reloadProperties());
+      } else {
+        this.deserialize(this.serialized_);
+      }
     });
   }
 
   getProperties(category: string, type: string): PipelineUnitProperty[] {
     const unitSchema = this.schema_[category]?.[type];
-    const properties = [];
+    const properties: PipelineUnitProperty[] = [];
     if (unitSchema) {
       for (const [k, v] of Object.entries(unitSchema)){
-        const value = v as { [key: string]: any };
-        properties.push({
-          name: k,
-          view: value['options'] ? 'select' : 'input',
-          type: value['type'],
-          options: value['options'],
-          optional: !value["required"],
-          value: value['default'],
-        });
+        properties.push(new PipelineUnitProperty(k, v as {[key: string]: any}));
       }
     }
     return properties;
@@ -204,6 +241,7 @@ export class PipelineComponent {
     this.units.forEach((u: any, i: number) => { u.index = i; });
     unit.instance.pipeline = this;
     unit.instance.category = 'filtra';
+    unit.instance.type = 'nop';
     return unit.instance;
   }
 
@@ -212,26 +250,26 @@ export class PipelineComponent {
     this.units = [];
   }
 
-  serialize() {
+  serialize(pretty: boolean = false): string {
     const pipeline: any = {};
     const connectorIn: any = {};
     const connectorOut: any = {};
     const filtras: any[] = [];
 
     this.connectorIn.usedProperties.forEach(p => {
-      connectorIn[p.name] = p.value;
+      connectorIn[p.name] =  p.getValue();
     });
     connectorIn['type'] = this.connectorIn.type;
 
     this.connectorOut.usedProperties.forEach(p => {
-      connectorOut[p.name] = p.value;
+      connectorOut[p.name] = p.getValue();
     });
     connectorOut['type'] = this.connectorOut.type;
 
     this.units.forEach(u => {
       const filtra: any = {};
       u.usedProperties.forEach((p: PipelineUnitProperty) => {
-        filtra[p.name] = p.value;
+        filtra[p.name] =  p.getValue();
       });
       filtra['type'] = u.type;
       filtras.push(filtra);
@@ -241,14 +279,23 @@ export class PipelineComponent {
     pipeline.filtras = filtras;
     pipeline.connector_out = connectorOut;
 
-    console.log(JSON.stringify(pipeline));
+    return JSON.stringify(pipeline, null, pretty ? 2 : undefined);
   }
 
-  deserialize() {
-    const s = '{"connector_in":{"type":"mqtt","server":"ff","topic":"#"},"filtras":[{"type":"throttle","rate":"1.6","goto_accepted":"12"}],"connector_out":{"type":"mqtt","server":""}}';
-    const js = JSON.parse(s);
+  deserialize(config: string | undefined) {
+    if (config === undefined) {
+      return;
+    }
 
-    this.connectorIn.properties = this.getProperties('connector', js.connector_in.type);
+    if (Object.keys(this.schema_).length === 0) {
+      this.serialized_ = config;
+      return;
+    }
+
+
+    const js = JSON.parse(config);
+
+    this.connectorIn.type = js.connector_in.type;
     for (const [name, value] of Object.entries(js.connector_in)) {
       if (name !== 'type') {
         if (typeof value === 'string' || typeof value === 'number') {
@@ -257,7 +304,7 @@ export class PipelineComponent {
       }
     }
 
-    this.connectorOut.properties = this.getProperties('connector', js.connector_in.type);
+    this.connectorOut.type = js.connector_out.type
     for (const [name, value] of Object.entries(js.connector_out)) {
       if (name !== 'type') {
         if (typeof value === 'string' || typeof value === 'number') {
@@ -267,7 +314,7 @@ export class PipelineComponent {
     }
 
     this.clearUnits();
-    for (const filtra of js.filtras) {
+    for (const filtra of js.filtras || []) {
       const unit = this.addUnit();
       unit.type = filtra.type;
       for (const [name, value] of Object.entries(filtra)) {
