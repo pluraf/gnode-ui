@@ -4,6 +4,10 @@
     <button (click)="removeUnit()">Remove</button>
   }
 
+  <select pInputText [(ngModel)]="type" (ngModelChange)="onTypeChange($event)" class="input_field">
+    <option *ngFor="let opt of getTypes()" [value]="opt">{{ opt }}</option>
+  </select>
+
   <select [(ngModel)]="optionalPropertySelected">
     <ng-container *ngFor="let propertyName of optionalPropertyNames">
       <option>{{ propertyName }}</option>

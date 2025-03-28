@@ -2,7 +2,7 @@
 @if (property.view == 'input') {
   <input type="text"  id="{{ property.name }}_{{ index }}" [(ngModel)]="property.value" class="input_field" />
 } @else if (property.view == 'select') {
-  <select #selectRef pInputText id="{{ property.name }}_{{ index }}" [(ngModel)]="property.value" (ngModelChange)="onPropertyChange($event, selectRef)" class="input_field">
+  <select #selectRef pInputText id="{{ property.name }}_{{ index }}" [(ngModel)]="property.value" class="input_field">
     <option *ngFor="let opt of property.options" [value]="opt">{{ opt }}</option>
   </select>
 }

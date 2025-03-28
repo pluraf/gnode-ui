@@ -16,6 +16,7 @@ export class ApiService {
   private pipelineConfigUrl = 'api/pipeline/config/';
   private pipelineControlUrl = 'api/pipeline/control/';
   private pipelineStatusUrl = 'api/pipeline/status/';
+  private pipelineSchemaUrl = 'api/pipeline/schema/';
   // Channel API
   private channelUrl = 'api/channel/';
   // Version API
@@ -126,6 +127,10 @@ export class ApiService {
       commands: [{ command: 'stop' }],
     };
     return this.http.put(this.pipelineControlUrl + '/stop/' + pipeid, postData);
+  }
+
+  pipelineSchema() {
+    return this.http.get(this.pipelineSchemaUrl);
   }
 
   /////////////////////////// Version ///////////////////////////
