@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -32,7 +32,7 @@ import { PipelineAssemblerComponent } from '../assembler/assembler.component';
   templateUrl: './pipeline-edit.component.html',
   styleUrl: './pipeline-edit.component.css',
 })
-export class PipelineEditComponent {
+export class PipelineEditComponent implements OnInit {
   apiService = inject(ApiService);
   route: ActivatedRoute = inject(ActivatedRoute);
   messageService = inject(MessageService);

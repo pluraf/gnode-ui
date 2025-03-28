@@ -207,9 +207,9 @@ export class PipelineAssemblerComponent {
     this.apiService.pipelineSchema().subscribe((response: any) => {
       this.schema_ = response;
       if (this.serialized_ === undefined) {
-        this.connectorIn.reloadProperties();
-        this.connectorOut.reloadProperties();
-        this.units.forEach(u => u.reloadProperties());
+        this.connectorIn.type = 'mqtt';
+        this.connectorOut.type = 'mqtt';
+        this.units.forEach(u => u.type = 'nop');
       } else {
         this.deserialize(this.serialized_);
       }

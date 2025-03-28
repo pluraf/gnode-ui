@@ -96,7 +96,7 @@ export class ApiService {
     return this.http.put(this.pipelineConfigUrl + pipeid, pipedata);
   }
 
-  pipelineCreate(pipeid: string, pipedata: object): Observable<any> {
+  pipelineCreate(pipeid: string, pipedata: string): Observable<any> {
     return this.http.post(this.pipelineConfigUrl + pipeid, pipedata);
   }
 

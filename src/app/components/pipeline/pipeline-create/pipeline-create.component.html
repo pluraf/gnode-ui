@@ -4,9 +4,6 @@
 ></app-subheader>
 <div class="main-content-body">
   <p-toast position="top-right" [baseZIndex]="5000"/>
-
-  <pipeline-assembler></pipeline-assembler>
-
   <div class="p-col-12 p-md-6">
     <div class="p-fluid">
       <div class="p-field flex flex-column gap-1">
@@ -18,18 +15,18 @@
           [(ngModel)]="pipeid"
         />
       </div>
-      <div class="p-field gap-1">
-        <div class="mb-2">
-          <button pButton (click)="onGenerateConfig()" class="genconfig" pTooltip="Generate pipeline template configuration" >Generate</button>
-        </div>
-
-        <textarea
-          cols="60"
-          rows="20"
-          class="pipeline-create"
-          [(ngModel)]="pipelineJson"
-        ></textarea>
-      </div>
+        <p-tabView (activeIndexChange)="onModeChange($event)">
+          <p-tabPanel header="Visual">
+              <pipeline-assembler #pipelineAssembler></pipeline-assembler>
+          </p-tabPanel>
+          <p-tabPanel header="Raw">
+              <div class="p-fluid">
+                  <div class="p-field gap-1">
+                      <textarea cols="100" rows="25" class="pipeline-edit" [(ngModel)]="pipelineJson"></textarea>
+                  </div>
+              </div>
+          </p-tabPanel>
+      </p-tabView>
       <div class="p-field mt-3">
         <button pButton (click)="onCreatePipeline()">Submit</button>
       </div>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { MessageService } from 'primeng/api';
+import { TabViewModule } from 'primeng/tabview';
 
 import { PipelineAssemblerComponent } from '../assembler/assembler.component';
 
@@ -22,6 +23,7 @@ import { PipelineAssemblerComponent } from '../assembler/assembler.component';
   standalone: true,
   imports: [
     SubheaderComponent,
+    PipelineAssemblerComponent,
     ButtonModule,
     InputTextModule,
     CommonModule,
@@ -29,39 +31,43 @@ import { PipelineAssemblerComponent } from '../assembler/assembler.component';
     CheckboxModule,
     TooltipModule,
     ToastModule,
-    PipelineAssemblerComponent,
+    TabViewModule,
   ],
   providers: [ MessageService, NoteService ],
   templateUrl: './pipeline-create.component.html',
   styleUrl: './pipeline-create.component.css',
 })
-export class PipelineCreateComponent implements OnInit {
+export class PipelineCreateComponent {
   apiService = inject(ApiService);
   route: ActivatedRoute = inject(ActivatedRoute);
   http = inject(HttpClient);
   noteService = inject(NoteService);
   messageService = inject(MessageService);
 
+  @ViewChild('pipelineAssembler') pipelineAssembler!: PipelineAssemblerComponent;
+
   pipeid = '';
   pipelineJson: string = '';
-  pipelineConfig: any = {};
+  private mode_ = 0;
 
-  constructor(private router: Router) {}
-
-  ngOnInit(): void {
-    this.http.get('/assets/pipelineConfig.json').subscribe((data) => {
-      this.pipelineConfig = data;
-    });
+  onModeChange(tabIndex: number) {
+    this.mode_ = tabIndex;
+    if (this.mode_ === 1) {
+      this.pipelineJson = this.pipelineAssembler.serialize(true);
+    } else if (this.mode_ === 0) {
+      this.pipelineAssembler.deserialize(this.pipelineJson);
+    }
   }
 
   onCreatePipeline() {
-    let pipelineData;
-    try {
-      pipelineData = JSON.parse(this.pipelineJson);
-    } catch (error) {
-      pipelineData = this.pipelineJson;
+    let config: string;
+    if (this.mode_ === 0) {
+      config = this.pipelineAssembler.serialize();
+    } else {
+      config = this.pipelineJson;
     }
-    this.apiService.pipelineCreate(this.pipeid, pipelineData).subscribe({
+
+    this.apiService.pipelineCreate(this.pipeid, config).subscribe({
       next: (response) => {
         this.noteService.handleMessage(
           this.messageService, 'success', 'Pipeline created successfully!'
@@ -73,9 +79,5 @@ export class PipelineCreateComponent implements OnInit {
         );
       },
     });
-  }
-
-  onGenerateConfig() {
-    this.pipelineJson = JSON.stringify(this.pipelineConfig, null, 2);
   }
 }
