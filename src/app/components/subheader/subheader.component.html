@@ -1,23 +1,18 @@
 <div class="subheader-container flex flex-row align-items-center border-1 border-top-none border-300 h-3rem" >
   <div class="flex flex-row align-items-center">
-    <i *ngIf="backRoute" class="pi pi-arrow-left back-arrow" (click)="goBack()"></i>
-    <p class="ml-2 text-lg"><strong>{{ selectedMenuName }}</strong></p>
+    <i *ngIf="backRoute" class="pi pi-arrow-left back-arrow mr-4" (click)="goBack()"></i>
+    @for (item of actions; track $index) {
+      <a [routerLink]="item.routerLink"
+         [pTooltip]="item.tooltipOptions.tooltipLabel"
+         [tooltipPosition]="item.tooltipOptions.tooltipPosition"
+         [tooltipEvent]="item.tooltipOptions.tooltipEvent" (click)="item.command ? item.command() : null"
+         class="mr-4"
+      >
+        <i [class]="item.iconClass"></i>
+      </a>
+    }
   </div>
-  @if(items.length){
-    <div class="flex flex-row align-items-center ml-auto">
-      <p-menubar [model]="items" [style]="{'background-color': 'white'}"/>
-    </div>
-  }
-    <div class="flex flex-row align-items-center ml-auto pr-5">
-        @for (item of actions; track $index) {
-          <a [routerLink]="item.routerLink"
-             [pTooltip]="item.tooltipOptions.tooltipLabel"
-             [tooltipPosition]="item.tooltipOptions.tooltipPosition"
-             [tooltipEvent]="item.tooltipOptions.tooltipEvent" (click)="item.command ? item.command() : null"
-             class="m-4 ml-2"
-          >
-            <i [class]="item.iconClass"></i>
-          </a>
-        }
+    <div class="flex flex-row align-items-center ml-auto pr-6">
+      <p class="text-lg"><strong>{{ selectedMenuName }}</strong></p>
     </div>
 </div>

@@ -26,7 +26,6 @@ import { ButtonModule } from 'primeng/button';
 export class SubheaderComponent {
   @Input() selectedMenuName: string = '';
   @Input() actions: MenuItem[] = [];
-  @Input() items: MenuItem[] = [];
   @Input() backRoute: string = '';
 
   constructor(
