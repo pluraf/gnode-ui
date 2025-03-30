@@ -39,7 +39,9 @@ export class PipelineDetailComponent {
   showSpinnerButton: boolean = false;
   isStarting: boolean = false;
   isStopping: boolean = false;
+  isLoading: boolean = false;
   pollingSubscription: Subscription | null = null;
+  pollingCounter: number = 0;
 
   constructor() {
     this.pipeid = this.route.snapshot.params['pipeid'];
@@ -92,16 +94,18 @@ export class PipelineDetailComponent {
         this.pipelines.last_out = statusResponse.last_out;
         this.pipelines.error = statusResponse.error;
         this.updateDetails();
+        this.isLoading = false;
 
         this.showSpinnerButton = this.pipelines.status === 'running';
         this.isStarting = this.pipelines.status === 'starting';
 
-        if (
-          this.pollingSubscription &&
-          this.pipelines.status !== 'starting' &&
-          this.pipelines.status !== 'stopping'
-        ) {
-          this.stopPolling();
+        if (this.pollingSubscription) {
+          if ((this.pipelines.status !== 'starting' &&
+               this.pipelines.status !== 'stopping') ||
+              ++this.pollingCounter > 5
+          ) {
+            this.stopPolling();
+          }
         }
       },
     });
@@ -161,7 +165,7 @@ export class PipelineDetailComponent {
     });
   }
 
-  OnStartSpinner() {
+  onStartSpinner() {
     if (
       this.pipelines.status === 'malformed' ||
       this.pipelines.status === 'failed'
@@ -186,7 +190,7 @@ export class PipelineDetailComponent {
     });
   }
 
-  OnStopSpinner() {
+  onStopSpinner() {
     this.isStopping = true;
     this.apiService.stopPipeline(this.pipeid).subscribe({
       next: () => {
@@ -198,6 +202,11 @@ export class PipelineDetailComponent {
         }, 1000);
       },
     });
+  }
+
+  onReloadDetails() {
+    this.isLoading = true;
+    this.updatePipelineStatus();
   }
 
   startPolling() {

@@ -1,17 +1,21 @@
 <app-subheader selectedMenuName="Pipeline ID: {{pipeid}}" [actions]="menubarItems" backRoute="/pipelines" (deleteChannelEvent)="onDeletePipelines()"></app-subheader>
 
 <app-delete [visible]="visibleDialog" [items]="[{'id': pipeid}]" [itemLabel]="'pipeline'" [idField]="'id'"
-(deleteConfirmed)="onDeletePipelines()" (cancel)="visibleDialog = false"></app-delete>  
-  
+(deleteConfirmed)="onDeletePipelines()" (cancel)="visibleDialog = false"></app-delete>
+
 <div class="main-content">
     <div class="mb-3">
-        <button pButton (click)="OnStartSpinner()" pTooltip="Start Pipeline" tooltipPosition="bottom" class="mr-2" [disabled]="isStarting">
-            <span *ngIf="!isStarting" class="pi pi-play-circle text-xl"></span> 
+        <button pButton (click)="onStartSpinner()" pTooltip="Start Pipeline" tooltipPosition="bottom" class="mr-1" [disabled]="isStarting">
+            <span *ngIf="!isStarting" class="pi pi-play-circle text-xl"></span>
             <span *ngIf="isStarting" class="pi pi-spin pi-spinner text-xl"></span>
         </button>
-        <button pButton (click)="OnStopSpinner()" pTooltip="Stop Pipeline" tooltipPosition="bottom" [disabled]="isStopping">
+        <button pButton (click)="onStopSpinner()" pTooltip="Stop Pipeline" tooltipPosition="bottom" class="mr-4" [disabled]="isStopping">
             <span *ngIf="!isStopping" class="pi pi-stop-circle text-xl"></span>
             <span *ngIf="isStopping" class="pi pi-spin pi-spinner text-xl"></span>
+        </button>
+        <button pButton (click)="onReloadDetails()" pTooltip="Reload Details" tooltipPosition="bottom" [disabled]="isLoading">
+            <span *ngIf="!isLoading" class="pi pi-sync text-xl"></span>
+            <span *ngIf="isLoading" class="pi pi-spin pi-spinner text-xl"></span>
         </button>
     </div>
     <p-table [value]="details" [tableStyle]="{ 'min-width': '10rem' }">
