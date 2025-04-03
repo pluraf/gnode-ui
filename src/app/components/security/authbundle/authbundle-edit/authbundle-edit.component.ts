@@ -8,10 +8,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
-import { SubheaderComponent } from '../../subheader/subheader.component';
+import { SubheaderComponent } from '../../../subheader/subheader.component';
 import { AuthType, AuthTypeLabel, ConnectorType, ConnectorTypeLabel, AuthbundleComponent } from '../authbundle';
-import { ApiService } from '../../../services/api.service';
-import { NoteService } from '../../../services/note.service';
+import { ApiService } from '../../../../services/api.service';
+import { NoteService } from '../../../../services/note.service';
 
 @Component({
   selector: 'app-authbundle-edit',
@@ -35,6 +35,7 @@ export class AuthbundleEditComponent extends AuthbundleComponent {
   noteService = inject(NoteService);
 
   @ViewChild('keyFile') keyFileInput!: ElementRef;
+  @ViewChild('caFile') caFileInput!: ElementRef;
 
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
@@ -47,7 +48,7 @@ export class AuthbundleEditComponent extends AuthbundleComponent {
         this.selServiceType = response.service_type;
         this.selAuthOption = response.auth_type;
         this.description = response.description;
-        this.onChangeConnectorType(this.selServiceType, this.keyFileInput);
+        this.onChangeConnectorType(this.selServiceType, this.keyFileInput, this.caFileInput);
       });
     });
   }
@@ -58,10 +59,6 @@ export class AuthbundleEditComponent extends AuthbundleComponent {
 
   onChangeAutoId(event: any) {
     this.authbundleId = '';
-  }
-
-  onFileSelected(event: any) {
-    this.keyFile = event.target.files[0];
   }
 
   onUpdate() {

@@ -1,0 +1,47 @@
+<app-subheader
+  selectedMenuName="Upload file"
+  backRoute="/ca">
+</app-subheader>
+
+<div class="main-content" [style]="{'margin-top': '120px'}">
+  <p-toast position="top-right" [baseZIndex]="5000"/>
+  <div class="formgrid grid w-full">
+    <div class="field col-12 w-full">
+      <div class="mb-2"><label for="file_id">CA Certificate Name</label></div>
+      <input
+        id="file_id"
+        type="text"
+        pInputText
+        [(ngModel)]="caId"
+        class="text-base p-2 w-23rem mr-3"
+        (change)="onCAIdChanged()"
+      />
+    </div>
+
+      <div class="field col-12 mt-2">
+        <div class="flex flex-row align-items-center gap-1 mt-2">
+          <span class="mr-2">CA Certificate File</span>
+          <input
+            type="file"
+            #keyFile
+            name="keyFile"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+      </div>
+
+    <div class="field col-12 mt-2">
+      <div class="mb-2"><label for="description">Description</label></div>
+      <input
+        id="description"
+        type="text"
+        pInputText
+        [(ngModel)]="description"
+        class="text-base p-2 w-30rem"
+      />
+    </div>
+    <div class="field col-12 mt-4">
+      <button pButton (click)="onSubmit()" class="button">Submit</button>
+    </div>
+  </div>
+</div>

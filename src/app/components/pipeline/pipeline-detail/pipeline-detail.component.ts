@@ -52,7 +52,7 @@ export class PipelineDetailComponent {
         tooltipOptions: {
           tooltipEvent: 'hover',
           tooltipPosition: 'bottom',
-          tooltipLabel: 'Edit channel',
+          tooltipLabel: 'Edit pipeline',
         },
         iconClass: 'pi pi-pencil m-1',
       },
@@ -60,7 +60,7 @@ export class PipelineDetailComponent {
         tooltipOptions: {
           tooltipEvent: 'hover',
           tooltipPosition: 'bottom',
-          tooltipLabel: 'Delete channel',
+          tooltipLabel: 'Delete pipeline',
         },
         iconClass: 'pi pi-trash m-1',
         command: () => {

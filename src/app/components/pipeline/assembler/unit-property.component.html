@@ -1,12 +1,12 @@
 <div class="flex flex-row flex-wrap">
-  <div class="flex w-4rem mt-3 mb-2 w-8rem">
-    <label for="{{ property.name }}_{{ index }}" class="">{{ property.name }}</label>
+  <div class="flex mt-3 mb-2">
+    <label for="{{ property.name }}_{{ index }}" class="property-label">{{ property.name }}</label>
   </div>
   <div class="flex mt-2 mb-0">
     @if (property.view == 'input') {
       <input pInputText type="text"  id="{{ property.name }}_{{ index }}" [(ngModel)]="property.value" class="w-28rem" />
     } @else if (property.view == 'select') {
-      <p-dropdown [options]="property.options" [(ngModel)]="property.value"/>
+      <p-dropdown [editable] = "true" [options]="property.options" [(ngModel)]="property.value"/>
     }
   <p-button *ngIf="property.isOptional()" icon="pi pi-times" [rounded]="true" severity="danger" [text]="true" (click)="removeProperty()" styleClass="h-2rem w-2rem ml-2 mt-1"/>
 </div>

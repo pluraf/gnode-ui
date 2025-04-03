@@ -50,8 +50,16 @@ export const routes: Routes = [
     path: 'authbundles',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./components/authbundle/authbundles.routes').then(
+      import('./components/security/authbundle/authbundles.routes').then(
         (r) => r.AUTHBUNDLES_ROUTES,
+      ),
+  },
+  {
+    path: 'ca',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./components/security/ca/ca.routes').then(
+        (r) => r.CA_ROUTES,
       ),
   },
   {

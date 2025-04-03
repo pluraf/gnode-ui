@@ -8,13 +8,13 @@
         </div>
         <div class="field col-12">
           <div class="mb-2"><label for="Connector-types">Service type</label></div>
-          <select id="Connector-types" [(ngModel)]="selServiceType" (ngModelChange)="onChangeConnectorType($event, keyFileInput)" class="text-color surface-overlay p-2 border-1 border-round w-12rem">
-            <option *ngFor="let option of objectKeys(ConnectorTypes)" [value]="option">{{ConnectorTypes[option]}}</option>
+          <select id="Connector-types" [(ngModel)]="selServiceType" (ngModelChange)="onChangeConnectorType($event, keyFileInput, caFileInput)" class="text-color surface-overlay p-2 border-1 border-round w-12rem">
+            <option *ngFor="let option of objectKeys(connectorTypes)" [value]="option">{{connectorTypes[option]}}</option>
           </select>
         </div>
         <div class="field col-12 mt-2">
           <div class="mb-2"><label for="auth-options">Authentication type</label></div>
-          <select id="auth-options" [(ngModel)]="selAuthOption" (ngModelChange)="onChangeAuthOption($event, keyFileInput)" class="text-color surface-overlay p-2 border-1 border-round w-12rem">
+          <select id="auth-options" [(ngModel)]="selAuthOption" (ngModelChange)="onChangeAuthOption($event, keyFileInput, caFileInput)" class="text-color surface-overlay p-2 border-1 border-round w-12rem">
             <option *ngFor="let option of objectKeys(authOptions)" [value]="option">{{authOptions[option]}}</option>
           </select>
         </div>
@@ -36,11 +36,19 @@
         @if (showUploadKey()) {
         <div class="field col-12 mt-2">
           <div class="flex flex-row align-items-center gap-1 mt-2">
-            <span class="mr-2">Secret key file</span>
+            <span class="mr-2">Secret Key File</span>
             <input type="file" #keyFile name="keyFile" (change)="onFileSelected($event)">
           </div>
         </div>
         }
+        @if (showCARoot()) {
+          <div class="field col-12 mt-2">
+            <div class="flex flex-row align-items-center gap-1 mt-2">
+              <span class="mr-2">CA Root Certificate</span>
+              <input type="file" #caFile name="caFile" (change)="onFileSelected($event)">
+            </div>
+          </div>
+          }
         <div class="field col-12 mt-2">
           <div class="mb-2"><label for="description">Description</label></div>
           <input id="description" type="text" pInputText [(ngModel)]="description" class="text-base p-2 w-30rem"/>

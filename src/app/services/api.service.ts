@@ -10,6 +10,8 @@ export class ApiService {
   constructor() {}
 
   private authbundleUrl = 'api/authbundle/';
+  // CA API
+  private caUrl = 'api/ca/'
   // Settings API
   private settingsUrl = 'api/settings/';
   // Pipeline API
@@ -27,6 +29,12 @@ export class ApiService {
   private apiInfoUrl = '/api/info';
 
   http = inject(HttpClient);
+
+  ////////////////////////////// ANY ////////////////////////////////
+
+  get(url: string): Observable<any> {
+    return this.http.get(url);
+  }
 
   /////////////////////////// Authbundles ///////////////////////////
 
@@ -48,6 +56,28 @@ export class ApiService {
 
   authbundleEdit(authbundle_id: string, formData: FormData): Observable<any> {
     return this.http.put(this.authbundleUrl + authbundle_id, formData);
+  }
+
+  /////////////////////////// CA Certificates ///////////////////////////
+
+  caList(): Observable<any> {
+    return this.http.get(this.caUrl);
+  }
+
+  caDelete(caId: string): Observable<any> {
+    return this.http.delete(this.caUrl + caId, {observe: 'response'});
+  }
+
+  caGet(caId: string): Observable<any> {
+    return this.http.get(this.caUrl + caId);
+  }
+
+  caAdd(formData: object): Observable<any> {
+    return this.http.post(this.caUrl, formData);
+  }
+
+  caEdit(caId: string, formData: FormData): Observable<any> {
+    return this.http.put(this.caUrl + caId, formData);
   }
 
   /////////////////////////// Settings ///////////////////////////

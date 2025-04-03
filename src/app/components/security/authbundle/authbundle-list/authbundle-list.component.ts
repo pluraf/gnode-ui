@@ -12,11 +12,11 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
 import { Authbundle } from '../authbundle';
-import { SubheaderComponent } from '../../subheader/subheader.component';
-import { ApiService } from '../../../services/api.service';
-import { NoteService } from '../../../services/note.service';
+import { SubheaderComponent } from '../../../subheader/subheader.component';
+import { ApiService } from '../../../../services/api.service';
+import { NoteService } from '../../../../services/note.service';
 import { ToastModule } from 'primeng/toast';
-import { DeleteComponent } from '../../shared/delete/delete.component';
+import { DeleteComponent } from '../../../shared/delete/delete.component';
 
 @Component({
   selector: 'app-authbundle-list',

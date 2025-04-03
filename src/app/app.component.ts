@@ -88,15 +88,15 @@ export class AppComponent implements OnInit {
 
   items: MenuItem[] = [
     { label: 'Channels', routerLink: '/channels', styleClass: 'gap-2' },
+    { label: 'Pipelines', routerLink: '/pipelines', styleClass: 'gap-2' },
     {
-      label: 'Pipelines',
+      label: 'Security',
       items: [
-        { label: 'List', routerLink: '/pipelines' },
         { label: 'Authbundles', routerLink: '/authbundles' },
+        { label: 'Certificates', routerLink: '/ca' },
       ],
       styleClass: 'gap-2',
     },
-    { label: 'Users', routerLink: '/users', styleClass: 'gap-4' },
     {
       label: 'Settings',
       items: [
@@ -108,6 +108,7 @@ export class AppComponent implements OnInit {
       ],
       styleClass: 'gap-2',
     },
+    { label: 'Users', routerLink: '/users', styleClass: 'gap-4' },
     { label: 'Status', routerLink: '/status', styleClass: 'gap-2' },
   ];
 

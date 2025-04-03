@@ -1,0 +1,25 @@
+<app-subheader selectedMenuName="Edit authbundle" [backRoute]="'ca/ca-detail/' + caId"></app-subheader>
+
+<div class="main-content">
+<p-toast position="top-right" [baseZIndex]="5000"/>
+    <div class="formgrid grid w-full">
+        <div class="field col-12 w-full">
+          <h4>CA Certificate Name: {{caId}}</h4>
+        </div>
+        <div class="field col-12 mt-1">
+          <div class="flex flex-row align-items-center gap-1 mt-2">
+            <span class="mr-2">CA Certificate File</span>
+            <input type="file" #keyFile name="keyFile" (change)="onFileSelected($event)">
+          </div>
+          <div><small class="text-color-secondary inline-block pt-1">Leave blank to keep the current file</small></div>
+        </div>
+
+        <div class="field col-12 mt-2">
+          <div class="mb-2"><label for="description">Description</label></div>
+          <input id="description" type="text" pInputText [(ngModel)]="description" class="text-base p-2 w-30rem"/>
+        </div>
+        <div class="field col-12 mt-4">
+          <button pButton (click)="onUpdate()" class="button">Update</button>
+        </div>
+    </div>
+  </div>

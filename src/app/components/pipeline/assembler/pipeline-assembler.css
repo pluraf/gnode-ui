@@ -1,5 +1,7 @@
 .property-label {
-    width: 10rem;
+    min-width: 8rem;
+    max-width: 12rem;
+    margin-right: 1rem;
 }
 
 .input_field {

@@ -19,26 +19,33 @@ class PipelineUnitProperty {
   name: string = '';
   view: string = '';
   type: string = '';
-  options?: string[] = [];
+  options: string[] = [];
   required: boolean | OptionalObject = true;
-  value: string = '';
+  value: undefined | string = '';
   private optional_: boolean | undefined = undefined;
 
-  constructor(name: string, v: {[key: string]: any}) {
+  constructor(name: string, v: {[key: string]: any}, loader?: (options: any, schema: any) => void) {
     this.name = name;
     this.view = v['options'] ? 'select' : 'input';
     this.type = v['type'];
-    this.options = v['options'];
+
+    if (v['options']) {
+      if (Array.isArray(v['options'])) {
+        this.options = v['options'];
+      } else if (loader) {
+        loader(this.options, v['options']);
+      }
+    }
+
     this.required = v["required"];
-    this.value = v['default'];
   }
 
   public getValue(): any {
     if (this.type === 'integer') {
-      return parseInt(this.value);
+      return parseInt(this.value as string);
     }
     if (this.type === 'float') {
-      return parseFloat(this.value);
+      return parseFloat(this.value as string);
     }
     return this.value;
   }
@@ -236,12 +243,23 @@ export class PipelineAssemblerComponent {
     });
   }
 
+  loadPropertyOptions(options: any, schema: any) {
+    this.apiService.get(schema['url']).subscribe((data: any) => {
+      if (schema['filter']) {
+        const key = schema['filter']['key'];
+        const value = schema['filter']['value'];
+        data = data.filter((o: any) => o[key].startsWith(value));
+      }
+      data.map((o: any) => o[schema['key']]).forEach((o:any) => options.push(o));
+    });
+  }
+
   getProperties(category: string, type: string): PipelineUnitProperty[] {
     const unitSchema = this.schema_[category]?.[type];
     const properties: PipelineUnitProperty[] = [];
     if (unitSchema) {
       for (const [k, v] of Object.entries(unitSchema)){
-        properties.push(new PipelineUnitProperty(k, v as {[key: string]: any}));
+        properties.push(new PipelineUnitProperty(k, v as {[key: string]: any}, (a ,b) => this.loadPropertyOptions(a, b)));
       }
     }
     return properties;

@@ -33,14 +33,14 @@
       <select
         id="Connector-types"
         [(ngModel)]="selServiceType"
-        (ngModelChange)="onChangeConnectorType($event, keyFileInput)"
+        (ngModelChange)="onChangeConnectorType($event, keyFileInput, caFileInput)"
         class="text-color surface-overlay p-2 border-1 border-round w-12rem"
       >
         <option
-          *ngFor="let option of objectKeys(ConnectorTypes)"
+          *ngFor="let option of objectKeys(connectorTypes)"
           [value]="option"
         >
-          {{ ConnectorTypes[option] }}
+          {{ connectorTypes[option] }}
         </option>
       </select>
     </div>
@@ -51,7 +51,7 @@
       <select
         id="auth-options"
         [(ngModel)]="selAuthOption"
-        (ngModelChange)="onChangeAuthOption($event, keyFileInput)"
+        (ngModelChange)="onChangeAuthOption($event, keyFileInput, caFileInput)"
         class="text-color surface-overlay p-2 border-1 border-round w-12rem"
       >
         <option *ngFor="let option of objectKeys(authOptions)" [value]="option">
@@ -91,11 +91,24 @@
     @if (showUploadKey()) {
       <div class="field col-12 mt-2">
         <div class="flex flex-row align-items-center gap-1 mt-2">
-          <span class="mr-2">Secret key file</span>
+          <span class="mr-2">Secret Key File</span>
           <input
             type="file"
             #keyFile
             name="keyFile"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+      </div>
+    }
+    @if (showCARoot()) {
+      <div class="field col-12 mt-2">
+        <div class="flex flex-row align-items-center gap-1 mt-2">
+          <span class="mr-2">CA Root Certificate</span>
+          <input
+            type="file"
+            #caFile
+            name="caFile"
             (change)="onFileSelected($event)"
           />
         </div>

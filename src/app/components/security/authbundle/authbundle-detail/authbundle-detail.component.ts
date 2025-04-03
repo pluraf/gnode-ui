@@ -4,9 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 
-import { SubheaderComponent } from '../../subheader/subheader.component';
-import { ApiService } from '../../../services/api.service';
-import { DeleteComponent } from '../../shared/delete/delete.component';
+import { SubheaderComponent } from '../../../subheader/subheader.component';
+import { ApiService } from '../../../../services/api.service';
+import { DeleteComponent } from '../../../shared/delete/delete.component';
 
 @Component({
   selector: 'app-authbundle-detail',
@@ -43,7 +43,7 @@ export class AuthbundleDetailComponent {
         tooltipOptions: {
           tooltipEvent: 'hover',
           tooltipPosition: 'bottom',
-          tooltipLabel: 'Delete channel',
+          tooltipLabel: 'Delete authbundle',
         },
         iconClass: 'pi pi-trash m-1',
         command: () => {

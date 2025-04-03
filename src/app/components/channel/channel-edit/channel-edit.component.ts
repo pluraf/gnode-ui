@@ -15,7 +15,7 @@ import { MessageService } from 'primeng/api';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { AuthType, AuthTypeLabel } from '../../authbundle/authbundle';
+import { AuthType } from '../../security/authbundle/authbundle';
 import { ChannelComponent } from '../channel';
 
 

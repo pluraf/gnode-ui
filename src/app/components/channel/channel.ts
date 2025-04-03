@@ -6,11 +6,6 @@ export interface Channel {
   isLoading?: boolean;
 }
 
-export interface PageEvent {
-  first: number;
-  rows: number;
-}
-
 export interface ChannelData {
   chanid: string;
   type: string;
