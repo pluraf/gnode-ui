@@ -37,6 +37,14 @@ class PipelineUnitProperty {
       }
     }
 
+    if (v['default']) {
+      if (this.type !== 'string') {
+        this.value = v['default'].toString();
+      } else {
+        this.value = v['default'];
+      }
+    }
+
     this.required = v["required"];
   }
 
