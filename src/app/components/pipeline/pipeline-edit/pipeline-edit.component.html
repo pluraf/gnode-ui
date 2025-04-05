@@ -4,7 +4,8 @@
     <p-toast position="top-right" [baseZIndex]="5000"/>
     <div class="p-grid ">
         <div class="p-col-12 p-md-6">
-            <h4>Pipeline ID: {{pipeid}}</h4>
+            Pipeline ID: <b>{{pipeid}}</b><br>
+            <small>Permanent identifier of the pipeline</small>
             <p-tabView (activeIndexChange)="onModeChange($event)">
                 <p-tabPanel header="Visual">
                     <pipeline-assembler #pipelineAssembler></pipeline-assembler>

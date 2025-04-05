@@ -37,6 +37,8 @@ export class AuthbundleEditComponent extends AuthbundleComponent {
   @ViewChild('keyFile') keyFileInput!: ElementRef;
   @ViewChild('caFile') caFileInput!: ElementRef;
 
+  override autoId = false;
+
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
   }
@@ -46,19 +48,16 @@ export class AuthbundleEditComponent extends AuthbundleComponent {
       this.authbundleId = params.get('authbundleId') || '';
       this.apiService.authbundleGet(this.authbundleId).subscribe((response: any) => {
         this.selServiceType = response.service_type;
+        this.onChangeConnectorType(this.selServiceType, this.keyFileInput, this.caFileInput);
         this.selAuthOption = response.auth_type;
         this.description = response.description;
-        this.onChangeConnectorType(this.selServiceType, this.keyFileInput, this.caFileInput);
+        this.username = response.username;
       });
     });
   }
 
   constructor() {
     super();
-  }
-
-  onChangeAutoId(event: any) {
-    this.authbundleId = '';
   }
 
   onUpdate() {
