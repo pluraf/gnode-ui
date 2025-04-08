@@ -12,7 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { SubheaderComponent } from '../../subheader/subheader.component';
-import { ChannelComponent } from '../../channel/channel';
+import { ChannelComponent, SubmitType } from '../../channel/channel';
 import { NoteService } from '../../../services/note.service';
 import { ApiService } from '../../../services/api.service';
 
@@ -52,7 +52,7 @@ export class ChannelCreateComponent extends ChannelComponent implements OnInit {
   }
 
   onSubmit() {
-    let payload = this.getSubmitPayload();
+    let payload = this.getSubmitPayload(SubmitType.CREATE);
 
     this.apiService.channelCreate(this.chanid, payload).subscribe({
        next: (response: any) => {

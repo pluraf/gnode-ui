@@ -16,7 +16,7 @@ import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { AuthType } from '../../security/authbundle/authbundle';
-import { ChannelComponent } from '../channel';
+import { ChannelComponent, SubmitType } from '../channel';
 
 
 @Component({
@@ -73,7 +73,7 @@ export class ChannelEditComponent extends ChannelComponent implements OnInit {
   }
 
   onUpdate() {
-    let payload = this.getSubmitPayload();
+    let payload = this.getSubmitPayload(SubmitType.EDIT);
 
     this.apiService.channelUpdate(this.chanid, payload).subscribe({
       next: (response) => {

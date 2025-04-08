@@ -36,6 +36,11 @@ export interface Details {
   value: string | boolean;
 }
 
+export enum SubmitType {
+  EDIT,
+  CREATE
+}
+
 
 export class ChannelComponent {
   communication: string = 'Allow';
@@ -98,7 +103,7 @@ export class ChannelComponent {
     this.secret = result;
   }
 
-  getSubmitPayload() {
+  getSubmitPayload(action: SubmitType) {
     let payload: Partial<ChannelData> = {
       type: this.selectedTypeOption,
       authtype: this.selectedAuthOption,
@@ -107,9 +112,13 @@ export class ChannelComponent {
       payload.secret = this.secret;
     }
     if (this.selectedTypeOption == 'mqtt') {
-      payload.clientid = this.clientid;
+      if (action === SubmitType.EDIT || this.clientid) {
+        payload.clientid = this.clientid;
+      }
+      if (action === SubmitType.EDIT || payload.username) {
+        payload.username = this.username;
+      }
       payload.enabled = this.enabled;
-      payload.username = this.username;
     } else if (this.selectedTypeOption == 'http') {
       payload.enabled = this.enabled;
       payload.queue_name = this.queue_name;
