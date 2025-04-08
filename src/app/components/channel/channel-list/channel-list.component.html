@@ -7,7 +7,7 @@
 No channels are available. To create one, click the plus sign in the top-right corner or use the <a routerLink="/channels/channel-create" class="text-green-700">Create Channel</a> link.</div>
 </div>
 
-<div class="main-content-body">
+<div *ngIf="!showMessage" class="main-content-body">
   <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
 
   <!-- Display the table after data is loaded -->
