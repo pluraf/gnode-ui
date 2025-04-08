@@ -1,17 +1,21 @@
-@if (router.url != "/login") {
-  @if (isInfoLoaded) {
-    <app-header></app-header>
+@if (router.url.startsWith("/external")) {
+  <exteranl-app [resource]="router.url.substring(9)"></exteranl-app>
+}@else {
+  @if (router.url != "/login") {
+    @if (isInfoLoaded) {
+      <app-header></app-header>
 
-    <p-sidebar [visible]="true" [modal]="false" [showCloseIcon]="false" [transitionOptions]="'0s'" [style]="{'padding-top': '40px'}" styleClass="no-border">
-      <p-panelMenu  [model]="items" [multiple]="true" />
-    </p-sidebar>
+      <p-sidebar [visible]="true" [modal]="false" [showCloseIcon]="false" [transitionOptions]="'0s'" [style]="{'padding-top': '40px'}" styleClass="no-border">
+        <p-panelMenu  [model]="items" [multiple]="true" />
+      </p-sidebar>
+    }
   }
-}
 
-@if (isInfoLoaded || router.url == "/login") {
-  <div [style]="{'margin-left': margin_left, 'margin-top': '56px', 'opacity': spinnerService.spinnerSignal() ? '50%' : '100%'}"><router-outlet></router-outlet></div>
-}
+  @if (isInfoLoaded || router.url == "/login") {
+    <div [style]="{'margin-left': margin_left, 'margin-top': '56px', 'opacity': spinnerService.spinnerSignal() ? '50%' : '100%'}"><router-outlet></router-outlet></div>
+  }
 
-<div class="spinner-overlay" [style]="{display: spinnerService.spinnerSignal() ? 'block' : 'none'}">
-<p-progressSpinner ariaLabel="loading" [style]='{"z-index": 10000, "display": "block", "top": "50%"}'/>
-</div>
+  <div class="spinner-overlay" [style]="{display: spinnerService.spinnerSignal() ? 'block' : 'none'}">
+  <p-progressSpinner ariaLabel="loading" [style]='{"z-index": 10000, "display": "block", "top": "50%"}'/>
+  </div>
+}

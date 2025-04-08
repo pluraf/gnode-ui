@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { StatusComponent } from './components/status/status.component';
 import { LoginComponent } from './components/login/login.component';
+import { ExternalComponent } from './components/external/external.component';
 
 export const routes: Routes = [
   {
@@ -75,4 +76,9 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     component: StatusComponent,
   },
+  {
+    path: 'external/chirpstack',
+    canActivate: [AuthGuard],
+    component: ExternalComponent,
+  }
 ];

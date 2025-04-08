@@ -24,6 +24,7 @@ import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
 
 import { HeaderComponent } from './components/header/header.component';
+import { ExternalComponent } from './components/external/external.component';
 import { InfoService } from './services/info.service';
 import { AuthService } from './services/auth.service';
 import { SpinnerService } from './services/spinner.service';
@@ -33,8 +34,9 @@ import { SpinnerService } from './services/spinner.service';
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet,
     HeaderComponent,
+    ExternalComponent,
+    RouterOutlet,
     PanelMenuModule,
     SplitterModule,
     DividerModule,
@@ -110,6 +112,7 @@ export class AppComponent implements OnInit {
     },
     { label: 'Users', routerLink: '/users', styleClass: 'gap-4' },
     { label: 'Status', routerLink: '/status', styleClass: 'gap-2' },
+    { label: 'ChirpStack', routerLink: '/external/chirpstack', styleClass: 'gap-2' },
   ];
 
   updateMenuItems() {
