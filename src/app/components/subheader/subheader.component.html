@@ -2,13 +2,13 @@
   <div class="flex flex-row align-items-center">
     <i *ngIf="backRoute" class="pi pi-arrow-left back-arrow mr-4" (click)="goBack()"></i>
     @for (item of actions; track $index) {
-      <a [routerLink]="item.routerLink"
+      <a [routerLink]="item.disabled ? undefined : item.routerLink"
          [pTooltip]="item.tooltipOptions.tooltipLabel"
          [tooltipPosition]="item.tooltipOptions.tooltipPosition"
-         [tooltipEvent]="item.tooltipOptions.tooltipEvent" (click)="item.command ? item.command() : null"
+         [tooltipEvent]="item.tooltipOptions.tooltipEvent" (click)="item.command && !item.disabled ? item.command() : null"
          class="mr-4"
       >
-        <i [class]="item.iconClass"></i>
+        <i [class]="item.iconClass" [style]="item.disabled ? 'opacity: 0.4;' : 'opacity: 1'"></i>
       </a>
     }
   </div>
