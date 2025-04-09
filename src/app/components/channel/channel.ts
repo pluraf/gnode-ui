@@ -84,6 +84,11 @@ export class ChannelComponent {
         { value: 'none', label: 'None'}
       ];
       this.selectedAuthOption = this.authOptions[0].value;
+    } else {
+      this.authOptions = [
+        { value: 'none', label: 'None'},
+      ];
+      this.selectedAuthOption = this.authOptions[0].value;
     }
     this.secret = '';
   }
@@ -107,6 +112,7 @@ export class ChannelComponent {
     let payload: Partial<ChannelData> = {
       type: this.selectedTypeOption,
       authtype: this.selectedAuthOption,
+      enabled: this.enabled,
     }
     if (this.secret.length > 0) {
       payload.secret = this.secret;

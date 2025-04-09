@@ -49,6 +49,7 @@ export class ChannelDetailComponent {
     this.chanid = this.route.snapshot.params['chanid'];
     this.menubarItems = [
       {
+        id: "edit",
         routerLink: ['/channels/channel-edit', this.chanid],
         tooltipOptions: {
           tooltipEvent: 'hover',
@@ -58,6 +59,7 @@ export class ChannelDetailComponent {
         iconClass: 'pi pi-pencil m-1',
       },
       {
+        id: "delete",
         tooltipOptions: {
           tooltipEvent: 'hover',
           tooltipPosition: 'bottom',
@@ -75,6 +77,9 @@ export class ChannelDetailComponent {
     this.apiService.channelGet(this.chanid).subscribe((response: any) => {
       this.channel = response;
       this.details = this.getDetails();
+      if (this.channel.type === 'lora') {
+        this.menubarItems.forEach(i => {if (i.id !== 'edit') i.disabled = true;})
+      }
     });
 
     effect(() => {

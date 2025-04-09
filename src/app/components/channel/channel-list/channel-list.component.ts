@@ -94,7 +94,9 @@ export class ChannelListComponent {
         const channels = clientResponse;
         this.channelList = channels.map((channel: any) => {
           let obj = { id: '', lastseen: '', enabled: false, type: '' };
-          if (channel.msg_timestamp === 0) {
+          if (channel.msg_timestamp === undefined) {
+            obj.lastseen = '-';
+          } else if (channel.msg_timestamp === 0) {
             obj.lastseen = 'never';
           } else {
             obj.lastseen = DateTime.fromJSDate(new Date(channel.msg_timestamp * 1000), {
