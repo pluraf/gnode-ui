@@ -41,9 +41,7 @@ export class ChannelDetailComponent {
   selectedChannel: any = { id: this.chanid };
 
   exampleHost = '';
-  channel: any = {
-    username: '',
-  };
+  channel: any = {};
 
   constructor() {
     this.chanid = this.route.snapshot.params['chanid'];
@@ -77,13 +75,17 @@ export class ChannelDetailComponent {
     this.apiService.channelGet(this.chanid).subscribe((response: any) => {
       this.channel = response;
       this.details = this.getDetails();
+      this.connDetails = this.getConnDetails(
+        this.infoService.infoData().hostname,
+        this.settingsService.settingsdata().network_settings
+      );
       if (this.channel.type === 'lora') {
         this.menubarItems.forEach(i => {if (i.id !== 'edit') i.disabled = true;})
       }
     });
 
     effect(() => {
-      const gnode_hostname = `gnode-${this.infoService.infoData().serial_number}`;
+      const gnode_hostname = this.infoService.infoData().hostname;
       const settings = this.settingsService.settingsdata();
       const network_settings = settings.network_settings;
 
@@ -129,16 +131,10 @@ export class ChannelDetailComponent {
 
   getConnDetails(gnode_hostname: any, network_settings: any): string[][] {
     let details: string[][] = [];
-    if (this.channel.type == "mqtt") {
-      details.push(
-          ['TCP Port', '1883', 'No encryption'],
-          ['TLS TCP Port', '8883', 'Encrypted'],
-      );
-    } else if (this.channel.type == "http") {
-      details.push(
-          ['HTTP Port', '80', 'No encryption'],
-          ['HTTPS Port', '443', 'Encrypted']
-      );
+    if (this.channel?.ports) {
+      this.channel.ports.forEach((p:any) => {
+        details.push([p.descr, p.port, ""]);
+      });
     }
 
     if (this.virtual) {

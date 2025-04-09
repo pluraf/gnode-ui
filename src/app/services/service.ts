@@ -2,6 +2,7 @@ export interface ApiInfo {
   mode: string;
   version: string;
   serial_number: string;
+  hostname: string;
   anonymous: boolean | null;
   time: any;
 }

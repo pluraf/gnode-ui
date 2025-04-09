@@ -15,6 +15,7 @@ export class InfoService {
     mode: '',
     version: '',
     serial_number: '',
+    hostname: '',
     anonymous: null,
     time: null
   });
@@ -40,6 +41,7 @@ export class InfoService {
             return {
               mode: response.mode,
               serial_number: response.serial_number,
+              hostname: `gnode-${response.serial_number}`,
               version: response.version,
               anonymous: v.anonymous,
               time: response.time
@@ -59,6 +61,7 @@ export class InfoService {
         return {
           mode: v.mode,
           serial_number: v.serial_number,
+          hostname: `gnode-${v.serial_number}`,
           version: v.version,
           anonymous: true,
           time: v.time
@@ -92,6 +95,7 @@ export class InfoService {
       mode: '',
       version: '',
       serial_number: '',
+      hostname: '',
       anonymous: null,
       time: null
     });
