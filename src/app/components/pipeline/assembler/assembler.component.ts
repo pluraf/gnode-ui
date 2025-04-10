@@ -55,6 +55,9 @@ class PipelineUnitProperty {
     if (this.type === 'float') {
       return parseFloat(this.value as string);
     }
+    if (this.type === 'object') {
+      return JSON.parse(this.value as string);
+    }
     return this.value;
   }
 
@@ -159,7 +162,7 @@ export class PipelineUnitComponent {
     return;
   }
 
-  setProperty(propertyName: string, propertyValue: string | number) {
+  setProperty(propertyName: string, propertyValue: any) {
     let prop = this.usedProperties.find(p => p.name === propertyName);
     if (prop === undefined) {
       prop = this.addProperty(propertyName);
@@ -167,8 +170,10 @@ export class PipelineUnitComponent {
     if (prop !== undefined) {
       if (typeof propertyValue  === 'number') {
         prop.value = propertyValue.toString();
+      } else if (typeof propertyValue === 'object') {
+        prop.value = JSON.stringify(propertyValue);
       } else {
-        prop.value = propertyValue;
+        prop.value = propertyValue as string;
       }
     }
   }
@@ -344,18 +349,14 @@ export class PipelineAssemblerComponent {
     this.connectorIn.type = js.connector_in.type;
     for (const [name, value] of Object.entries(js.connector_in)) {
       if (name !== 'type') {
-        if (typeof value === 'string' || typeof value === 'number') {
-          this.connectorIn.setProperty(name, value);
-        }
+        this.connectorIn.setProperty(name, value);
       }
     }
 
     this.connectorOut.type = js.connector_out.type
     for (const [name, value] of Object.entries(js.connector_out)) {
       if (name !== 'type') {
-        if (typeof value === 'string' || typeof value === 'number') {
-          this.connectorOut.setProperty(name, value);
-        }
+        this.connectorOut.setProperty(name, value);
       }
     }
 
@@ -365,9 +366,7 @@ export class PipelineAssemblerComponent {
       unit.type = filtra.type;
       for (const [name, value] of Object.entries(filtra)) {
         if (name !== 'type') {
-          if (typeof value === 'string' || typeof value === 'number') {
-            unit.setProperty(name, value);
-          }
+          unit.setProperty(name, value);
         }
       }
     }
