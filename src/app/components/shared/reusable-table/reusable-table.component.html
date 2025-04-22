@@ -1,0 +1,50 @@
+<p-table [value]="gridData" selectionMode="multiple" [(selection)]="selectedItems" dataKey="id"
+         [paginator]="paginator" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" 
+         (onSelectionChange)="onSelectionChange()" [tableStyle]="{ 'min-width': '50rem' }">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
+      @for(column of columnArray; track $index){
+        <th>{{ column.headerName }}</th>
+      }        
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-rowData>
+    <tr>
+      <td>
+        <p-tableCheckbox name="checkbox" [value]="rowData" />
+      </td>
+  
+      @for (column of columnArray; track $index) {
+        <td>@if (column.fieldName==="state" && column.enabled) {
+            <div>
+              <fa-icon [icon]="['fas', 'ban']"></fa-icon>
+            </div>
+          }
+            @if(column.fieldName==="state" && !column.enabled){
+              <div>
+                <fa-icon [icon]="['far', 'comment']"></fa-icon>
+                <i class="fab fa-github" style="font-size: 24px;"></i>                
+              </div>
+            }  
+            @if (column.routePage) {
+              <div>
+                <a [routerLink]="column.routePage(rowData)">
+                  {{ rowData[column.fieldName] }}
+                </a>
+              </div>
+            }
+            @if (column.isAdmin) {
+              {{ column.isAdmin(rowData) }}
+            } 
+            @else {
+            {{ rowData[column.fieldName] }}
+            }
+        </td>        
+      }
+    </tr>
+  </ng-template>
+</p-table>
+

@@ -1,7 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
-import { TableModule } from 'primeng/table';
-import { PaginatorModule } from 'primeng/paginator';
 import { ToastModule } from 'primeng/toast';
 
 import { catchError, forkJoin, Observable, of } from 'rxjs';
@@ -10,16 +8,19 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
+import {
+  ITableColumn,
+  ReusableTableComponent,
+} from '../../shared/reusable-table/reusable-table.component';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   imports: [
     SubheaderComponent,
-    TableModule,
-    PaginatorModule,
     DeleteComponent,
     ToastModule,
+    ReusableTableComponent,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './user-list.component.html',
@@ -34,6 +35,18 @@ export class UserListComponent {
   selectedUsers: any[] = [];
   totalRecords = 0;
   users: any[] = [];
+
+  columnList: ITableColumn[] = [
+    {
+      fieldName: 'username',
+      headerName: 'Username',
+    },
+    {
+      fieldName: 'role',
+      headerName: 'Role',
+      isAdmin: (user: any) => (user.is_admin ? 'Admin' : 'User'),
+    },
+  ];
 
   menubarItems: MenuItem[] = [
     {

@@ -5,18 +5,20 @@ import { Router, RouterModule } from '@angular/router';
 
 import { forkJoin, catchError, of, Observable } from 'rxjs';
 
-import { TableModule } from 'primeng/table';
-import { PaginatorModule } from 'primeng/paginator';
 import { MenuItem, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
 
 import { Authbundle } from '../authbundle';
 import { SubheaderComponent } from '../../../subheader/subheader.component';
 import { ApiService } from '../../../../services/api.service';
 import { NoteService } from '../../../../services/note.service';
-import { ToastModule } from 'primeng/toast';
 import { DeleteComponent } from '../../../shared/delete/delete.component';
+import {
+  ITableColumn,
+  ReusableTableComponent,
+} from '../../../shared/reusable-table/reusable-table.component';
 
 @Component({
   selector: 'app-authbundle-list',
@@ -27,12 +29,11 @@ import { DeleteComponent } from '../../../shared/delete/delete.component';
     ReactiveFormsModule,
     RouterModule,
     SubheaderComponent,
-    TableModule,
-    PaginatorModule,
     DialogModule,
     ButtonModule,
     ToastModule,
     DeleteComponent,
+    ReusableTableComponent,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './authbundle-list.component.html',
@@ -51,6 +52,23 @@ export class AuthbundleListComponent implements OnInit {
   authbundleid = '';
 
   showMessage: boolean = false;
+
+  columnList: ITableColumn[] = [
+    {
+      fieldName: 'authbundle_id',
+      headerName: 'Authbundle ID',
+      routePage: (row: any) =>
+        `/authbundles/authbundle-detail/${row.authbundle_id}`,
+    },
+    {
+      fieldName: 'connector_type',
+      headerName: 'Type',
+    },
+    {
+      fieldName: 'description',
+      headerName: 'Description',
+    },
+  ];
 
   menubarItems: MenuItem[] = [
     {

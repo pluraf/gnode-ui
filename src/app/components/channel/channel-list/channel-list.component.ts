@@ -6,8 +6,6 @@ import { RouterModule } from '@angular/router';
 import { catchError, forkJoin, Observable, of } from 'rxjs';
 import { DateTime } from 'luxon';
 
-import { TableModule } from 'primeng/table';
-import { PaginatorModule } from 'primeng/paginator';
 import { MenuItem, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -22,6 +20,10 @@ import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
 import { DatetimeService } from '../../../services/datetime.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
+import {
+  ITableColumn,
+  ReusableTableComponent,
+} from '../../shared/reusable-table/reusable-table.component';
 
 @Component({
   selector: 'app-channel-list',
@@ -32,14 +34,13 @@ import { DeleteComponent } from '../../shared/delete/delete.component';
     ReactiveFormsModule,
     RouterModule,
     SubheaderComponent,
-    TableModule,
-    PaginatorModule,
     DialogModule,
     ButtonModule,
     ToastModule,
     ProgressSpinnerModule,
     FontAwesomeModule,
     DeleteComponent,
+    ReusableTableComponent,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './channel-list.component.html',
@@ -52,6 +53,27 @@ export class ChannelListComponent {
   showMessage: boolean = false;
   totalRecords!: number;
   chanid: string = '';
+
+  columnList: ITableColumn[] = [
+    {
+      fieldName: 'id',
+      headerName: 'Channel ID',
+      routePage: (row: any) => `/channels/channel/${row.id}`,
+    },
+    {
+      fieldName: 'type',
+      headerName: 'Type',
+    },
+    {
+      fieldName: 'lastseen',
+      headerName: 'Last Seen',
+    },
+    {
+      fieldName: 'state',
+      headerName: 'State',
+      enabled: true,
+    },
+  ];
 
   menubarItems: MenuItem[] = [
     {
@@ -99,13 +121,19 @@ export class ChannelListComponent {
           } else if (channel.msg_timestamp === 0) {
             obj.lastseen = 'never';
           } else {
-            obj.lastseen = DateTime.fromJSDate(new Date(channel.msg_timestamp * 1000), {
-              zone: this.datetimeService.timezone,
-            }).toFormat('yyyy-MM-dd HH:mm');
+            obj.lastseen = DateTime.fromJSDate(
+              new Date(channel.msg_timestamp * 1000),
+              {
+                zone: this.datetimeService.timezone,
+              },
+            ).toFormat('yyyy-MM-dd HH:mm');
           }
-          obj.id = channel.id;
+
+          // Need to modify the obj key-value naming convention as per latest backend code
+          obj.id = channel.chanid;
           obj.type = channel.type;
-          obj.enabled = channel.enabled;
+          obj.enabled = channel.disabled;
+
           return obj;
         });
         this.totalRecords = this.channelList.length;
@@ -151,4 +179,10 @@ export class ChannelListComponent {
       },
     });
   }
+
+  onSelectionChange(selectedItems: any) {
+    console.log('Selected Items:', selectedItems);
+  }
+
+  routePage(column: ITableColumn) {}
 }
