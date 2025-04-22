@@ -5,8 +5,6 @@ import { Router, RouterModule } from '@angular/router';
 
 import { forkJoin, catchError, of, Observable } from 'rxjs';
 
-import { TableModule } from 'primeng/table';
-import { PaginatorModule } from 'primeng/paginator';
 import { MenuItem, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -31,8 +29,6 @@ import {
     ReactiveFormsModule,
     RouterModule,
     SubheaderComponent,
-    TableModule,
-    PaginatorModule,
     DialogModule,
     ButtonModule,
     ToastModule,
@@ -82,7 +78,7 @@ export class CAListComponent extends CAComponent implements OnInit {
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',
-        tooltipLabel: 'Delete authbundle',
+        tooltipLabel: 'Delete Certificate',
       },
       iconClass: 'pi pi-trash m-1',
       command: () => {
@@ -116,7 +112,7 @@ export class CAListComponent extends CAComponent implements OnInit {
       this.noteService.handleMessage(
         this.messageService,
         'warn',
-        'No channels selected.',
+        'No CA certificate selected.',
       );
       return;
     }
