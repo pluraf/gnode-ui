@@ -35,13 +35,13 @@
                   {{ rowData[column.fieldName] }}
                 </a>
               </div>
+            }@else {
+            {{ rowData[column.fieldName] }}
             }
             @if (column.isAdmin) {
               {{ column.isAdmin(rowData) }}
             } 
-            @else {
-            {{ rowData[column.fieldName] }}
-            }
+            
         </td>        
       }
     </tr>

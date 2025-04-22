@@ -17,6 +17,10 @@ import { SubheaderComponent } from '../../../subheader/subheader.component';
 import { ApiService } from '../../../../services/api.service';
 import { NoteService } from '../../../../services/note.service';
 import { DeleteComponent } from '../../../shared/delete/delete.component';
+import {
+  ITableColumn,
+  ReusableTableComponent,
+} from '../../../shared/reusable-table/reusable-table.component';
 
 @Component({
   selector: 'app-certificate-list',
@@ -33,6 +37,7 @@ import { DeleteComponent } from '../../../shared/delete/delete.component';
     ButtonModule,
     ToastModule,
     DeleteComponent,
+    ReusableTableComponent,
   ],
   providers: [MessageService, NoteService],
   templateUrl: './ca-list.component.html',
@@ -50,6 +55,18 @@ export class CAListComponent extends CAComponent implements OnInit {
   totalRecords!: number;
 
   showMessage: boolean = false;
+
+  columnList: ITableColumn[] = [
+    {
+      fieldName: 'id',
+      headerName: 'CA Certificate ID',
+      routePage: (row: any) => `/ca/ca-detail/${row.id}`,
+    },
+    {
+      fieldName: 'description',
+      headerName: 'Description',
+    },
+  ];
 
   menubarItems: MenuItem[] = [
     {
@@ -110,9 +127,7 @@ export class CAListComponent extends CAComponent implements OnInit {
     let observables: Observable<any>[] = [];
     this.selectedCAs.map((ca) => {
       observables.push(
-        this.apiService
-          .caDelete(ca.id)
-          .pipe(catchError((err) => of(true))),
+        this.apiService.caDelete(ca.id).pipe(catchError((err) => of(true))),
       );
     });
 
