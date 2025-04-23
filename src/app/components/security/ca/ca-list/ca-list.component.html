@@ -8,7 +8,7 @@
         </div>
         <div *ngIf="!showMessage" class="main-content">
             <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
-            <p-table [value]="caList" selectionMode="multiple" [(selection)]="selectedCAs" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 30]" [tableStyle]="{ 'min-width': '50rem' }">
+            <p-table [value]="caList" selectionMode="multiple" [(selection)]="selectedCAs" dataKey="id" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[10, 15, 30]" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>

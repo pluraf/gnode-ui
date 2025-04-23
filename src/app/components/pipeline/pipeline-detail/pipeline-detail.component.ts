@@ -128,9 +128,9 @@ export class PipelineDetailComponent {
       ['Connector Out', this.pipelines.connector_out.type],
       ['Pipeline Status', this.pipelines.status],
       ['Messages received', this.pipelines.count_in],
-      ['Last message received timestamp', recivedTimestamp],
+      ['Last message received', recivedTimestamp],
       ['Messages sent', this.pipelines.count_out],
-      ['Last message sent timestamp', sentTimestamp],
+      ['Last message sent', sentTimestamp],
     ];
 
     if (

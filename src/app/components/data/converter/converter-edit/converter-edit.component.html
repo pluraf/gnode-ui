@@ -1,0 +1,23 @@
+<app-subheader selectedMenuName="Edit converter" backRoute="/converters"></app-subheader>
+
+<div class="main-content">
+<p-toast position="top-right" [baseZIndex]="5000"/>
+    <div class="formgrid grid" style="display: inline-block;">
+        <div class="field col-12">
+          Converter Id: <b>{{converterId}}</b><br>
+          <small>Permanent identifier of the converter</small>
+        </div>
+        <div class="field col-12 mt-2">
+          <div class="mb-2">
+            <label for="lua-code">Lua code</label>
+          </div>
+          <textarea id="lua-code" cols="72" rows="20" class="converter-edit" [(ngModel)]="converterCode"></textarea>
+        </div>
+        <div class="field col-12 mt-2">
+          <div class="mb-2"><label for="description">Description</label></div>
+          <input id="description" type="text" pInputText [(ngModel)]="description" class="text-base p-2 w-full"/>
+        </div>
+        <div class="field col-12 mt-4">
+          <button pButton (click)="onUpdate()" class="button">Update</button>
+        </div>
+    </div>

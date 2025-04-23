@@ -1,0 +1,27 @@
+        <app-subheader selectedMenuName="Converters" [actions]="menubarItems"></app-subheader>
+        <app-delete [visible]="visibleDialog" [items]="selectedConverter" [itemLabel]="'converter'" [idField]="'converterId'" (deleteConfirmed)="onDeleteConverter()" (cancel)="visibleDialog = false"></app-delete>
+        <div *ngIf="showMessage" class="showMessage flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
+            <div class="text-center">
+                No converters available. To create one, click the plus sign in the top-right corner or use the
+                <a routerLink="/converters/converter-create" class="text-green-700">Create Converter</a> link.
+            </div>
+        </div>
+        <div *ngIf="!showMessage" class="main-content">
+            <p-toast position="top-right" class="mt-6" [baseZIndex]="5000"/>
+            <p-table [value]="converterList" selectionMode="multiple" [(selection)]="selectedConverter" dataKey="converterId" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[10, 15, 30]" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
+                        <th>Converter ID</th>
+                        <th>Description</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-converter>
+                    <tr>
+                        <td><p-tableCheckbox name="checkbox" [value]="converter" /></td>
+                        <td><a routerLink="/converters/converter-edit/{{converter.converter_id}}">{{ converter.converter_id }}</a></td>
+                        <td>{{converter.description}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>

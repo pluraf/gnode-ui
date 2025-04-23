@@ -92,10 +92,18 @@ export class AppComponent implements OnInit {
     { label: 'Channels', routerLink: '/channels', styleClass: 'gap-2' },
     { label: 'Pipelines', routerLink: '/pipelines', styleClass: 'gap-2' },
     {
+      label: 'Data',
+      items: [
+        { label: 'Converters', routerLink: '/converters' },
+      ],
+      styleClass: 'gap-2'
+    },
+    {
       label: 'Security',
       items: [
         { label: 'Authbundles', routerLink: '/authbundles' },
         { label: 'Certificates', routerLink: '/ca' },
+        { label: 'Users', routerLink: '/users' },
       ],
       styleClass: 'gap-2',
     },
@@ -110,7 +118,7 @@ export class AppComponent implements OnInit {
       ],
       styleClass: 'gap-2',
     },
-    { label: 'Users', routerLink: '/users', styleClass: 'gap-4' },
+
     { label: 'Status', routerLink: '/status', styleClass: 'gap-2' },
     { label: 'ChirpStack', routerLink: '/external/chirpstack', styleClass: 'gap-2' },
   ];

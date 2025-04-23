@@ -1,0 +1,17 @@
+button {
+  background-color: #006666 !important;
+  width: 7rem;
+  font-size: 18px;
+  justify-content: center;
+}
+:host {
+  ::ng-deep .p-button {
+    padding: 0.375rem 0.625rem;
+  }
+}
+
+.converter-edit {
+  resize: both;
+  overflow: auto;
+  font-size: 1rem;
+}

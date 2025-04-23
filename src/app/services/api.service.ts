@@ -21,6 +21,8 @@ export class ApiService {
   private pipelineSchemaUrl = 'api/pipeline/schema/';
   // Channel API
   private channelUrl = 'api/channel/';
+  // Converter API
+  private converterUrl = 'api/converter/';
   // Version API
   private apiVersionUrl = '/api/version';
   // Status API
@@ -221,6 +223,28 @@ export class ApiService {
 
   getTimeZones(): Observable<any> {
     return this.http.get('api/timezones');
+  }
+
+  /////////////////////////// Authbundles ///////////////////////////
+
+  converterList(): Observable<any> {
+    return this.http.get(this.converterUrl);
+  }
+
+  converterDelete(converterId: string): Observable<any> {
+    return this.http.delete(this.converterUrl + converterId, {observe: 'response'});
+  }
+
+  converterGet(converterId: string): Observable<any> {
+    return this.http.get(this.converterUrl + converterId);
+  }
+
+  converterCreate(formData: object): Observable<any> {
+    return this.http.post(this.converterUrl, formData);
+  }
+
+  converterUpdate(converterId: string, formData: FormData): Observable<any> {
+    return this.http.put(this.converterUrl + converterId, formData);
   }
 
   ///////////////////////////////// Next ////////////////////////////

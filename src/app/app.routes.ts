@@ -48,6 +48,14 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'converters',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./components/data/converter/converter.routes').then(
+        (r) => r.CONVERTER_ROUTES,
+      ),
+  },
+  {
     path: 'authbundles',
     canActivate: [AuthGuard],
     loadChildren: () =>
