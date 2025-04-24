@@ -40,6 +40,7 @@ import { ChannelComponent, SubmitType } from '../channel';
 })
 export class ChannelEditComponent extends ChannelComponent implements OnInit {
   noteService = inject(NoteService);
+  loaded = false;
 
   constructor(
     private apiService: ApiService,
@@ -50,31 +51,31 @@ export class ChannelEditComponent extends ChannelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      this.chanid = params.get('chanid') || '';
-
+      this.chanid = this.route.snapshot.params['chanid'];
       this.apiService.channelGet(this.chanid).subscribe((response: any) => {
-          const channel = response;
-          this.onChangeChannelType(channel.type);
+        this.loaded = true;
+        const channel = response;
+        this.onChangeChannelType(channel.type);
 
-          this.clientid = channel.clientid ?? "";
-          this.username = channel.username ?? "";
-          this.secret = channel.token ?? "";
-          this.selectedAuthOption = channel.authtype.toLowerCase();
-          this.selectedTypeOption = channel.type;
-          this.queue_name = channel.queue_name ?? "";
+        this.clientid = channel.clientid ?? "";
+        this.username = channel.username ?? "";
+        this.secret = channel.token ?? "";
+        this.selectedAuthOption = channel.authtype.toLowerCase();
+        this.selectedTypeOption = channel.type;
+        this.queue_name = channel.queue_name ?? "";
 
-          if (this.selectedAuthOption === AuthType.JWT_ES256) {
-            this.secret = channel.jwtkey;  // .replace(/(.{64})/g, '$1\n');
-          }
-          this.enabled = channel.enabled;
-        });
-    });
+        if (this.selectedAuthOption === AuthType.JWT_ES256) {
+          this.secret = channel.jwtkey;  // .replace(/(.{64})/g, '$1\n');
+        }
+        this.enabled = channel.enabled;
+      });
   }
 
   onUpdate() {
+    if (this.chanid === null) {
+      return;
+    }
     let payload = this.getSubmitPayload(SubmitType.EDIT);
-
     this.apiService.channelUpdate(this.chanid, payload).subscribe({
       next: (response) => {
         this.noteService.handleMessage(
