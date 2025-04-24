@@ -152,7 +152,6 @@ export class PipelineDetailComponent {
   }
 
   onDeletePipelines() {
-    const pipeids = [this.pipeid];
     this.apiService.pipelineDelete(this.pipeid).subscribe({
       next: (response: any) => {
         if (response.success || response.status === 'success') {

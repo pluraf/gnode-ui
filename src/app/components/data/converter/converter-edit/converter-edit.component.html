@@ -1,4 +1,7 @@
-<app-subheader selectedMenuName="Edit converter" backRoute="/converters"></app-subheader>
+<app-subheader selectedMenuName="Edit converter" [actions]="menubarItems" backRoute="/converters"></app-subheader>
+
+<app-delete [visible]="visibleDialog" [items]="[{'id': converterId}]" [itemLabel]="'pipeline'" [idField]="'id'"
+(deleteConfirmed)="onDeleteConverter()" (cancel)="visibleDialog = false"></app-delete>
 
 <div class="main-content">
 <p-toast position="top-right" [baseZIndex]="5000"/>

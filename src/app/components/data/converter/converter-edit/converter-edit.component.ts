@@ -1,17 +1,18 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { MessageService } from 'primeng/api';
+import { MessageService, MenuItem } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
 import { SubheaderComponent } from '../../../subheader/subheader.component';
 import { Converter, ConverterComponent } from '../converter';
 import { ApiService } from '../../../../services/api.service';
 import { NoteService } from '../../../../services/note.service';
+import { DeleteComponent } from '../../../shared/delete/delete.component';
 
 
 @Component({
@@ -19,6 +20,7 @@ import { NoteService } from '../../../../services/note.service';
   standalone: true,
   imports: [
     SubheaderComponent,
+    DeleteComponent,
     CommonModule,
     ButtonModule,
     InputTextModule,
@@ -32,10 +34,13 @@ import { NoteService } from '../../../../services/note.service';
 export class ConverterEditComponent extends ConverterComponent {
   apiService = inject(ApiService);
   route = inject(ActivatedRoute);
+  router = inject(Router);
   messageService = inject(MessageService);
   noteService = inject(NoteService);
 
+  menubarItems: MenuItem[] = [];
   override autoId = false;
+  visibleDialog: boolean = false;
 
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
@@ -53,6 +58,32 @@ export class ConverterEditComponent extends ConverterComponent {
 
   constructor() {
     super();
+    this.menubarItems = [
+      {
+        tooltipOptions: {
+          tooltipEvent: 'hover',
+          tooltipPosition: 'bottom',
+          tooltipLabel: 'Delete pipeline',
+        },
+        iconClass: 'pi pi-trash m-1',
+        command: () => {
+          this.showDialog();
+        },
+      },
+    ];
+  }
+
+  showDialog() {
+    this.visibleDialog = true;
+  }
+
+  onDeleteConverter() {
+    this.apiService.converterDelete(this.converterId).subscribe({
+      next: (response: any) => {
+        this.visibleDialog = false;
+        this.router.navigateByUrl('/converters');
+      },
+    });
   }
 
   onUpdate() {
