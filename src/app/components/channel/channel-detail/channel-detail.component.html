@@ -1,4 +1,4 @@
-<app-subheader selectedMenuName="Channel ID: {{chanid}}" [actions]="menubarItems" backRoute="/channels" (deleteChannelEvent)="onDeleteChannel()"></app-subheader>
+<app-subheader selectedMenuName="Channel details" [actions]="menubarItems" backRoute="/channels" (deleteChannelEvent)="onDeleteChannel()"></app-subheader>
 <app-delete [visible]="visibleDialog" [items]="[{'id': chanid}]" [itemLabel]="'channel'" [idField]="'id'"
 (deleteConfirmed)="onDeleteChannel()" (cancel)="visibleDialog = false"></app-delete>
 

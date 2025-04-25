@@ -124,6 +124,7 @@ export class PipelineDetailComponent {
       .slice(0, iso8601Sent.toString().indexOf('GMT'));
 
     this.details = [
+      ['Pipeline ID', this.pipeid],
       ['Connector In', this.pipelines.connector_in.type],
       ['Connector Out', this.pipelines.connector_out.type],
       ['Pipeline Status', this.pipelines.status],

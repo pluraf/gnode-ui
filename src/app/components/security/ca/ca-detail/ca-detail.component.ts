@@ -57,9 +57,11 @@ export class CADetailsComponent extends CAComponent {
   loadDetails(caId: string) {
     this.apiService.caGet(caId).subscribe((response: any) => {
       if (response) {
-        console.log(response);
         this.fileMetaData = response;
-        this.details = [['Description', this.fileMetaData.description]];
+        this.details = [
+          ['CA Certificate ID', this.caId],
+          ['Description', this.fileMetaData.description]
+        ];
       }
     });
   }

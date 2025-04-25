@@ -110,6 +110,7 @@ export class ChannelDetailComponent {
         .slice(0, iso8601.toString().indexOf('GMT'));
     }
     let details: string[][] = [
+      ['Channel ID', this.chanid],
       ['State', this.channel.state],
       ['Enabled', this.channel.enabled],
       ['Type', this.channel.type],

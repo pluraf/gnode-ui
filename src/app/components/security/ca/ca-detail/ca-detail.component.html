@@ -1,4 +1,4 @@
-<app-subheader selectedMenuName="CA Certificate Name: {{caId}}" [actions]="menubarItems" backRoute="/ca/"></app-subheader>
+<app-subheader selectedMenuName="CA Certificate details" [actions]="menubarItems" backRoute="/ca/"></app-subheader>
 <app-delete [visible]="visibleDialog" [items]="[{'file_id': caId}]" [itemLabel]="'file'" [idField]="'file_id'" (deleteConfirmed)="onDelete()" (cancel)="visibleDialog = false"></app-delete>
 <div class="main-content">
     <p-table [value]="details" [tableStyle]="{ 'min-width': '10rem' }">

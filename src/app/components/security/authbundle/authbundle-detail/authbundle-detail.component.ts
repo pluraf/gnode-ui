@@ -58,6 +58,7 @@ export class AuthbundleDetailComponent {
       if (response) {
         this.authbundle = response;
         this.details = [
+          ['Authbundle ID', this.authbundleId],
           ['Type', this.authbundle.auth_type],
           ['Authentication type', this.authbundle.service_type],
         ];

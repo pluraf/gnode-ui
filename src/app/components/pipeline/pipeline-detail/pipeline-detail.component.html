@@ -1,4 +1,4 @@
-<app-subheader selectedMenuName="Pipeline ID: {{pipeid}}" [actions]="menubarItems" backRoute="/pipelines" (deleteChannelEvent)="onDeletePipelines()"></app-subheader>
+<app-subheader selectedMenuName="Pipeline details" [actions]="menubarItems" backRoute="/pipelines" (deleteChannelEvent)="onDeletePipelines()"></app-subheader>
 
 <app-delete [visible]="visibleDialog" [items]="[{'id': pipeid}]" [itemLabel]="'pipeline'" [idField]="'id'"
 (deleteConfirmed)="onDeletePipelines()" (cancel)="visibleDialog = false"></app-delete>
