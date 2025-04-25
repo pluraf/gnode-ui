@@ -34,7 +34,6 @@ import { DeleteComponent } from '../../../shared/delete/delete.component';
     ToastModule,
     DeleteComponent,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './authbundle-list.component.html',
   styleUrl: './authbundle-list.component.css',
 })
@@ -95,11 +94,7 @@ export class AuthbundleListComponent implements OnInit {
 
   showDialog() {
     if (this.selectedAuthbundle.length === 0) {
-      this.noteService.handleMessage(
-        this.messageService,
-        'warn',
-        'No channels selected.',
-      );
+      this.noteService.handleWarning('No channels selected!');
       return;
     }
     this.visibleDialog = true;
@@ -111,7 +106,10 @@ export class AuthbundleListComponent implements OnInit {
       observables.push(
         this.apiService
           .authbundleDelete(authbundle.authbundle_id)
-          .pipe(catchError((err) => of(true))),
+          .pipe(catchError((err) => {
+            this.noteService.handleError(err);
+            return of(true)
+          })),
       );
     });
 

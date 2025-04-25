@@ -32,7 +32,6 @@ import { NoteService } from '../../../../services/note.service';
     SubheaderComponent,
     ToastModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './authbundle-create.component.html',
   styleUrl: './authbundle-create.component.css',
 })
@@ -84,39 +83,13 @@ export class AuthbundleCreateComponent extends AuthbundleComponent {
     if (this.description) {
       formData.append('description', this.description);
     }
-    this.apiService.authbundleCreate(formData).subscribe(
-      (response) => {
-        if (response && response.responses && response.responses.length > 0) {
-          if (response.responses[0].hasOwnProperty('error')) {
-            this.noteService.handleMessage(
-              this.messageService,
-              'error',
-              response.responses[0].error,
-            );
-          }
-        } else {
-          this.noteService.handleMessage(
-            this.messageService,
-            'success',
-            'Authbundle submitted successfully!',
-          );
-        }
+    this.apiService.authbundleCreate(formData).subscribe({
+      next: (response: any) => {
+        this.noteService.handleMessage(response, 'Authbundle submitted successfully!');
       },
-      (error: any) => {
-        const errorMessage =
-          error?.message ||
-          (typeof error?.error === 'string' && error.error) ||
-          (error?.status &&
-            error?.statusText &&
-            `${error.status}: ${error.statusText}`) ||
-          (error?.status && `Error Code: ${error.status}`) ||
-          'An unknown error occurred';
-        this.noteService.handleMessage(
-          this.messageService,
-          'error',
-          errorMessage,
-        );
-      },
-    );
+      error: (error: any) => {
+        this.noteService.handleError(error);
+      }
+    });
   }
 }

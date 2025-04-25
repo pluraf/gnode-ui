@@ -30,7 +30,6 @@ import { ToastModule } from 'primeng/toast';
     SubheaderComponent,
     ToastModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './user-create.component.html',
   styleUrl: './user-create.component.css',
 })
@@ -51,10 +50,8 @@ export class UserCreateComponent {
 
   onCreateUser() {
     if (!this.userObj.username || !this.userObj.password) {
-      this.noteService.handleMessage(
-        this.messageService,
-        'warn',
-        'Username and Password are required.',
+      this.noteService.handleWarning(
+        'Username and Password are required!'
       );
       return;
     }
@@ -65,32 +62,14 @@ export class UserCreateComponent {
 
       this.apiService.createUser(this.userObj).subscribe({
         next: (response: any) => {
-          if (response?.responses?.[0]?.error) {
-            this.noteService.handleMessage(
-              this.messageService,
-              'error',
-              response.responses[0].error,
-            );
-          } else {
-            this.noteService.handleMessage(
-              this.messageService,
-              'success',
-              'User created successfully!',
-            );
-          }
+          this.noteService.handleMessage(
+            this.messageService,
+            response,
+            'User created successfully!'
+          );
         },
         error: (error: any) => {
-          if (
-            error.status === 400 ||
-            error.status === 401 ||
-            error.status === 500
-          ) {
-            this.noteService.handleMessage(
-              this.messageService,
-              'error',
-              'User name already exists.',
-            );
-          }
+          this.noteService.handleError(error);
         }
       });
     }

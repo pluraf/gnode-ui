@@ -38,7 +38,6 @@ export interface Pipeline {
     CommonModule,
     ToastModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './pipeline-list.component.html',
   styleUrl: './pipeline-list.component.css',
 })
@@ -109,11 +108,7 @@ export class PipelineListComponent implements OnInit {
 
   showDialog() {
     if (this.selectedPipelines.length === 0) {
-      this.noteService.handleMessage(
-        this.messageService,
-        'warn',
-        'No pipelines selected.',
-      );
+      this.noteService.handleWarning('No pipelines selected!');
       return;
     }
     this.visibleDialog = true;

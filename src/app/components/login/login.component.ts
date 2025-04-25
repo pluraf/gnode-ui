@@ -34,7 +34,6 @@ export interface LoginUser {
     CardModule,
     ToastModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -74,11 +73,7 @@ export class LoginComponent {
 
   async onLogin() {
     if (!this.loginUser.username || !this.loginUser.password) {
-      this.noteService.handleMessage(
-        this.messageService,
-        'error',
-        'Username and password are required.',
-      );
+      this.noteService.handleError('Username and password are required!');
       return;
     }
 
@@ -95,27 +90,18 @@ export class LoginComponent {
 
     this.apiService
       .getAuthToken(this.loginUser.username, this.loginUser.password)
-      .subscribe(
-        (res: any) => {
+      .subscribe({
+        next: (res: any) => {
           if (res.access_token) {
             this.authService.storeToken(res.access_token);
             this.router.navigate([this.from]);
           } else {
-            this.noteService.handleMessage(
-              this.messageService,
-              'error',
-              res.error,
-            );
+            this.noteService.handleError(res);
           }
         },
-        (error) => {
-          const errorMessage = error.error?.detail || error.message;
-          this.noteService.handleMessage(
-            this.messageService,
-            'error',
-            errorMessage,
-          );
-        },
-      );
+        error: (error: any) => {
+          this.noteService.handleError(error);
+        }
+      });
   }
 }

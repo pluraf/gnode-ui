@@ -24,7 +24,6 @@ import { NoteService } from '../../../../services/note.service';
     FormsModule,
     ToastModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './authbundle-edit.component.html',
   styleUrl: './authbundle-edit.component.css',
 })
@@ -77,33 +76,17 @@ export class AuthbundleEditComponent extends AuthbundleComponent {
       formData.append('keyfile', this.keyFile);
     }
     formData.append('description', this.description);
-    this.apiService.authbundleEdit(this.authbundleId, formData).subscribe(
-      (response) => {
-        if (
-          response.responses &&
-          response.responses[0].hasOwnProperty('error')
-        ) {
-          this.noteService.handleMessage(
-            this.messageService,
-            'error',
-            response.responses[0].error,
-          )!;
-        } else {
-          this.noteService.handleMessage(
-            this.messageService,
-            'success',
-            'Authbundle edited successfully!',
-          );
-        }
-      },
-      (error: any) => {
-        const errorDetail = error.error?.detail;
+    this.apiService.authbundleEdit(this.authbundleId, formData).subscribe({
+      next: (response: any) => {
         this.noteService.handleMessage(
-          this.messageService,
-          'error',
-          errorDetail,
+          response,
+          'Authbundle edited successfully!'
         );
       },
-    );
+      error: (response: any) => {
+        this.noteService.handleError(response);
+      }
+    });
   }
+
 }

@@ -25,7 +25,7 @@ import { NoteService } from '../../../services/note.service';
     ToastModule,
     ConfirmDialogModule,
   ],
-  providers: [MessageService, NoteService, ConfirmationService],
+  providers: [ConfirmationService],
   templateUrl: './g-cloud.component.html',
   styleUrl: './g-cloud.component.css',
 })
@@ -48,7 +48,7 @@ export class GCloudComponent {
   }
 
   handleGCloudMessage(type: 'warn' | 'success' | 'error', message: string) {
-    this.noteService.handleMessage(this.messageService, type, message);
+    this.noteService.handleMessage(null, message, type);
   }
 
   onCheckboxChange() {
@@ -88,17 +88,12 @@ export class GCloudComponent {
     this.apiService.updateSettings(payload).subscribe({
       next: (resp) => {
         this.settingsService.load();
-        this.noteService.handleMessage(
-          this.messageService,
-          'success',
+        this.noteService.handleInfo(
           'Submitted successfully',
-        );},
+        );
+      },
       error: (error) => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'error',
-          error.error.detail,
-        )
+        this.noteService.handleError(error)
       }
     });
   }

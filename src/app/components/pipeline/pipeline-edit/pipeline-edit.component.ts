@@ -28,7 +28,6 @@ import { PipelineAssemblerComponent } from '../assembler/assembler.component';
     ToastModule,
     TabViewModule
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './pipeline-edit.component.html',
   styleUrl: './pipeline-edit.component.css',
 })
@@ -71,22 +70,16 @@ export class PipelineEditComponent implements OnInit {
       config = this.pipelineJson;
     }
 
-    this.apiService.pipelineEdit(this.pipeid, config).subscribe(
-      () => {
+    this.apiService.pipelineEdit(this.pipeid, config).subscribe({
+      next: (response: any) => {
         this.noteService.handleMessage(
-          this.messageService,
-          'success',
-          'Pipeline edited successfully!',
+          response,
+          'Pipeline edited successfully!'
         );
       },
-      (error) => {
-        const errorMessage = error?.error.split('\n').pop();
-        this.noteService.handleMessage(
-          this.messageService,
-          'error',
-          errorMessage,
-        );
-      },
-    );
+      error: (error: any) => {
+        this.noteService.handleMessage(error);
+      }
+    });
   }
 }

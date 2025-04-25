@@ -5,12 +5,14 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
+import { ToastModule } from 'primeng/toast';
 
 import { ApiService } from '../../../services/api.service';
 import { SettingsService } from '../../../services/settings.service';
 import { InfoService } from '../../../services/info.service';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { DeleteComponent } from '../../shared/delete/delete.component';
+import { NoteService } from '../../../services/note.service';
 
 @Component({
   selector: 'app-device-detail',
@@ -21,6 +23,7 @@ import { DeleteComponent } from '../../shared/delete/delete.component';
     TableModule,
     CardModule,
     RouterModule,
+    ToastModule,
     DeleteComponent,
   ],
   templateUrl: './channel-detail.component.html',
@@ -31,6 +34,7 @@ export class ChannelDetailComponent {
   apiService = inject(ApiService);
   settingsService = inject(SettingsService);
   infoService = inject(InfoService);
+  noteService = inject(NoteService);
   router = inject(Router);
   chanid = '';
   details: any;
@@ -176,13 +180,16 @@ export class ChannelDetailComponent {
   onDeleteChannel() {
     this.apiService.channelDelete(this.chanid).subscribe({
       next: (response: any) => {
-        if (response.success || response.status === 'success') {
-          this.details = [];
-          this.channel = null;
+        if (response.ok) {
+          this.noteService.handleInfo('Channel deleted successfully!');
+          this.router.navigateByUrl('/channels');
         }
         this.visibleDialog = false;
-        this.router.navigateByUrl('/channels');
       },
+      error: (response: any) => {
+        this.noteService.handleError(response);
+        this.visibleDialog = false;
+      }
     });
   }
 }

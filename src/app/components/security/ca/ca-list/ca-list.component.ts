@@ -34,7 +34,6 @@ import { DeleteComponent } from '../../../shared/delete/delete.component';
     ToastModule,
     DeleteComponent,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './ca-list.component.html',
   styleUrl: './ca-list.component.css',
 })
@@ -96,11 +95,7 @@ export class CAListComponent extends CAComponent implements OnInit {
 
   showDialog() {
     if (this.selectedCAs.length === 0) {
-      this.noteService.handleMessage(
-        this.messageService,
-        'warn',
-        'No channels selected.',
-      );
+      this.noteService.handleWarning('No channels selected!');
       return;
     }
     this.visibleDialog = true;

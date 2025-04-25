@@ -27,7 +27,6 @@ import { DeleteComponent } from '../../../shared/delete/delete.component';
     FormsModule,
     ToastModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './converter-edit.component.html',
   styleUrl: './converter-edit.component.css',
 })
@@ -93,18 +92,12 @@ export class ConverterEditComponent extends ConverterComponent {
 
     this.apiService.converterUpdate(this.converterId, formData).subscribe({
       next: (response) => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'success',
+        this.noteService.handleInfo(
           'Converter updated successfully!',
         );
       },
       error: (response) => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'error',
-          response.error?.detail ?? response.statusText,
-        );
+        this.noteService.handleError(response);
       }
     });
   }

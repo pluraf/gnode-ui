@@ -1,7 +1,6 @@
 <app-subheader selectedMenuName="MQTT Channels"></app-subheader>
 
 <div class="main-content-body" [style]="{'margin-top': '120px'}">
-  <p-toast position="top-right" [baseZIndex]="5000"/>
     <div class="field col-12 w-full mt-1">
       <div>
         <p-checkbox [(ngModel)]="allow_anonymous" [binary]="true" inputId="auto_id"/>
@@ -12,4 +11,4 @@
     <div class="field col-12 mt-4">
         <button pButton (click)="onSubmit()" class="button">Submit</button>
       </div>
-</div>    
+</div>

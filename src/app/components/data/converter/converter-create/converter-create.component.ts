@@ -27,7 +27,6 @@ import { NoteService } from '../../../../services/note.service';
     SubheaderComponent,
     ToastModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './converter-create.component.html',
   styleUrl: './converter-create.component.css',
 })
@@ -52,18 +51,12 @@ export class ConverterCreateComponent extends ConverterComponent {
 
     this.apiService.converterCreate(formData).subscribe({
       next: (response) => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'success',
+        this.noteService.handleInfo(
           'Converter created successfully!',
         );
       },
       error: (response) => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'error',
-          response.error?.detail ?? response.statusText,
-        );
+        this.noteService.handleError(response);
       }
     });
   }

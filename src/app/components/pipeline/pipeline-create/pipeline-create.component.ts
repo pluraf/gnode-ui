@@ -33,7 +33,6 @@ import { PipelineAssemblerComponent } from '../assembler/assembler.component';
     ToastModule,
     TabViewModule,
   ],
-  providers: [ MessageService, NoteService ],
   templateUrl: './pipeline-create.component.html',
   styleUrl: './pipeline-create.component.css',
 })
@@ -70,13 +69,11 @@ export class PipelineCreateComponent {
     this.apiService.pipelineCreate(this.pipeid, config).subscribe({
       next: (response) => {
         this.noteService.handleMessage(
-          this.messageService, 'success', 'Pipeline created successfully!'
+          response,'Pipeline created successfully!'
         );
       },
       error: (response) => {
-        this.noteService.handleMessage(
-          this.messageService, 'error', response.error
-        );
+        this.noteService.handleError(response);
       },
     });
   }

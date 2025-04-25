@@ -21,7 +21,6 @@ import { NoteService } from '../../../services/note.service';
     CheckboxModule,
     SubheaderComponent,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css',
 })
@@ -64,11 +63,7 @@ export class AuthenticationComponent {
         this.authService.logout();
       },
       error: (error) =>
-        this.noteService.handleMessage(
-          this.messageService,
-          'error',
-          error.error.detail,
-        ),
+        this.noteService.handleError(error),
     });
   }
 }

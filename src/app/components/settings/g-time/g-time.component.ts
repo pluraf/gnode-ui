@@ -36,7 +36,6 @@ import { NoteService } from '../../../services/note.service';
     ToastModule,
     DropdownModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './g-time.component.html',
   styleUrl: './g-time.component.css',
 })
@@ -102,22 +101,17 @@ export class GTimeComponent implements OnInit, OnDestroy {
       gnode_time: gnodeTime,
     };
 
-    this.apiService.updateSettings(payload).subscribe(
-      () => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'success',
-          'Submitted successfully!',
-        );
+    this.apiService.updateSettings(payload).subscribe({
+      next: (resp: any) => {
+        this.noteService.handleInfo('Submitted successfully!');
         setTimeout(() => {
           this.settingsService.load();
         }, 3000);
       },
-      (error: any) => {
-        const errorMsg = error.error.detail;
-        this.noteService.handleMessage(this.messageService, 'error', errorMsg);
-      },
-    );
+      error: (error: any) => {
+        this.noteService.handleError(error);
+      }
+    });
   }
 
   ngOnDestroy() {

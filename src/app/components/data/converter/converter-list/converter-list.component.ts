@@ -34,7 +34,6 @@ import { DeleteComponent } from '../../../shared/delete/delete.component';
     ToastModule,
     DeleteComponent,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './converter-list.component.html',
   styleUrl: './converter-list.component.css',
 })
@@ -94,11 +93,7 @@ export class ConverterListComponent implements OnInit {
 
   showDialog() {
     if (this.selectedConverter.length === 0) {
-      this.noteService.handleMessage(
-        this.messageService,
-        'warn',
-        'No converters selected.',
-      );
+      this.noteService.handleWarning('No converters selected!');
       return;
     }
     this.visibleDialog = true;

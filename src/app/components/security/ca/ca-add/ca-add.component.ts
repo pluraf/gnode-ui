@@ -26,7 +26,6 @@ import { NoteService } from '../../../../services/note.service';
     SubheaderComponent,
     ToastModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './ca-add.component.html',
   styleUrl: './ca-add.component.css',
 })
@@ -70,15 +69,12 @@ export class CAAddComponent extends CAComponent {
     this.apiService.caAdd(formData).subscribe({
       next: (response) => {
         this.noteService.handleMessage(
-          this.messageService, 'success', 'Certificate added successfully!'
+          response, 'Certificate added successfully!', 'success'
         );
       },
       error: (response) => {
-        console.log(response);
-        this.noteService.handleMessage(
-          this.messageService, 'error', typeof response.error.detail === 'string' ? response.error.detail : JSON.stringify(response.error.detail)
-        );
-      },
+        this.noteService.handleError(response);
+      }
     });
   }
 }

@@ -7,6 +7,7 @@ import { TableModule } from 'primeng/table';
 import { SubheaderComponent } from '../../../subheader/subheader.component';
 import { ApiService } from '../../../../services/api.service';
 import { DeleteComponent } from '../../../shared/delete/delete.component';
+import { NoteService } from '../../../../services/note.service';
 
 @Component({
   selector: 'app-authbundle-detail',
@@ -19,6 +20,7 @@ export class AuthbundleDetailComponent {
   apiService = inject(ApiService);
   route = inject(ActivatedRoute);
   router = inject(Router);
+  noteService = inject(NoteService);
 
   authbundleId: string = '';
   authbundle: any;
@@ -77,13 +79,16 @@ export class AuthbundleDetailComponent {
   onDeleteAuthbundle() {
     this.apiService.authbundleDelete(this.authbundleId).subscribe({
       next: (response: any) => {
-        if (response.success || response.status === 'success') {
-          this.details = [];
-          this.authbundle = null;
+        if (response.ok) {
+          this.noteService.handleInfo('Authbundle deleted successfully!');
+          this.router.navigateByUrl('/authbundles');
         }
         this.visibleDialog = false;
-        this.router.navigateByUrl('/authbundles');
       },
+      error: (response: any) => {
+        this.noteService.handleError(response);
+        this.visibleDialog = false;
+      }
     });
   }
 }

@@ -34,7 +34,6 @@ import { ChannelComponent, SubmitType } from '../channel';
     InputSwitchModule,
     PasswordModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './channel-edit.component.html',
   styleUrl: '../channel.css',
 })
@@ -79,17 +78,12 @@ export class ChannelEditComponent extends ChannelComponent implements OnInit {
     this.apiService.channelUpdate(this.chanid, payload).subscribe({
       next: (response) => {
         this.noteService.handleMessage(
-          this.messageService,
-          'success',
-          'Channel edited successfully!',
+          response,
+          'Channel updated successfully!',
         );
       },
       error: (response) => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'error',
-          response.error?.detail ?? response.statusText,
-        );
+        this.noteService.handleError(response);
       }
     });
   }

@@ -21,7 +21,6 @@ import { NoteService } from '../../../services/note.service';
     ButtonModule,
     ToastModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './mqtt-channels.component.html',
   styleUrl: './mqtt-channels.component.css',
 })
@@ -48,18 +47,13 @@ export class MqttChannelsComponent {
       ...this.settingsService.settingsdata(),
       allow_anonymous: this.allow_anonymous,
     });
-    this.apiService.updateSettings(payload).subscribe(
-      () => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'success',
-          'Submitted successfully!',
-        );
+    this.apiService.updateSettings(payload).subscribe({
+      next: (resp: any) => {
+        this.noteService.handleInfo('Submitted successfully!');
       },
-      (error: any) => {
-        let errorMsg = error.status === 500 ? error.error : error.error.detail;
-        this.noteService.handleMessage(this.messageService, 'error', errorMsg);
+      error: (error: any) => {
+        this.noteService.handleMessage(error);
       },
-    );
+    });
   }
 }

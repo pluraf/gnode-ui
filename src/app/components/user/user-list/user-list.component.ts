@@ -21,7 +21,6 @@ import { DeleteComponent } from '../../shared/delete/delete.component';
     DeleteComponent,
     ToastModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css',
 })
@@ -85,7 +84,10 @@ export class UserListComponent {
     let observables: Observable<any>[] = [];
     this.selectedUsers.map((user) => {
       observables.push(
-        this.apiService.deleteUser(user.id).pipe(catchError((err) => of(true))),
+        this.apiService.deleteUser(user.id).pipe(catchError((err) => {
+          this.noteService.handleError(err);
+          return of(true);
+        })),
       );
     });
 

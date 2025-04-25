@@ -41,7 +41,6 @@ import { DeleteComponent } from '../../shared/delete/delete.component';
     FontAwesomeModule,
     DeleteComponent,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './channel-list.component.html',
   styleUrl: './channel-list.component.css',
 })
@@ -118,14 +117,13 @@ export class ChannelListComponent {
 
   showDialog() {
     if (this.selectedChannels.length === 0) {
-      this.noteService.handleMessage(
+      this.noteService.handleWarning(
         this.messageService,
-        'warn',
         'No channels selected.',
       );
-      return;
+    } else {
+      this.visibleDialog = true;
     }
-    this.visibleDialog = true;
   }
 
   onDeleteChannel() {
@@ -134,7 +132,10 @@ export class ChannelListComponent {
       observables.push(
         this.apiService
           .channelDelete(channel.id)
-          .pipe(catchError((err) => of(true))),
+          .pipe(catchError((err) => {
+            this.noteService.handleError(err);
+            return of(true);
+          }))
       );
     });
 

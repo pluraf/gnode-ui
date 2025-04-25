@@ -12,12 +12,13 @@ import {
 } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { SplitterModule } from 'primeng/splitter';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ToastModule } from 'primeng/toast';
 
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
@@ -28,6 +29,7 @@ import { ExternalComponent } from './components/external/external.component';
 import { InfoService } from './services/info.service';
 import { AuthService } from './services/auth.service';
 import { SpinnerService } from './services/spinner.service';
+import { NoteService } from './services/note.service';
 
 
 @Component({
@@ -42,8 +44,10 @@ import { SpinnerService } from './services/spinner.service';
     DividerModule,
     SidebarModule,
     ProgressSpinnerModule,
+    ToastModule,
     FontAwesomeModule,
   ],
+  providers: [MessageService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -55,13 +59,15 @@ export class AppComponent implements OnInit {
   infoService = inject(InfoService);
   spinnerService = inject(SpinnerService);
   faLibrary = inject(FaIconLibrary);
+  messageService = inject(MessageService);
 
   margin_left: string;
   isVirtualMode: boolean = false;
   isAuthentication: boolean = true;
   isInfoLoaded: boolean = false;
 
-  constructor() {
+  constructor(private noteService: NoteService) {
+    this.noteService.setMessageService(this.messageService);
     this.margin_left = window.location.pathname == '/login' ? '0px' : '210px';
     this.faLibrary.addIcons(faComment, faBan);
 

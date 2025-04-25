@@ -1,6 +1,7 @@
 @if (router.url.startsWith("/external")) {
   <exteranl-app [resource]="router.url.substring(9)"></exteranl-app>
 }@else {
+  <p-toast position="top-right" [baseZIndex]="5000"/>
   @if (router.url != "/login") {
     @if (isInfoLoaded) {
       <app-header></app-header>

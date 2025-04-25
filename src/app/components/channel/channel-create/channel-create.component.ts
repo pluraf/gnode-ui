@@ -32,7 +32,6 @@ import { ApiService } from '../../../services/api.service';
     ToastModule,
     InputSwitchModule,
   ],
-  providers: [MessageService, NoteService],
   templateUrl: './channel-create.component.html',
   styleUrl: '../channel.css',
 })
@@ -56,18 +55,10 @@ export class ChannelCreateComponent extends ChannelComponent implements OnInit {
 
     this.apiService.channelCreate(this.chanid, payload).subscribe({
        next: (response: any) => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'success',
-          'Channel created successfully!'
-        );
+        this.noteService.handleMessage(response, 'Channel created successfully!');
        },
        error: (response: any) => {
-        this.noteService.handleMessage(
-          this.messageService,
-          'error',
-           response.error?.detail ?? response.statusText
-        );
+        this.noteService.handleError(response);
       }
     });
   }
