@@ -85,6 +85,14 @@ export const routes: Routes = [
     component: StatusComponent,
   },
   {
+    path: 'apitokens',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./components/security/apitoken/apitoken.routes').then(
+        (r) => r.APITOKEN_ROUTES,
+      ),
+  },
+  {
     path: 'external/chirpstack',
     canActivate: [AuthGuard],
     component: ExternalComponent,

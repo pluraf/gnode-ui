@@ -12,6 +12,8 @@ export class ApiService {
   private authbundleUrl = 'api/authbundle/';
   // CA API
   private caUrl = 'api/ca/'
+  // API Token API
+  private apitokenUrl = 'api/auth/apitoken';
   // Settings API
   private settingsUrl = 'api/settings/';
   // Pipeline API
@@ -194,7 +196,7 @@ export class ApiService {
       .set('username', username)
       .set('password', password);
 
-    return this.http.post('api/auth/token/', body.toString(), { headers });
+    return this.http.post('api/auth/token', body.toString(), { headers });
   }
 
   //Modify to send the encrypted data
@@ -225,7 +227,7 @@ export class ApiService {
     return this.http.get('api/timezones');
   }
 
-  /////////////////////////// Authbundles ///////////////////////////
+  /////////////////////////// Converters ///////////////////////////
 
   converterList(): Observable<any> {
     return this.http.get(this.converterUrl);
@@ -245,6 +247,28 @@ export class ApiService {
 
   converterUpdate(converterId: string, formData: FormData): Observable<any> {
     return this.http.put(this.converterUrl + converterId, formData);
+  }
+
+  /////////////////////////// Apitokens ///////////////////////////
+
+  apitokenList(): Observable<any> {
+    return this.http.get(this.apitokenUrl  + '/');
+  }
+
+  apitokenDelete(apitokenId: string): Observable<any> {
+    return this.http.delete(this.apitokenUrl + '/' + apitokenId, {observe: 'response'});
+  }
+
+  apitokenGet(apitokenId: string): Observable<any> {
+    return this.http.get(this.apitokenUrl + '/' + apitokenId);
+  }
+
+  apitokenCreate(payload: object): Observable<any> {
+    return this.http.post(this.apitokenUrl, payload);
+  }
+
+  apitokenUpdate(apitokenId: string, payload: object): Observable<any> {
+    return this.http.put(this.apitokenUrl + '/' + apitokenId, payload);
   }
 
   ///////////////////////////////// Next ////////////////////////////

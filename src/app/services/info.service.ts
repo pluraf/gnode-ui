@@ -79,7 +79,7 @@ export class InfoService {
       return of(true);
     }
     // Fetch and cache
-    return this.http.get('/api/auth/token/', {observe: 'response'}).pipe(
+    return this.http.get('/api/auth/token', {observe: 'response'}).pipe(
       tap(resp => this.cacheBasics(resp)),
       catchError((resp) => {
         this.cacheBasics(resp);

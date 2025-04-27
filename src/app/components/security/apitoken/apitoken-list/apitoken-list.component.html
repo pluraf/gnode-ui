@@ -1,0 +1,38 @@
+        <app-subheader selectedMenuName="API Tokens" [actions]="menubarItems"></app-subheader>
+        <app-delete [visible]="visibleDialog" [items]="selectedApitoken" [itemLabel]="'apitoken'" [idField]="'id'" (deleteConfirmed)="onDeleteApitoken()" (cancel)="visibleDialog = false"></app-delete>
+        <div *ngIf="showMessage" class="showMessage flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
+            <div class="text-center">
+                No apitokens available. To create one, click the plus sign in the top-right corner or use the
+                <a routerLink="/apitokens/apitoken-create" class="text-green-700">Create Apitoken</a> link.
+            </div>
+        </div>
+        <div *ngIf="!showMessage" class="main-content">
+            <p-table [value]="apitokenList" selectionMode="multiple" [(selection)]="selectedApitoken" dataKey="id" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[10, 15, 30]" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
+                        <th>Token</th>
+                        <th>Till</th>
+                        <th>State</th>
+                        <th>Description</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-apitoken>
+                    <tr>
+                        <td><p-tableCheckbox name="checkbox" [value]="apitoken" /></td>
+                        <td><a routerLink="/apitokens/apitoken-edit/{{apitoken.id}}">{{apitoken.id}} - {{ apitoken.token | slice:0:6 }}...</a></td>
+                        <td>
+                            @if(apitoken.duration) {
+                                {{ apitoken.till | date:'longDate' }}
+                            }@else {
+                                -
+                            }
+                        </td>
+                        <td>
+                            {{ apitoken.state | apitoken_state }}
+                        </td>
+                        <td>{{apitoken.description}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>

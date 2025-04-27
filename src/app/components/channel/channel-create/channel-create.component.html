@@ -12,13 +12,13 @@
                 <div class="card mt-4">
                   <div class="flex flex-column gap-1">
                     <label for="channelType">Type</label>
-                    <select [(ngModel)]="selectedTypeOption" (ngModelChange)="onChangeChannelType($event)" id="channelType" class="input_field border-1 border-round ">
+                    <select [(ngModel)]="selectedTypeOption" (ngModelChange)="onChangeChannelType($event)" id="channelType" class="input_field border-1 border-round">
                         <option *ngFor="let type of channelTypes" [value]="type.value">{{ type.label }}</option>
                     </select>
                   </div>
                   <div class="flex flex-column gap-1 mt-4">
                     <label for="authOptions">Authentication type</label>
-                    <select [(ngModel)]="selectedAuthOption" (ngModelChange)="onChangeAuthenticationType($event)" id="authOptions" class="input_field border-1 border-round ">
+                    <select [(ngModel)]="selectedAuthOption" (ngModelChange)="onChangeAuthenticationType($event)" id="authOptions" class="input_field border-1 border-round">
                         <option *ngFor="let option of authOptions" [value]="option.value">{{ option.label }}</option>
                     </select>
                   </div>

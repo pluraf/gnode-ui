@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -11,15 +11,27 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 
-import { Converter } from '../converter';
+import { Apitoken } from '../apitoken';
 import { SubheaderComponent } from '../../../subheader/subheader.component';
 import { ApiService } from '../../../../services/api.service';
 import { NoteService } from '../../../../services/note.service';
 import { ToastModule } from 'primeng/toast';
 import { DeleteComponent } from '../../../shared/delete/delete.component';
 
+
+@Pipe({ name: 'apitoken_state', standalone: true })
+export class ApitokenStatePipe implements PipeTransform {
+  transform(value: Number): string {
+    if (value === 1) return 'valid';
+    if (value === 3) return 'suspended';
+    if (value === 5) return 'revoked';
+    return '';
+  }
+}
+
+
 @Component({
-  selector: 'app-converter-list',
+  selector: 'app-apitoken-list',
   standalone: true,
   imports: [
     CommonModule,
@@ -33,30 +45,31 @@ import { DeleteComponent } from '../../../shared/delete/delete.component';
     ButtonModule,
     ToastModule,
     DeleteComponent,
+    ApitokenStatePipe,
   ],
-  templateUrl: './converter-list.component.html',
-  styleUrl: './converter-list.component.css',
+  templateUrl: './apitoken-list.component.html',
+  styleUrl: '../apitoken.css',
 })
-export class ConverterListComponent implements OnInit {
+export class ApitokenListComponent implements OnInit {
   noteService = inject(NoteService);
   messageService = inject(MessageService);
   apiService = inject(ApiService);
   router = inject(Router);
 
   visibleDialog: boolean = false;
-  converterList: Converter[] = [];
-  selectedConverter: Converter[] = [];
+  apitokenList: Apitoken[] = [];
+  selectedApitoken: Apitoken[] = [];
   totalRecords!: number;
 
   showMessage: boolean = false;
 
   menubarItems: MenuItem[] = [
     {
-      routerLink: '/converters/converter-create',
+      routerLink: '/apitokens/apitoken-create',
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',
-        tooltipLabel: 'Create converter',
+        tooltipLabel: 'Create API Token',
       },
       iconClass: 'pi pi-plus m-1',
     },
@@ -64,7 +77,7 @@ export class ConverterListComponent implements OnInit {
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',
-        tooltipLabel: 'Delete converter',
+        tooltipLabel: 'Delete API Token',
       },
       iconClass: 'pi pi-trash m-1',
       command: () => {
@@ -78,33 +91,44 @@ export class ConverterListComponent implements OnInit {
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
-    this.loadConverters();
+    this.loadApitokens();
   }
 
-  loadConverters() {
-    this.apiService.converterList().subscribe((resp) => {
+  loadApitokens() {
+    this.apiService.apitokenList().subscribe((resp) => {
       if (resp.length === 0) {
         this.showMessage = !this.showMessage;
       } else {
-        this.converterList = resp;
+        this.apitokenList = [];
+        resp.forEach((el: any) => {
+          this.apitokenList.push({
+            id: el.id,
+            duration: el.till ? el.till - el.created: 0,
+            state: el.state,
+            token: el.token,
+            created: new Date(el.created * 1000),
+            till: new Date(el.till * 1000),
+            description: el.description
+          });
+        });
       }
     });
   }
 
   showDialog() {
-    if (this.selectedConverter.length === 0) {
-      this.noteService.handleWarning('No converters selected!');
+    if (this.selectedApitoken.length === 0) {
+      this.noteService.handleWarning('No apitokens selected!');
       return;
     }
     this.visibleDialog = true;
   }
 
-  onDeleteConverter() {
+  onDeleteApitoken() {
     let observables: Observable<any>[] = [];
-    this.selectedConverter.map((converter) => {
+    this.selectedApitoken.map((apitoken) => {
       observables.push(
         this.apiService
-          .converterDelete(converter.converterId)
+          .apitokenDelete(apitoken.id)
           .pipe(catchError((err) => of(true))),
       );
     });
@@ -112,13 +136,13 @@ export class ConverterListComponent implements OnInit {
     forkJoin(observables).subscribe({
       next: (response: any) => {
         this.visibleDialog = false;
-        this.selectedConverter = [];
-        this.loadConverters();
+        this.selectedApitoken = [];
+        this.loadApitokens();
       },
       error: (response: any) => {
         this.visibleDialog = false;
-        this.selectedConverter = [];
-        this.loadConverters();
+        this.selectedApitoken = [];
+        this.loadApitokens();
       },
     });
   }

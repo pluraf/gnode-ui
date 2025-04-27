@@ -109,6 +109,7 @@ export class AppComponent implements OnInit {
       items: [
         { label: 'Authbundles', routerLink: '/authbundles' },
         { label: 'Certificates', routerLink: '/ca' },
+        { label: 'API Tokens', routerLink: '/apitokens' },
         { label: 'Users', routerLink: '/users' },
       ],
       styleClass: 'gap-2',
