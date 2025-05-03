@@ -127,24 +127,15 @@ export class PipelineDetailComponent {
       ['Pipeline ID', this.pipeid],
       ['Connector In', this.pipelines.connector_in.type],
       ['Connector Out', this.pipelines.connector_out.type],
-      ['Pipeline Status', this.pipelines.status],
+      ['Pipeline status', this.pipelines.status],
       ['Messages received', this.pipelines.count_in],
       ['Last message received', recivedTimestamp],
       ['Messages sent', this.pipelines.count_out],
       ['Last message sent', sentTimestamp],
     ];
 
-    if (
-      this.pipelines.status === 'malformed' ||
-      this.pipelines.status === 'failed'
-    ) {
-      this.details.push(['Error', this.pipelines.error]);
-      if (this.pipelines.status === 'starting') {
-        this.details = this.details.filter(
-          (detail: any) => detail[0] !== 'Error',
-        );
-        this.pipelines.error = null;
-      }
+    if (this.pipelines.error) {
+      this.details.push(['Last error', this.pipelines.error]);
     }
   }
 
