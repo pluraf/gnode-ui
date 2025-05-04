@@ -84,6 +84,8 @@ export class NoteService {
       } else {
         return [detail.status ?? 'Unknown error', 'error'];
       }
+    } else if (detail.ok === false) {
+      return [detail.statusText, 'error'];
     }
     return [defaultMessage, 'success'];
   }

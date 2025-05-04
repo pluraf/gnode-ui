@@ -114,7 +114,7 @@ export class ChannelComponent {
       authtype: this.selectedAuthOption,
       enabled: this.enabled,
     }
-    if (this.secret.length > 0) {
+    if (this.secret?.length > 0) {
       payload.secret = this.secret;
     }
     if (this.selectedTypeOption == 'mqtt') {

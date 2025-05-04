@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild, OnInit } from '@angular/core';
+import { Component, inject, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -31,7 +31,7 @@ import { PipelineAssemblerComponent } from '../assembler/assembler.component';
   templateUrl: './pipeline-edit.component.html',
   styleUrl: './pipeline-edit.component.css',
 })
-export class PipelineEditComponent implements OnInit {
+export class PipelineEditComponent implements AfterViewInit {
   apiService = inject(ApiService);
   route: ActivatedRoute = inject(ActivatedRoute);
   messageService = inject(MessageService);
@@ -46,10 +46,12 @@ export class PipelineEditComponent implements OnInit {
     this.pipeid = this.route.snapshot.params['pipeid'];
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.apiService.pipelineGet(this.pipeid).subscribe((resp) => {
-      this.pipelineJson = JSON.stringify(resp, null, 2);
-      this.pipelineAssembler.deserialize(this.pipelineJson);
+      setTimeout(() => {
+        this.pipelineJson = JSON.stringify(resp, null, 2);
+        this.pipelineAssembler.deserialize(this.pipelineJson);
+      });
     });
   }
 

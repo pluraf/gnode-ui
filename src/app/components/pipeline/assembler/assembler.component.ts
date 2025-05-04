@@ -1,4 +1,4 @@
-import { Component, Inject, inject, effect, ViewContainerRef, ElementRef, Input, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, Inject, inject, effect, ViewContainerRef, ElementRef, Input, ViewChild, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -230,7 +230,7 @@ export class PipelineUnitComponent {
   standalone: true,
   templateUrl: './assembler.component.html',
 })
-export class PipelineAssemblerComponent {
+export class PipelineAssemblerComponent implements AfterViewInit {
   @ViewChild('connectorIn') connectorIn!: PipelineUnitComponent;
   @ViewChild('pipelineFiltrasContainer', { read: ViewContainerRef }) containerFiltras!: ViewContainerRef;
   @ViewChild('connectorOut') connectorOut!: PipelineUnitComponent;
@@ -243,16 +243,18 @@ export class PipelineAssemblerComponent {
 
   constructor(private apiService: ApiService) {}
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.apiService.pipelineSchema().subscribe((response: any) => {
-      this.schema_ = response;
-      if (this.serialized_ === undefined) {
-        this.connectorIn.type = 'mqtt';
-        this.connectorOut.type = 'mqtt';
-        this.units.forEach(u => u.type = 'nop');
-      } else {
-        this.deserialize(this.serialized_);
-      }
+      setTimeout(() => {
+        this.schema_ = response;
+        if (this.serialized_ === undefined) {
+          this.connectorIn.type = 'mqtt';
+          this.connectorOut.type = 'mqtt';
+          this.units.forEach(u => u.type = 'nop');
+        } else {
+          this.deserialize(this.serialized_);
+        }
+      });
     });
   }
 
