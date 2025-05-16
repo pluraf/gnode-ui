@@ -6,7 +6,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { NoteService } from '../../../services/note.service';
 import { TabViewModule } from 'primeng/tabview';
 import { DividerModule } from 'primeng/divider';
 import { TableModule } from 'primeng/table';
@@ -38,13 +38,12 @@ interface Ipv4Settings {
     DividerModule,
     TableModule,
   ],
-  providers: [MessageService],
   templateUrl: './network-settings.component.html',
   styleUrl: './network-settings.component.css',
 })
 export class NetworkSettingsComponent {
   apiService = inject(ApiService);
-  messageService = inject(MessageService);
+  noteService = inject(NoteService);
   settingsService = inject(SettingsService);
 
   availableWifi: any[] = [];
@@ -166,8 +165,14 @@ export class NetworkSettingsComponent {
           password: this.wifiPassword,
         },
       })
-      .subscribe((resp) => {
-        this.settingsService.load();
+      .subscribe({
+        next: (response) => {
+          this.noteService.handleMessage(response,'Connected successfully!');
+          this.settingsService.load();
+        },
+        error: (response) => {
+          this.noteService.handleError(response);
+        }
       });
   }
 
@@ -218,8 +223,14 @@ export class NetworkSettingsComponent {
       network_settings['network_settings']['ipv4_settings'] =
         this.ethernet.ipv4Settings;
     }
-    this.apiService.updateSettings(network_settings).subscribe((resp) => {
-      this.settingsService.load();
+    this.apiService.updateSettings(network_settings).subscribe({
+      next: (response) => {
+        this.noteService.handleMessage(response,'Settings updated successfully!');
+        this.settingsService.load();
+      },
+      error: (response) => {
+        this.noteService.handleError(response);
+      }
     });
   }
 }

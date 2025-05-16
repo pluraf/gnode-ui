@@ -41,7 +41,6 @@ export class PipelineCreateComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   http = inject(HttpClient);
   noteService = inject(NoteService);
-  messageService = inject(MessageService);
 
   @ViewChild('pipelineAssembler') pipelineAssembler!: PipelineAssemblerComponent;
 
