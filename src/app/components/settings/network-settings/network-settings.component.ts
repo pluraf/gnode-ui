@@ -10,6 +10,7 @@ import { NoteService } from '../../../services/note.service';
 import { TabViewModule } from 'primeng/tabview';
 import { DividerModule } from 'primeng/divider';
 import { TableModule } from 'primeng/table';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from '../../../services/api.service';
@@ -37,6 +38,7 @@ interface Ipv4Settings {
     TabViewModule,
     DividerModule,
     TableModule,
+    InputSwitchModule,
   ],
   templateUrl: './network-settings.component.html',
   styleUrl: './network-settings.component.css',
@@ -51,14 +53,6 @@ export class NetworkSettingsComponent {
 
   isLoaded = false;
 
-  isStarting = true;
-
-  isStopping = true;
-
-  OnStartSpinner() {}
-
-  OnStopSpinner() {}
-
   selWifiSecurity = '';
   selWifiSignal = '';
   selWifiRate = '';
@@ -71,6 +65,7 @@ export class NetworkSettingsComponent {
   allActive: any[] = [];
 
   ethernet: Ehternet;
+  wifiAP: WifiAP;
 
   ipv4_method = 'auto';
   ipv4_settings: Ipv4Settings = {
@@ -89,11 +84,13 @@ export class NetworkSettingsComponent {
 
   constructor() {
     this.ethernet = new Ehternet();
+    this.wifiAP = new WifiAP();
     effect(() => this.load());
   }
 
   load() {
     const networkData = this.settingsService.settingsdata();
+    this.wifiAP.isEnabled = networkData.network_settings.ap_state === 'enabled'
     this.wifiEnabled = networkData.network_settings.wifi_state === 'enabled';
     this.ethernet.isEnabled =
       networkData.network_settings.ethernet_state === 'enabled';
@@ -233,6 +230,21 @@ export class NetworkSettingsComponent {
       }
     });
   }
+
+  onWifiAPSubmit() {
+    this.apiService.updateSettings({
+      network_settings: {
+        ap_state: this.wifiAP.isEnabled ? 'enabled' : 'disabled'
+      }
+    }).subscribe({
+      next: (response) => {
+        this.noteService.handleMessage(response,'Settings updated successfully!');
+      },
+      error: (response) => {
+        this.noteService.handleError(response);
+      }
+    });
+  }
 }
 
 class Ehternet {
@@ -253,4 +265,9 @@ class Ehternet {
   };
 
   constructor() {}
+}
+
+
+class WifiAP {
+  isEnabled: boolean = false;
 }

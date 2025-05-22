@@ -1,94 +1,6 @@
 <app-subheader selectedMenuName="Network Settings"></app-subheader>
 
 <p-tabView class="main-content-body" [style]="{'margin-top': '120px'}">
-  <p-tabPanel header="WiFi">
-    <div class="formgrid grid align-content-start">
-      <div class="field col flex-grow-0 mr-6">
-        <div class="field col-12 mt-2">
-          Status:
-          <strong>
-          @if (isLoaded) {
-
-            @if (wifiEnabled) {
-              {{wifiActiveSSID}} | {{wifiConnectionStatus}}
-            } @else {
-              disabled
-            }
-          }
-          </strong>
-        </div>
-        <div class="field col-12 mt-2 mb-2">
-          <button pButton (click)="onEnableWifi()">Enable</button>
-          <button pButton (click)="onDisableWifi()" class="ml-4">Disable</button>
-        </div>
-        <div class="field col-12 mt-2 mb-2">
-          <div class="mb-2"><label for="ssid">SSID</label></div>
-          <div class="flex flex-row">
-            <select
-              id="Connector-types"
-              [(ngModel)]="selSSID"
-              (ngModelChange)="onChangeSSID($event)"
-              class="text-color surface-overlay p-2 border-1 border-round w-12rem"
-            >
-              <option *ngFor="let ssid of allSSID" [value]="ssid">{{ssid}}</option>
-            </select>
-            <button pButton (click)="onRescan()" class="ml-4 w-3rem">
-              <span *ngIf="isStarting" class="pi pi-sync text-xl"></span>
-            </button>
-          </div>
-        </div>
-        <div class="field col-12 mt-0 w-max">
-          <small>Signal strength: {{selWifiSignal}}, rate: {{selWifiRate}} | Security: {{selWifiSecurity}}</small>
-        </div>
-        <div class="field col-12 mt-2">
-            <div class="mb-2"><label for="password">Password</label></div>
-            <input id="password" type="password" pInputText [(ngModel)]="wifiPassword" class="text-base p-2 w-18rem"/>
-        </div>
-        <div class="field col-12 mt-2">
-          <button pButton (click)="onConnectWifi()">Connect</button>
-        </div>
-        <div class="field col-12 mt-2">
-            <div class="mb-2"><label for="ipv4_method">IPv4 Method</label></div>
-            <select [(ngModel)]="ipv4_method" class="text-color surface-overlay p-2 border-1 border-round w-18rem">
-                <option value="auto">Automatic</option>
-                <option value="manual">Manual</option>
-            </select>
-        </div>
-        <div *ngIf="ipv4_method === 'manual'">
-            <div class="field col-12 mt-2">
-                <div class="mb-2"><label for="ip-address">IP Address</label></div>
-                <input id="ip-address" type="text" pInputText [(ngModel)]="ipv4_settings.address" class="text-base p-2 w-18rem"/>
-            </div>
-            <div class="field col-12 mt-2">
-                <div class="mb-2"><label for="netmask">Netmask</label></div>
-                <input id="netmask"  type="text" pInputText [(ngModel)]="ipv4_settings.netmask" class="text-base p-2 w-18rem"/>
-            </div>
-            <div class="field col-12 mt-2">
-                <div class="mb-2"><label for="gateway">Gateway</label></div>
-                <input id="gateway" type="text" pInputText [(ngModel)]="ipv4_settings.gateway" class="text-base p-2 w-18rem"/>
-            </div>
-            <div class="field col-12 mt-2">
-                <div class="mb-2"><label for="dns">DNS</label></div>
-                <input id="dns" type="text" pInputText [(ngModel)]="ipv4_settings.dns" class="text-base p-2 w-18rem"/>
-            </div>
-        </div>
-        <div class="field col-12 mt-4">
-          <button pButton (click)="onSubmitWifi()" class="button">Submit</button>
-        </div>
-      </div>
-      <div class="field col flex-grow-0">
-        <div class="field col-12 mt-2 w-max">Current Configuration:</div>
-        <p-table [value]="[['IPv4', ipv4SettingsCurrent.address], ['Netmask', ipv4SettingsCurrent.netmask], ['Gateway', ipv4SettingsCurrent.gateway], ['DNS', ipv4SettingsCurrent.dns]]">
-          <ng-template pTemplate="body" let-v>
-            <tr>
-              <td>{{v[0]}}</td>
-              <td>{{v[1]}}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
-  </p-tabPanel>
   <p-tabPanel header="Ethernet">
     <div class="formgrid grid align-content-start">
       <div class="field col flex-grow-0">
@@ -148,6 +60,111 @@
             </tr>
           </ng-template>
         </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+  <p-tabPanel header="WiFi">
+    <div class="formgrid grid align-content-start">
+      <div class="field col flex-grow-0 mr-6">
+        <div class="field col-12 mt-2">
+          Status:
+          <strong>
+          @if (isLoaded) {
+            @if (wifiEnabled) {
+              {{wifiActiveSSID}} | {{wifiConnectionStatus}}
+            } @else {
+              disabled
+            }
+          }
+          </strong>
+        </div>
+        <div class="field col-12 mt-2 mb-2">
+          <button pButton (click)="onEnableWifi()">Enable</button>
+          <button pButton (click)="onDisableWifi()" class="ml-4">Disable</button>
+        </div>
+        <div class="field col-12 mt-2 mb-2">
+          <div class="mb-2"><label for="ssid">SSID</label></div>
+          <div class="flex flex-row">
+            <select
+              id="Connector-types"
+              [(ngModel)]="selSSID"
+              (ngModelChange)="onChangeSSID($event)"
+              class="text-color surface-overlay p-2 border-1 border-round w-12rem"
+            >
+              <option *ngFor="let ssid of allSSID" [value]="ssid">{{ssid}}</option>
+            </select>
+            <button pButton (click)="onRescan()" class="ml-4 w-3rem">
+              <span class="pi pi-sync text-xl"></span>
+            </button>
+          </div>
+        </div>
+        <div class="field col-12 mt-0 w-max">
+          <small>Signal strength: {{selWifiSignal}}, rate: {{selWifiRate}} | Security: {{selWifiSecurity}}</small>
+        </div>
+        <div class="field col-12 mt-2">
+            <div class="mb-2"><label for="password">Password</label></div>
+            <input id="password" type="password" pInputText [(ngModel)]="wifiPassword" class="text-base p-2 w-18rem"/>
+        </div>
+        <div class="field col-12 mt-2">
+          <button pButton (click)="onConnectWifi()">Connect</button>
+        </div>
+        <div class="field col-12 mt-2">
+            <div class="mb-2"><label for="ipv4_method">IPv4 Method</label></div>
+            <select [(ngModel)]="ipv4_method" class="text-color surface-overlay p-2 border-1 border-round w-18rem">
+                <option value="auto">Automatic</option>
+                <option value="manual">Manual</option>
+            </select>
+        </div>
+        <div *ngIf="ipv4_method === 'manual'">
+            <div class="field col-12 mt-2">
+                <div class="mb-2"><label for="ip-address">IP Address</label></div>
+                <input id="ip-address" type="text" pInputText [(ngModel)]="ipv4_settings.address" class="text-base p-2 w-18rem"/>
+            </div>
+            <div class="field col-12 mt-2">
+                <div class="mb-2"><label for="netmask">Netmask</label></div>
+                <input id="netmask"  type="text" pInputText [(ngModel)]="ipv4_settings.netmask" class="text-base p-2 w-18rem"/>
+            </div>
+            <div class="field col-12 mt-2">
+                <div class="mb-2"><label for="gateway">Gateway</label></div>
+                <input id="gateway" type="text" pInputText [(ngModel)]="ipv4_settings.gateway" class="text-base p-2 w-18rem"/>
+            </div>
+            <div class="field col-12 mt-2">
+                <div class="mb-2"><label for="dns">DNS</label></div>
+                <input id="dns" type="text" pInputText [(ngModel)]="ipv4_settings.dns" class="text-base p-2 w-18rem"/>
+            </div>
+        </div>
+        <div class="field col-12 mt-4">
+          <button pButton (click)="onSubmitWifi()" class="button">Submit</button>
+        </div>
+      </div>
+      <div class="field col flex-grow-0">
+        <div class="field col-12 mt-2 w-max">Current Configuration:</div>
+        <p-table [value]="[['IPv4', ipv4SettingsCurrent.address], ['Netmask', ipv4SettingsCurrent.netmask], ['Gateway', ipv4SettingsCurrent.gateway], ['DNS', ipv4SettingsCurrent.dns]]">
+          <ng-template pTemplate="body" let-v>
+            <tr>
+              <td>{{v[0]}}</td>
+              <td>{{v[1]}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-tabPanel>
+  <p-tabPanel header="WiFi Access Point">
+    <div class="p-fluid ml-2 mt-2">
+      <div class="p-field mb-4">
+        IPv4: <strong>192.168.80.1</strong>
+      </div>
+      <div class="p-field">
+        <span><strong>Enabled</strong></span>
+        <div class="card flex mt-3 ">
+            <div class="flex flex-column gap-1">
+                <p-inputSwitch [(ngModel)]="wifiAP.isEnabled" />
+            </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <button pButton (click)="onWifiAPSubmit()">Update</button>
       </div>
     </div>
   </p-tabPanel>
