@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReusableTableComponent } from './reusable-table.component';
+import { SupremeTableComponent } from './supreme-table.component';
 
-describe('ReusableTableComponent', () => {
-  let component: ReusableTableComponent;
-  let fixture: ComponentFixture<ReusableTableComponent>;
+describe('SupremeTableComponent', () => {
+  let component: SupremeTableComponent;
+  let fixture: ComponentFixture<SupremeTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReusableTableComponent]
+      imports: [SupremeTableComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ReusableTableComponent);
+    fixture = TestBed.createComponent(SupremeTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

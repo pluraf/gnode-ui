@@ -22,8 +22,8 @@ import { DatetimeService } from '../../../services/datetime.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
 import {
   ITableColumn,
-  ReusableTableComponent,
-} from '../../shared/reusable-table/reusable-table.component';
+  SupremeTableComponent,
+} from '../../shared/supreme-table/supreme-table.component';
 
 @Component({
   selector: 'app-channel-list',
@@ -40,7 +40,7 @@ import {
     ProgressSpinnerModule,
     FontAwesomeModule,
     DeleteComponent,
-    ReusableTableComponent,
+    SupremeTableComponent,
   ],
   templateUrl: './channel-list.component.html',
   styleUrl: './channel-list.component.css',

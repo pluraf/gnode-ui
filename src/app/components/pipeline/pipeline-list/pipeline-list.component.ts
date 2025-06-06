@@ -15,8 +15,8 @@ import { NoteService } from '../../../services/note.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
 import {
   ITableColumn,
-  ReusableTableComponent,
-} from '../../shared/reusable-table/reusable-table.component';
+  SupremeTableComponent,
+} from '../../shared/supreme-table/supreme-table.component';
 
 export interface Pipeline {
   id: string;
@@ -37,7 +37,7 @@ export interface Pipeline {
     ButtonModule,
     CommonModule,
     ToastModule,
-    ReusableTableComponent,
+    SupremeTableComponent,
   ],
   templateUrl: './pipeline-list.component.html',
   styleUrl: './pipeline-list.component.css',

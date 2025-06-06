@@ -17,8 +17,8 @@ import { NoteService } from '../../../../services/note.service';
 import { DeleteComponent } from '../../../shared/delete/delete.component';
 import {
   ITableColumn,
-  ReusableTableComponent,
-} from '../../../shared/reusable-table/reusable-table.component';
+  SupremeTableComponent,
+} from '../../../shared/supreme-table/supreme-table.component';
 
 @Component({
   selector: 'app-certificate-list',
@@ -33,7 +33,7 @@ import {
     ButtonModule,
     ToastModule,
     DeleteComponent,
-    ReusableTableComponent,
+    SupremeTableComponent,
   ],
   templateUrl: './ca-list.component.html',
   styleUrl: './ca-list.component.css',

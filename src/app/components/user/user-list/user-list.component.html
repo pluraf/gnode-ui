@@ -2,7 +2,7 @@
 <app-delete  [visible]="visibleDialog" [items]="selectedUsers" [itemLabel]="'user'" [idField]="'username'"(deleteConfirmed)="onDeleteUser()" (cancel)="visibleDialog = false"></app-delete>
 
 <div class="main-content">
-    <app-reusable-table [columnArray]="columnList" [gridData]="users" ></app-reusable-table>
+    <supreme-table [columnArray]="columnList" [gridData]="users" ></supreme-table>
     <!-- <p-table [value]="users" selectionMode="multiple" [(selection)]="selectedUsers" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[10, 15, 30]">
             <ng-template pTemplate="header"  >
                 <tr>

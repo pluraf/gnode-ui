@@ -10,8 +10,8 @@ import { NoteService } from '../../../services/note.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
 import {
   ITableColumn,
-  ReusableTableComponent,
-} from '../../shared/reusable-table/reusable-table.component';
+  SupremeTableComponent,
+} from '../../shared/supreme-table/supreme-table.component';
 
 @Component({
   selector: 'app-user-list',
@@ -20,7 +20,7 @@ import {
     SubheaderComponent,
     DeleteComponent,
     ToastModule,
-    ReusableTableComponent,
+    SupremeTableComponent,
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css',

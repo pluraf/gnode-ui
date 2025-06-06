@@ -13,13 +13,13 @@ export interface ITableColumn {
 }
 
 @Component({
-  selector: 'app-reusable-table',
+  selector: 'supreme-table',
   standalone: true,
   imports: [PaginatorModule, TableModule, FontAwesomeModule, RouterModule],
-  templateUrl: './reusable-table.component.html',
-  styleUrl: './reusable-table.component.css',
+  templateUrl: './supreme-table.component.html',
+  styleUrl: './supreme-table.component.css',
 })
-export class ReusableTableComponent {
+export class SupremeTableComponent {
   @Input() columnArray: ITableColumn[] = [];
   @Input() gridData: any[] = [];
 
@@ -34,5 +34,6 @@ export class ReusableTableComponent {
 
   onSelectionChange() {
     this.selectionChange.emit(this.selectedItems);
+    console.log("FF");
   }
 }

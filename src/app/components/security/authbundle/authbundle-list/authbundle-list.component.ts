@@ -17,8 +17,8 @@ import { NoteService } from '../../../../services/note.service';
 import { DeleteComponent } from '../../../shared/delete/delete.component';
 import {
   ITableColumn,
-  ReusableTableComponent,
-} from '../../../shared/reusable-table/reusable-table.component';
+  SupremeTableComponent,
+} from '../../../shared/supreme-table/supreme-table.component';
 
 @Component({
   selector: 'app-authbundle-list',
@@ -33,7 +33,7 @@ import {
     ButtonModule,
     ToastModule,
     DeleteComponent,
-    ReusableTableComponent,
+    SupremeTableComponent,
   ],
   templateUrl: './authbundle-list.component.html',
   styleUrl: './authbundle-list.component.css',
