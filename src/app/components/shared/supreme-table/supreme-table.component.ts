@@ -26,6 +26,7 @@ export class SupremeTableComponent {
   @Input() paginator: boolean = true;
   @Input() rows: number = 15;
   @Input() rowsPerPageOptions: number[] = [10, 15, 30];
+  @Input() selection: any = null;
   @Output() selectionChange: EventEmitter<any> = new EventEmitter();
 
   @Output() onRoute = new EventEmitter<any>();
@@ -34,6 +35,5 @@ export class SupremeTableComponent {
 
   onSelectionChange() {
     this.selectionChange.emit(this.selectedItems);
-    console.log("FF");
   }
 }

@@ -7,7 +7,7 @@
             </div>
         </div>
         <div *ngIf="!showMessage" class="main-content">
-            <supreme-table [columnArray]="columnList" [gridData]="authbundleList" ></supreme-table>
+            <supreme-table [columnArray]="columnList" [gridData]="authbundleList" [(selection)]="selectedAuthbundle"></supreme-table>
             <!--  <p-table [value]="authbundleList" selectionMode="multiple" [(selection)]="selectedAuthbundle" dataKey="authbundle_id" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[10, 15, 30]" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template pTemplate="header">
                     <tr>
