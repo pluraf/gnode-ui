@@ -5,8 +5,6 @@ import { Router, RouterModule } from '@angular/router';
 
 import { forkJoin, catchError, of, Observable } from 'rxjs';
 
-import { TableModule } from 'primeng/table';
-import { PaginatorModule } from 'primeng/paginator';
 import { MenuItem, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -17,6 +15,10 @@ import { SubheaderComponent } from '../../../subheader/subheader.component';
 import { ApiService } from '../../../../services/api.service';
 import { NoteService } from '../../../../services/note.service';
 import { DeleteComponent } from '../../../shared/delete/delete.component';
+import {
+  ITableColumn,
+  ReusableTableComponent,
+} from '../../../shared/reusable-table/reusable-table.component';
 
 @Component({
   selector: 'app-certificate-list',
@@ -27,12 +29,11 @@ import { DeleteComponent } from '../../../shared/delete/delete.component';
     ReactiveFormsModule,
     RouterModule,
     SubheaderComponent,
-    TableModule,
-    PaginatorModule,
     DialogModule,
     ButtonModule,
     ToastModule,
     DeleteComponent,
+    ReusableTableComponent,
   ],
   templateUrl: './ca-list.component.html',
   styleUrl: './ca-list.component.css',
@@ -50,6 +51,18 @@ export class CAListComponent extends CAComponent implements OnInit {
 
   showMessage: boolean = false;
 
+  columnList: ITableColumn[] = [
+    {
+      fieldName: 'id',
+      headerName: 'CA Certificate ID',
+      routePage: (row: any) => `/ca/ca-detail/${row.id}`,
+    },
+    {
+      fieldName: 'description',
+      headerName: 'Description',
+    },
+  ];
+
   menubarItems: MenuItem[] = [
     {
       routerLink: '/ca/ca-add',
@@ -64,7 +77,7 @@ export class CAListComponent extends CAComponent implements OnInit {
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',
-        tooltipLabel: 'Delete authbundle',
+        tooltipLabel: 'Delete Certificate',
       },
       iconClass: 'pi pi-trash m-1',
       command: () => {
@@ -95,7 +108,7 @@ export class CAListComponent extends CAComponent implements OnInit {
 
   showDialog() {
     if (this.selectedCAs.length === 0) {
-      this.noteService.handleWarning('No channels selected!');
+      this.noteService.handleWarning('No CA certificate selected!');
       return;
     }
     this.visibleDialog = true;
@@ -105,9 +118,7 @@ export class CAListComponent extends CAComponent implements OnInit {
     let observables: Observable<any>[] = [];
     this.selectedCAs.map((ca) => {
       observables.push(
-        this.apiService
-          .caDelete(ca.id)
-          .pipe(catchError((err) => of(true))),
+        this.apiService.caDelete(ca.id).pipe(catchError((err) => of(true))),
       );
     });
 

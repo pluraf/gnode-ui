@@ -5,8 +5,6 @@ import { CommonModule } from '@angular/common';
 import { catchError, forkJoin, Observable, of } from 'rxjs';
 
 import { MenuItem, MessageService } from 'primeng/api';
-import { TableModule } from 'primeng/table';
-import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -15,6 +13,10 @@ import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
+import {
+  ITableColumn,
+  ReusableTableComponent,
+} from '../../shared/reusable-table/reusable-table.component';
 
 export interface Pipeline {
   id: string;
@@ -29,14 +31,13 @@ export interface Pipeline {
   standalone: true,
   imports: [
     SubheaderComponent,
-    TableModule,
     RouterModule,
-    PaginatorModule,
     DeleteComponent,
     DialogModule,
     ButtonModule,
     CommonModule,
     ToastModule,
+    ReusableTableComponent,
   ],
   templateUrl: './pipeline-list.component.html',
   styleUrl: './pipeline-list.component.css',
@@ -53,9 +54,25 @@ export class PipelineListComponent implements OnInit {
   errorMessage: string = '';
   showMessage: boolean = false;
 
-  first: number = 0;
-  rows: number = 10;
-  totalRecords!: number;
+  columnList: ITableColumn[] = [
+    {
+      fieldName: 'id',
+      headerName: 'Pipeline ID',
+      routePage: (row: any) => `/pipelines/pipeline-detail/${row.id}`,
+    },
+    {
+      fieldName: 'connector_in',
+      headerName: 'Connector In',
+    },
+    {
+      fieldName: 'connector_out',
+      headerName: 'Connector Out',
+    },
+    {
+      fieldName: 'status',
+      headerName: 'Status',
+    },
+  ];
 
   menubarActions: MenuItem[] = [
     {

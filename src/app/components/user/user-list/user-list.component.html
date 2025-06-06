@@ -2,7 +2,8 @@
 <app-delete  [visible]="visibleDialog" [items]="selectedUsers" [itemLabel]="'user'" [idField]="'username'"(deleteConfirmed)="onDeleteUser()" (cancel)="visibleDialog = false"></app-delete>
 
 <div class="main-content">
-        <p-table [value]="users" selectionMode="multiple" [(selection)]="selectedUsers" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[10, 15, 30]">
+    <app-reusable-table [columnArray]="columnList" [gridData]="users" ></app-reusable-table>
+    <!-- <p-table [value]="users" selectionMode="multiple" [(selection)]="selectedUsers" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[10, 15, 30]">
             <ng-template pTemplate="header"  >
                 <tr>
                     <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox"></p-tableHeaderCheckbox></th>
@@ -17,5 +18,5 @@
                     <td class="role">{{ user.is_admin ? 'Admin' : 'User' }}</td>
                 </tr>
             </ng-template>
-        </p-table>
+        </p-table> -->
 </div>
