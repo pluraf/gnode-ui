@@ -3,20 +3,4 @@
 
 <div class="main-content">
     <supreme-table [columnArray]="columnList" [gridData]="users" [(selection)]="selectedUsers"></supreme-table>
-    <!-- <p-table [value]="users" selectionMode="multiple" [(selection)]="selectedUsers" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[10, 15, 30]">
-            <ng-template pTemplate="header"  >
-                <tr>
-                    <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox"></p-tableHeaderCheckbox></th>
-                    <th >Username</th>
-                    <th >Role</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" class="users " let-user>
-                <tr class="">
-                    <td ><p-tableCheckbox name="checkbox" [value]="user"></p-tableCheckbox></td>
-                    <td >{{ user.username }}</td>
-                    <td class="role">{{ user.is_admin ? 'Admin' : 'User' }}</td>
-                </tr>
-            </ng-template>
-        </p-table> -->
 </div>

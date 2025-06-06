@@ -8,35 +8,5 @@ No channels are available. To create one, click the plus sign in the top-right c
 </div>
 
 <div *ngIf="!showMessage" class="main-content-body">
-
  <supreme-table [columnArray]="columnList" [gridData]="channelList" [(selection)]="selectedChannels"></supreme-table>
- <!-- <p-table [value]="channelList" selectionMode="multiple" [(selection)]="selectedChannels" dataKey="id"
-               [paginator]="true" [rows]="15" [rowsPerPageOptions]="[10, 15, 30]" [tableStyle]="{ 'min-width': '50rem' }">
-    <ng-template pTemplate="header">
-      <tr>
-        <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
-        <th>Channel ID</th>
-        <th class="text-center">Type</th>
-        <th class="text-center">Last Seen</th>
-        <th class="text-center">State</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-channel>
-      <tr>
-        <td><p-tableCheckbox name="checkbox" [value]="channel" /></td>
-        <td><a routerLink="/channels/channel/{{channel.id}}">{{ channel.id }}</a></td>
-        <td class="text-center">{{ channel.type }}</td>
-        <td class="text-center">{{ channel.lastseen }}</td>
-        <td class="text-center">
-          <ng-container *ngIf="channel.enabled">
-            <fa-icon [icon]="['far', 'comment']"></fa-icon>
-            <i class="fab fa-github" style="font-size: 24px;"></i>
-          </ng-container>
-          <ng-container *ngIf="!channel.enabled">
-            <fa-icon [icon]="['fas', 'ban']"></fa-icon>
-          </ng-container>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table> -->
 </div>

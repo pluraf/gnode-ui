@@ -9,24 +9,4 @@
 
 <div *ngIf="!showMessage" class="main-content">
   <supreme-table [columnArray]="columnList" [gridData]="pipelines" [(selection)]="selectedPipelines"></supreme-table>
-  <!--  <p-table [value]="pipelines" selectionMode="multiple" [(selection)]="selectedPipelines" dataKey="id" [paginator]="true" [rows]="15" [rowsPerPageOptions]="[10, 20, 30]" [tableStyle]="{ 'min-width': '50rem' }">
-    <ng-template pTemplate="header">
-      <tr>
-        <th style="width: 4rem"><p-tableHeaderCheckbox name="checkbox" /></th>
-        <th >Pipeline ID</th>
-        <th >Connector In</th>
-        <th >Connector Out</th>
-        <th >Status</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" class="pipeline" let-pipeline>
-      <tr>
-        <td><p-tableCheckbox name="checkbox" [value]="pipeline" /></td>
-        <td><a routerLink="/pipelines/pipeline-detail/{{pipeline.id}}">{{pipeline.id}}</a></td>
-        <td>{{pipeline.connector_in}}</td>
-        <td>{{pipeline.connector_out}}</td>
-        <td>{{pipeline.status}}</td>
-      </tr>
-    </ng-template>
-  </p-table> -->
 </div>
