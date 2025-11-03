@@ -109,9 +109,9 @@ export class PipelineListComponent implements OnInit {
             this.pipelines = Object.entries(pipelinesConfig).map(
               (entry: any) => ({
                 id: entry[0],
-                connector_in: entry[1].connector_in.type,
-                connector_out: entry[1].connector_out.type,
-                status: pipelinesStatus[entry[0]].status,
+                connector_in: entry[1]?.connector_in?.type,
+                connector_out: entry[1]?.connector_out?.type,
+                status: pipelinesStatus[entry[0]]?.status,
                 error: '',
               }),
             );
