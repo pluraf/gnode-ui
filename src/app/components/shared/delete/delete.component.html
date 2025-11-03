@@ -1,4 +1,4 @@
-<p-dialog  [(visible)]="visible" [modal]="true" [style]="{ width: '40rem' }">
+<p-dialog [(visible)]="visibleDialog" (visibleChange)="onCancel()" [modal]="true" [style]="{ width: '40rem' }">
     <ng-template pTemplate="header">
       {{ isMultiple ? 'Delete ' + itemLabel + 's: ' + itemIds.join(', ') + '?' : 'Delete ' + itemLabel + ': ' + itemIds[0] + '?' }}
     </ng-template>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 
@@ -9,15 +9,24 @@ import { DialogModule } from 'primeng/dialog';
   templateUrl: './delete.component.html',
   styleUrl: './delete.component.css',
 })
-export class DeleteComponent {
+export class DeleteComponent implements OnChanges{
   @Input() visible: boolean = false;
   @Input() items: any[] = [];
   @Input() itemLabel: string = '';
   @Input() idField: string = 'id';
+  @Output() visibleChange = new EventEmitter<boolean>();
   @Output() deleteConfirmed = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
+  visibleDialog: boolean = false;
+
   constructor() {}
+
+  ngOnChanges(changes: any) {
+    if (changes['visible']) {
+      this.visibleDialog = changes['visible'].currentValue;
+    }
+  }
 
   get isMultiple(): boolean {
     return this.items.length > 1;
@@ -34,4 +43,5 @@ export class DeleteComponent {
   onCancel() {
     this.cancel.emit();
   }
+
 }
