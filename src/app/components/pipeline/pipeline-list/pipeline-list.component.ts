@@ -137,7 +137,10 @@ export class PipelineListComponent implements OnInit {
       observables.push(
         this.apiService
           .pipelineDelete(pipeline.id)
-          .pipe(catchError((err) => of(true))),
+          .pipe(catchError((err) => {
+            this.noteService.handleError(err);
+            return of(true);
+          })),
       );
     });
 
