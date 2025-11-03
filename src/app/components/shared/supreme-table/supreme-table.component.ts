@@ -26,7 +26,16 @@ export class SupremeTableComponent {
   @Input() paginator: boolean = true;
   @Input() rows: number = 15;
   @Input() rowsPerPageOptions: number[] = [10, 15, 30];
-  @Input() selection: any = null;
+
+  @Input()
+  set selection(value: any[]) {
+    this.selectedItems = value;
+  }
+  get selection(): any[] {
+    return this.selectedItems;
+  }
+
+
   @Output() selectionChange: EventEmitter<any> = new EventEmitter();
 
   @Output() onRoute = new EventEmitter<any>();
