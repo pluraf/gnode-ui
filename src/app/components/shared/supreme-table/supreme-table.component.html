@@ -1,6 +1,6 @@
 <p-table [value]="gridData" selectionMode="multiple" [(selection)]="selectedItems" dataKey="id"
          [paginator]="paginator" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions"
-         (selectionChange)="onSelectionChange()" [tableStyle]="{ 'min-width': '50rem' }">
+         (selectionChange)="onSelectionChange()" [tableStyle]="{ 'min-width': '50rem', 'padding-right': '1rem' }">
 
   <ng-template pTemplate="header">
     <tr>
