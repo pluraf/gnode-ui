@@ -1,8 +1,21 @@
-import { Routes } from '@angular/router';
+import { Routes, UrlMatchResult, UrlSegment } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { StatusComponent } from './components/status/status.component';
 import { LoginComponent } from './components/login/login.component';
 import { ExternalComponent } from './components/external/external.component';
+import { DashboardContainerComponent } from './components/dashboard-container/dashboard-container.component';
+
+
+function dashboardMatcher(segments: UrlSegment[]): UrlMatchResult | null {
+  if (segments.length > 0 && segments[0].path === 'dashboard') {
+    return {
+      consumed: segments,
+      posParams: {}
+    };
+  }
+  return null;
+}
+
 
 export const routes: Routes = [
   {
@@ -37,6 +50,14 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./components/channel/channels.routes').then(
         (r) => r.CHANNELS_ROUTES,
+      ),
+  },
+  {
+    path: 'devices',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./components/device/device.routes').then(
+        (r) => r.DEVICE_ROUTES,
       ),
   },
   {
@@ -78,6 +99,11 @@ export const routes: Routes = [
       import('./components/settings/settings.routes').then(
         (r) => r.SETTINGS_ROUTES,
       ),
+  },
+  {
+    matcher: dashboardMatcher,
+    canActivate: [AuthGuard],
+    component: DashboardContainerComponent,
   },
   {
     path: 'status',

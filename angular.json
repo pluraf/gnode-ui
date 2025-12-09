@@ -26,10 +26,14 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
+
               "node_modules/primeflex/primeflex.css",
               "node_modules/primeicons/primeicons.css",
+
               "src/styles.css"
             ],
             "scripts": []

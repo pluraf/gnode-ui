@@ -95,6 +95,7 @@ export class AppComponent implements OnInit {
   }
 
   items: MenuItem[] = [
+    { label: 'Devices', routerLink: '/devices', styleClass: 'gap-2' },
     { label: 'Channels', routerLink: '/channels', styleClass: 'gap-2' },
     { label: 'Pipelines', routerLink: '/pipelines', styleClass: 'gap-2' },
     {
@@ -125,7 +126,13 @@ export class AppComponent implements OnInit {
       ],
       styleClass: 'gap-2',
     },
-
+    {
+      label: 'Dasboards',
+      items: [
+        { label: 'Devices', routerLink: '/dashboard/devices' },
+      ],
+      styleClass: 'gap-2'
+    },
     { label: 'Status', routerLink: '/status', styleClass: 'gap-2' },
     { label: 'ChirpStack', routerLink: '/external/chirpstack', styleClass: 'gap-2' },
   ];

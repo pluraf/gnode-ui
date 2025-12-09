@@ -1,0 +1,39 @@
+<app-subheader selectedMenuName="Create Device" backRoute="/devices"></app-subheader>
+<div class="main-content-body">
+    <div class="p-grid">
+      <div class="p-col-12 p-md-6">
+          <div class="p-fluid">
+            <div class="flex flex-column gap-1">
+              <label for="deviceId">Device ID</label>
+              <input type="text" pInputText id="deviceId" name="devid" [(ngModel)]="devid" class="input_field"/>
+              <small>Permanent identifier of the device</small>
+            </div>
+              <div class="p-field">
+                <div class="card mt-4">
+                  <div class="flex flex-column gap-1">
+                    <label for="deviceType">Type</label>
+                    <select [(ngModel)]="selectedTypeOption" (ngModelChange)="onChangeDeviceType($event)" id="deviceType" class="input_field border-1 border-round">
+                        <option *ngFor="let type of deviceTypes" [value]="type.value">{{ type.label }}</option>
+                    </select>
+                  </div>
+                  <div class="flex flex-column gap-1 mt-4">
+                    <label for="description">Description</label>
+                    <input type="text" pInputText name="description" id="description" [(ngModel)]="description" class="input_field"/>
+                  </div>
+                </div>
+              </div>
+              <div class="p-field">
+                  <span><strong>Device state</strong></span>
+                  <div class="card flex mt-3 ">
+                      <div class="flex flex-column gap-1">
+                          <p-inputSwitch [(ngModel)]="enabled" />
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="mt-2">
+              <button pButton (click)="onSubmit()">Submit</button>
+          </div>
+      </div>
+  </div>
+</div>

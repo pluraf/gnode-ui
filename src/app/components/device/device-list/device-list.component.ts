@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { catchError, forkJoin, Observable, of } from 'rxjs';
-import { DateTime } from 'luxon';
 
 import { MenuItem, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
@@ -14,7 +13,7 @@ import { ToastModule } from 'primeng/toast';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { Channel } from '../channel';
+import { Device } from '../device';
 import { SubheaderComponent } from '../../subheader/subheader.component';
 import { ApiService } from '../../../services/api.service';
 import { NoteService } from '../../../services/note.service';
@@ -26,7 +25,7 @@ import {
 } from '../../shared/supreme-table/supreme-table.component';
 
 @Component({
-  selector: 'app-channel-list',
+  selector: 'app-device-list',
   standalone: true,
   imports: [
     CommonModule,
@@ -42,45 +41,45 @@ import {
     DeleteComponent,
     SupremeTableComponent,
   ],
-  templateUrl: './channel-list.component.html',
-  styleUrl: './channel-list.component.css',
+  templateUrl: './device-list.component.html',
+  styleUrl: './device-list.component.css',
 })
-export class ChannelListComponent {
+export class DeviceListComponent {
   visibleDialog: boolean = false;
-  channelList: Channel[] = [];
-  selectedChannels: Channel[] = [];
+  deviceList: Device[] = [];
+  selectedDevices: Device[] = [];
   showMessage: boolean = false;
   totalRecords!: number;
-  chanid: string = '';
+  devid: string = '';
 
   columnList: ITableColumn[] = [
     {
       fieldName: 'id',
-      headerName: 'Channel ID',
-      routePage: (row: any) => `/channels/channel/${row.id}`,
+      headerName: 'Device ID',
+      routePage: (row: any) => `/devices/device/${row.id}`,
     },
     {
       fieldName: 'type',
       headerName: 'Type',
     },
     {
-      fieldName: 'lastseen',
-      headerName: 'Last Seen',
-    },
-    {
-      fieldName: 'state',
+      fieldName: 'enabled',
       headerName: 'State',
       pictogram: true,
+    },
+    {
+      fieldName: 'description',
+      headerName: 'Description',
     },
   ];
 
   menubarItems: MenuItem[] = [
     {
-      routerLink: '/channels/channel-create',
+      routerLink: '/devices/device-create',
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',
-        tooltipLabel: 'Create channel',
+        tooltipLabel: 'Create device',
       },
       iconClass: 'pi pi-plus m-1',
     },
@@ -88,7 +87,7 @@ export class ChannelListComponent {
       tooltipOptions: {
         tooltipEvent: 'hover',
         tooltipPosition: 'bottom',
-        tooltipLabel: 'Delete channel',
+        tooltipLabel: 'Delete device',
       },
       iconClass: 'pi pi-trash m-1',
       command: () => {
@@ -105,37 +104,23 @@ export class ChannelListComponent {
   constructor() {}
 
   ngOnInit() {
-    this.loadChannels();
+    this.loadDevices();
   }
 
-  loadChannels() {
-    this.apiService.channelList().subscribe({
+  loadDevices() {
+    this.apiService.deviceList().subscribe({
       next: (response: any) => {
         const clientResponse = response;
-        const channels = clientResponse;
-        this.channelList = channels.map((channel: any) => {
-          let obj = { id: '', lastseen: '', enabled: false, type: '' };
-          if (channel.msg_timestamp === undefined) {
-            obj.lastseen = '-';
-          } else if (channel.msg_timestamp === 0) {
-            obj.lastseen = 'never';
-          } else {
-            obj.lastseen = DateTime.fromJSDate(
-              new Date(channel.msg_timestamp * 1000),
-              {
-                zone: this.datetimeService.timezone,
-              },
-            ).toFormat('yyyy-MM-dd HH:mm');
-          }
-
-          // Need to modify the obj key-value naming convention as per latest backend code
-          obj.id = channel.id;
-          obj.type = channel.type;
-          obj.enabled = channel.disabled;
-
+        const devices = clientResponse;
+        this.deviceList = devices.map((device: any) => {
+          let obj = { id: '', lastseen: '', enabled: false, type: '', description: '' };
+          obj.id = device.id;
+          obj.type = device.type;
+          obj.description = device.description;
+          obj.enabled = device.enabled;
           return obj;
         });
-        this.totalRecords = this.channelList.length;
+        this.totalRecords = this.deviceList.length;
         if (this.totalRecords === 0) {
           this.showMessage = true;
         }
@@ -144,22 +129,22 @@ export class ChannelListComponent {
   }
 
   showDialog() {
-    if (this.selectedChannels.length === 0) {
+    if (this.selectedDevices.length === 0) {
       this.noteService.handleWarning(
         this.messageService,
-        'No channels selected.',
+        'No devices selected.',
       );
     } else {
       this.visibleDialog = true;
     }
   }
 
-  onDeleteChannel() {
+  onDeleteDevice() {
     let observables: Observable<any>[] = [];
-    this.selectedChannels.map((channel) => {
+    this.selectedDevices.map((device) => {
       observables.push(
         this.apiService
-          .channelDelete(channel.id)
+          .deviceDelete(device.id)
           .pipe(catchError((err) => {
             this.noteService.handleError(err);
             return of(true);
@@ -170,13 +155,13 @@ export class ChannelListComponent {
     forkJoin(observables).subscribe({
       next: (response: any) => {
         this.visibleDialog = false;
-        this.selectedChannels = [];
-        this.loadChannels();
+        this.selectedDevices = [];
+        this.loadDevices();
       },
       error: (response: any) => {
         this.visibleDialog = false;
-        this.selectedChannels = [];
-        this.loadChannels();
+        this.selectedDevices = [];
+        this.loadDevices();
       },
     });
   }

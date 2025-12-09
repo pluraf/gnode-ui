@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 export interface ITableColumn {
   fieldName: string;
   headerName: string;
-  enabled?: boolean;
+  pictogram?: boolean;
   routePage?: any;
   isAdmin?: (row: any) => string;
 }

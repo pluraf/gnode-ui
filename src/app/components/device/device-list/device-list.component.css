@@ -1,0 +1,18 @@
+.pi.pi-plus {
+  font-size: 24px;
+  margin-right: 8px;
+  color: inherit;
+  display: inline-block;
+  line-height: 1 !important;
+  vertical-align: middle;
+}
+:host {
+  ::ng-deep .p-toast-top-right {
+    top: 4rem;
+  }
+}
+:host {
+  ::ng-deep .p-progress-spinner-circle {
+    stroke: #006666 !important;
+  }
+}

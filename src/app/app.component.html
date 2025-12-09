@@ -1,6 +1,10 @@
 @if (router.url.startsWith("/external")) {
   <exteranl-app [resource]="router.url.substring(9)"></exteranl-app>
-}@else {
+}
+@else if (router.url.startsWith("/dashboard")) {
+  <router-outlet></router-outlet>
+}
+@else {
   <p-toast position="top-right" [baseZIndex]="5000"/>
   @if (router.url != "/login") {
     @if (isInfoLoaded) {

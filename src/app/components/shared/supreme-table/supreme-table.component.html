@@ -18,30 +18,27 @@
       </td>
 
       @for (column of columnArray; track $index) {
-        <td>@if (column.fieldName==="state" && column.enabled) {
-            <div>
-              <fa-icon [icon]="['fas', 'ban']"></fa-icon>
-            </div>
-          }
-            @if(column.fieldName==="state" && !column.enabled){
-              <div>
-                <fa-icon [icon]="['far', 'comment']"></fa-icon>
-                <i class="fab fa-github" style="font-size: 24px;"></i>
-              </div>
+        <td>@if (column.pictogram === true) {
+              @if (rowData[column.fieldName] === false) {
+                <div>
+                  <fa-icon [icon]="['fas', 'ban']"></fa-icon>
+                </div>
+              }
+              @else {
+                <div>
+                  <fa-icon [icon]="['far', 'comment']"></fa-icon>
+                </div>
+              }
             }
-            @if (column.routePage) {
+            @else if (column.routePage) {
               <div>
                 <a [routerLink]="column.routePage(rowData)">
                   {{ rowData[column.fieldName] }}
                 </a>
               </div>
             }@else {
-            {{ rowData[column.fieldName] }}
+              {{ rowData[column.fieldName] }}
             }
-            @if (column.isAdmin) {
-              {{ column.isAdmin(rowData) }}
-            }
-
         </td>
       }
     </tr>

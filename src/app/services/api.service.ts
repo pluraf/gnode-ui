@@ -23,6 +23,8 @@ export class ApiService {
   private pipelineSchemaUrl = 'api/pipeline/schema/';
   // Channel API
   private channelUrl = 'api/channel/';
+  // Device API
+  private deviceUrl = 'api/device/';
   // Converter API
   private converterUrl = 'api/converter/';
   // Version API
@@ -165,6 +167,28 @@ export class ApiService {
 
   pipelineSchema() {
     return this.http.get(this.pipelineSchemaUrl);
+  }
+
+  /////////////////////////// Devices ///////////////////////////
+
+  deviceList(): Observable<any> {
+    return this.http.get(this.deviceUrl);
+  }
+
+  deviceGet(devid: string) {
+    return this.http.get(this.deviceUrl + devid);
+  }
+
+  deviceUpdate(devid: string, devdata: object): Observable<any> {
+    return this.http.put(this.deviceUrl + devid, devdata);
+  }
+
+  deviceCreate(devid: string, devdata: object): Observable<any> {
+    return this.http.post(this.deviceUrl + devid, devdata);
+  }
+
+  deviceDelete(devid: string): Observable<any> {
+    return this.http.delete(this.deviceUrl + devid, {observe: 'response'});
   }
 
   /////////////////////////// Version ///////////////////////////

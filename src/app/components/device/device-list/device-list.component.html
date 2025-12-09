@@ -1,0 +1,12 @@
+<app-subheader selectedMenuName="Devices" [actions]="menubarItems" ></app-subheader>
+<app-delete [visible]="visibleDialog" [items]="selectedDevices" [itemLabel]="'device'" [idField]="'id'"
+(deleteConfirmed)="onDeleteDevice()" (cancel)="visibleDialog = false"></app-delete>
+
+<div *ngIf="showMessage" class="showMessage flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
+  <div class="text-center">
+No devices are available. To create one, click the plus sign in the top-right corner or use the <a routerLink="/devices/device-create" class="text-green-700">Create Device</a> link.</div>
+</div>
+
+<div *ngIf="!showMessage" class="main-content-body">
+ <supreme-table [columnArray]="columnList" [gridData]="deviceList" [(selection)]="selectedDevices"></supreme-table>
+</div>
