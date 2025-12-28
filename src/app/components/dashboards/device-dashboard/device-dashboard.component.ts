@@ -1,4 +1,6 @@
 import { Component, ViewChildren, ElementRef, QueryList, inject } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { ApiService } from '../../../services/api.service';
 import { Device } from '../../device/device';
 import { Subscription, interval } from 'rxjs';
@@ -13,15 +15,16 @@ import { Subscription, interval } from 'rxjs';
 })
 export class DeviceDashboardComponent {
   apiService = inject(ApiService);
+  router = inject(Router);
 
   @ViewChildren('cnodeFrame') cnodeFrames!: QueryList<ElementRef>;
 
   deviceList: Device[] = [];
 
-  constructor() {}
-
   private cnodeFramesSubscription!: Subscription;
   private updateSubscription!: Subscription;
+
+  constructor() {}
 
   ngAfterViewInit() {
     this.cnodeFramesSubscription = this.cnodeFrames.changes.subscribe(
@@ -41,6 +44,12 @@ export class DeviceDashboardComponent {
   ngOnDestroy() {
     this.cnodeFramesSubscription?.unsubscribe();
     this.updateSubscription?.unsubscribe();
+
+    this.cnodeFrames?.forEach((el: ElementRef, index) => {
+      if (el.nativeElement.src) {
+        URL.revokeObjectURL(el.nativeElement.src);
+      }
+    });
   }
 
   loadDevices() {
@@ -62,9 +71,22 @@ export class DeviceDashboardComponent {
 
   updateFrames() {
     this.cnodeFrames?.forEach((el: ElementRef, index) => {
-      console.log(el.nativeElement);
-      el.nativeElement.src = `api/device/${el.nativeElement.id}/frame?${Date.now()}`;
+      this.apiService.get(
+        `api/device/${el.nativeElement.id}/frame?${Date.now()}`,
+        { responseType: 'blob' }
+      ).subscribe({
+        next: (blob: Blob) => {
+          if (el.nativeElement.src) {
+            URL.revokeObjectURL(el.nativeElement.src);
+          }
+          el.nativeElement.src = URL.createObjectURL(blob);
+        },
+      });
     });
+  }
+
+  navigateToDevice(deviceId: String) {
+    this.router.navigateByUrl("/device/" + deviceId);
   }
 
 }

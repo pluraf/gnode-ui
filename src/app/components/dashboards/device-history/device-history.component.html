@@ -1,0 +1,25 @@
+<div style="position: fixed; background-color: #006666; z-index: 10; width: 100%; top: 0px">
+    <a href="/" style="color: white;">&nbsp;&lt; Back to G-Node interface</a>
+</div>
+
+<div style = "margin-top: 2rem">
+  <div class="container flex-grow-1">
+    <div class="row d-flex mx-auto">
+      @for (_ of [].constructor(dataPointsPerPage); track $index) {
+        <div class="col-sm-12 col-md-6 col-lg-4 d-flex flex-column ">
+          <div class="m-2">
+            <img id="{{dataPointStartIx + $index}}" #cnodeFrame src="" class="mx-auto" style="display: block; width: 100%;">
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<p-paginator
+    (onPageChange)="onPageChange($event)"
+    [first]="0"
+    [rows]="12"
+    [totalRecords]="120"
+    [rowsPerPageOptions]="[6, 12, 24]"
+/>

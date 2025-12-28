@@ -38,8 +38,8 @@ export class ApiService {
 
   ////////////////////////////// ANY ////////////////////////////////
 
-  get(url: string): Observable<any> {
-    return this.http.get(url);
+  get(url: string, options?: any): Observable<any> {
+    return this.http.get(url, options);
   }
 
   /////////////////////////// Authbundles ///////////////////////////
