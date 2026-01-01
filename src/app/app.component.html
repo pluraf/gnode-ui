@@ -19,8 +19,8 @@
   @if (isInfoLoaded || router.url == "/login") {
     <div [style]="{'margin-left': margin_left, 'margin-top': '56px', 'opacity': spinnerService.spinnerSignal() ? '50%' : '100%'}"><router-outlet></router-outlet></div>
   }
-
-  <div class="spinner-overlay" [style]="{display: spinnerService.spinnerSignal() ? 'block' : 'none'}">
-  <p-progressSpinner ariaLabel="loading" [style]='{"z-index": 10000, "display": "block", "top": "50%"}'/>
-  </div>
 }
+
+<div class="spinner-overlay" [style]="{display: spinnerService.spinnerSignal() ? 'block' : 'none'}">
+  <p-progressSpinner ariaLabel="loading" [style]='{"z-index": 10000, "display": "block", "top": "45%"}'/>
+</div>
