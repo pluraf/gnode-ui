@@ -46,18 +46,34 @@ export class DeviceHistoryComponent {
   }
 
   updateFrames() {
-    this.cnodeFrames?.forEach((el: ElementRef, index) => {
-      this.apiService.get(
-        `api/device/${this.deviceId}/history-data/${el.nativeElement.id}?${Date.now()}`,
-        { responseType: 'blob' }
-      ).subscribe({
-        next: (blob: Blob) => {
-          if (el.nativeElement.src) {
-            URL.revokeObjectURL(el.nativeElement.src);
-          }
-          el.nativeElement.src = URL.createObjectURL(blob);
-        },
-      });
+    this.apiService.get(
+      `api/device/${this.deviceId}/history-data/${this.dataPointStartIx}-${this.dataPointsPerPage}`,
+      {
+        params: {"resize": 300, "timestamp": `${Date.now()}`},
+        responseType: 'blob'
+      }
+    ).subscribe({
+      next: (blob: Blob) => {
+        const arrayBuffer = blob.arrayBuffer().then((arrayBuffer) => {
+          const data = new DataView(arrayBuffer);
+          let offset = 0;
+
+          this.cnodeFrames?.forEach((el: ElementRef, index) => {
+            if (offset < data.byteLength) {
+                const length = data.getUint32(offset, true);
+                offset += 4;
+                const imageBytes = arrayBuffer.slice(offset, offset + length);
+                offset += length;
+                const blob = new Blob([imageBytes], { type: 'image/jpeg' });
+
+                if (el.nativeElement.src) {
+                  URL.revokeObjectURL(el.nativeElement.src);
+                }
+                el.nativeElement.src = URL.createObjectURL(blob);
+            }
+          });
+        });
+      },
     });
   }
 
