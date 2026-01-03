@@ -1,4 +1,5 @@
-import { Component, ViewChildren, ElementRef, QueryList, inject } from '@angular/core';
+import { Component, ViewChild, ViewChildren, ElementRef, QueryList, HostListener, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { ApiService } from '../../../services/api.service';
@@ -9,7 +10,9 @@ import { Subscription, interval } from 'rxjs';
 @Component({
   selector: 'app-device-dashboard',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+  ],
   templateUrl: './device-dashboard.component.html',
   styleUrl: './device-dashboard.component.css'
 })
@@ -18,13 +21,20 @@ export class DeviceDashboardComponent {
   router = inject(Router);
 
   @ViewChildren('cnodeFrame') cnodeFrames!: QueryList<ElementRef>;
+  @ViewChild('cnodeFrameBig') cnodeFrameBig!: ElementRef;
 
   deviceList: Device[] = [];
+  isOpen: boolean = false;
 
   private cnodeFramesSubscription!: Subscription;
   private updateSubscription!: Subscription;
 
   constructor() {}
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscapeKey(event: KeyboardEvent) {
+    this.hideBig(event);
+  }
 
   ngAfterViewInit() {
     this.cnodeFramesSubscription = this.cnodeFrames.changes.subscribe(
@@ -72,17 +82,70 @@ export class DeviceDashboardComponent {
   updateFrames() {
     this.cnodeFrames?.forEach((el: ElementRef, index) => {
       this.apiService.get(
-        `api/device/${el.nativeElement.id}/frame?${Date.now()}`,
-        { responseType: 'blob' }
+        `api/device/${el.nativeElement.getAttribute("device-id")}/frame/latest?${Date.now()}`,
+        {
+          params: {"preview": true, "timestamp": `${Date.now()}`},
+          responseType: 'blob'
+        }
       ).subscribe({
         next: (blob: Blob) => {
-          if (el.nativeElement.src) {
-            URL.revokeObjectURL(el.nativeElement.src);
-          }
-          el.nativeElement.src = URL.createObjectURL(blob);
+          const arrayBuffer = blob.arrayBuffer().then((arrayBuffer) => {
+            const data = new DataView(arrayBuffer);
+            let offset = 0;
+            const frame_id = data.getUint32(offset, true);
+            offset += 4;
+            const length = data.getUint32(offset, true);
+            offset += 4;
+            const imageBytes = arrayBuffer.slice(offset, offset + length);
+            offset += length;
+            const blob = new Blob([imageBytes], { type: 'image/jpeg' });
+
+            if (el.nativeElement.src) {
+              URL.revokeObjectURL(el.nativeElement.src);
+            }
+
+            el.nativeElement.setAttribute("frame-id", frame_id);
+            el.nativeElement.src = URL.createObjectURL(blob);
+          });
         },
       });
     });
+  }
+
+  showBig(event: Event) {
+    this.apiService.get(
+      `api/device/${(event.target as HTMLElement).getAttribute("device-id")}/frame/${(event.target as HTMLElement).getAttribute("frame-id")}?${Date.now()}`,
+      { responseType: 'blob' }
+    ).subscribe({
+      next: (blob: Blob) => {
+        const arrayBuffer = blob.arrayBuffer().then((arrayBuffer) => {
+          const data = new DataView(arrayBuffer);
+          let offset = 0;
+          const frame_id = data.getUint32(offset, true);
+          offset += 4;
+          const length = data.getUint32(offset, true);
+          offset += 4;
+          const imageBytes = arrayBuffer.slice(offset, offset + length);
+          offset += length;
+          const blob = new Blob([imageBytes], { type: 'image/jpeg' });
+
+          if (this.cnodeFrameBig.nativeElement.src) {
+            URL.revokeObjectURL(this.cnodeFrameBig.nativeElement.src);
+          }
+
+          this.cnodeFrameBig.nativeElement.src = URL.createObjectURL(blob);
+        });
+      },
+    });
+    this.isOpen = true;
+  }
+
+  hideBig(event: Event) {
+    if (this.cnodeFrameBig.nativeElement.src) {
+      URL.revokeObjectURL(this.cnodeFrameBig.nativeElement.src);
+    }
+
+    this.isOpen = false;
   }
 
   navigateToDevice(deviceId: String) {

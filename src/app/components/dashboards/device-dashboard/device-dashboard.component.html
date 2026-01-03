@@ -2,7 +2,7 @@
     <a href="/" style="color: white;">&nbsp;&lt; Back to G-Node interface</a>
 </div>
 
-<div style = "margin-top: 2rem">
+<div [style]="{'margin-top': '2rem', 'opacity': isOpen ? '40%' : '100%'}">
   <div class="container flex-grow-1">
     <div class="row d-flex mx-auto">
       @for (entry of deviceList; track $index) {
@@ -13,10 +13,30 @@
             </a>
           </div>
           <div>
-            <img id="{{entry.id}}" #cnodeFrame src="" class="mx-auto" style="display: block; width: 100%;">
+            <img
+              #cnodeFrame
+              [attr.device-id]="entry.id"
+              class="mx-auto"
+              style="display: block; width: 100%;"
+              (click)="showBig($event)"
+            >
           </div>
         </div>
       }
     </div>
   </div>
+</div>
+
+<div *ngIf="isOpen" class="image-viewer">
+  <div
+    (click)="hideBig($event)"
+    class="image-viewer-cross"
+  >
+    X
+  </div>
+  <img
+    #cnodeFrameBig
+    style="display: block; width: 100%;"
+    (click)="hideBig($event)"
+  >
 </div>

@@ -2,13 +2,19 @@
     <a href="/" style="color: white;">&nbsp;&lt; Back to G-Node interface</a>
 </div>
 
-<div style = "margin-top: 2rem">
+<div [style]="{'margin-top': '2rem', 'opacity': isOpen ? '40%' : '100%'}">
   <div class="container flex-grow-1">
+    <a href="/dashboard/devices">&nbsp;&lt; back</a>
     <div class="row d-flex mx-auto">
       @for (_ of [].constructor(dataPointsPerPage); track $index) {
         <div class="col-sm-12 col-md-6 col-lg-4 d-flex flex-column ">
           <div class="m-2">
-            <img id="{{dataPointStartIx + $index}}" #cnodeFrame src="" class="mx-auto" style="display: block; width: 100%;">
+            <img
+              #cnodeFrame
+              class="mx-auto"
+              style="display: block; width: 100%;"
+              (click)="showBig($event)"
+            >
           </div>
         </div>
       }
@@ -23,3 +29,17 @@
     [totalRecords]="120"
     [rowsPerPageOptions]="[6, 12, 24]"
 />
+
+<div *ngIf="isOpen" class="image-viewer">
+  <div
+    (click)="hideBig($event)"
+    class="image-viewer-cross"
+  >
+    X
+  </div>
+  <img
+    #cnodeFrameBig
+    style="display: block; width: 100%;"
+    (click)="hideBig($event)"
+  >
+</div>
