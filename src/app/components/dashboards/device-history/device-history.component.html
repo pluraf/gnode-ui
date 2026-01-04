@@ -6,9 +6,9 @@
   <div class="container flex-grow-1">
     <a href="/dashboard/devices">&nbsp;&lt; back</a>
     <div class="row d-flex mx-auto">
-      @for (_ of [].constructor(dataPointsPerPage); track $index) {
+      @for (_ of [].constructor(dataPointsPerPage); track $index; let idx = $index) {
         <div class="col-sm-12 col-md-6 col-lg-4 d-flex flex-column ">
-          <div class="m-2">
+          <div class="mt-3">
             <img
               #cnodeFrame
               class="mx-auto"
@@ -16,6 +16,14 @@
               (click)="showBig($event)"
             >
           </div>
+          <table style = "width: 50%;">
+            @for (sensor_data of deviceHistoricalData[idx]; track $index) {
+              <tr>
+                <td>{{sensor_data.title}}</td>
+                <td style = "text-align: left">{{sensor_data.value}} {{sensor_data.units}}</td>
+              </tr>
+            }
+          </table>
         </div>
       }
     </div>

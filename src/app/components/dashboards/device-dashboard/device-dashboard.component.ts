@@ -2,9 +2,13 @@ import { Component, ViewChild, ViewChildren, ElementRef, QueryList, HostListener
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
+import { Subscription, interval } from 'rxjs';
+
+import { decode as cbor_decode } from 'cbor2';
+
 import { ApiService } from '../../../services/api.service';
 import { Device } from '../../device/device';
-import { Subscription, interval } from 'rxjs';
+
 
 
 @Component({
@@ -24,6 +28,10 @@ export class DeviceDashboardComponent {
   @ViewChild('cnodeFrameBig') cnodeFrameBig!: ElementRef;
 
   deviceList: Device[] = [];
+  deviceData: Record<string, Array<Record<string, any>>> = {
+    "1": [{"title": "Temp", "value": 20, "units": "C"}, {"title": "Battery", "value": 60, "units": "%"}],
+    "2": [{"title": "Temp", "value": 30, "units": "C"}, {"title": "Battery", "value": 90, "units": "%"}]
+  };
   isOpen: boolean = false;
 
   private cnodeFramesSubscription!: Subscription;
@@ -82,31 +90,39 @@ export class DeviceDashboardComponent {
   updateFrames() {
     this.cnodeFrames?.forEach((el: ElementRef, index) => {
       this.apiService.get(
-        `api/device/${el.nativeElement.getAttribute("device-id")}/frame/latest?${Date.now()}`,
+        `api/device/${el.nativeElement.getAttribute("device-id")}/frame/latest`,
         {
-          params: {"preview": true, "timestamp": `${Date.now()}`},
-          responseType: 'blob'
+          params: { "preview": true, "timestamp": `${Date.now()}` },
+          responseType: 'arraybuffer'
         }
       ).subscribe({
-        next: (blob: Blob) => {
-          const arrayBuffer = blob.arrayBuffer().then((arrayBuffer) => {
-            const data = new DataView(arrayBuffer);
-            let offset = 0;
-            const frame_id = data.getUint32(offset, true);
-            offset += 4;
-            const length = data.getUint32(offset, true);
-            offset += 4;
-            const imageBytes = arrayBuffer.slice(offset, offset + length);
-            offset += length;
-            const blob = new Blob([imageBytes], { type: 'image/jpeg' });
+        next: (arrayBuffer: ArrayBuffer) => {
+          const device_id = el.nativeElement.getAttribute("device-id");
+          this.deviceData[device_id] = [];
+          const cbor_encoded = new Uint8Array(arrayBuffer);
+          const decoded = cbor_decode(cbor_encoded);
 
-            if (el.nativeElement.src) {
-              URL.revokeObjectURL(el.nativeElement.src);
+          console.log(decoded);
+          for (const [key, value] of Object.entries(decoded as Object)) {
+            if (key == "frame_id")
+            {
+              el.nativeElement.setAttribute("frame-id", value);
             }
-
-            el.nativeElement.setAttribute("frame-id", frame_id);
-            el.nativeElement.src = URL.createObjectURL(blob);
-          });
+            else if (key == "data_frame")
+            {
+              const blob = new Blob([value], { type: 'image/jpeg' });
+              if (el.nativeElement.src) {
+                URL.revokeObjectURL(el.nativeElement.src);
+              }
+              el.nativeElement.src = URL.createObjectURL(blob);
+            }
+            else if (key == "sensor_data")
+            {
+              for ( const sensor of value ) {
+                this.deviceData[device_id].push(sensor)
+              };
+            }
+          }
         },
       });
     });
@@ -114,27 +130,20 @@ export class DeviceDashboardComponent {
 
   showBig(event: Event) {
     this.apiService.get(
-      `api/device/${(event.target as HTMLElement).getAttribute("device-id")}/frame/${(event.target as HTMLElement).getAttribute("frame-id")}?${Date.now()}`,
-      { responseType: 'blob' }
+      `api/device/${(event.target as HTMLElement).getAttribute("device-id")}/frame/${(event.target as HTMLElement).getAttribute("frame-id")}`,
+      {
+        params: { "preview": false, "timestamp": `${Date.now()}` },
+        responseType: 'arraybuffer'
+      }
     ).subscribe({
-      next: (blob: Blob) => {
-        const arrayBuffer = blob.arrayBuffer().then((arrayBuffer) => {
-          const data = new DataView(arrayBuffer);
-          let offset = 0;
-          const frame_id = data.getUint32(offset, true);
-          offset += 4;
-          const length = data.getUint32(offset, true);
-          offset += 4;
-          const imageBytes = arrayBuffer.slice(offset, offset + length);
-          offset += length;
-          const blob = new Blob([imageBytes], { type: 'image/jpeg' });
-
-          if (this.cnodeFrameBig.nativeElement.src) {
-            URL.revokeObjectURL(this.cnodeFrameBig.nativeElement.src);
-          }
-
-          this.cnodeFrameBig.nativeElement.src = URL.createObjectURL(blob);
-        });
+      next: (arrayBuffer: ArrayBuffer) => {
+        const cbor_encoded = new Uint8Array(arrayBuffer);
+        const decoded = cbor_decode(cbor_encoded);
+        const blob = new Blob([(decoded as any).data_frame], { type: 'image/jpeg' });
+        if (this.cnodeFrameBig.nativeElement.src) {
+          URL.revokeObjectURL(this.cnodeFrameBig.nativeElement.src);
+        }
+        this.cnodeFrameBig.nativeElement.src = URL.createObjectURL(blob);
       },
     });
     this.isOpen = true;
