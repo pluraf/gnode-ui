@@ -6,6 +6,8 @@ import { Subscription, interval } from 'rxjs';
 
 import { decode as cbor_decode } from 'cbor2';
 
+import { DateTime } from 'luxon';
+
 import { ApiService } from '../../../services/api.service';
 import { Device } from '../../device/device';
 
@@ -28,9 +30,9 @@ export class DeviceDashboardComponent {
   @ViewChild('cnodeFrameBig') cnodeFrameBig!: ElementRef;
 
   deviceList: Device[] = [];
-  deviceData: Record<string, Array<Record<string, any>>> = {
-    "1": [{"title": "Temp", "value": 20, "units": "C"}, {"title": "Battery", "value": 60, "units": "%"}],
-    "2": [{"title": "Temp", "value": 30, "units": "C"}, {"title": "Battery", "value": 90, "units": "%"}]
+  deviceData: Record<string, Record<string, any>> = {
+    "1": {"created": "", "data": [{"title": "Temp", "value": 20, "units": "C"}, {"title": "Battery", "value": 60, "units": "%"}]},
+    "2": {"created": "", "data": [{"title": "Temp", "value": 30, "units": "C"}, {"title": "Battery", "value": 90, "units": "%"}]}
   };
   isOpen: boolean = false;
 
@@ -98,7 +100,7 @@ export class DeviceDashboardComponent {
       ).subscribe({
         next: (arrayBuffer: ArrayBuffer) => {
           const device_id = el.nativeElement.getAttribute("device-id");
-          this.deviceData[device_id] = [];
+          this.deviceData[device_id]["data"] = [];
           const cbor_encoded = new Uint8Array(arrayBuffer);
           const decoded = cbor_decode(cbor_encoded);
 
@@ -119,8 +121,12 @@ export class DeviceDashboardComponent {
             else if (key == "sensor_data")
             {
               for ( const sensor of value ) {
-                this.deviceData[device_id].push(sensor)
+                this.deviceData[device_id]["data"].push(sensor)
               };
+            }
+            else if (key == "created")
+            {
+              this.deviceData[device_id]["created"] = DateTime.fromJSDate(value).toFormat('yyyy-MM-dd HH:mm');
             }
           }
         },

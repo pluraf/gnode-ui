@@ -5,6 +5,8 @@ import { Subscription, interval } from 'rxjs';
 
 import { decode as cbor_decode } from 'cbor2';
 
+import { DateTime } from 'luxon';
+
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
 import { ApiService } from '../../../services/api.service';
@@ -34,7 +36,7 @@ export class DeviceHistoryComponent {
     this.hideBig(event);
   }
 
-  deviceHistoricalData: Array<Array<Record<string, any>>> = [];
+  deviceHistoricalData: Array<Record<string, any>> = [{"created": "", "data": []}];
   isOpen: boolean = false;
 
   private cnodeFramesSubscription!: Subscription;
@@ -72,9 +74,9 @@ export class DeviceHistoryComponent {
 
         this.deviceHistoricalData = [];
         this.cnodeFrames?.forEach((el: ElementRef, index) => {
-          this.deviceHistoricalData[index] = [];
-
           if (index >= decoded.length) { return; }
+
+          this.deviceHistoricalData.push({"data": []});
 
           for (const [key, value] of Object.entries(decoded[index])) {
             if (key == "frame_id")
@@ -92,8 +94,12 @@ export class DeviceHistoryComponent {
             else if (key == "sensor_data")
             {
               for ( const sensor of value ) {
-                this.deviceHistoricalData[index].push(sensor);
+                this.deviceHistoricalData[index]["data"].push(sensor);
               };
+            }
+            else if (key == "created")
+            {
+              this.deviceHistoricalData[index]["created"] = DateTime.fromJSDate(value).toFormat('yyyy-MM-dd HH:mm');
             }
           }
         });
