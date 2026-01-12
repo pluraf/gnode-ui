@@ -10,7 +10,7 @@ import { DateTime } from 'luxon';
 
 import { ApiService } from '../../../services/api.service';
 import { Device } from '../../device/device';
-
+import { formatSensorData } from '../utils';
 
 
 @Component({
@@ -104,7 +104,6 @@ export class DeviceDashboardComponent {
           const cbor_encoded = new Uint8Array(arrayBuffer);
           const decoded = cbor_decode(cbor_encoded);
 
-          console.log(decoded);
           for (const [key, value] of Object.entries(decoded as Object)) {
             if (key == "frame_id")
             {
@@ -122,6 +121,7 @@ export class DeviceDashboardComponent {
             {
               for ( const sensor of value ) {
                 this.deviceData[device_id]["data"].push(sensor)
+                sensor.value = formatSensorData(sensor.value);
               };
             }
             else if (key == "created")

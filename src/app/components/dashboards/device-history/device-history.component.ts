@@ -11,6 +11,7 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
 import { ApiService } from '../../../services/api.service';
 import { Device } from '../../device/device';
+import { formatSensorData } from '../utils';
 
 
 @Component({
@@ -95,6 +96,7 @@ export class DeviceHistoryComponent {
             {
               for ( const sensor of value ) {
                 this.deviceHistoricalData[index]["data"].push(sensor);
+                sensor.value = formatSensorData(sensor.value);
               };
             }
             else if (key == "created")
