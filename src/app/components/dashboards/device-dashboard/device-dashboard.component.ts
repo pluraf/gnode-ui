@@ -10,7 +10,7 @@ import { DateTime } from 'luxon';
 
 import { ApiService } from '../../../services/api.service';
 import { Device } from '../../device/device';
-import { formatSensorData } from '../utils';
+import { formatSensorData, createPlaceholderBlob } from '../utils';
 
 
 @Component({
@@ -111,11 +111,16 @@ export class DeviceDashboardComponent {
             }
             else if (key == "data_frame")
             {
-              const blob = new Blob([value], { type: 'image/jpeg' });
-              if (el.nativeElement.src) {
-                URL.revokeObjectURL(el.nativeElement.src);
+              if (value.length > 0) {
+                const blob = new Blob([value], { type: 'image/jpeg' });
+                if (el.nativeElement.src) {
+                  URL.revokeObjectURL(el.nativeElement.src);
+                }
+                el.nativeElement.src = URL.createObjectURL(blob);
               }
-              el.nativeElement.src = URL.createObjectURL(blob);
+              else{
+                el.nativeElement.src = createPlaceholderBlob(300, 168);
+              }
             }
             else if (key == "sensor_data")
             {
