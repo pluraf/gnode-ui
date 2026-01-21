@@ -37,7 +37,7 @@ export class DeviceHistoryComponent {
     this.hideBig(event);
   }
 
-  deviceHistoricalData: Array<Record<string, any>> = [{"created": "", "data": []}];
+  deviceHistoricalData: Array<Record<string, any>> = [ /*{"created": "", "data": []} */ ];
   isOpen: boolean = false;
 
   private cnodeFramesSubscription!: Subscription;

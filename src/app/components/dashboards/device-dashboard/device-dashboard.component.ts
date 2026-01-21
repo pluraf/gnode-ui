@@ -31,8 +31,8 @@ export class DeviceDashboardComponent {
 
   deviceList: Device[] = [];
   deviceData: Record<string, Record<string, any>> = {
-    "1": {"created": "", "data": [{"title": "Temp", "value": 20, "units": "C"}, {"title": "Battery", "value": 60, "units": "%"}]},
-    "2": {"created": "", "data": [{"title": "Temp", "value": 30, "units": "C"}, {"title": "Battery", "value": 90, "units": "%"}]}
+    //"1": {"created": "", "data": [{"title": "Temp", "value": 20, "units": "C"}, {"title": "Battery", "value": 60, "units": "%"}]},
+    // "2": {"created": "", "data": [{"title": "Temp", "value": 30, "units": "C"}, {"title": "Battery", "value": 90, "units": "%"}]}
   };
   isOpen: boolean = false;
 
@@ -100,7 +100,9 @@ export class DeviceDashboardComponent {
       ).subscribe({
         next: (arrayBuffer: ArrayBuffer) => {
           const device_id = el.nativeElement.getAttribute("device-id");
-          this.deviceData[device_id]["data"] = [];
+          this.deviceData[device_id] = {
+            "data": []
+          };
           const cbor_encoded = new Uint8Array(arrayBuffer);
           const decoded = cbor_decode(cbor_encoded);
 

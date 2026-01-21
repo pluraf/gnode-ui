@@ -21,15 +21,17 @@
               (click)="showBig($event)"
             >
           </div>
-          {{deviceData[entry.id]["created"]}}
-          <table style = "width: 100%;">
-            @for (sensor_data of deviceData[entry.id]["data"]; track $index) {
-              <tr>
-                <td>{{sensor_data.title}}</td>
-                <td style = "text-align: left">{{sensor_data.value}} {{sensor_data.units}}</td>
-              </tr>
-            }
-          </table>
+          @if (deviceData[entry.id]) {
+            {{deviceData[entry.id]["created"]}}
+            <table style = "width: 100%;">
+              @for (sensor_data of deviceData[entry.id]["data"]; track $index) {
+                <tr>
+                  <td>{{sensor_data.title}}</td>
+                  <td style = "text-align: left">{{sensor_data.value}} {{sensor_data.units}}</td>
+                </tr>
+              }
+            </table>
+          }
         </div>
       }
     </div>
